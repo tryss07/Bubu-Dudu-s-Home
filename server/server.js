@@ -81,6 +81,200 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // --- Helper for parsing JSON body ---
+  function parseBody(cb) {
+    let raw = '';
+    req.on('data', chunk => { raw += chunk; });
+    req.on('end', () => {
+      try {
+        cb(null, raw ? JSON.parse(raw) : {});
+      } catch (err) {
+        cb(err);
+      }
+    });
+    req.on('error', cb);
+  }
+
+  // --- Calendar REST Endpoints ---
+  if (url.pathname === '/api/calendar' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', events: db.getAllCalendarEvents() }));
+    return;
+  }
+
+  if (url.pathname === '/api/calendar' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      const saved = db.saveCalendarEvent(json);
+      broadcastToOthers(null, JSON.stringify({ type: 'calendar_event_saved', event: saved }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', event: saved }));
+    });
+    return;
+  }
+
+  const calMatch = url.pathname.match(/^\/api\/calendar\/([^/]+)$/);
+  if (calMatch && req.method === 'DELETE') {
+    const id = calMatch[1];
+    db.deleteCalendarEvent(id);
+    broadcastToOthers(null, JSON.stringify({ type: 'calendar_event_deleted', id }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', deleted: id }));
+    return;
+  }
+
+  // --- Planner / Bucket List REST Endpoints ---
+  if (url.pathname === '/api/planner' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', items: db.getAllPlannerItems() }));
+    return;
+  }
+
+  if (url.pathname === '/api/planner' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      const saved = db.savePlannerItem(json);
+      broadcastToOthers(null, JSON.stringify({ type: 'planner_item_saved', item: saved }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', item: saved }));
+    });
+    return;
+  }
+
+  const plannerMatch = url.pathname.match(/^\/api\/planner\/([^/]+)$/);
+  if (plannerMatch && req.method === 'DELETE') {
+    const id = plannerMatch[1];
+    db.deletePlannerItem(id);
+    broadcastToOthers(null, JSON.stringify({ type: 'planner_item_deleted', id }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', deleted: id }));
+    return;
+  }
+
+  // --- Love Notes REST Endpoints ---
+  if (url.pathname === '/api/notes' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', notes: db.getAllNotes() }));
+    return;
+  }
+
+  if (url.pathname === '/api/notes' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      const saved = db.saveNote(json);
+      broadcastToOthers(null, JSON.stringify({ type: 'note_saved', note: saved }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', note: saved }));
+    });
+    return;
+  }
+
+  const noteMatch = url.pathname.match(/^\/api\/notes\/([^/]+)$/);
+  if (noteMatch && req.method === 'DELETE') {
+    const id = noteMatch[1];
+    db.deleteNote(id);
+    broadcastToOthers(null, JSON.stringify({ type: 'note_deleted', id }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', deleted: id }));
+    return;
+  }
+
+  // --- Memories REST Endpoints ---
+  if (url.pathname === '/api/memories' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      polaroids: db.getAllPolaroids(),
+      milestones: db.getAllMilestones()
+    }));
+    return;
+  }
+
+  if (url.pathname === '/api/memories/polaroids' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      const saved = db.savePolaroid(json);
+      broadcastToOthers(null, JSON.stringify({ type: 'polaroid_saved', polaroid: saved }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', polaroid: saved }));
+    });
+    return;
+  }
+
+  const polMatch = url.pathname.match(/^\/api\/memories\/polaroids\/([^/]+)$/);
+  if (polMatch && req.method === 'DELETE') {
+    const id = polMatch[1];
+    db.deletePolaroid(id);
+    broadcastToOthers(null, JSON.stringify({ type: 'polaroid_deleted', id }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', deleted: id }));
+    return;
+  }
+
+  if (url.pathname === '/api/memories/milestones' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      const saved = db.saveMilestone(json);
+      broadcastToOthers(null, JSON.stringify({ type: 'milestone_saved', milestone: saved }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', milestone: saved }));
+    });
+    return;
+  }
+
+  const msMatch = url.pathname.match(/^\/api\/memories\/milestones\/([^/]+)$/);
+  if (msMatch && req.method === 'DELETE') {
+    const id = msMatch[1];
+    db.deleteMilestone(id);
+    broadcastToOthers(null, JSON.stringify({ type: 'milestone_deleted', id }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', deleted: id }));
+    return;
+  }
+
+  // --- Couple Space REST Endpoints ---
+  if (url.pathname === '/api/couple-space' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', data: db.getCoupleSpace() }));
+    return;
+  }
+
+  if (url.pathname === '/api/couple-space' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      db.saveCoupleSpace(json);
+      const updated = db.getCoupleSpace();
+      broadcastToOthers(null, JSON.stringify({ type: 'couple_space_updated', data: updated }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', data: updated }));
+    });
+    return;
+  }
+
   // --- Encrypted Blob Chunked Storage Endpoints ---
 
   // 1. Upload chunk: POST /api/blobs/:blobId/chunk/:chunkIndex
@@ -200,6 +394,47 @@ wss.on('connection', (ws, request) => {
     ws.send(JSON.stringify({
       type: 'tummy_log_sync',
       logs: db.getAllTummyLogs()
+    }));
+  } catch (e) {}
+
+  // Send current calendar events
+  try {
+    ws.send(JSON.stringify({
+      type: 'calendar_sync',
+      events: db.getAllCalendarEvents()
+    }));
+  } catch (e) {}
+
+  // Send current planner items
+  try {
+    ws.send(JSON.stringify({
+      type: 'planner_sync',
+      items: db.getAllPlannerItems()
+    }));
+  } catch (e) {}
+
+  // Send current love notes
+  try {
+    ws.send(JSON.stringify({
+      type: 'notes_sync',
+      notes: db.getAllNotes()
+    }));
+  } catch (e) {}
+
+  // Send current memories (polaroids and milestones)
+  try {
+    ws.send(JSON.stringify({
+      type: 'memories_sync',
+      polaroids: db.getAllPolaroids(),
+      milestones: db.getAllMilestones()
+    }));
+  } catch (e) {}
+
+  // Send current couple space
+  try {
+    ws.send(JSON.stringify({
+      type: 'couple_space_sync',
+      data: db.getCoupleSpace()
     }));
   } catch (e) {}
 
@@ -330,6 +565,115 @@ wss.on('connection', (ws, request) => {
           db.clearAllTopics();
           broadcastToOthers(ws, JSON.stringify({
             type: 'delete_all_topics'
+          }));
+          return;
+        }
+
+        // Calendar synchronization
+        if ((parsed.type === 'create_calendar_event' || parsed.type === 'save_calendar_event') && parsed.event) {
+          const saved = db.saveCalendarEvent(parsed.event);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'calendar_event_saved',
+            event: saved || parsed.event
+          }));
+          return;
+        }
+
+        if (parsed.type === 'delete_calendar_event' && (parsed.id || parsed.eventId)) {
+          const id = parsed.id || parsed.eventId;
+          db.deleteCalendarEvent(id);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'calendar_event_deleted',
+            id
+          }));
+          return;
+        }
+
+        // Planner / Bucket List synchronization
+        if ((parsed.type === 'create_planner_item' || parsed.type === 'save_planner_item') && parsed.item) {
+          const saved = db.savePlannerItem(parsed.item);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'planner_item_saved',
+            item: saved || parsed.item
+          }));
+          return;
+        }
+
+        if (parsed.type === 'delete_planner_item' && (parsed.id || parsed.itemId)) {
+          const id = parsed.id || parsed.itemId;
+          db.deletePlannerItem(id);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'planner_item_deleted',
+            id
+          }));
+          return;
+        }
+
+        // Love Notes synchronization
+        if ((parsed.type === 'create_note' || parsed.type === 'save_note') && parsed.note) {
+          const saved = db.saveNote(parsed.note);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'note_saved',
+            note: saved || parsed.note
+          }));
+          return;
+        }
+
+        if (parsed.type === 'delete_note' && (parsed.id || parsed.noteId)) {
+          const id = parsed.id || parsed.noteId;
+          db.deleteNote(id);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'note_deleted',
+            id
+          }));
+          return;
+        }
+
+        // Memories synchronization (Polaroids & Milestones)
+        if ((parsed.type === 'create_polaroid' || parsed.type === 'save_polaroid') && parsed.polaroid) {
+          const saved = db.savePolaroid(parsed.polaroid);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'polaroid_saved',
+            polaroid: saved || parsed.polaroid
+          }));
+          return;
+        }
+
+        if (parsed.type === 'delete_polaroid' && (parsed.id || parsed.polaroidId)) {
+          const id = parsed.id || parsed.polaroidId;
+          db.deletePolaroid(id);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'polaroid_deleted',
+            id
+          }));
+          return;
+        }
+
+        if ((parsed.type === 'create_milestone' || parsed.type === 'save_milestone') && parsed.milestone) {
+          const saved = db.saveMilestone(parsed.milestone);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'milestone_saved',
+            milestone: saved || parsed.milestone
+          }));
+          return;
+        }
+
+        if (parsed.type === 'delete_milestone' && (parsed.id || parsed.milestoneId)) {
+          const id = parsed.id || parsed.milestoneId;
+          db.deleteMilestone(id);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'milestone_deleted',
+            id
+          }));
+          return;
+        }
+
+        // Couple Space synchronization
+        if (parsed.type === 'update_couple_space' && parsed.data) {
+          db.saveCoupleSpace(parsed.data);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'couple_space_updated',
+            data: db.getCoupleSpace()
           }));
           return;
         }

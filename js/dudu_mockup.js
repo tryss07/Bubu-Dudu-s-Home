@@ -162,9 +162,9 @@
       }
     ],
     calendarEvents: [
-      { date: 10, month: 9, year: 2026, title: 'Picnic Date 🧺', icon: '🧺' },
-      { date: 24, month: 9, year: 2026, title: 'Anniversary Cake Prep 🎂', icon: '🎂' },
-      { date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼' }
+      { id: 'cal_1', date: 10, month: 9, year: 2026, title: 'Picnic Date 🧺', icon: '🧺' },
+      { id: 'cal_2', date: 24, month: 9, year: 2026, title: 'Anniversary Cake Prep 🎂', icon: '🎂' },
+      { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼' }
     ],
     wardrobe: {
       dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
@@ -185,6 +185,11 @@
         // Force migration to 2025-11-04 per user requirement
         if (!parsed.anniversaryDate || parsed.anniversaryDate !== '2025-11-04') {
           parsed.anniversaryDate = '2025-11-04';
+        }
+        if (Array.isArray(parsed.calendarEvents)) {
+          parsed.calendarEvents.forEach((ev, i) => {
+            if (!ev.id) ev.id = 'cal_' + (i + 1);
+          });
         }
         if (sessionRole && (sessionRole === 'dudu' || sessionRole === 'bubu')) {
           parsed.userRole = sessionRole;
@@ -400,9 +405,106 @@
 
   const lofiEngine = new BedtimeLofiEngine();
 
+  // --- MODAL SHEETS & TACTILE HELPERS ---
+  function openSheet(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('hidden');
+      window.duduAudio?.playPop?.(650);
+    }
+  }
+
+  function closeSheet(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  }
+
+  function updateSyncBadge(status) {
+    const dot = document.getElementById('header-sync-dot');
+    const txt = document.getElementById('header-sync-text');
+    if (!dot || !txt) return;
+    if (status === 'connected') {
+      dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+      txt.textContent = 'synced ♡';
+    } else if (status === 'connecting' || status === 'reconnecting') {
+      dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+      txt.textContent = 'syncing...';
+    } else {
+      dot.className = 'w-2 h-2 rounded-full bg-stone-400';
+      txt.textContent = 'offline';
+    }
+  }
+
+  function sendDeleteRest(endpoint, id) {
+    try {
+      const base = window.DuduChatSocket?.getHttpBaseUrl?.() || 'https://chat.nexora-v1.my.id';
+      fetch(`${base}${endpoint}/${id}`, { method: 'DELETE' }).catch(() => {});
+    } catch (_) {}
+  }
+
+  function sendSaveRest(endpoint, body) {
+    try {
+      const base = window.DuduChatSocket?.getHttpBaseUrl?.() || 'https://chat.nexora-v1.my.id';
+      fetch(`${base}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).catch(() => {});
+    } catch (_) {}
+  }
+
+  async function hydrateDataFromRemoteServer() {
+    try {
+      if (!window.DuduChatSocket?.fetchAllFeaturesRest) return;
+      const data = await window.DuduChatSocket.fetchAllFeaturesRest();
+      let rerender = false;
+      if (Array.isArray(data.calendar) && data.calendar.length > 0) {
+        appData.calendarEvents = data.calendar;
+        rerender = true;
+      }
+      if (Array.isArray(data.planner) && data.planner.length > 0) {
+        appData.bucketList = data.planner;
+        rerender = true;
+      }
+      if (Array.isArray(data.notes) && data.notes.length > 0) {
+        appData.notes = data.notes;
+        rerender = true;
+      }
+      if (Array.isArray(data.polaroids) && data.polaroids.length > 0) {
+        appData.polaroids = data.polaroids;
+        rerender = true;
+      }
+      if (Array.isArray(data.milestones) && data.milestones.length > 0) {
+        appData.milestones = data.milestones;
+        rerender = true;
+      }
+      if (data.coupleSpace) {
+        if (data.coupleSpace.anniversaryDate) appData.anniversaryDate = data.coupleSpace.anniversaryDate;
+        if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = data.coupleSpace.loveBattery;
+        if (data.coupleSpace.statuses) {
+          if (data.coupleSpace.statuses.dudu) appData.statuses.dudu = data.coupleSpace.statuses.dudu;
+          if (data.coupleSpace.statuses.bubu) appData.statuses.bubu = data.coupleSpace.statuses.bubu;
+        }
+        rerender = true;
+      }
+      if (rerender) {
+        saveState();
+        renderOurSpaceHome();
+        renderLoveNotes();
+        renderMemoryJar();
+        renderBucketList();
+        renderOurCalendar();
+      }
+    } catch (err) {
+      console.warn('[Mockup] Remote hydration failed (offline fallback active):', err);
+    }
+  }
+
   // --- INITIALIZATION ---
   window.addEventListener('DOMContentLoaded', () => {
     initTabRouting();
+    initBottomNavOverflow();
+    initChatInputCollapse();
     renderOurSpaceHome();
     renderLoveNotes();
     renderMemoryJar();
@@ -412,10 +514,280 @@
     renderWardrobeRoom();
     initGlobalModals();
     startBedtimeCountdownTimer();
+    setupMockupSocketListeners();
+    hydrateDataFromRemoteServer();
     window.DuduChatUI?.init?.();
   });
 
-  // --- TAB ROUTING ---
+  // --- REAL-TIME WEBSOCKET & REST SYNC ---
+  function setupMockupSocketListeners() {
+    if (!window.DuduChatSocket) return;
+
+    window.DuduChatSocket.onStatusChange?.((status) => updateSyncBadge(status));
+    updateSyncBadge(window.DuduChatSocket.getStatus?.() || 'disconnected');
+
+    // 1. Calendar Sync & Events
+    window.DuduChatSocket.onCalendarSync?.((events) => {
+      if (Array.isArray(events)) {
+        appData.calendarEvents = events;
+        saveState();
+        renderOurCalendar();
+        renderCalendarDayModalEvents();
+      }
+    });
+
+    window.DuduChatSocket.onCalendarEventSaved?.((event) => {
+      if (!event || !event.id) return;
+      const idx = appData.calendarEvents.findIndex(e => e.id === event.id);
+      if (idx >= 0) appData.calendarEvents[idx] = event;
+      else appData.calendarEvents.push(event);
+      saveState();
+      renderOurCalendar();
+      renderCalendarDayModalEvents();
+      showFeedbackToast(`New calendar event: ${event.title} 🗓️`);
+      window.duduAudio?.playPop?.(750);
+    });
+
+    window.DuduChatSocket.onCalendarEventDeleted?.((id) => {
+      if (!id) return;
+      appData.calendarEvents = appData.calendarEvents.filter(e => e.id !== id);
+      saveState();
+      renderOurCalendar();
+      renderCalendarDayModalEvents();
+    });
+
+    // 2. Planner / Bucket List
+    window.DuduChatSocket.onPlannerSync?.((items) => {
+      if (Array.isArray(items)) {
+        appData.bucketList = items;
+        saveState();
+        renderBucketList();
+      }
+    });
+
+    window.DuduChatSocket.onPlannerItemSaved?.((item) => {
+      if (!item || !item.id) return;
+      const idx = appData.bucketList.findIndex(i => i.id === item.id);
+      if (idx >= 0) appData.bucketList[idx] = item;
+      else appData.bucketList.unshift(item);
+      saveState();
+      renderBucketList();
+      showFeedbackToast(`Partner updated date planner! 📝✨`);
+      window.duduAudio?.playPop?.(600);
+    });
+
+    window.DuduChatSocket.onPlannerItemDeleted?.((id) => {
+      if (!id) return;
+      appData.bucketList = appData.bucketList.filter(i => i.id !== id);
+      saveState();
+      renderBucketList();
+    });
+
+    // 3. Love Notes
+    window.DuduChatSocket.onNotesSync?.((notes) => {
+      if (Array.isArray(notes)) {
+        appData.notes = notes;
+        saveState();
+        renderLoveNotes();
+      }
+    });
+
+    window.DuduChatSocket.onNoteSaved?.((note) => {
+      if (!note || !note.body) return;
+      const idx = appData.notes.findIndex(n => n.id === note.id);
+      if (idx >= 0) appData.notes[idx] = note;
+      else appData.notes.unshift(note);
+      saveState();
+      renderLoveNotes();
+      showFeedbackToast(`New love note from ${note.sender}! 💌`);
+      window.duduAudio?.playPop?.(880);
+    });
+
+    window.DuduChatSocket.onNoteDeleted?.((id) => {
+      if (!id) return;
+      appData.notes = appData.notes.filter(n => n.id !== id);
+      saveState();
+      renderLoveNotes();
+    });
+
+    // 4. Memories (Polaroids & Milestones)
+    window.DuduChatSocket.onMemoriesSync?.((data) => {
+      if (data && Array.isArray(data.polaroids)) {
+        appData.polaroids = data.polaroids;
+      }
+      if (data && Array.isArray(data.milestones)) {
+        appData.milestones = data.milestones;
+      }
+      saveState();
+      renderMemoryJar();
+    });
+
+    window.DuduChatSocket.onPolaroidSaved?.((polaroid) => {
+      if (!polaroid || !polaroid.id) return;
+      const idx = appData.polaroids.findIndex(p => p.id === polaroid.id);
+      if (idx >= 0) appData.polaroids[idx] = polaroid;
+      else appData.polaroids.unshift(polaroid);
+      saveState();
+      renderMemoryJar();
+      showFeedbackToast(`Partner added a memory to the jar! 📸🍯`);
+      window.duduAudio?.playPop?.(700);
+    });
+
+    window.DuduChatSocket.onPolaroidDeleted?.((id) => {
+      if (!id) return;
+      appData.polaroids = appData.polaroids.filter(p => p.id !== id);
+      saveState();
+      renderMemoryJar();
+    });
+
+    window.DuduChatSocket.onMilestoneSaved?.((milestone) => {
+      if (!milestone || !milestone.id) return;
+      const idx = appData.milestones.findIndex(m => m.id === milestone.id);
+      if (idx >= 0) appData.milestones[idx] = milestone;
+      else appData.milestones.push(milestone);
+      saveState();
+      renderMemoryJar();
+    });
+
+    window.DuduChatSocket.onMilestoneDeleted?.((id) => {
+      if (!id) return;
+      appData.milestones = appData.milestones.filter(m => m.id !== id);
+      saveState();
+      renderMemoryJar();
+    });
+
+    // 5. Couple Space
+    const handleCoupleSpace = (data) => {
+      if (!data) return;
+      let changed = false;
+      if (data.anniversaryDate && data.anniversaryDate !== appData.anniversaryDate) {
+        appData.anniversaryDate = data.anniversaryDate;
+        changed = true;
+      }
+      if (data.loveBattery !== undefined && data.loveBattery !== appData.loveBattery) {
+        appData.loveBattery = data.loveBattery;
+        changed = true;
+      }
+      if (data.statuses) {
+        if (data.statuses.dudu && data.statuses.dudu !== appData.statuses.dudu) {
+          appData.statuses.dudu = data.statuses.dudu;
+          changed = true;
+        }
+        if (data.statuses.bubu && data.statuses.bubu !== appData.statuses.bubu) {
+          appData.statuses.bubu = data.statuses.bubu;
+          changed = true;
+        }
+      }
+      if (changed) {
+        saveState();
+        renderOurSpaceHome();
+        renderOurCalendar();
+      }
+    };
+
+    window.DuduChatSocket.onCoupleSpaceSync?.(handleCoupleSpace);
+    window.DuduChatSocket.onCoupleSpaceUpdated?.(handleCoupleSpace);
+  }
+
+  // --- TAB ROUTING & BOTTOM DOCK OVERFLOW ---
+  function updateBottomNavOverflow() {
+    const moreBtn = document.getElementById('btn-bottom-nav-more');
+    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const secondaryItems = document.querySelectorAll('.bottom-nav-secondary');
+    if (!moreBtn) return;
+
+    // Small phone screen threshold (< 560px)
+    const isNarrow = window.innerWidth < 560;
+    secondaryItems.forEach(el => {
+      if (isNarrow) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      } else {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    });
+
+    if (isNarrow) {
+      moreBtn.classList.remove('hidden');
+      moreBtn.classList.add('flex');
+    } else {
+      moreBtn.classList.add('hidden');
+      moreBtn.classList.remove('flex');
+      if (morePopup) {
+        morePopup.classList.add('hidden');
+        document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
+      }
+    }
+  }
+
+  function initBottomNavOverflow() {
+    const moreBtn = document.getElementById('btn-bottom-nav-more');
+    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const moreIcon = document.getElementById('bottom-nav-more-icon');
+
+    updateBottomNavOverflow();
+    window.addEventListener('resize', updateBottomNavOverflow);
+
+    moreBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!morePopup) return;
+      const isOpen = !morePopup.classList.contains('hidden');
+      if (isOpen) {
+        morePopup.classList.add('hidden');
+        moreIcon?.classList.remove('rotate-180');
+      } else {
+        morePopup.classList.remove('hidden');
+        moreIcon?.classList.add('rotate-180');
+        window.duduAudio?.playPop?.(480);
+      }
+    });
+
+    // Close when tapping outside
+    document.addEventListener('click', (e) => {
+      if (morePopup && !morePopup.classList.contains('hidden')) {
+        if (!morePopup.contains(e.target) && !moreBtn?.contains(e.target)) {
+          morePopup.classList.add('hidden');
+          moreIcon?.classList.remove('rotate-180');
+        }
+      }
+    });
+  }
+
+  function initChatInputCollapse() {
+    const chatInput = document.getElementById('chat-text-input');
+    const bottomNav = document.getElementById('bottom-nav-bar');
+    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const tabChat = document.getElementById('tab-chat');
+    const messagesContainer = document.getElementById('chat-messages-container');
+
+    chatInput?.addEventListener('focus', () => {
+      bottomNav?.classList.add('nav-collapsed');
+      tabChat?.classList.add('chat-input-focused');
+      if (morePopup) {
+        morePopup.classList.add('hidden');
+        document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
+      }
+    });
+
+    chatInput?.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (document.activeElement !== chatInput) {
+          bottomNav?.classList.remove('nav-collapsed');
+          tabChat?.classList.remove('chat-input-focused');
+        }
+      }, 150);
+    });
+
+    // Dismiss keyboard and restore bottom nav when touching/clicking messages feed
+    messagesContainer?.addEventListener('touchstart', () => {
+      chatInput?.blur();
+    }, { passive: true });
+    messagesContainer?.addEventListener('mousedown', () => {
+      chatInput?.blur();
+    });
+  }
+
   function initTabRouting() {
     const navLinks = document.querySelectorAll('.mockup-nav-item');
     navLinks.forEach(link => {
@@ -438,6 +810,7 @@
   }
 
   function switchTab(tabName, updateHash = true) {
+    if (tabName === 'memory') tabName = 'memories';
     const tabs = ['home', 'notes', 'chat', 'memories', 'calendar', 'bucket', 'music', 'wardrobe'];
     if (!tabs.includes(tabName)) tabName = 'home';
 
@@ -454,6 +827,13 @@
       }
     });
 
+    // Close more popup on tab switch
+    const morePopup = document.getElementById('bottom-nav-more-popup');
+    if (morePopup) {
+      morePopup.classList.add('hidden');
+      document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
+    }
+
     // Update bottom dock active styles
     document.querySelectorAll('.mockup-nav-item').forEach(btn => {
       const target = btn.getAttribute('data-tab');
@@ -466,10 +846,30 @@
       }
     });
 
+    // Highlight More button if active tab is one of the secondary tabs
+    const isSecondaryTab = ['calendar', 'bucket', 'music', 'wardrobe'].includes(tabName);
+    const moreBtn = document.getElementById('btn-bottom-nav-more');
+    const moreDot = document.getElementById('bottom-nav-more-dot');
+    if (moreBtn) {
+      if (isSecondaryTab) {
+        moreBtn.classList.add('dock-item-active', 'text-white');
+        moreBtn.classList.remove('opacity-75');
+        moreDot?.classList.remove('hidden');
+      } else {
+        moreBtn.classList.remove('dock-item-active', 'text-white');
+        moreBtn.classList.add('opacity-75');
+        moreDot?.classList.add('hidden');
+      }
+    }
+
     // Special handling for chat tab
     document.body.classList.toggle('chat-tab-active', tabName === 'chat');
     if (tabName === 'chat') {
       window.scrollToChatBottom?.();
+    } else {
+      // Ensure bottom dock is visible if navigating away while typing
+      document.getElementById('bottom-nav-bar')?.classList.remove('nav-collapsed');
+      document.getElementById('tab-chat')?.classList.remove('chat-input-focused');
     }
 
     if (updateHash && window.location.hash !== `#${tabName}`) {
@@ -508,6 +908,7 @@
         appData.loveBattery = Math.min(100, appData.loveBattery + 10);
         saveState();
         updateLoveBatteryUI();
+        window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
         triggerHeartBurst();
         showFeedbackToast('Love battery charged! 💖 +10%');
         window.duduAudio?.playPop?.(650);
@@ -602,7 +1003,12 @@
               <span class="font-bold text-[#8D5B4C] flex items-center gap-1">
                 Written by ${escapeHtml(note.sender)}
               </span>
-              <span>${escapeHtml(note.time)}</span>
+              <div class="flex items-center gap-2">
+                <span>${escapeHtml(note.time)}</span>
+                <button type="button" class="btn-delete-note w-6 h-6 rounded-full text-stone-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center transition-colors cursor-pointer button-press" data-id="${note.id}" title="Delete note">
+                  <span class="material-symbols-outlined text-[15px]">delete</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -615,7 +1021,12 @@
             </p>
             <div class="flex items-center justify-between text-[11px] font-bold opacity-85">
               <span>From ${escapeHtml(note.sender)}</span>
-              <span>${escapeHtml(note.time)}</span>
+              <div class="flex items-center gap-2">
+                <span>${escapeHtml(note.time)}</span>
+                <button type="button" class="btn-delete-note w-6 h-6 rounded-full text-[#4A3222]/50 hover:text-rose-700 hover:bg-black/5 flex items-center justify-center transition-colors cursor-pointer button-press" data-id="${note.id}" title="Delete note">
+                  <span class="material-symbols-outlined text-[15px]">delete</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -630,15 +1041,32 @@
             </div>
             <div class="flex items-center justify-between text-[11px] text-on-surface-variant font-bold px-1">
               <span>From ${escapeHtml(note.sender)}</span>
-              <span>${escapeHtml(note.time)}</span>
+              <div class="flex items-center gap-2">
+                <span>${escapeHtml(note.time)}</span>
+                <button type="button" class="btn-delete-note w-6 h-6 rounded-full text-stone-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center transition-colors cursor-pointer button-press" data-id="${note.id}" title="Delete note">
+                  <span class="material-symbols-outlined text-[15px]">delete</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }
 
+      card.querySelector('.btn-delete-note')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        appData.notes = appData.notes.filter(n => n.id !== note.id);
+        saveState();
+        renderLoveNotes();
+        window.DuduChatSocket?.sendDeleteNote?.(note.id);
+        sendDeleteRest('/api/notes', note.id);
+        showFeedbackToast('Love note deleted 🗑️');
+        window.duduAudio?.playPop?.(400);
+      });
+
       card.onclick = () => {
         note.isRead = true;
         saveState();
+        window.DuduChatSocket?.sendSaveNote?.(note);
         showNoteDetailsModal(note);
       };
 
@@ -673,6 +1101,9 @@
 
       card.innerHTML = `
         <div class="washi-tape ${p.tape || 'washi-tape-grid'} -top-2.5 left-1/2 -translate-x-1/2"></div>
+        <button type="button" class="btn-delete-polaroid absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 dark:bg-stone-800/90 text-stone-400 hover:text-rose-500 flex items-center justify-center opacity-80 hover:opacity-100 transition-all cursor-pointer shadow-xs button-press" data-id="${p.id}" title="Delete photo">
+          <span class="material-symbols-outlined text-[14px]">delete</span>
+        </button>
         <div class="aspect-4/3 w-full rounded-xl overflow-hidden bg-stone-100 flex items-center justify-center">
           <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover">
         </div>
@@ -682,6 +1113,17 @@
           </span>
         </div>
       `;
+
+      card.querySelector('.btn-delete-polaroid')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        appData.polaroids = appData.polaroids.filter(item => item.id !== p.id);
+        saveState();
+        renderMemoryJar();
+        window.DuduChatSocket?.sendDeletePolaroid?.(p.id);
+        sendDeleteRest('/api/memories/polaroids', p.id);
+        showFeedbackToast('Photo removed from jar 🗑️');
+        window.duduAudio?.playPop?.(400);
+      });
 
       card.onclick = () => showPolaroidPreviewModal(p);
       polaroidGrid.appendChild(card);
@@ -700,13 +1142,30 @@
           <div class="w-3.5 h-3.5 rounded-full border-2 border-[#8D5B4C] bg-[#FAF5EE] z-10"></div>
           ${idx < appData.milestones.length - 1 ? '<div class="w-0.5 flex-1 border-l-2 border-dashed border-[#8D5B4C]/50 mt-1"></div>' : ''}
         </div>
-        <div class="flex-1 -mt-0.5">
-          <h4 class="font-heading font-bold text-xs text-primary">${escapeHtml(m.title)}</h4>
-          <p class="text-[11px] text-on-surface-variant leading-relaxed">
-            <span class="font-semibold">${escapeHtml(m.date)}</span> — ${escapeHtml(m.desc)}
-          </p>
+        <div class="flex-1 -mt-0.5 flex items-start justify-between gap-2">
+          <div>
+            <h4 class="font-heading font-bold text-xs text-primary">${escapeHtml(m.title)}</h4>
+            <p class="text-[11px] text-on-surface-variant leading-relaxed">
+              <span class="font-semibold">${escapeHtml(m.date)}</span> — ${escapeHtml(m.desc)}
+            </p>
+          </div>
+          <button type="button" class="btn-delete-milestone text-stone-400 hover:text-rose-500 p-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer button-press transition-colors" data-id="${m.id}" title="Delete milestone">
+            <span class="material-symbols-outlined text-[14px]">delete</span>
+          </button>
         </div>
       `;
+
+      node.querySelector('.btn-delete-milestone')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        appData.milestones = appData.milestones.filter(item => item.id !== m.id);
+        saveState();
+        renderMemoryJar();
+        window.DuduChatSocket?.sendDeleteMilestone?.(m.id);
+        sendDeleteRest('/api/memories/milestones', m.id);
+        showFeedbackToast('Milestone removed 🗑️');
+        window.duduAudio?.playPop?.(400);
+      });
+
       timelineList.appendChild(node);
     });
   }
@@ -747,14 +1206,19 @@
             ${item.completed ? '<span class="text-xs font-bold">✓</span>' : ''}
           </button>
           <div class="flex flex-col min-w-0">
-            <h4 class="font-heading font-bold text-xs text-primary leading-tight ${item.completed ? 'line-through opacity-70' : ''}">${escapeHtml(item.title)}</h4>
+            <h4 class="font-heading font-bold text-xs text-primary dark:text-stone-100 leading-tight ${item.completed ? 'line-through opacity-70' : ''}">${escapeHtml(item.title)}</h4>
             <p class="text-[11px] text-on-surface-variant leading-relaxed line-clamp-2 mt-0.5">${escapeHtml(item.desc)}</p>
             <span class="text-[10px] text-[#8D5B4C] font-semibold mt-1">Planned: ${escapeHtml(item.plannedDate)}</span>
           </div>
         </div>
 
-        <div class="flex flex-col items-center gap-1.5 shrink-0">
-          ${item.image ? `<img src="${item.image}" alt="date" class="w-16 h-12 rounded-xl object-cover border border-outline-variant/30">` : ''}
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <div class="flex items-center gap-1.5">
+            ${item.image ? `<img src="${item.image}" alt="date" class="w-12 h-10 rounded-xl object-cover border border-[#E8DACB]">` : ''}
+            <button type="button" class="btn-delete-bucket w-7 h-7 rounded-full text-stone-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center transition-colors cursor-pointer button-press" data-id="${item.id}" title="Delete date idea">
+              <span class="material-symbols-outlined text-[16px]">delete</span>
+            </button>
+          </div>
           <span class="px-2 py-0.5 rounded-full text-[9px] font-bold ${item.completed ? 'bg-emerald-100 text-emerald-800' : 'bg-[#FBE4D5] text-[#8D5B4C]'}">
             ${item.completed ? 'Done!' : escapeHtml(item.statusBadge || 'Ready')}
           </span>
@@ -766,9 +1230,22 @@
         item.completed = !item.completed;
         saveState();
         renderBucketList();
+        window.DuduChatSocket?.sendSavePlannerItem?.(item);
+        sendSaveRest('/api/planner', item);
         window.duduAudio?.playPop?.(item.completed ? 800 : 400);
         showFeedbackToast(item.completed ? 'Date completed! 🥰' : 'Marked active');
       };
+
+      card.querySelector('.btn-delete-bucket')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        appData.bucketList = appData.bucketList.filter(b => b.id !== item.id);
+        saveState();
+        renderBucketList();
+        window.DuduChatSocket?.sendDeletePlannerItem?.(item.id);
+        sendDeleteRest('/api/planner', item.id);
+        showFeedbackToast('Date removed from wishlist 🗑️');
+        window.duduAudio?.playPop?.(400);
+      });
 
       listEl.appendChild(card);
     });
@@ -872,22 +1349,68 @@
     }
   }
 
-  function showCalendarDayEvents(day, month, year) {
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const dateStr = `${monthNames[month]} ${day}, ${year}`;
-    const events = appData.calendarEvents.filter(e => e.date === day && e.month === month && e.year === year);
+  let activeCalSelection = null;
 
-    if (events.length > 0) {
-      alert(`🗓️ ${dateStr}:\n` + events.map(e => `• ${e.title}`).join('\n'));
-    } else {
-      const title = prompt(`Add a cozy event for ${dateStr}:`, 'Sweet dinner date 🍝');
-      if (title) {
-        appData.calendarEvents.push({ date: day, month: month, year: year, title: title, icon: '❤️' });
+  function showCalendarDayEvents(day, month, year) {
+    activeCalSelection = { day, month, year };
+    const fullMonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const dateStr = `${fullMonthNames[month]} ${day}, ${year}`;
+
+    const titleEl = document.getElementById('modal-cal-date-title');
+    if (titleEl) titleEl.textContent = dateStr;
+
+    renderCalendarDayModalEvents();
+
+    const inputEl = document.getElementById('input-cal-event-title');
+    if (inputEl) inputEl.value = '';
+
+    openSheet('modal-calendar-day');
+  }
+
+  function renderCalendarDayModalEvents() {
+    if (!activeCalSelection) return;
+    const { day, month, year } = activeCalSelection;
+    const listEl = document.getElementById('modal-cal-events-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    const events = appData.calendarEvents.filter(e => e.date === day && e.month === month && e.year === year);
+    if (events.length === 0) {
+      listEl.innerHTML = `
+        <div class="text-center py-3 text-xs text-stone-400 font-semibold italic">
+          No cozy plans yet on this day. Add something sweet below! ✨
+        </div>
+      `;
+      return;
+    }
+
+    events.forEach(e => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-stone-700/80 border border-[#E8DACB] gap-2 button-press shadow-2xs';
+      itemEl.innerHTML = `
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          <span class="text-base">${escapeHtml(e.icon || '❤️')}</span>
+          <span class="text-xs font-bold text-primary dark:text-stone-100 truncate">${escapeHtml(e.title)}</span>
+        </div>
+        <button type="button" class="btn-del-cal-event p-1 text-stone-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer button-press transition-colors" data-id="${e.id}" title="Delete event">
+          <span class="material-symbols-outlined text-sm">delete</span>
+        </button>
+      `;
+
+      itemEl.querySelector('.btn-del-cal-event').onclick = (ev) => {
+        ev.stopPropagation();
+        appData.calendarEvents = appData.calendarEvents.filter(item => item.id !== e.id);
         saveState();
         renderOurCalendar();
-        showFeedbackToast('Event added to calendar! 🗓️');
-      }
-    }
+        renderCalendarDayModalEvents();
+        window.DuduChatSocket?.sendDeleteCalendarEvent?.(e.id);
+        sendDeleteRest('/api/calendar', e.id);
+        showFeedbackToast('Event deleted! 🗑️');
+        window.duduAudio?.playPop?.(400);
+      };
+
+      listEl.appendChild(itemEl);
+    });
   }
 
   // --- 6. BEDTIME & MUSIC (music & bed time.jpg) ---
@@ -1077,7 +1600,7 @@
             if (gameMatchedPairs === cardItems.length) {
               clearInterval(gameTimer);
               setTimeout(() => {
-                alert(`🎉 Congratulations! You cleared all pairs!\nFinal Score: ${gameScore} 🐻❤️`);
+                showFeedbackToast(`🎉 Congratulations! Score: ${gameScore} 🐻❤️`);
                 modal.classList.add('hidden');
               }, 400);
             }
@@ -1105,7 +1628,7 @@
       if (timeEl) timeEl.textContent = `${timeLeft}s`;
       if (timeLeft <= 0) {
         clearInterval(gameTimer);
-        alert(`Time's up! Great effort, score: ${gameScore} ✨`);
+        showFeedbackToast(`Time's up! Great effort, score: ${gameScore} ✨`);
         modal.classList.add('hidden');
       }
     }, 1000);
@@ -1120,77 +1643,287 @@
   }
 
   // --- GLOBAL MODALS & HELPERS ---
+  // --- GLOBAL MODALS & HELPERS ---
+  let activeViewingNote = null;
+  let activeViewingPolaroid = null;
+
   function initGlobalModals() {
-    // Write Love Note Modal
+    // 1. Write Love Note Modal
     const btnWriteNote = document.getElementById('btn-write-love-note');
-    const modalWriteNote = document.getElementById('modal-write-love-note');
-    if (btnWriteNote && modalWriteNote) {
-      btnWriteNote.onclick = () => modalWriteNote.classList.remove('hidden');
-      const closeBtn = document.getElementById('btn-close-write-note');
-      if (closeBtn) closeBtn.onclick = () => modalWriteNote.classList.add('hidden');
+    if (btnWriteNote) {
+      btnWriteNote.onclick = () => {
+        const bodyInput = document.getElementById('input-love-note-body');
+        if (bodyInput) bodyInput.value = '';
+        openSheet('modal-write-love-note');
+      };
+    }
+    const closeWriteNote = document.getElementById('btn-close-write-note');
+    if (closeWriteNote) closeWriteNote.onclick = () => closeSheet('modal-write-love-note');
 
-      const sendBtn = document.getElementById('btn-submit-love-note');
-      if (sendBtn) {
-        sendBtn.onclick = () => {
-          const body = document.getElementById('input-love-note-body')?.value?.trim();
-          if (!body) return alert('Please write a note! 💌');
+    const sendNoteBtn = document.getElementById('btn-submit-love-note');
+    if (sendNoteBtn) {
+      sendNoteBtn.onclick = () => {
+        const body = document.getElementById('input-love-note-body')?.value?.trim();
+        if (!body) {
+          showFeedbackToast('Please write a note! 💌');
+          return;
+        }
 
-          const styleEl = document.querySelector('input[name="note-style"]:checked');
-          const style = styleEl ? styleEl.value : 'envelope';
+        const styleEl = document.querySelector('input[name="note-style"]:checked');
+        const style = styleEl ? styleEl.value : 'envelope';
 
-          const newNote = {
-            id: 'note_' + Date.now(),
-            style: style,
-            body: body,
-            sender: appData.userRole === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼',
-            senderRole: appData.userRole,
-            time: 'Just now',
-            date: 'Today',
-            isFavorite: true,
-            isRead: false
-          };
-
-          appData.notes.unshift(newNote);
-          saveState();
-          renderLoveNotes();
-          modalWriteNote.classList.add('hidden');
-          document.getElementById('input-love-note-body').value = '';
-          showFeedbackToast('Love note sent to Honey! 💌');
-          window.duduAudio?.playPop?.(850);
+        const newNote = {
+          id: 'note_' + Date.now(),
+          style: style,
+          body: body,
+          sender: appData.userRole === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼',
+          senderRole: appData.userRole,
+          time: 'Just now',
+          date: 'Today',
+          isFavorite: true,
+          isRead: false
         };
-      }
+
+        appData.notes.unshift(newNote);
+        saveState();
+        renderLoveNotes();
+        window.DuduChatSocket?.sendSaveNote?.(newNote);
+        sendSaveRest('/api/notes', newNote);
+        closeSheet('modal-write-love-note');
+        document.getElementById('input-love-note-body').value = '';
+        showFeedbackToast('Love note sent to Honey! 💌');
+        window.duduAudio?.playPop?.(850);
+      };
     }
 
-    // Add Polaroid Modal
+    // 2. Add Polaroid Modal
     const btnAddPol = document.getElementById('btn-add-polaroid');
-    const modalAddPol = document.getElementById('modal-add-polaroid');
-    if (btnAddPol && modalAddPol) {
-      btnAddPol.onclick = () => modalAddPol.classList.remove('hidden');
-      const closeBtn = document.getElementById('btn-close-add-polaroid');
-      if (closeBtn) closeBtn.onclick = () => modalAddPol.classList.add('hidden');
+    if (btnAddPol) {
+      btnAddPol.onclick = () => {
+        const titleInput = document.getElementById('input-polaroid-title');
+        const dateInput = document.getElementById('input-polaroid-date');
+        if (titleInput) titleInput.value = '';
+        if (dateInput) dateInput.value = '';
+        openSheet('modal-add-polaroid');
+      };
+    }
+    const closeAddPol = document.getElementById('btn-close-add-polaroid');
+    if (closeAddPol) closeAddPol.onclick = () => closeSheet('modal-add-polaroid');
 
-      const submitBtn = document.getElementById('btn-submit-polaroid');
-      if (submitBtn) {
-        submitBtn.onclick = () => {
-          const title = document.getElementById('input-polaroid-title')?.value?.trim() || 'Cozy Date';
-          const date = document.getElementById('input-polaroid-date')?.value?.trim() || 'Today';
+    const submitPolBtn = document.getElementById('btn-submit-polaroid');
+    if (submitPolBtn) {
+      submitPolBtn.onclick = () => {
+        const title = document.getElementById('input-polaroid-title')?.value?.trim() || 'Cozy Date';
+        const date = document.getElementById('input-polaroid-date')?.value?.trim() || 'Today';
 
-          const newPol = {
-            id: 'pol_' + Date.now(),
-            title: title,
-            date: date,
-            image: 'assets/mockup_art/polaroid_picnic.png',
-            tape: 'washi-tape-peach',
-            rotate: (Math.random() * 4 - 2)
-          };
-
-          appData.polaroids.unshift(newPol);
-          saveState();
-          renderMemoryJar();
-          modalAddPol.classList.add('hidden');
-          showFeedbackToast('Polaroid added to jar! 📸');
+        const newPol = {
+          id: 'pol_' + Date.now(),
+          title: title,
+          date: date,
+          image: 'assets/mockup_art/polaroid_picnic.png',
+          tape: 'washi-tape-peach',
+          rotate: (Math.random() * 4 - 2)
         };
-      }
+
+        appData.polaroids.unshift(newPol);
+        saveState();
+        renderMemoryJar();
+        window.DuduChatSocket?.sendSavePolaroid?.(newPol);
+        sendSaveRest('/api/memories/polaroids', newPol);
+        closeSheet('modal-add-polaroid');
+        showFeedbackToast('Polaroid added to jar! 📸');
+        window.duduAudio?.playPop?.(750);
+      };
+    }
+
+    // 3. Add Date Idea (Planner / Bucket List) Modal
+    const btnAddDate = document.getElementById('btn-add-date-idea');
+    if (btnAddDate) {
+      btnAddDate.onclick = () => {
+        const titleInput = document.getElementById('input-planner-title');
+        const descInput = document.getElementById('input-planner-desc');
+        if (titleInput) titleInput.value = '';
+        if (descInput) descInput.value = '';
+        openSheet('modal-add-planner');
+      };
+    }
+    const closePlanner = document.getElementById('btn-close-planner-modal');
+    if (closePlanner) closePlanner.onclick = () => closeSheet('modal-add-planner');
+
+    const submitPlanner = document.getElementById('btn-submit-planner-item');
+    if (submitPlanner) {
+      submitPlanner.onclick = () => {
+        const titleInput = document.getElementById('input-planner-title');
+        const descInput = document.getElementById('input-planner-desc');
+        const title = titleInput?.value?.trim();
+        if (!title) {
+          showFeedbackToast('Please enter a date idea! ✨');
+          return;
+        }
+        const desc = descInput?.value?.trim() || 'A cozy couple adventure together';
+        const catEl = document.querySelector('input[name="planner-category"]:checked');
+        const category = catEl ? catEl.value : 'outdoor';
+
+        const newPlan = {
+          id: 'bl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          title: title,
+          desc: desc,
+          plannedDate: 'Soon',
+          statusBadge: 'Ready to Go',
+          category: category,
+          completed: false,
+          image: category === 'indoor' ? 'assets/mockup_art/date_coffee.png' : 'assets/mockup_art/date_stargazing.png'
+        };
+
+        appData.bucketList.unshift(newPlan);
+        saveState();
+        renderBucketList();
+        window.DuduChatSocket?.sendSavePlannerItem?.(newPlan);
+        sendSaveRest('/api/planner', newPlan);
+        closeSheet('modal-add-planner');
+        showFeedbackToast('Date idea added to planner! 📝✨');
+        window.duduAudio?.playPop?.(800);
+      };
+    }
+
+    // 4. Calendar Day Modal (Close & Add)
+    const closeCal = document.getElementById('btn-close-cal-modal');
+    if (closeCal) closeCal.onclick = () => closeSheet('modal-calendar-day');
+
+    const submitCal = document.getElementById('btn-submit-cal-event');
+    if (submitCal) {
+      submitCal.onclick = () => {
+        if (!activeCalSelection) return;
+        const input = document.getElementById('input-cal-event-title');
+        const title = input?.value?.trim();
+        if (!title) {
+          showFeedbackToast('Please enter an event title! 🗓️');
+          return;
+        }
+
+        const iconEl = document.querySelector('input[name="cal-icon"]:checked');
+        const icon = iconEl ? iconEl.value : '❤️';
+
+        const newEvent = {
+          id: 'cal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          date: activeCalSelection.day,
+          month: activeCalSelection.month,
+          year: activeCalSelection.year,
+          title: title,
+          icon: icon
+        };
+
+        appData.calendarEvents.push(newEvent);
+        saveState();
+        renderOurCalendar();
+        renderCalendarDayModalEvents();
+        window.DuduChatSocket?.sendSaveCalendarEvent?.(newEvent);
+        sendSaveRest('/api/calendar', newEvent);
+        if (input) input.value = '';
+        showFeedbackToast('Event added to calendar! 🗓️✨');
+        window.duduAudio?.playPop?.(750);
+      };
+    }
+
+    // 5. View Love Note Modal
+    const closeViewNote = document.getElementById('btn-close-view-note');
+    if (closeViewNote) closeViewNote.onclick = () => closeSheet('modal-view-love-note');
+
+    const dismissViewNote = document.getElementById('btn-dismiss-view-note');
+    if (dismissViewNote) dismissViewNote.onclick = () => closeSheet('modal-view-love-note');
+
+    const delViewNote = document.getElementById('btn-delete-view-note');
+    if (delViewNote) {
+      delViewNote.onclick = () => {
+        if (!activeViewingNote) return;
+        const id = activeViewingNote.id;
+        appData.notes = appData.notes.filter(n => n.id !== id);
+        saveState();
+        renderLoveNotes();
+        window.DuduChatSocket?.sendDeleteNote?.(id);
+        sendDeleteRest('/api/notes', id);
+        closeSheet('modal-view-love-note');
+        showFeedbackToast('Love note removed from space 🗑️');
+        window.duduAudio?.playPop?.(400);
+      };
+    }
+
+    // 6. View Polaroid Modal
+    const closeViewPol = document.getElementById('btn-close-view-polaroid');
+    if (closeViewPol) closeViewPol.onclick = () => closeSheet('modal-view-polaroid');
+
+    const dismissViewPol = document.getElementById('btn-dismiss-view-polaroid');
+    if (dismissViewPol) dismissViewPol.onclick = () => closeSheet('modal-view-polaroid');
+
+    const delViewPol = document.getElementById('btn-delete-view-polaroid');
+    if (delViewPol) {
+      delViewPol.onclick = () => {
+        if (!activeViewingPolaroid) return;
+        const id = activeViewingPolaroid.id;
+        appData.polaroids = appData.polaroids.filter(p => p.id !== id);
+        saveState();
+        renderMemoryJar();
+        window.DuduChatSocket?.sendDeletePolaroid?.(id);
+        sendDeleteRest('/api/memories/polaroids', id);
+        closeSheet('modal-view-polaroid');
+        showFeedbackToast('Photo removed from jar 🗑️');
+        window.duduAudio?.playPop?.(400);
+      };
+    }
+
+    // 7. Status Modal
+    const closeStatus = document.getElementById('btn-close-status-modal');
+    if (closeStatus) closeStatus.onclick = () => closeSheet('modal-edit-status');
+
+    const saveStatusBtn = document.getElementById('btn-save-partner-status');
+    if (saveStatusBtn) {
+      saveStatusBtn.onclick = () => {
+        const inputEl = document.getElementById('input-partner-status');
+        const next = inputEl?.value?.trim();
+        if (next) {
+          if (appData.userRole === 'dudu') appData.statuses.dudu = next;
+          else appData.statuses.bubu = next;
+          saveState();
+          renderOurSpaceHome();
+          window.DuduChatSocket?.sendUpdateCoupleSpace?.({ statuses: appData.statuses });
+          sendSaveRest('/api/couple-space', { statuses: appData.statuses });
+          closeSheet('modal-edit-status');
+          showFeedbackToast('Status updated! 💭');
+          window.duduAudio?.playPop?.(700);
+        }
+      };
+    }
+
+    // Quick Status Presets
+    document.querySelectorAll('.btn-preset-status').forEach(btn => {
+      btn.onclick = () => {
+        const inputEl = document.getElementById('input-partner-status');
+        if (inputEl) inputEl.value = btn.textContent.trim();
+        window.duduAudio?.playPop?.(500);
+      };
+    });
+
+    // 8. Anniversary Modal
+    const closeAnniv = document.getElementById('btn-close-anniversary-modal');
+    if (closeAnniv) closeAnniv.onclick = () => closeSheet('modal-edit-anniversary');
+
+    const saveAnnivBtn = document.getElementById('btn-save-anniversary');
+    if (saveAnnivBtn) {
+      saveAnnivBtn.onclick = () => {
+        const inputEl = document.getElementById('input-anniversary-iso');
+        const next = inputEl?.value?.trim();
+        if (next && /^\d{4}-\d{2}-\d{2}$/.test(next)) {
+          appData.anniversaryDate = next;
+          saveState();
+          renderOurSpaceHome();
+          renderOurCalendar();
+          window.DuduChatSocket?.sendUpdateCoupleSpace?.({ anniversaryDate: appData.anniversaryDate });
+          sendSaveRest('/api/couple-space', { anniversaryDate: appData.anniversaryDate });
+          closeSheet('modal-edit-anniversary');
+          showFeedbackToast(`Anniversary updated! (${getDaysTogether()} days) ♡`);
+          window.duduAudio?.playPop?.(750);
+        }
+      };
     }
 
     // Identity switch (Dudu / Bubu)
@@ -1245,33 +1978,39 @@
 
   function openStatusEditModal() {
     const current = appData.userRole === 'dudu' ? appData.statuses.dudu : appData.statuses.bubu;
-    const next = prompt(`Update status for ${appData.userRole === 'dudu' ? 'Dudu' : 'Bubu'}:`, current);
-    if (next && next.trim()) {
-      if (appData.userRole === 'dudu') appData.statuses.dudu = next.trim();
-      else appData.statuses.bubu = next.trim();
-      saveState();
-      renderOurSpaceHome();
-      showFeedbackToast('Status updated! 💭');
-    }
+    const inputEl = document.getElementById('input-partner-status');
+    if (inputEl) inputEl.value = current || '';
+    openSheet('modal-edit-status');
   }
 
   function openAnniversaryModal() {
-    const dateInput = prompt('Enter your relationship start date (YYYY-MM-DD):', appData.anniversaryDate || '2025-11-04');
-    if (dateInput && /^\d{4}-\d{2}-\d{2}$/.test(dateInput.trim())) {
-      appData.anniversaryDate = dateInput.trim();
-      saveState();
-      renderOurSpaceHome();
-      renderOurCalendar();
-      showFeedbackToast(`Anniversary updated! (${getDaysTogether()} days) ♡`);
-    }
+    const inputEl = document.getElementById('input-anniversary-iso');
+    const previewEl = document.getElementById('anniversary-preview-days');
+    if (inputEl) inputEl.value = appData.anniversaryDate || '2025-11-04';
+    if (previewEl) previewEl.textContent = `Together for ${getDaysTogether()} sweet days ♡`;
+    openSheet('modal-edit-anniversary');
   }
 
   function showPolaroidPreviewModal(p) {
-    alert(`📸 ${p.title} (${p.date})\nStored safely in our Memory Jar! 🍯✨`);
+    activeViewingPolaroid = p;
+    const imgEl = document.getElementById('modal-polaroid-img');
+    const titleEl = document.getElementById('modal-polaroid-title');
+    const dateEl = document.getElementById('modal-polaroid-date');
+    if (imgEl) imgEl.src = p.image;
+    if (titleEl) titleEl.textContent = p.title;
+    if (dateEl) dateEl.textContent = p.date;
+    openSheet('modal-view-polaroid');
   }
 
   function showNoteDetailsModal(note) {
-    alert(`💌 Love Note from ${note.sender} (${note.time}):\n\n"${note.body}"`);
+    activeViewingNote = note;
+    const senderEl = document.getElementById('modal-view-note-sender');
+    const timeEl = document.getElementById('modal-view-note-time');
+    const bodyEl = document.getElementById('modal-view-note-body');
+    if (senderEl) senderEl.textContent = `Love Note from ${note.sender}`;
+    if (timeEl) timeEl.textContent = `${note.date || 'Today'} • ${note.time || ''}`;
+    if (bodyEl) bodyEl.textContent = `"${note.body}"`;
+    openSheet('modal-view-love-note');
   }
 
   function showFeedbackToast(msg) {

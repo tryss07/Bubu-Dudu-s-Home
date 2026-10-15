@@ -33,11 +33,36 @@
     tummyLogCreated: new Set(),
     tummyLogDeleted: new Set(),
     tummyLogSync: new Set(),
+    calendarSync: new Set(),
+    calendarEventSaved: new Set(),
+    calendarEventDeleted: new Set(),
+    plannerSync: new Set(),
+    plannerItemSaved: new Set(),
+    plannerItemDeleted: new Set(),
+    notesSync: new Set(),
+    noteSaved: new Set(),
+    noteDeleted: new Set(),
+    memoriesSync: new Set(),
+    polaroidSaved: new Set(),
+    polaroidDeleted: new Set(),
+    milestoneSaved: new Set(),
+    milestoneDeleted: new Set(),
+    coupleSpaceSync: new Set(),
+    coupleSpaceUpdated: new Set(),
     typing: new Set()
   };
 
   function getServerUrl() {
-    return localStorage.getItem(STORAGE_KEY_SERVER) || localStorage.getItem('dudu_chat_server_url') || DEFAULT_REMOTE_URL;
+    const custom = localStorage.getItem(STORAGE_KEY_SERVER) || localStorage.getItem('dudu_chat_server_url');
+    if (custom) return custom;
+    if (typeof window !== 'undefined' && window.location) {
+      const host = window.location.hostname;
+      if (host === 'chat.nexora-v1.my.id') {
+        const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        return `${proto}//${window.location.host}/chat-socket`;
+      }
+    }
+    return DEFAULT_REMOTE_URL;
   }
 
   function setServerUrl(url) {
@@ -183,6 +208,112 @@
         if (payload.type === 'tummy_log_sync' && Array.isArray(payload.logs)) {
           listeners.tummyLogSync.forEach(fn => {
             try { fn(payload.logs); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
+        // Calendar
+        if (payload.type === 'calendar_sync' && Array.isArray(payload.events)) {
+          listeners.calendarSync.forEach(fn => {
+            try { fn(payload.events); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'calendar_event_saved' && payload.event) {
+          listeners.calendarEventSaved.forEach(fn => {
+            try { fn(payload.event); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'calendar_event_deleted') {
+          listeners.calendarEventDeleted.forEach(fn => {
+            try { fn(payload.id); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
+        // Planner
+        if (payload.type === 'planner_sync' && Array.isArray(payload.items)) {
+          listeners.plannerSync.forEach(fn => {
+            try { fn(payload.items); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'planner_item_saved' && payload.item) {
+          listeners.plannerItemSaved.forEach(fn => {
+            try { fn(payload.item); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'planner_item_deleted') {
+          listeners.plannerItemDeleted.forEach(fn => {
+            try { fn(payload.id); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
+        // Notes
+        if (payload.type === 'notes_sync' && Array.isArray(payload.notes)) {
+          listeners.notesSync.forEach(fn => {
+            try { fn(payload.notes); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'note_saved' && payload.note) {
+          listeners.noteSaved.forEach(fn => {
+            try { fn(payload.note); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'note_deleted') {
+          listeners.noteDeleted.forEach(fn => {
+            try { fn(payload.id); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
+        // Memories
+        if (payload.type === 'memories_sync') {
+          listeners.memoriesSync.forEach(fn => {
+            try { fn(payload); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'polaroid_saved' && payload.polaroid) {
+          listeners.polaroidSaved.forEach(fn => {
+            try { fn(payload.polaroid); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'polaroid_deleted') {
+          listeners.polaroidDeleted.forEach(fn => {
+            try { fn(payload.id); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'milestone_saved' && payload.milestone) {
+          listeners.milestoneSaved.forEach(fn => {
+            try { fn(payload.milestone); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'milestone_deleted') {
+          listeners.milestoneDeleted.forEach(fn => {
+            try { fn(payload.id); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
+        // Couple Space
+        if (payload.type === 'couple_space_sync' && payload.data) {
+          listeners.coupleSpaceSync.forEach(fn => {
+            try { fn(payload.data); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'couple_space_updated' && payload.data) {
+          listeners.coupleSpaceUpdated.forEach(fn => {
+            try { fn(payload.data); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -383,8 +514,41 @@
       const protocol = u.protocol === 'wss:' ? 'https:' : 'http:';
       return `${protocol}//${u.host}`;
     } catch (e) {
-      return 'http://localhost:3000';
+      return 'https://chat.nexora-v1.my.id';
     }
+  }
+
+  async function fetchAllFeaturesRest() {
+    const baseUrl = getHttpBaseUrl();
+    const result = {
+      calendar: [],
+      planner: [],
+      notes: [],
+      polaroids: [],
+      milestones: [],
+      coupleSpace: null
+    };
+
+    try {
+      const [calRes, planRes, notesRes, polRes, msRes, spaceRes] = await Promise.allSettled([
+        fetch(`${baseUrl}/api/calendar`).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/planner`).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/notes`).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/memories/polaroids`).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/memories/milestones`).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/couple-space`).then(r => r.ok ? r.json() : null)
+      ]);
+
+      if (calRes.status === 'fulfilled' && calRes.value?.events) result.calendar = calRes.value.events;
+      if (planRes.status === 'fulfilled' && planRes.value?.items) result.planner = planRes.value.items;
+      if (notesRes.status === 'fulfilled' && notesRes.value?.notes) result.notes = notesRes.value.notes;
+      if (polRes.status === 'fulfilled' && polRes.value?.polaroids) result.polaroids = polRes.value.polaroids;
+      if (msRes.status === 'fulfilled' && msRes.value?.milestones) result.milestones = msRes.value.milestones;
+      if (spaceRes.status === 'fulfilled' && spaceRes.value?.data) result.coupleSpace = spaceRes.value.data;
+    } catch (err) {
+      console.warn('[Socket] fetchAllFeaturesRest error:', err);
+    }
+    return result;
   }
 
   function sendCreateTopic(topic) {
@@ -433,6 +597,132 @@
     }
   }
 
+  // --- Calendar Senders ---
+  function sendSaveCalendarEvent(event) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'save_calendar_event', event }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send save_calendar_event:', e);
+      return false;
+    }
+  }
+
+  function sendDeleteCalendarEvent(id) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'delete_calendar_event', id }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send delete_calendar_event:', e);
+      return false;
+    }
+  }
+
+  // --- Planner Senders ---
+  function sendSavePlannerItem(item) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'save_planner_item', item }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send save_planner_item:', e);
+      return false;
+    }
+  }
+
+  function sendDeletePlannerItem(id) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'delete_planner_item', id }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send delete_planner_item:', e);
+      return false;
+    }
+  }
+
+  // --- Notes Senders ---
+  function sendSaveNote(note) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'save_note', note }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send save_note:', e);
+      return false;
+    }
+  }
+
+  function sendDeleteNote(id) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'delete_note', id }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send delete_note:', e);
+      return false;
+    }
+  }
+
+  // --- Memories Senders ---
+  function sendSavePolaroid(polaroid) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'save_polaroid', polaroid }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send save_polaroid:', e);
+      return false;
+    }
+  }
+
+  function sendDeletePolaroid(id) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'delete_polaroid', id }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send delete_polaroid:', e);
+      return false;
+    }
+  }
+
+  function sendSaveMilestone(milestone) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'save_milestone', milestone }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send save_milestone:', e);
+      return false;
+    }
+  }
+
+  function sendDeleteMilestone(id) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'delete_milestone', id }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send delete_milestone:', e);
+      return false;
+    }
+  }
+
+  // --- Couple Space Sender ---
+  function sendUpdateCoupleSpace(data) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'update_couple_space', data }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send update_couple_space:', e);
+      return false;
+    }
+  }
+
   function sendTyping(sender, isTyping, sessionId) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
@@ -462,6 +752,18 @@
     sendDeleteAllTopics,
     sendCreateTummyLog,
     sendDeleteTummyLog,
+    // New Feature Senders
+    sendSaveCalendarEvent,
+    sendDeleteCalendarEvent,
+    sendSavePlannerItem,
+    sendDeletePlannerItem,
+    sendSaveNote,
+    sendDeleteNote,
+    sendSavePolaroid,
+    sendDeletePolaroid,
+    sendSaveMilestone,
+    sendDeleteMilestone,
+    sendUpdateCoupleSpace,
     sendTyping,
     getStatus: () => currentStatus,
     getServerUrl,
@@ -482,8 +784,35 @@
     onTummyLogCreated: (fn) => listeners.tummyLogCreated.add(fn),
     onTummyLogDeleted: (fn) => listeners.tummyLogDeleted.add(fn),
     onTummyLogSync: (fn) => listeners.tummyLogSync.add(fn),
+    // New Feature Listeners
+    onCalendarSync: (fn) => listeners.calendarSync.add(fn),
+    onCalendarEventSaved: (fn) => listeners.calendarEventSaved.add(fn),
+    onCalendarEventDeleted: (fn) => listeners.calendarEventDeleted.add(fn),
+    onPlannerSync: (fn) => listeners.plannerSync.add(fn),
+    onPlannerItemSaved: (fn) => listeners.plannerItemSaved.add(fn),
+    onPlannerItemDeleted: (fn) => listeners.plannerItemDeleted.add(fn),
+    onNotesSync: (fn) => listeners.notesSync.add(fn),
+    onNoteSaved: (fn) => listeners.noteSaved.add(fn),
+    onNoteDeleted: (fn) => listeners.noteDeleted.add(fn),
+    onMemoriesSync: (fn) => listeners.memoriesSync.add(fn),
+    onPolaroidSaved: (fn) => listeners.polaroidSaved.add(fn),
+    onPolaroidDeleted: (fn) => listeners.polaroidDeleted.add(fn),
+    onMilestoneSaved: (fn) => listeners.milestoneSaved.add(fn),
+    onMilestoneDeleted: (fn) => listeners.milestoneDeleted.add(fn),
+    onCoupleSpaceSync: (fn) => listeners.coupleSpaceSync.add(fn),
+    onCoupleSpaceUpdated: (fn) => listeners.coupleSpaceUpdated.add(fn),
     onTyping: (fn) => listeners.typing.add(fn),
+    fetchAllFeaturesRest,
     LOCAL_DEV_URL,
     DEFAULT_REMOTE_URL
   };
+
+  // Immediate auto-connection on boot
+  if (typeof window !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => { connect(); });
+    } else {
+      setTimeout(connect, 0);
+    }
+  }
 })();

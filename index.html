@@ -84,8 +84,13 @@
         </button>
       </div>
 
-      <!-- Quick Room Quick-Links & Audio Toggle -->
+      <!-- Live Sync Pill & Audio/Theme Controls -->
       <div class="flex items-center gap-1.5 sm:gap-2">
+        <div id="header-sync-status" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 dark:bg-stone-800 border border-[#E8DACB] text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300 transition-all shadow-2xs" style="display: none !important;" title="Connection status with partner">
+          <span id="header-sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="header-sync-text" class="hidden sm:inline">synced ♡</span>
+        </div>
+
         <button id="btn-header-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications">
           <span class="material-symbols-outlined text-base">notifications</span>
           <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
@@ -670,7 +675,7 @@
     <!-- ====================================================================
          SCREEN 8: DUO CHAT (chat.jpg)
          ==================================================================== -->
-    <section id="tab-chat" class="hidden flex flex-col gap-2.5 relative">
+    <section id="tab-chat" class="hidden flex flex-col gap-2 relative h-[calc(100dvh-5.5rem)] pb-18 transition-all">
       
       <!-- Top Chat Header Bar (chat.jpg) -->
       <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
@@ -709,19 +714,19 @@
       </div>
 
       <!-- Multi-Topic Bar (Persistent E2EE Sessions) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar select-none shrink-0" id="chat-sessions-list">
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar select-none shrink-0 touch-pan-x overscroll-x-contain" id="chat-sessions-list">
         <!-- Rendered dynamically by js/chat/ui.js -->
       </div>
 
       <!-- Chat Feed Container (Doodle Background matching chat.jpg) -->
-      <div class="doodle-bg rounded-[2rem] p-3 sm:p-4 border border-[#E8DACB] dark:border-stone-700 min-h-[380px] max-h-[500px] flex flex-col flex-1 overflow-hidden relative plush-shadow">
-        <div id="chat-messages-container" class="relative z-10 flex-1 overflow-y-auto pr-1 flex flex-col gap-3 overscroll-contain">
+      <div class="doodle-bg rounded-[2rem] p-3 sm:p-4 border border-[#E8DACB] dark:border-stone-700 flex flex-col flex-1 min-h-0 overflow-hidden relative plush-shadow">
+        <div id="chat-messages-container" class="relative z-10 flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 overscroll-contain">
           <!-- Messages rendered dynamically -->
         </div>
       </div>
 
       <!-- Bottom Chat Bar (chat.jpg: camera, pill input, photo, mic, bear sticker) -->
-      <div class="bg-[#8D5B4C] rounded-full p-2 plush-shadow flex items-center gap-2 relative z-30">
+      <div id="chat-input-bar-container" class="bg-[#8D5B4C] rounded-full p-2 plush-shadow flex items-center gap-2 relative z-30 shrink-0 transition-all">
         
         <!-- Camera Button -->
         <button id="btn-chat-camera" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Snap Photo">
@@ -781,7 +786,33 @@
   <!-- ====================================================================
        BOTTOM DOCK (timeline.jpg warm brown dock)
        ==================================================================== -->
-  <nav id="bottom-nav-bar" class="fixed bottom-2 left-3 right-3 sm:left-auto sm:right-auto sm:w-[480px] sm:mx-auto z-50 cozy-brown-dock rounded-full px-2 py-1.5 shadow-xl transition-all">
+  <!-- MORE POPUP MENU (Floats above dock on small screens) -->
+  <div id="bottom-nav-more-popup" class="hidden fixed bottom-16 left-0 right-0 mx-auto w-[calc(100%-2rem)] max-w-[380px] z-50 cozy-brown-dock rounded-3xl p-3 shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-200 animate-squish">
+    <div class="grid grid-cols-4 gap-2 text-center">
+      <!-- Calendar -->
+      <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
+        <span class="material-symbols-outlined text-2xl">calendar_month</span>
+        <span class="text-[10px] font-heading font-bold mt-1">Calendar</span>
+      </a>
+      <!-- Planner -->
+      <a href="#bucket" data-tab="bucket" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
+        <span class="material-symbols-outlined text-2xl">checklist</span>
+        <span class="text-[10px] font-heading font-bold mt-1">Planner</span>
+      </a>
+      <!-- Music -->
+      <a href="#music" data-tab="music" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
+        <span class="material-symbols-outlined text-2xl">music_note</span>
+        <span class="text-[10px] font-heading font-bold mt-1">Music</span>
+      </a>
+      <!-- Closet -->
+      <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
+        <span class="material-symbols-outlined text-2xl">styler</span>
+        <span class="text-[10px] font-heading font-bold mt-1">Closet</span>
+      </a>
+    </div>
+  </div>
+
+  <nav id="bottom-nav-bar" class="fixed bottom-2 left-0 right-0 mx-auto w-[calc(100%-1.5rem)] max-w-[480px] z-50 cozy-brown-dock rounded-full px-2 py-1.5 shadow-xl transition-all">
     <div class="flex justify-around items-center">
       
       <!-- Home -->
@@ -811,29 +842,38 @@
         <span class="text-[9px] font-heading font-bold">Memories</span>
       </a>
 
-      <!-- Calendar -->
-      <a href="#calendar" data-tab="calendar" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <!-- Calendar (Secondary) -->
+      <a href="#calendar" data-tab="calendar" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">calendar_month</span>
         <span class="text-[9px] font-heading font-bold">Calendar</span>
       </a>
 
-      <!-- Bucket List -->
-      <a href="#bucket" data-tab="bucket" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <!-- Bucket List (Secondary) -->
+      <a href="#bucket" data-tab="bucket" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">checklist</span>
         <span class="text-[9px] font-heading font-bold">Planner</span>
       </a>
 
-      <!-- Bedtime Music -->
-      <a href="#music" data-tab="music" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <!-- Bedtime Music (Secondary) -->
+      <a href="#music" data-tab="music" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">music_note</span>
         <span class="text-[9px] font-heading font-bold">Music</span>
       </a>
 
-      <!-- Closet & Game -->
-      <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <!-- Closet & Game (Secondary) -->
+      <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">styler</span>
         <span class="text-[9px] font-heading font-bold">Closet</span>
       </a>
+
+      <!-- More Menu Button (Arrow Up) -->
+      <button id="btn-bottom-nav-more" type="button" class="mockup-nav-item hidden flex flex-col items-center justify-center py-1 px-2.5 button-press cursor-pointer relative" title="More Menus">
+        <div class="relative">
+          <span id="bottom-nav-more-icon" class="material-symbols-outlined text-xl transition-transform duration-200">keyboard_arrow_up</span>
+          <span id="bottom-nav-more-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-300 ring-2 ring-[#855943]"></span>
+        </div>
+        <span class="text-[9px] font-heading font-bold">More</span>
+      </button>
 
     </div>
   </nav>
@@ -919,6 +959,418 @@
       <div id="minigame-board" class="grid grid-cols-4 gap-2 py-2">
         <!-- Rendered by js/dudu_mockup.js -->
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CALENDAR DAY DETAILS & ADD EVENT -->
+  <div id="modal-calendar-day" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish max-h-[90vh] overflow-y-auto no-scrollbar">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-2.5 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🗓️</span>
+          <div>
+            <h3 id="modal-cal-date-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 leading-tight">October 15, 2026</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">our cozy agenda ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-cal-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <!-- Events List on this day -->
+      <div class="flex flex-col gap-2">
+        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300">Planned Moments:</span>
+        <div id="modal-cal-events-list" class="flex flex-col gap-1.5 min-h-[40px]">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Add New Event Form -->
+      <div class="bg-white/80 dark:bg-stone-700/60 rounded-2xl p-3 border border-[#E8DACB]/80 dark:border-stone-600 flex flex-col gap-2.5">
+        <span class="text-[11px] font-extrabold text-[#4A3222] dark:text-stone-200 flex items-center gap-1">
+          <span>✨</span>
+          <span>Add New Moment</span>
+        </span>
+
+        <input type="text" id="input-cal-event-title" placeholder="e.g. Cozy pasta & movie date 🍝" class="w-full rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-[#FAF5EE] dark:bg-stone-800 p-2.5 text-xs text-[#4A3222] dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+
+        <!-- Category icon pills -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="❤️" checked class="accent-[#8D5B4C]">
+            <span>❤️ Date</span>
+          </label>
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="💍" class="accent-[#8D5B4C]">
+            <span>💍 Milestone</span>
+          </label>
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="🌲" class="accent-[#8D5B4C]">
+            <span>🌲 Trip</span>
+          </label>
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="☕" class="accent-[#8D5B4C]">
+            <span>☕ Everyday</span>
+          </label>
+        </div>
+
+        <button id="btn-submit-cal-event" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
+          <span>Save to Calendar ♡</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: ADD TO DATE PLANNER (BUCKET LIST) -->
+  <div id="modal-add-planner" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      
+      <div class="flex items-center justify-between pb-2.5 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📝</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Add Date Wishlist</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">dreaming our future together ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-planner-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-2.5 text-xs">
+        <div>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Date or Idea Title</label>
+          <input type="text" id="input-planner-title" placeholder="e.g. Stargazing with blankets & warm cider ✨" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
+
+        <div>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Little Description (Optional)</label>
+          <input type="text" id="input-planner-desc" placeholder="A cozy couple memory we want to make" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
+
+        <div>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Vibe Category</label>
+          <div class="flex items-center gap-2">
+            <label class="flex-1 flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] cursor-pointer">
+              <input type="radio" name="planner-category" value="outdoor" checked class="accent-[#8D5B4C]">
+              <span class="font-bold">🌸 Outdoor</span>
+            </label>
+            <label class="flex-1 flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] cursor-pointer">
+              <input type="radio" name="planner-category" value="indoor" class="accent-[#8D5B4C]">
+              <span class="font-bold">☕ Indoor</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-submit-planner-item" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Add to Wishlist ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: VIEW LOVE NOTE (READ LETTER & DELETE) -->
+  <div id="modal-view-love-note" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-6 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-4 relative animate-squish">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💌</span>
+          <div>
+            <h3 id="modal-view-note-sender" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Love Note from Dudu</h3>
+            <span id="modal-view-note-time" class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">10:15 AM</span>
+          </div>
+        </div>
+        <button id="btn-close-view-note" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <!-- Letter Paper Card -->
+      <div class="bg-white dark:bg-stone-700 rounded-2xl p-5 plush-shadow border border-[#E8DACB] relative">
+        <div class="wax-seal w-8 h-8 rounded-full flex items-center justify-center text-white text-xs shadow-md absolute -top-3.5 right-4">♥</div>
+        <p id="modal-view-note-body" class="font-handwriting text-2xl text-[#4A3222] dark:text-stone-100 leading-relaxed min-h-[90px] pt-1">
+          "Can't wait to see you tonight! Bring your cozy sweater... 💌"
+        </p>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex items-center gap-2 pt-1">
+        <button id="btn-delete-view-note" type="button" class="py-2 px-3.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
+          <span>🗑️ Delete</span>
+        </button>
+        <button id="btn-dismiss-view-note" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Keep in Heart ♡
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: VIEW POLAROID (PREVIEW & DELETE) -->
+  <div id="modal-view-polaroid" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+          <span>📸 Memory Jar Photo</span>
+        </h3>
+        <button id="btn-close-view-polaroid" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <!-- Polaroid Container -->
+      <div class="bg-white dark:bg-stone-900 rounded-2xl p-3 pb-4 plush-shadow border border-stone-200 dark:border-stone-700 relative">
+        <div class="washi-tape washi-tape-dots -top-3 left-1/2 -translate-x-1/2"></div>
+        <div class="aspect-4/3 w-full rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
+          <img id="modal-polaroid-img" src="" alt="Polaroid" class="w-full h-full object-cover">
+        </div>
+        <div class="text-center pt-2.5">
+          <h4 id="modal-polaroid-title" class="font-handwriting text-2xl text-[#4A3222] dark:text-stone-100 font-bold leading-tight">Sweet Memory</h4>
+          <span id="modal-polaroid-date" class="text-xs font-bold text-[#8D5B4C] dark:text-stone-400">Oct 15</span>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex items-center gap-2 pt-1">
+        <button id="btn-delete-view-polaroid" type="button" class="py-2 px-3.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
+          <span>🗑️ Delete</span>
+        </button>
+        <button id="btn-dismiss-view-polaroid" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Cherish Forever ✨
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT STATUS -->
+  <div id="modal-edit-status" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💭</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Update Your Status</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">let your partner know what you're doing ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-status-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <input type="text" id="input-partner-status" placeholder="Thinking of you! 💭" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+
+      <!-- Quick Status Presets -->
+      <div class="flex flex-col gap-1.5">
+        <span class="text-[10px] font-bold text-stone-500">Quick Sweet Statuses:</span>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Thinking of you! 💭</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Missing you ❤️</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Eating snacks! 🐼</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Studying hard 📚</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Sleepy cozy 😴</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">On my way home! 🚗</button>
+        </div>
+      </div>
+
+      <button id="btn-save-partner-status" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Update Status ♡
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT ANNIVERSARY -->
+  <div id="modal-edit-anniversary" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💍</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Our Relationship Date</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">when our love story began ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-anniversary-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-bold text-[#4A3222] dark:text-stone-200">Start Date</label>
+        <input type="date" id="input-anniversary-iso" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs font-bold text-[#4A3222] dark:text-stone-100 focus:outline-none">
+        <span id="anniversary-preview-days" class="text-xs text-[#8D5B4C] dark:text-stone-300 font-bold">Together for 345 sweet days ♡</span>
+      </div>
+
+      <button id="btn-save-anniversary" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Save Anniversary Date ♡
+      </button>
+
+    </div>
+  </div>
+
+  <!-- MODAL: ALL TOPICS -->
+  <div id="modal-all-topics" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#8D5B4C] text-xl">forum</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+              <span>All Chat Topics</span>
+              <span id="all-topics-count-badge" class="px-2 py-0.5 rounded-full bg-[#8D5B4C]/15 text-[#8D5B4C] dark:text-stone-300 text-[10px] font-bold">0</span>
+            </h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">explore &amp; organize our talks ♡</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button id="btn-new-topic" type="button" class="w-7 h-7 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center text-xs font-bold cursor-pointer button-press" title="New Topic">＋</button>
+          <button id="btn-close-all-topics" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+        </div>
+      </div>
+
+      <!-- Search input -->
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-2.5 text-stone-400 text-sm">search</span>
+        <input type="text" id="input-search-topics" placeholder="Search topics..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+      </div>
+
+      <!-- Topics List -->
+      <div id="all-topics-list-container" class="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
+        <!-- Rendered dynamically by js/chat/ui.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NEW TOPIC -->
+  <div id="modal-new-topic" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💬</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Create New Topic</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">a new thread for our thoughts ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-new-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <form id="form-new-topic" class="flex flex-col gap-3">
+        <div>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Topic Title</label>
+          <input type="text" id="input-new-topic-title" placeholder="e.g. Late Night Snacks 🍱" required class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
+
+        <div>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Icon / Emoji</label>
+          <select id="select-new-topic-emoji" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none">
+            <option value="💬">💬 Chat</option>
+            <option value="🍱">🍱 Food &amp; Snacks</option>
+            <option value="💡">💡 Date Ideas</option>
+            <option value="✈️">✈️ Travel &amp; Trips</option>
+            <option value="🧸">🧸 Dudu &amp; Bubu</option>
+            <option value="🍿">🍿 Movie Night</option>
+            <option value="✨">✨ Memories</option>
+            <option value="💌">💌 Sweet Love</option>
+          </select>
+        </div>
+
+        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Create Topic ✨
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DELETE TOPIC 3-STEP CONFIRM -->
+  <div id="modal-delete-topic-confirm" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-rose-300 dark:border-rose-900 flex flex-col gap-3.5 relative text-center animate-squish">
+      <div id="delete-prompt-icon" class="w-12 h-12 mx-auto rounded-full bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-500">
+        <span class="material-symbols-outlined text-3xl">delete</span>
+      </div>
+
+      <h3 id="delete-prompt-title" class="font-heading font-extrabold text-base text-[#4A3222] dark:text-stone-100">Are you sure?</h3>
+      <p id="delete-prompt-desc" class="text-xs text-[#8D5B4C] dark:text-stone-300 leading-relaxed"></p>
+
+      <!-- 3 Step progress dots -->
+      <div class="flex items-center justify-center gap-2 py-1">
+        <span id="delete-step-dot-1" class="w-2.5 h-2.5 rounded-full bg-rose-500 scale-110 transition-all"></span>
+        <span id="delete-step-dot-2" class="w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700 transition-all"></span>
+        <span id="delete-step-dot-3" class="w-2 h-2 rounded-full bg-stone-300 dark:bg-stone-700 transition-all"></span>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button id="btn-cancel-delete-step" type="button" class="flex-1 py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs button-press cursor-pointer">
+          Cancel
+        </button>
+        <button id="btn-confirm-delete-step" type="button" class="flex-1 py-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs button-press cursor-pointer shadow-xs">
+          Yes, I'm sure
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TOPIC OPTIONS (LONG HOLD) -->
+  <div id="modal-topic-actions" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-xs w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish text-center">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="topic-action-emoji" class="text-2xl shrink-0">💬</span>
+          <h3 id="topic-action-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 truncate text-left">Topic Options</h3>
+        </div>
+        <button id="btn-close-topic-actions" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-2 pt-1">
+        <button id="btn-topic-action-rename" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F5EAE0] dark:hover:bg-stone-600 flex items-center justify-center gap-2 text-xs font-bold text-[#4A3222] dark:text-stone-100 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C]">edit</span>
+          <span>Rename Topic</span>
+        </button>
+        <button id="btn-topic-action-delete" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 hover:bg-rose-100 dark:hover:bg-rose-900/60 flex items-center justify-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base">delete</span>
+          <span>Delete Topic</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RENAME TOPIC -->
+  <div id="modal-rename-topic" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✏️</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Rename Topic</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">give our thread a new name ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-rename-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <form id="form-rename-topic" class="flex flex-col gap-3">
+        <div>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">New Title</label>
+          <input type="text" id="input-rename-topic-title" placeholder="Topic name" required class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
+
+        <div>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Icon / Emoji</label>
+          <select id="select-rename-topic-emoji" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none">
+            <option value="💬">💬 Chat</option>
+            <option value="🍱">🍱 Food &amp; Snacks</option>
+            <option value="💡">💡 Date Ideas</option>
+            <option value="✈️">✈️ Travel &amp; Trips</option>
+            <option value="🧸">🧸 Dudu &amp; Bubu</option>
+            <option value="🍿">🍿 Movie Night</option>
+            <option value="✨">✨ Memories</option>
+            <option value="💌">💌 Sweet Love</option>
+          </select>
+        </div>
+
+        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Save Changes ♡
+        </button>
+      </form>
     </div>
   </div>
 

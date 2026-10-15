@@ -54,10 +54,13 @@
     }
   }
 
-  function markSessionUnread(sessionId) {
+  async function markSessionUnread(sessionId) {
     if (!sessionId) return;
     unreadSessionIds.add(sessionId);
     saveUnreadSessions();
+    if (!activeSessions.some(s => s.id === sessionId)) {
+      activeSessions = await DuduChatStorage.getSessions();
+    }
     renderSessionBar();
     const modal = document.getElementById('modal-all-topics');
     if (modal && !modal.classList.contains('hidden')) {
@@ -280,11 +283,102 @@
     await loadActiveMessages();
   }
 
+  // --- Topic Long Hold Actions & Rename State ---
+  let activeActionSession = null;
+
+  function attachTopicLongPress(element, session, onShortClick) {
+    let pressTimer = null;
+    let didLongPress = false;
+    let startX = 0;
+    let startY = 0;
+
+    const start = (e) => {
+      if (e.button && e.button !== 0) return;
+      didLongPress = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      pressTimer = setTimeout(() => {
+        didLongPress = true;
+        window.navigator?.vibrate?.(40);
+        openTopicActionsModal(session);
+      }, 450);
+    };
+
+    const cancel = () => {
+      if (pressTimer) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+      }
+    };
+
+    const move = (e) => {
+      if (!pressTimer) return;
+      if (Math.abs(e.clientX - startX) > 15 || Math.abs(e.clientY - startY) > 15) {
+        cancel();
+      }
+    };
+
+    element.addEventListener('pointerdown', start);
+    element.addEventListener('pointerup', cancel);
+    element.addEventListener('pointercancel', cancel);
+    element.addEventListener('pointermove', move);
+
+    element.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      openTopicActionsModal(session);
+    });
+
+    element.addEventListener('click', (e) => {
+      if (didLongPress) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (onShortClick) onShortClick(e);
+    });
+  }
+
+  function openTopicActionsModal(session) {
+    if (!session) return;
+    activeActionSession = session;
+    const modal = document.getElementById('modal-topic-actions');
+    const titleEl = document.getElementById('topic-action-title');
+    const emojiEl = document.getElementById('topic-action-emoji');
+    if (titleEl) titleEl.textContent = session.title || 'Topic';
+    if (emojiEl) emojiEl.textContent = session.emoji || '💬';
+    if (modal) modal.classList.remove('hidden');
+    window.duduAudio?.playPop?.(440);
+  }
+
+  function closeTopicActionsModal() {
+    const modal = document.getElementById('modal-topic-actions');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function openRenameTopicModal(session) {
+    if (!session) return;
+    activeActionSession = session;
+    closeTopicActionsModal();
+    const modal = document.getElementById('modal-rename-topic');
+    const titleInput = document.getElementById('input-rename-topic-title');
+    const emojiSelect = document.getElementById('select-rename-topic-emoji');
+    if (titleInput) titleInput.value = session.title || '';
+    if (emojiSelect && session.emoji) emojiSelect.value = session.emoji;
+    if (modal) modal.classList.remove('hidden');
+    titleInput?.focus();
+    window.duduAudio?.playPop?.(460);
+  }
+
+  function closeRenameTopicModal() {
+    const modal = document.getElementById('modal-rename-topic');
+    if (modal) modal.classList.add('hidden');
+  }
+
   function renderSessionBar() {
     const container = document.getElementById('chat-sessions-list');
     if (!container) return;
 
-    // Pick top 2 most recent topics; prioritize unread topics, ensure activeSessionId is in the visible pair
+    // Sort: active session first, then unread sessions, then recent activity
     const activeSession = activeSessions.find(s => s.id === activeSessionId) || activeSessions[0];
     const otherSessions = activeSessions.filter(s => s.id !== activeSession?.id);
     otherSessions.sort((a, b) => {
@@ -294,24 +388,23 @@
       return (b.lastActivity || 0) - (a.lastActivity || 0);
     });
 
-    const visibleSessions = activeSession ? [activeSession] : [];
-    if (otherSessions.length > 0) {
-      visibleSessions.push(otherSessions[0]);
-    }
+    // Limit topic bookmarks to 3 items, followed by the swipeable All Topics button
+    const allOrdered = activeSession ? [activeSession, ...otherSessions] : otherSessions;
+    const visibleSessions = allOrdered.slice(0, 3);
 
     const sessionChipsHtml = visibleSessions.map(session => {
       const isActive = session.id === activeSessionId;
       const hasUnread = unreadSessionIds.has(session.id);
       const activeClasses = isActive
         ? 'bg-secondary text-surface-container-lowest shadow-xs ring-1 ring-secondary/50'
-        : (hasUnread ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-700/60' : 'bg-surface-container-lowest text-primary hover:bg-surface-container-high border border-outline-variant/30');
+        : (hasUnread ? 'bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-200 border-2 border-rose-400 dark:border-rose-600 ring-2 ring-rose-400/20 shadow-xs' : 'bg-surface-container-lowest text-primary hover:bg-surface-container-high border border-outline-variant/30');
 
       return `
         <button type="button" data-session-id="${session.id}" class="chat-session-chip relative button-press shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-bold transition-all cursor-pointer ${activeClasses}">
           <span class="text-sm pointer-events-none">${session.emoji || '💬'}</span>
           <span class="pointer-events-none whitespace-nowrap">${escapeHtml(session.title)}</span>
           ${session.isPinned ? '<span class="material-symbols-outlined text-[12px] opacity-75 pointer-events-none">push_pin</span>' : ''}
-          ${hasUnread ? '<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse pointer-events-none shrink-0 shadow-xs ring-1 ring-white dark:ring-stone-900"></span>' : ''}
+          ${hasUnread ? '<span class="flex items-center gap-1 pointer-events-none"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse shrink-0 shadow-xs ring-2 ring-white dark:ring-stone-900"></span><span class="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">new</span></span>' : ''}
         </button>
       `;
     }).join('');
@@ -322,23 +415,24 @@
         <span class="material-symbols-outlined text-[15px] text-secondary pointer-events-none">grid_view</span>
         <span class="pointer-events-none whitespace-nowrap">All Topics</span>
         <span class="ml-0.5 px-1.5 py-0.2 rounded-full bg-surface-container text-[10px] text-on-surface-variant font-extrabold">${activeSessions.length}</span>
-        ${hasAnyUnread ? '<span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse pointer-events-none shrink-0 shadow-xs ring-1 ring-white dark:ring-stone-900"></span>' : ''}
+        ${hasAnyUnread ? '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse pointer-events-none shrink-0 shadow-xs ring-1 ring-white dark:ring-stone-900"></span>' : ''}
       </button>
     `;
 
     container.innerHTML = sessionChipsHtml + allTopicsBtnHtml;
 
     container.querySelectorAll('.chat-session-chip').forEach(chip => {
-      chip.addEventListener('click', async () => {
-        const sid = chip.getAttribute('data-session-id');
-        if (sid) {
-          markSessionRead(sid);
-          if (sid !== activeSessionId) {
-            activeSessionId = sid;
-            renderSessionBar();
-            await loadActiveMessages();
-            window.duduAudio?.playPop(440);
-          }
+      const sid = chip.getAttribute('data-session-id');
+      const sess = activeSessions.find(s => s.id === sid);
+      if (!sess) return;
+
+      attachTopicLongPress(chip, sess, async () => {
+        markSessionRead(sid);
+        if (sid !== activeSessionId) {
+          activeSessionId = sid;
+          renderSessionBar();
+          await loadActiveMessages();
+          window.duduAudio?.playPop(440);
         }
       });
     });
@@ -426,6 +520,9 @@
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             ${isActive ? '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-md bg-secondary text-white pointer-events-none">Current</span>' : ''}
+            <button type="button" data-rename-id="${session.id}" class="btn-item-rename-topic p-1 rounded-lg text-outline hover:text-[#8D5B4C] hover:bg-[#8D5B4C]/10 cursor-pointer button-press transition-colors" title="Rename Topic">
+              <span class="material-symbols-outlined text-[18px]">edit</span>
+            </button>
             <button type="button" data-delete-id="${session.id}" data-delete-title="${escapeHtml(session.title)}" class="btn-delete-topic p-1 rounded-lg text-outline hover:text-rose-600 hover:bg-rose-500/10 cursor-pointer button-press transition-colors" title="Delete Topic">
               <span class="material-symbols-outlined text-[18px]">delete</span>
             </button>
@@ -435,16 +532,29 @@
     }).join('');
 
     listContainer.querySelectorAll('.all-topic-item').forEach(item => {
-      item.addEventListener('click', async (e) => {
-        if (e.target.closest('.btn-delete-topic')) return;
-        const sid = item.getAttribute('data-session-id');
-        if (sid) {
-          markSessionRead(sid);
-          activeSessionId = sid;
+      const sid = item.getAttribute('data-session-id');
+      const sess = activeSessions.find(s => s.id === sid);
+      if (!sess) return;
+
+      attachTopicLongPress(item, sess, async (e) => {
+        if (e.target.closest('.btn-delete-topic') || e.target.closest('.btn-item-rename-topic')) return;
+        markSessionRead(sid);
+        activeSessionId = sid;
+        closeAllTopicsModal();
+        renderSessionBar();
+        await loadActiveMessages();
+        window.duduAudio?.playPop(460);
+      });
+    });
+
+    listContainer.querySelectorAll('.btn-item-rename-topic').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const sid = btn.getAttribute('data-rename-id');
+        const sess = activeSessions.find(s => s.id === sid);
+        if (sess) {
           closeAllTopicsModal();
-          renderSessionBar();
-          await loadActiveMessages();
-          window.duduAudio?.playPop(460);
+          openRenameTopicModal(sess);
         }
       });
     });
@@ -2660,6 +2770,56 @@
       activeSessionId = newSess.id;
       await loadSessions();
       window.duduAudio?.playSparkle();
+    });
+
+    // Topic Options / Long Hold Modal Triggers
+    document.getElementById('btn-close-topic-actions')?.addEventListener('click', closeTopicActionsModal);
+    const topicActionsModal = document.getElementById('modal-topic-actions');
+    topicActionsModal?.addEventListener('click', (e) => {
+      if (e.target === topicActionsModal) closeTopicActionsModal();
+    });
+
+    document.getElementById('btn-topic-action-rename')?.addEventListener('click', () => {
+      if (activeActionSession) {
+        openRenameTopicModal(activeActionSession);
+      }
+    });
+
+    document.getElementById('btn-topic-action-delete')?.addEventListener('click', () => {
+      if (activeActionSession) {
+        const sess = activeActionSession;
+        closeTopicActionsModal();
+        startDeleteTopicWorkflow(sess.id, sess.title);
+      }
+    });
+
+    // Rename Topic Form & Modal Triggers
+    document.getElementById('btn-close-rename-topic')?.addEventListener('click', closeRenameTopicModal);
+    const renameModal = document.getElementById('modal-rename-topic');
+    renameModal?.addEventListener('click', (e) => {
+      if (e.target === renameModal) closeRenameTopicModal();
+    });
+
+    document.getElementById('form-rename-topic')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!activeActionSession) return;
+      const titleInput = document.getElementById('input-rename-topic-title');
+      const emojiSelect = document.getElementById('select-rename-topic-emoji');
+      const newTitle = titleInput?.value.trim();
+      const newEmoji = emojiSelect?.value || '💬';
+      if (!newTitle) return;
+
+      activeActionSession.title = newTitle;
+      activeActionSession.emoji = newEmoji;
+      await DuduChatStorage.saveSession(activeActionSession);
+      DuduChatSocket.sendCreateTopic(activeActionSession);
+      closeRenameTopicModal();
+      await loadSessions();
+
+      if (window.showToast) {
+        window.showToast(`Topic renamed to "${newTitle}" ♡`);
+      }
+      window.duduAudio?.playSparkle?.();
     });
 
     // Chat Settings / E2EE Key Modal Triggers
