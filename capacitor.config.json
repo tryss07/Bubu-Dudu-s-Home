@@ -1,0 +1,9 @@
+{
+  "appId": "com.honeyandbear.dudu",
+  "appName": "Dudu",
+  "webDir": "dist",
+  "backgroundColor": "#fff8f4",
+  "android": {
+    "backgroundColor": "#fff8f4"
+  }
+}

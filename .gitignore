@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Android build caches & artifacts
+.gradle/
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+!Dudu.apk
+
+# Server database & temporary blob storage
+server/data/chat.db*
+server/data/blobs/*
+tests/test_data/
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.log
+scratch/

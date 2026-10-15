@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Dudu &amp; Bubu ♡ Our Space</title>
+  <link rel="icon" type="image/png" href="assets/dudu_icon.png">
+  <link rel="apple-touch-icon" href="assets/dudu_icon.png">
+  
+  <!-- Fonts: Plus Jakarta Sans, Quicksand, Caveat (Handwritten) & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#FAF5EE",
+            "surface-dim": "#e5d8cc",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#fff4ea",
+            "surface-container": "#f8ece0",
+            "surface-container-high": "#f1e3d5",
+            "primary": "#4A3222",
+            "primary-container": "#5c4033",
+            "secondary": "#8D5B4C",
+            "secondary-container": "#F5C7A9",
+            "warm-brown": "#8D5B4C",
+            "dark-brown": "#4A3222",
+            "biscuit": "#E6BE8A",
+            "peach": "#F5C7A9"
+          },
+          fontFamily: {
+            "heading": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Quicksand", "sans-serif"],
+            "handwriting": ["Caveat", "cursive"]
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/custom.css">
+  
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Hide scrollbars but keep scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-surface text-primary min-h-screen antialiased pb-28 selection:bg-secondary-container font-body transition-colors">
+
+  <!-- TOP STICKY HEADER -->
+  <header class="sticky top-0 z-40 bg-[#FAF5EE]/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-[#E8DACB]/60 dark:border-stone-800 max-w-xl mx-auto transition-all">
+    <div class="flex justify-between items-center px-4 py-2.5">
+      
+      <!-- Couple Identity Button -->
+      <div class="flex items-center gap-2.5">
+        <button id="profile-avatar-btn" type="button" class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#8D5B4C]/40 bg-[#FAF4ED] flex items-center justify-center shadow-xs shrink-0 cursor-pointer button-press focus:outline-none" title="Dudu & Bubu">
+          <img src="assets/header_couple_avatar.png" alt="Dudu & Bubu" class="w-full h-full object-cover pointer-events-none select-none">
+        </button>
+        <button id="header-identity-btn" type="button" class="flex flex-col text-left cursor-pointer button-press group focus:outline-none" title="Tap to switch viewing role">
+          <div class="flex items-center gap-1">
+            <span id="header-identity-name" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 tracking-tight leading-none">Dudu 🐻</span>
+            <span class="material-symbols-outlined text-[14px] text-stone-500 group-hover:text-secondary leading-none">expand_more</span>
+          </div>
+          <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold mt-0.5">our shared space ♡</span>
+        </button>
+      </div>
+
+      <!-- Quick Room Quick-Links & Audio Toggle -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button id="btn-header-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications">
+          <span class="material-symbols-outlined text-base">notifications</span>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
+        </button>
+
+        <button id="btn-theme-toggle" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-400 button-press cursor-pointer" title="Toggle Theme">
+          <span class="material-symbols-outlined text-base">dark_mode</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION CONTAINER -->
+  <main class="max-w-xl mx-auto px-3.5 sm:px-4 py-3 flex flex-col gap-4">
+
+    <!-- ====================================================================
+         SCREEN 1: OUR SPACE (HOME - timeline.jpg)
+         ==================================================================== -->
+    <section id="tab-home" class="flex flex-col gap-4">
+      
+      <!-- Top Title Bar -->
+      <div class="text-center pt-1 pb-0.5">
+        <h2 class="font-heading font-extrabold text-xl text-[#4A3222] dark:text-stone-100 tracking-tight flex items-center justify-center gap-2">
+          <span>✨</span>
+          <span>our space ♡</span>
+          <span>🍃</span>
+        </h2>
+      </div>
+
+      <!-- Main Framed Couple Card (timeline.jpg) -->
+      <div class="bg-white dark:bg-stone-800/90 rounded-[2.5rem] p-5 plush-shadow-lg border-2 border-[#5A3825] dark:border-stone-600 flex flex-col items-center text-center relative overflow-hidden">
+        
+        <h3 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 tracking-tight mb-2">
+          Bubu &amp; Dudu
+        </h3>
+
+        <!-- Couple Hugging Illustration -->
+        <div class="w-full max-w-xs aspect-4/3 rounded-2xl flex items-center justify-center relative my-1">
+          <img src="assets/mockup_art/home_couple_hug.png" alt="Bubu & Dudu Hug" class="max-h-56 object-contain pointer-events-none select-none drop-shadow-sm">
+        </div>
+
+        <!-- Anniversary Pill Badge (4 November 2025) -->
+        <button id="home-anniversary-pill" type="button" class="w-full max-w-xs mt-3 py-2.5 px-4 rounded-full bg-[#FCDFD0] hover:bg-[#F9D0BC] border border-[#EAA684]/50 shadow-xs flex flex-col items-center justify-center button-press cursor-pointer group" title="Anniversary: 4 November 2025 (Tap to edit date)">
+          <span class="text-[11px] font-heading font-semibold text-[#8D5B4C]">We've been together for</span>
+          <span id="home-days-count" class="text-xl font-heading font-black text-[#5A3825] tracking-tight group-hover:scale-105 transition-transform">
+            345 days ♡
+          </span>
+          <span id="home-anniversary-sub" class="text-[10px] text-[#8D5B4C]/80 font-medium">Since 4 November 2025</span>
+        </button>
+
+      </div>
+
+      <!-- Two Side-by-Side Widgets (love battery & current status) -->
+      <div class="grid grid-cols-2 gap-3 relative">
+        <div id="heart-burst-container" class="absolute inset-0 pointer-events-none z-30"></div>
+
+        <!-- Left: Love Battery Card -->
+        <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col justify-between">
+          <div>
+            <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">love battery</span>
+            <div id="home-battery-text" class="text-base font-heading font-black text-[#8D5B4C] mt-0.5">100%</div>
+          </div>
+
+          <div class="flex items-center gap-2 mt-2">
+            <!-- Battery Graphic with Heart -->
+            <button id="btn-boost-battery" type="button" class="flex-1 h-8 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to charge love!">
+              <div id="home-battery-fill" class="h-full bg-[#F5A5A5] rounded-lg transition-all duration-300 flex items-center justify-center" style="width: 100%;">
+                <span class="text-xs">♥</span>
+              </div>
+            </button>
+            <!-- Bubu Cute Face -->
+            <img src="assets/mockup_art/bubu_head.png" alt="Bubu" class="w-7 h-7 object-contain shrink-0 rounded-full">
+          </div>
+        </div>
+
+        <!-- Right: Current Status Card -->
+        <button id="home-status-card" type="button" class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col text-left justify-between button-press cursor-pointer" title="Tap to update status">
+          <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">current status</span>
+          <div class="flex flex-col gap-1 mt-1 text-[11px] text-[#4A3222] dark:text-stone-300 font-semibold leading-tight">
+            <span class="truncate">Dudu: <span id="home-status-dudu" class="font-normal text-on-surface-variant">Thinking of you! 💭</span></span>
+            <span class="truncate">Bubu: <span id="home-status-bubu" class="font-normal text-on-surface-variant">Eating snacks! 🐼</span></span>
+          </div>
+        </button>
+
+      </div>
+
+      <!-- Quick Room Portals Hub -->
+      <div class="flex flex-col gap-2 pt-2">
+        <h4 class="font-heading font-bold text-xs text-[#8D5B4C] px-1 uppercase tracking-wider flex items-center justify-between">
+          <span>Our Cozy Rooms</span>
+          <span class="text-[10px] font-normal normal-case opacity-80">Tap to visit</span>
+        </h4>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          <!-- Room: Love Notes -->
+          <a href="#notes" data-tab="notes" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">💌</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Love Notes</span>
+              <span class="text-[10px] text-on-surface-variant truncate">Shared letters</span>
+            </div>
+          </a>
+
+          <!-- Room: Memory Jar -->
+          <a href="#memories" data-tab="memories" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🍯</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Memory Jar</span>
+              <span class="text-[10px] text-on-surface-variant truncate">Our Polaroids</span>
+            </div>
+          </a>
+
+          <!-- Room: Our Calendar -->
+          <a href="#calendar" data-tab="calendar" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🗓️</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Our Calendar</span>
+              <span id="home-portal-calendar-next" class="text-[10px] text-on-surface-variant truncate">Next: 1 Year (Nov 4)</span>
+            </div>
+          </a>
+
+          <!-- Room: Bucket List -->
+          <a href="#bucket" data-tab="bucket" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">📋</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bucket List</span>
+              <span class="text-[10px] text-on-surface-variant truncate">Date Planner</span>
+            </div>
+          </a>
+
+          <!-- Room: Bedtime Lofi -->
+          <a href="#music" data-tab="music" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🌙</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bedtime Lofi</span>
+              <span class="text-[10px] text-on-surface-variant truncate">Soothing beats</span>
+            </div>
+          </a>
+
+          <!-- Room: Couple Closet & Games -->
+          <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">👗</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Couple Closet</span>
+              <span class="text-[10px] text-on-surface-variant truncate">Outfits &amp; Games</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 2: LOVE NOTES (love notes.jpg)
+         ==================================================================== -->
+    <section id="tab-notes" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Notes Header -->
+      <div class="flex items-center justify-between px-1">
+        <span class="px-3 py-1 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] text-xs font-bold text-[#8D5B4C] shadow-xs">
+          Us 🤎
+        </span>
+        <div class="text-center">
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100">Love Notes</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-[#F5EAE0] text-[10px] font-bold text-[#8D5B4C]">Our Shared Space</span>
+        </div>
+        <button id="btn-write-love-note" type="button" class="px-3 py-1 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white text-xs font-bold shadow-xs button-press cursor-pointer flex items-center gap-1">
+          <span>+ Write</span>
+        </button>
+      </div>
+
+      <!-- Banner Illustration Card (love notes.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex flex-col items-center">
+        <img src="assets/mockup_art/notes_banner.png" alt="Dudu & Bubu Love Notes" class="max-h-28 object-contain pointer-events-none select-none">
+        <span class="text-[11px] font-heading font-bold text-[#8D5B4C] mt-2">Dudu &amp; Bubu space 🤎</span>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <button type="button" data-filter="all" class="notes-filter-chip px-3.5 py-1 rounded-full bg-[#8D5B4C] text-white text-xs font-bold button-press cursor-pointer shadow-xs">
+          All Notes
+        </button>
+        <button type="button" data-filter="unread" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+          Unread
+        </button>
+        <button type="button" data-filter="favorites" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+          Favorites
+        </button>
+      </div>
+
+      <!-- Notes Cards Container -->
+      <div id="notes-cards-list" class="flex flex-col gap-3">
+        <!-- Rendered dynamically by js/dudu_mockup.js -->
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 3: MEMORY JAR (Memory .jpg)
+         ==================================================================== -->
+    <section id="tab-memories" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Memory Jar Bar -->
+      <div class="flex items-center justify-between px-1">
+        <div>
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+            Memory Jar 🍯✨
+          </h2>
+          <p class="text-[11px] text-on-surface-variant font-medium">Capturing our together today</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-full bg-[#FBE4D5] text-[10px] font-bold text-[#8D5B4C]">
+            Lvl 8 • Synced ⏱️
+          </span>
+          <button id="btn-add-polaroid" type="button" class="w-8 h-8 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center button-press cursor-pointer shadow-xs" title="Add Polaroid">
+            <span class="material-symbols-outlined text-base">add_a_photo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Our Polaroids Card Container (Memory .jpg) -->
+      <div class="bg-[#FAF5EE] dark:bg-stone-800/90 rounded-[2.5rem] p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative">
+        
+        <div class="flex items-center justify-between px-1">
+          <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+            <span>Our Polaroids 📸</span>
+          </h3>
+          <span class="text-[11px] font-bold text-[#8D5B4C] cursor-pointer hover:underline">View All</span>
+        </div>
+
+        <!-- 4 Polaroid Grid with Washi Tape & Peeking Bears -->
+        <div id="polaroids-grid" class="grid grid-cols-2 gap-3.5 pt-2">
+          <!-- Rendered dynamically by js/dudu_mockup.js -->
+        </div>
+
+      </div>
+
+      <!-- Memory Timeline Card (Memory .jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
+        
+        <div class="flex items-center justify-between border-b border-[#E8DACB]/40 pb-2">
+          <h3 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+            <span>⌛ Memory Timeline ⌛</span>
+          </h3>
+          <span class="font-handwriting text-base text-[#8D5B4C]">Handwritten notes, washi/scrapbook</span>
+        </div>
+
+        <div id="memory-timeline-nodes" class="flex flex-col gap-1 pt-1">
+          <!-- Rendered dynamically by js/dudu_mockup.js -->
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 4: BUCKET LIST & DATE PLANNER (bucket list.jpg)
+         ==================================================================== -->
+    <section id="tab-bucket" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Header -->
+      <div class="flex items-center justify-between px-1">
+        <div>
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+            Bucket List &amp; Date Planner
+          </h2>
+          <p class="text-[11px] text-on-surface-variant font-medium">Adventures &amp; dreams together</p>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-[#FAF0E6] border border-[#E8DACB] text-[10px] font-bold text-[#8D5B4C]">
+          Lvl 8 | 42 Completed ✨
+        </span>
+      </div>
+
+      <!-- Adventure Progress Card (bucket list.jpg) -->
+      <div class="bg-[#FAF5EE] dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-2 relative">
+        <div class="flex items-center justify-between">
+          <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100">Our Adventure Progress</h3>
+          <img src="assets/mockup_art/adventure_couple.png" alt="Couple" class="h-10 object-contain">
+        </div>
+
+        <!-- Progress bar -->
+        <div class="w-full h-5 rounded-full bg-[#EBD2B4] overflow-hidden p-0.5 mt-1">
+          <div id="bucket-progress-fill" class="h-full bg-[#8D5B4C] rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-500" style="width: 40%;">
+            <span id="bucket-progress-percent">40%</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] text-[#8D5B4C] font-semibold pt-1">
+          <span id="bucket-progress-count">24 of 60 Completed</span>
+          <span>Keep exploring, love! 🐻🐾</span>
+        </div>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <button type="button" data-filter="all" class="bucket-filter-chip px-3.5 py-1 rounded-full bg-[#5C3D2E] text-white text-xs font-bold button-press cursor-pointer shadow-xs">
+          All Dates (60)
+        </button>
+        <button type="button" data-filter="indoor" class="bucket-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+          Cozy Indoor (18)
+        </button>
+        <button type="button" data-filter="outdoor" class="bucket-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+          Outdoor (22)
+        </button>
+      </div>
+
+      <!-- Checklist Cards List -->
+      <div id="bucket-cards-list" class="flex flex-col gap-3">
+        <!-- Rendered dynamically by js/dudu_mockup.js -->
+      </div>
+
+      <!-- Quick Planners Section -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#8D5B4C] text-white flex items-center justify-center font-bold text-sm">
+            ✨
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-[#8D5B4C] uppercase tracking-wide">Next Date Idea?</span>
+            <p class="font-heading font-bold text-xs text-primary dark:text-stone-100">Warm campfire &amp; s'mores</p>
+          </div>
+        </div>
+        <button id="btn-add-date-idea" type="button" class="w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8D5B4C] hover:text-white text-[#8D5B4C] border border-[#E8DACB] flex items-center justify-center font-bold text-base button-press cursor-pointer" title="Add Date Idea">
+          +
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 5: OUR CALENDAR (calender.jpg)
+         ==================================================================== -->
+    <section id="tab-calendar" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between px-1">
+        <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+          <span>Our Calendar 🗓️ ♡</span>
+        </h2>
+        <span class="text-xs font-bold text-[#8D5B4C]">Bubu &amp; Dudu</span>
+      </div>
+
+      <!-- Anniversary Countdown Card (calender.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-3 relative overflow-hidden">
+        <div class="washi-tape washi-tape-grid top-0 right-3"></div>
+
+        <div class="flex items-center gap-3">
+          <img src="assets/mockup_art/calendar_anniversary.png" alt="Anniversary" class="w-20 h-16 object-contain">
+          <div>
+            <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide">Next Anniversary:</span>
+            <h3 id="calendar-anniversary-title" class="font-heading font-black text-base text-[#4A3222] dark:text-stone-100 leading-tight">
+              1 Year Anniversary! 🎂🎉
+            </h3>
+            <span id="calendar-anniversary-subtitle" class="text-xs font-bold text-[#8D5B4C] mt-0.5 block">Only 20 days left! (4 November 2026) 🐻❤️</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Monthly Calendar Grid (calender.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
+        
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between px-2">
+          <button id="btn-cal-prev" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold button-press cursor-pointer">
+            &lt;
+          </button>
+          <h3 id="calendar-month-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">
+            October 2026
+          </h3>
+          <button id="btn-cal-next" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold button-press cursor-pointer">
+            &gt;
+          </button>
+        </div>
+
+        <!-- Days of week -->
+        <div class="grid grid-cols-7 text-center text-[10px] font-heading font-bold text-stone-500 py-1 border-b border-[#E8DACB]/40">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+
+        <!-- Calendar Days Grid -->
+        <div id="calendar-days-grid" class="grid grid-cols-7 gap-1">
+          <!-- Rendered dynamically by js/dudu_mockup.js -->
+        </div>
+
+      </div>
+
+      <!-- Upcoming Events Scrapbook (calender.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between border-b border-[#E8DACB]/40 pb-2">
+          <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+            <span>⏳ Upcoming Events 📝</span>
+          </h4>
+          <span class="font-handwriting text-base text-[#8D5B4C]">Handwritten notes</span>
+        </div>
+
+        <div class="flex flex-col gap-2 pt-1 text-xs text-primary dark:text-stone-200">
+          <div class="flex items-start gap-2">
+            <span class="text-base">🎂</span>
+            <div>
+              <span class="font-bold">Anniversary Cake Prep</span>
+              <p class="text-[11px] text-on-surface-variant">October 24th — Pick up the custom sweet cake! 🐾</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-base">🤎</span>
+            <div>
+              <span class="font-bold">100th Day Celebration!</span>
+              <p class="text-[11px] text-on-surface-variant">October 26th — Special dinner and cozy walks 🐼🐻</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 6: BEDTIME & MUSIC (music & bed time.jpg)
+         ==================================================================== -->
+    <section id="tab-music" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Title Bar -->
+      <div class="flex items-center justify-between px-1">
+        <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100">
+          우리 (Our Space) ♡
+        </h2>
+        <span class="text-xs font-bold text-[#8D5B4C]">Bedtime Lofi 🌙</span>
+      </div>
+
+      <!-- Cozy Bedtime Illustration Card (music & bed time.jpg) -->
+      <div class="bg-[#1D1924] rounded-[2.5rem] p-2 plush-shadow-lg border-2 border-[#382E47] flex flex-col items-center overflow-hidden relative">
+        <img src="assets/mockup_art/music_bedtime.png" alt="Dudu & Bubu Bedtime" class="w-full rounded-[2rem] object-cover pointer-events-none select-none">
+      </div>
+
+      <!-- Bedtime Countdown & Together Offline Button -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2">
+        <div>
+          <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide">Bedtime Countdown 🌙</span>
+          <h3 id="bedtime-countdown-display" class="font-heading font-black text-sm text-[#4A3222] dark:text-stone-100">
+            Bedtime in 00:45:12
+          </h3>
+        </div>
+        <button id="btn-together-offline" type="button" class="py-2 px-3.5 rounded-full bg-[#EBD2B4] hover:bg-[#DEC09E] text-[#5C3D2E] text-xs font-bold button-press cursor-pointer shadow-xs">
+          Together Offline 💤
+        </button>
+      </div>
+
+      <!-- Soothing Bedtime Lofi Player Card (music & bed time.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
+        
+        <h3 class="font-heading font-bold text-xs text-[#8D5B4C] text-center uppercase tracking-wider">
+          ✨ Soothing Bedtime Lofi ✨
+        </h3>
+
+        <!-- Player Row: Vinyl + Details -->
+        <div class="flex items-center gap-3.5">
+          <!-- Spinning Vinyl Disc -->
+          <div id="lofi-vinyl-disc" class="vinyl-disc w-16 h-16 rounded-full shrink-0 flex items-center justify-center relative shadow-md">
+            <div class="w-6 h-6 rounded-full bg-[#F5C7A9] flex items-center justify-center border border-white/40">
+              <span class="text-[8px] font-bold text-[#5C3D2E]">🐾</span>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h4 id="lofi-track-title" class="font-heading font-bold text-sm text-primary dark:text-stone-100 truncate">
+              Lofi Night Whispers 🌙
+            </h4>
+            <p id="lofi-track-sub" class="text-xs text-on-surface-variant truncate">
+              Lo-fi Beats for Two
+            </p>
+          </div>
+
+          <!-- Controls -->
+          <div class="flex items-center gap-1">
+            <button id="btn-lofi-prev" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer">
+              <span class="material-symbols-outlined text-lg">skip_previous</span>
+            </button>
+            <button id="btn-lofi-play" type="button" class="w-10 h-10 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center button-press cursor-pointer shadow-xs">
+              <span id="lofi-play-icon" class="material-symbols-outlined text-xl">play_arrow</span>
+            </button>
+            <button id="btn-lofi-next" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer">
+              <span class="material-symbols-outlined text-lg">skip_next</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Scrubber Bar with Star Handle -->
+        <div class="flex items-center gap-2 pt-1">
+          <span class="material-symbols-outlined text-xs text-stone-400">volume_up</span>
+          <div class="flex-1 h-1.5 rounded-full bg-[#E8DACB] relative flex items-center">
+            <div class="w-1/2 h-full bg-[#8D5B4C] rounded-full"></div>
+            <span class="absolute left-1/2 -translate-x-1/2 text-xs">⭐</span>
+          </div>
+          <span class="text-xs">⭐</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 7: COUPLE CLOSET & MINI GAME (wardrobe.jpg)
+         ==================================================================== -->
+    <section id="tab-wardrobe" class="hidden flex flex-col gap-4">
+      
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between px-1">
+        <div>
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+            Couple Closet &amp; Mini Game 🎮🧥
+          </h2>
+          <span class="text-[11px] text-on-surface-variant font-medium">Lvl 8 | Cozy Room</span>
+        </div>
+      </div>
+
+      <!-- Dressing Room Card (wardrobe.jpg) -->
+      <div class="bg-[#FAF5EE] dark:bg-stone-800 rounded-[2.5rem] p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col items-center relative overflow-hidden">
+        
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 self-start mb-2">
+          Dressing Room
+        </h3>
+
+        <!-- Dressing Room Illustration -->
+        <div class="w-full rounded-2xl overflow-hidden bg-stone-100 flex items-center justify-center">
+          <img src="assets/mockup_art/wardrobe_room.png" alt="Dressing Room" class="w-full object-cover">
+        </div>
+
+      </div>
+
+      <!-- Choose Clothes Category Selector (wardrobe.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Choose Clothes</h4>
+          <div class="flex items-center gap-1.5 text-xs font-bold">
+            <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu's Wardrobe</button>
+            <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer">Bubu's Wardrobe</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2 text-center text-xs">
+          <button type="button" data-type="hat" data-val="beanie" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center">
+            <span class="text-2xl mb-1">🧶</span>
+            <span>Hats</span>
+          </button>
+          <button type="button" data-type="sweater" data-val="cable" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center">
+            <span class="text-2xl mb-1">🧣</span>
+            <span>Sweaters</span>
+          </button>
+          <button type="button" data-type="coat" data-val="duffle" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center">
+            <span class="text-2xl mb-1">🧥</span>
+            <span>Coats</span>
+          </button>
+          <button type="button" data-type="accs" data-val="scarf" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center">
+            <span class="text-2xl mb-1">👓</span>
+            <span>Accs</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mini Game Room Card (wardrobe.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
+        <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+          <span>⏳ Mini Game Room 🕹️</span>
+        </h4>
+
+        <div class="bg-[#FAF5EE] dark:bg-stone-900 rounded-2xl p-3 flex items-center justify-between gap-3 border border-[#E8DACB]">
+          <img src="assets/mockup_art/minigame_switch.png" alt="Switch Game" class="w-24 object-contain rounded-xl">
+          <div class="flex-1 min-w-0">
+            <h5 class="font-heading font-bold text-xs text-primary dark:text-stone-100">Outfit Matcher Game</h5>
+            <p class="text-[11px] text-on-surface-variant leading-tight mt-0.5">
+              Mix &amp; match for today's high score! Daily Bonus 🐻✨
+            </p>
+            <button id="btn-play-minigame" type="button" class="mt-2 py-1.5 px-4 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white text-xs font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
+              <span>Play 🎮</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         SCREEN 8: DUO CHAT (chat.jpg)
+         ==================================================================== -->
+    <section id="tab-chat" class="hidden flex flex-col gap-2.5 relative">
+      
+      <!-- Top Chat Header Bar (chat.jpg) -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-2 min-w-0">
+          <a href="#home" data-tab="home" class="mockup-nav-item w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold button-press cursor-pointer">
+            &lt;
+          </a>
+          <div class="flex flex-col min-w-0">
+            <button id="chat-partner-toggle-btn" type="button" class="flex items-center gap-1 text-left button-press cursor-pointer group focus:outline-none" title="Tap to switch viewing role (Dudu / Bubu)">
+              <h3 id="chat-partner-name" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 truncate leading-tight">
+                Bubu 🐼❤️
+              </h3>
+              <span class="material-symbols-outlined text-[13px] text-stone-400 group-hover:text-[#8D5B4C] leading-none">swap_horiz</span>
+            </button>
+            <button id="chat-partner-presence-container" type="button" class="flex items-center gap-1.5 mt-0.5 cursor-pointer button-press text-left focus:outline-none" title="Tap to toggle online/offline state">
+              <span id="chat-partner-presence-dot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-xs ring-2 ring-emerald-200 dark:ring-emerald-900 shrink-0 animate-pulse"></span>
+              <span id="chat-partner-presence-text" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">
+                online 💫
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Call, Video Call, Security Lock Action Buttons -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="btn-chat-call" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="Voice Call">
+            <span class="material-symbols-outlined text-base">call</span>
+          </button>
+          <button id="btn-chat-videocall" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="Video Call">
+            <span class="material-symbols-outlined text-base">videocam</span>
+          </button>
+          <button id="btn-chat-e2ee-lock" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="E2EE Security Verified">
+            <span class="material-symbols-outlined text-base">lock</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Multi-Topic Bar (Persistent E2EE Sessions) -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar select-none shrink-0" id="chat-sessions-list">
+        <!-- Rendered dynamically by js/chat/ui.js -->
+      </div>
+
+      <!-- Chat Feed Container (Doodle Background matching chat.jpg) -->
+      <div class="doodle-bg rounded-[2rem] p-3 sm:p-4 border border-[#E8DACB] dark:border-stone-700 min-h-[380px] max-h-[500px] flex flex-col flex-1 overflow-hidden relative plush-shadow">
+        <div id="chat-messages-container" class="relative z-10 flex-1 overflow-y-auto pr-1 flex flex-col gap-3 overscroll-contain">
+          <!-- Messages rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Bottom Chat Bar (chat.jpg: camera, pill input, photo, mic, bear sticker) -->
+      <div class="bg-[#8D5B4C] rounded-full p-2 plush-shadow flex items-center gap-2 relative z-30">
+        
+        <!-- Camera Button -->
+        <button id="btn-chat-camera" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Snap Photo">
+          <span class="material-symbols-outlined text-xl">photo_camera</span>
+        </button>
+
+        <!-- Input Pill -->
+        <div class="flex-1 bg-white dark:bg-stone-800 rounded-full px-3.5 py-1.5 flex items-center gap-1 shadow-inner">
+          <input type="text" id="chat-text-input" placeholder="Send a message... 🧸" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0">
+        </div>
+
+        <!-- Photo Gallery Button -->
+        <button id="btn-chat-photo" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Send Photo">
+          <span class="material-symbols-outlined text-xl">image</span>
+        </button>
+        <input type="file" id="chat-image-input" accept="image/*" class="hidden">
+
+        <!-- Voice Note / Mic Button -->
+        <button id="btn-chat-mic" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Record Voice">
+          <span class="material-symbols-outlined text-xl">mic</span>
+        </button>
+
+        <!-- Bear Sticker Toggle Button (chat.jpg) -->
+        <button id="btn-toggle-sticker-tray" type="button" class="w-8 h-8 rounded-full bg-[#FAF4ED] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer shadow-xs" title="Open Stickers">
+          <span class="text-base font-bold">🐻</span>
+        </button>
+
+      </div>
+
+      <!-- Sticker Bottom Sheet Drawer (chat.jpg) -->
+      <div id="chat-sticker-tray" class="hidden bg-[#FAF5EE] dark:bg-stone-800 rounded-[2rem] p-4 plush-shadow-lg border-2 border-[#E8DACB] flex flex-col gap-3 animate-squish">
+        <!-- Grab handle -->
+        <div class="w-10 h-1 rounded-full bg-stone-300 dark:bg-stone-600 mx-auto"></div>
+
+        <div class="flex items-center justify-between pb-1 border-b border-[#E8DACB]/40">
+          <span class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Dudu &amp; Bubu Stickers</span>
+          <button id="btn-close-sticker-tray" type="button" class="text-xs font-bold text-stone-500 cursor-pointer">✕</button>
+        </div>
+
+        <!-- Sticker Grid -->
+        <div id="mockup-stickers-grid" class="grid grid-cols-3 sm:grid-cols-6 gap-3 max-h-48 overflow-y-auto p-1 text-center">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <!-- Bottom Sticker Tabs (Panda, Panda+Bear, Bear) -->
+        <div class="flex justify-center items-center gap-3 pt-2 border-t border-[#E8DACB]/40">
+          <button type="button" data-cat="bubu" class="stk-cat-btn px-3 py-1 rounded-full bg-[#F5EAE0] text-sm">🐼</button>
+          <button type="button" data-cat="couple" class="stk-cat-btn px-3 py-1 rounded-full bg-[#8D5B4C] text-white text-sm">🐼🐻</button>
+          <button type="button" data-cat="dudu" class="stk-cat-btn px-3 py-1 rounded-full bg-[#F5EAE0] text-sm">🐻</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ====================================================================
+       BOTTOM DOCK (timeline.jpg warm brown dock)
+       ==================================================================== -->
+  <nav id="bottom-nav-bar" class="fixed bottom-2 left-3 right-3 sm:left-auto sm:right-auto sm:w-[480px] sm:mx-auto z-50 cozy-brown-dock rounded-full px-2 py-1.5 shadow-xl transition-all">
+    <div class="flex justify-around items-center">
+      
+      <!-- Home -->
+      <a href="#home" data-tab="home" class="mockup-nav-item dock-item-active flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">home</span>
+        <span class="text-[9px] font-heading font-bold">Home</span>
+      </a>
+
+      <!-- Love Notes -->
+      <a href="#notes" data-tab="notes" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">mail</span>
+        <span class="text-[9px] font-heading font-bold">Notes</span>
+      </a>
+
+      <!-- Chat -->
+      <a href="#chat" data-tab="chat" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press relative">
+        <div class="relative">
+          <span class="material-symbols-outlined text-xl">chat</span>
+          <span id="nav-chat-unread-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-white"></span>
+        </div>
+        <span class="text-[9px] font-heading font-bold">Chat</span>
+      </a>
+
+      <!-- Memory Jar -->
+      <a href="#memories" data-tab="memories" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">photo_library</span>
+        <span class="text-[9px] font-heading font-bold">Memories</span>
+      </a>
+
+      <!-- Calendar -->
+      <a href="#calendar" data-tab="calendar" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">calendar_month</span>
+        <span class="text-[9px] font-heading font-bold">Calendar</span>
+      </a>
+
+      <!-- Bucket List -->
+      <a href="#bucket" data-tab="bucket" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">checklist</span>
+        <span class="text-[9px] font-heading font-bold">Planner</span>
+      </a>
+
+      <!-- Bedtime Music -->
+      <a href="#music" data-tab="music" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">music_note</span>
+        <span class="text-[9px] font-heading font-bold">Music</span>
+      </a>
+
+      <!-- Closet & Game -->
+      <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+        <span class="material-symbols-outlined text-xl">styler</span>
+        <span class="text-[9px] font-heading font-bold">Closet</span>
+      </a>
+
+    </div>
+  </nav>
+
+  <!-- ====================================================================
+       INTERACTIVE MODALS
+       ==================================================================== -->
+
+  <!-- MODAL: WRITE LOVE NOTE -->
+  <div id="modal-write-love-note" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]">
+        <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+          <span>💌 Write a Love Note</span>
+        </h3>
+        <button id="btn-close-write-note" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+
+      <p class="text-xs text-on-surface-variant">Send a sweet handwritten note into our shared space:</p>
+
+      <div class="flex items-center gap-2 text-xs">
+        <label class="flex items-center gap-1 cursor-pointer">
+          <input type="radio" name="note-style" value="envelope" checked>
+          <span>Wax Seal Envelope</span>
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer">
+          <input type="radio" name="note-style" value="craft">
+          <span>Craft Paper</span>
+        </label>
+      </div>
+
+      <textarea id="input-love-note-body" rows="4" placeholder="Can't wait to see you tonight! Bring your cozy sweater... 💌" class="w-full rounded-2xl border border-[#E8DACB] p-3 text-base font-handwriting bg-white dark:bg-stone-700 focus:outline-none"></textarea>
+
+      <div class="flex justify-end gap-2 pt-1">
+        <button id="btn-submit-love-note" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Send Love Note ♥
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD POLAROID -->
+  <div id="modal-add-polaroid" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-stone-800 max-w-sm w-full rounded-3xl p-5 plush-shadow border border-[#E8DACB] flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/40">
+        <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100">Add to Memory Jar 📸</h3>
+        <button id="btn-close-add-polaroid" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-2 text-xs">
+        <label class="font-bold">Memory Title</label>
+        <input type="text" id="input-polaroid-title" placeholder="Starlight Picnic" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700">
+        
+        <label class="font-bold">Date</label>
+        <input type="text" id="input-polaroid-date" placeholder="Oct 15" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700">
+      </div>
+
+      <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] text-white font-heading font-bold text-xs button-press cursor-pointer">
+        Save to Jar ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: OUTFIT MATCHER MINI GAME -->
+  <div id="modal-minigame" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border-2 border-[#8D5B4C] flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]">
+        <div>
+          <h3 class="font-heading font-black text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1">
+            <span>🎮 Outfit Matcher</span>
+          </h3>
+          <span class="text-[10px] text-[#8D5B4C] font-semibold">Match pairs before time expires!</span>
+        </div>
+        <button id="btn-close-minigame" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div class="flex items-center justify-between px-2 text-xs font-bold text-[#8D5B4C]">
+        <span>Score: <span id="minigame-score" class="text-base text-[#4A3222] dark:text-stone-100">0</span></span>
+        <span>Time: <span id="minigame-time" class="text-base text-rose-500">45s</span></span>
+      </div>
+
+      <!-- 12-Card Grid -->
+      <div id="minigame-board" class="grid grid-cols-4 gap-2 py-2">
+        <!-- Rendered by js/dudu_mockup.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOGETHER OFFLINE SLEEP OVERLAY -->
+  <div id="offline-sleep-overlay" class="hidden fixed inset-0 z-50 bg-[#120E18]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center text-white animate-fade-in">
+    <span class="text-6xl mb-4 animate-bounce">🌙</span>
+    <h2 class="font-heading font-black text-2xl tracking-tight mb-1">Sweet Dreams, Bubu &amp; Dudu</h2>
+    <p class="text-sm text-stone-300 max-w-xs leading-relaxed mb-6 font-handwriting text-xl">
+      The stars are glowing softly. Together offline, resting our hearts for tomorrow... zzz ✨
+    </p>
+    <button id="btn-close-sleep-overlay" type="button" class="py-2.5 px-6 rounded-full bg-[#8D5B4C] hover:bg-[#9E6959] text-white font-bold text-xs button-press cursor-pointer shadow-lg">
+      Wake Up ☀️
+    </button>
+  </div>
+
+  <!-- FEEDBACK TOAST -->
+  <div id="feedback-toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#4A3222]/95 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-white/20 opacity-0 pointer-events-none transition-opacity duration-200">
+    Affection delivered!
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/stickers.js?v=v5"></script>
+  <script src="js/audio.js?v=v5"></script>
+  <script src="js/chat/crypto.js?v=v1"></script>
+  <script src="js/chat/storage.js?v=v1"></script>
+  <script src="js/chat/socket.js?v=v1"></script>
+  <script src="js/chat/ui.js?v=v2"></script>
+  <script src="js/dudu_mockup.js?v=v1"></script>
+
+</body>
+</html>

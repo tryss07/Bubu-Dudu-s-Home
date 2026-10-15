@@ -1,0 +1,13 @@
+{
+  "name": "dudu-relay-server",
+  "version": "1.0.0",
+  "description": "Zero-Knowledge WebSocket Relay Server for Dudu Duo Chat",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ws": "^8.18.0"
+  }
+}
