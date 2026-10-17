@@ -1,6 +1,9 @@
-# Dependencies
+# Dependencies & Secrets
 node_modules/
 server/node_modules/
+.env
+*.env
+server/.env
 
 # Android build caches & artifacts
 .gradle/

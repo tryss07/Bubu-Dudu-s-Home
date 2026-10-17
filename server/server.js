@@ -1,10 +1,33 @@
 /**
- * Zero-Knowledge WebSocket Relay Server for Dudu Duo Chat
+ * Zero-Knowledge WebSocket Relay & Static Preview Server for Dudu & Bubu
  * Strictly relays opaque encrypted payloads between the two connected clients.
  * Plaintext is NEVER seen, parsed, or stored by this server.
  */
 
-require('dotenv').config();
+// Load .env with zero-dependency fallback
+try {
+  require('dotenv').config();
+} catch (_) {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const envPath = path.resolve(__dirname, '.env');
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf8');
+      content.split('\n').forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#')) {
+          const idx = trimmed.indexOf('=');
+          if (idx !== -1) {
+            const k = trimmed.slice(0, idx).trim();
+            const v = trimmed.slice(idx + 1).trim().replace(/^['"]|['"]$/g, '');
+            if (!process.env[k]) process.env[k] = v;
+          }
+        }
+      });
+    }
+  } catch (e) {}
+}
 const http = require('http');
 const { WebSocketServer, WebSocket } = require('ws');
 
@@ -15,19 +38,63 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./db');
 
+const PROJECT_ROOT = path.resolve(__dirname, '..');
 const BLOBS_DIR = process.env.BLOBS_DIR || path.resolve(__dirname, 'data', 'blobs');
 if (!fs.existsSync(BLOBS_DIR)) {
   fs.mkdirSync(BLOBS_DIR, { recursive: true });
 }
 
-// 1. Create HTTP Server for Health Checks, Blob Storage & WebSocket Upgrade
+const RELAY_AUTH_TOKEN = (process.env.RELAY_AUTH_TOKEN || '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a').trim();
+
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2'
+};
+
+/**
+ * Layer 1 Security: Application-level Auth Verification
+ * Validates requests against RELAY_AUTH_TOKEN via query param (?token=), custom header, or Bearer auth.
+ */
+function isAuthorized(req, url) {
+  if (!RELAY_AUTH_TOKEN) return true; // Open in development if no token configured
+
+  // 1. Query parameter ?token=... or ?auth=...
+  if (url) {
+    const qToken = url.searchParams.get('token') || url.searchParams.get('auth');
+    if (qToken && qToken.trim() === RELAY_AUTH_TOKEN) return true;
+  }
+
+  // 2. Custom headers
+  const headerToken = req.headers['x-relay-token'] || req.headers['x-dudu-auth'];
+  if (headerToken && headerToken.trim() === RELAY_AUTH_TOKEN) return true;
+
+  // 3. Authorization: Bearer <token>
+  const authHeader = req.headers['authorization'];
+  if (authHeader) {
+    const bearer = authHeader.replace(/^Bearer\s+/i, '').trim();
+    if (bearer === RELAY_AUTH_TOKEN) return true;
+  }
+
+  return false;
+}
+
+// 1. Create HTTP Server for Health Checks, Static App Preview, Blob Storage & WebSocket Upgrade
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
-  // CORS Headers for zero-knowledge blob transfer
+  // CORS Headers for zero-knowledge blob transfer & REST API
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Chunk-Index, X-Total-Chunks');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Chunk-Index, X-Total-Chunks, X-Relay-Token, X-Dudu-Auth, Authorization');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -35,7 +102,8 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (url.pathname === '/health' || url.pathname === '/') {
+  // Health check endpoint (always accessible for monitoring & local test readiness)
+  if (url.pathname === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       status: 'ok',
@@ -56,6 +124,62 @@ const server = http.createServer((req, res) => {
       activeClients: wss.clients.size,
       timestamp: new Date().toISOString()
     }));
+    return;
+  }
+
+  // Serve Static Frontend Assets for non-API GET/HEAD requests
+  if ((req.method === 'GET' || req.method === 'HEAD') && !url.pathname.startsWith('/api/')) {
+    let decodedPath = '/index.html';
+    try {
+      decodedPath = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname);
+    } catch (_) {
+      decodedPath = url.pathname;
+    }
+
+    const safePath = path.normalize(path.join(PROJECT_ROOT, decodedPath));
+    if (safePath.startsWith(PROJECT_ROOT) && !safePath.startsWith(__dirname) && fs.existsSync(safePath)) {
+      const stat = fs.statSync(safePath);
+      if (stat.isFile()) {
+        const ext = path.extname(safePath).toLowerCase();
+        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+        res.writeHead(200, { 'Content-Type': contentType });
+        if (req.method === 'HEAD') {
+          res.end();
+        } else {
+          fs.createReadStream(safePath).pipe(res);
+        }
+        return;
+      }
+    }
+
+    // Fallback: If root '/' requested on standalone VPS relay (where static index.html is absent),
+    // serve clean relay status info instead of falling through to 401 Unauthorized log warning
+    if (url.pathname === '/') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        status: 'ok',
+        service: 'dudu-duo-chat-relay',
+        activeClients: wss.clients.size,
+        uptimeSeconds: Math.floor(process.uptime()),
+        db: db.getStats(),
+        timestamp: new Date().toISOString()
+      }));
+      return;
+    }
+
+    if (url.pathname === '/favicon.ico') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+  }
+
+  // Enforce Layer 1 Security Token on all API endpoints
+  if (!isAuthorized(req, url)) {
+    const clientIp = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.warn(`[Security] Unauthorized HTTP ${req.method} ${url.pathname} rejected from ${clientIp}`);
+    res.writeHead(401, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Unauthorized: Valid RELAY_AUTH_TOKEN required' }));
     return;
   }
 
@@ -202,6 +326,24 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === '/api/memories/polaroids' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      polaroids: db.getAllPolaroids()
+    }));
+    return;
+  }
+
+  if (url.pathname === '/api/memories/milestones' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      milestones: db.getAllMilestones()
+    }));
+    return;
+  }
+
   if (url.pathname === '/api/memories/polaroids' && req.method === 'POST') {
     parseBody((err, json) => {
       if (err || !json) {
@@ -269,6 +411,33 @@ const server = http.createServer((req, res) => {
       db.saveCoupleSpace(json);
       const updated = db.getCoupleSpace();
       broadcastToOthers(null, JSON.stringify({ type: 'couple_space_updated', data: updated }));
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', data: updated }));
+    });
+    return;
+  }
+
+  // --- Wardrobe / Couple Closet REST Endpoints ---
+  if (url.pathname === '/api/wardrobe' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', data: db.getWardrobe() }));
+    return;
+  }
+
+  if (url.pathname === '/api/wardrobe' && req.method === 'POST') {
+    parseBody((err, json) => {
+      if (err || !json) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid payload' }));
+        return;
+      }
+      db.saveWardrobe(json);
+      const updated = db.getWardrobe();
+      broadcastToOthers(null, JSON.stringify({
+        type: 'wardrobe_updated',
+        data: updated,
+        updatedBy: json.updatedBy || null
+      }));
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ status: 'ok', data: updated }));
     });
@@ -362,6 +531,13 @@ server.on('upgrade', (request, socket, head) => {
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   // Accept /chat-socket, /ws, or root WebSocket connections
   if (url.pathname === '/chat-socket' || url.pathname === '/ws' || url.pathname === '/') {
+    if (!isAuthorized(request, url)) {
+      const clientIp = request.headers['cf-connecting-ip'] || request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+      console.warn(`[Security] Unauthorized WebSocket upgrade rejected from ${clientIp}`);
+      socket.write('HTTP/1.1 401 Unauthorized\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nUnauthorized: Invalid or missing token\n');
+      socket.destroy();
+      return;
+    }
     wss.handleUpgrade(request, socket, head, (ws) => {
       wss.emit('connection', ws, request);
     });
@@ -430,11 +606,15 @@ wss.on('connection', (ws, request) => {
     }));
   } catch (e) {}
 
-  // Send current couple space
+  // Send current couple space & wardrobe
   try {
     ws.send(JSON.stringify({
       type: 'couple_space_sync',
       data: db.getCoupleSpace()
+    }));
+    ws.send(JSON.stringify({
+      type: 'wardrobe_sync',
+      data: db.getWardrobe()
     }));
   } catch (e) {}
 
@@ -678,6 +858,17 @@ wss.on('connection', (ws, request) => {
           return;
         }
 
+        // Wardrobe / Couple Closet synchronization
+        if (parsed.type === 'update_wardrobe' && parsed.data) {
+          db.saveWardrobe(parsed.data);
+          broadcastToOthers(ws, JSON.stringify({
+            type: 'wardrobe_updated',
+            data: db.getWardrobe(),
+            updatedBy: parsed.data.updatedBy || ws.clientIdentity || null
+          }));
+          return;
+        }
+
         // Zero-Knowledge Encrypted message storage:
         // Save opaque ciphertext (iv, ciphertext) to SQLite on 512GB HDD
         if (parsed.ciphertext && parsed.iv) {
@@ -792,7 +983,7 @@ wss.on('close', () => {
 // 5. Start Listening
 server.listen(PORT, HOST, () => {
   console.log(`===============================================`);
-  console.log(`🐻 Dudu Duo Chat Relay Server`);
+  console.log(`🐻 Dudu Duo Chat Relay & Preview Server`);
   console.log(`🚀 Listening on http://${HOST}:${PORT}`);
   console.log(`📡 WebSocket endpoint: ws://${HOST}:${PORT}/chat-socket (or /ws)`);
   console.log(`🔒 Zero-Knowledge Mode Active (No plaintext logging)`);

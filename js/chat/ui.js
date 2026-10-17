@@ -256,7 +256,8 @@
     } else {
       if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-stone-400 dark:bg-stone-600 shrink-0';
       if (textEl) {
-        const lastSeenStr = partnerState && partnerState.last_seen ? formatLastSeen(partnerState.last_seen) : 'recently';
+        const lastSeenTs = partnerState && (partnerState.lastSeen || partnerState.last_seen);
+        const lastSeenStr = lastSeenTs ? formatLastSeen(lastSeenTs) : 'recently';
         textEl.textContent = `offline (${lastSeenStr})`;
         textEl.className = 'text-[10px] text-stone-500 dark:text-stone-400 font-medium truncate';
       }
@@ -970,15 +971,19 @@
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
     const blobId = 'blob_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
     const httpBase = DuduChatSocket.getHttpBaseUrl();
+    const token = DuduChatSocket.getAuthToken ? DuduChatSocket.getAuthToken() : '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a';
 
     for (let chunkIdx = 0; chunkIdx < totalChunks; chunkIdx++) {
       const slice = file.slice(chunkIdx * CHUNK_SIZE, (chunkIdx + 1) * CHUNK_SIZE);
       const arrayBuffer = await slice.arrayBuffer();
       const encryptedPacket = await DuduChatCrypto.encryptChunk(arrayBuffer, cryptoKey);
 
-      const res = await fetch(`${httpBase}/api/blobs/${blobId}/chunk/${chunkIdx}?total=${totalChunks}`, {
+      const res = await fetch(`${httpBase}/api/blobs/${blobId}/chunk/${chunkIdx}?total=${totalChunks}&token=${encodeURIComponent(token)}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/octet-stream' },
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'x-relay-token': token
+        },
         body: encryptedPacket
       });
       if (!res.ok) throw new Error(`Failed to upload chunk ${chunkIdx}`);
@@ -994,11 +999,14 @@
     if (cached) return cached;
 
     const httpBase = DuduChatSocket.getHttpBaseUrl();
+    const token = DuduChatSocket.getAuthToken ? DuduChatSocket.getAuthToken() : '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a';
     const decryptedChunks = [];
     const total = blobMeta.totalChunks || 1;
 
     for (let i = 0; i < total; i++) {
-      const res = await fetch(`${httpBase}/api/blobs/${blobId}/chunk/${i}`);
+      const res = await fetch(`${httpBase}/api/blobs/${blobId}/chunk/${i}?token=${encodeURIComponent(token)}`, {
+        headers: { 'x-relay-token': token }
+      });
       if (!res.ok) throw new Error(`Failed to download chunk ${i}`);
       const encBuffer = await res.arrayBuffer();
       const decBuffer = await DuduChatCrypto.decryptChunk(encBuffer, cryptoKey);
@@ -1736,20 +1744,21 @@
     // 1. Save locally in IndexedDB
     await DuduChatStorage.saveMessage(message);
 
-    if (message.sessionId === activeSessionId) {
+    if (message.sessionId === activeSessionId && !activeSessionAllMessages.some(m => m.id === message.id)) {
       activeSessionAllMessages.push(message);
       renderedMessageCount++;
     }
 
-    // 2. Append to UI & Scroll
+    // 2. Append to UI & Scroll (deduplicated by data-msg-id)
     const listContainer = document.getElementById('chat-messages-container');
     if (listContainer) {
-      // Remove empty state if present
       const emptyState = listContainer.querySelector('.select-none.my-auto');
       if (emptyState) listContainer.innerHTML = '';
 
-      const myIdentity = DuduChatCrypto.getStoredIdentity();
-      listContainer.insertAdjacentHTML('beforeend', renderMessageBubble(message, myIdentity));
+      if (!listContainer.querySelector(`.chat-bubble-row[data-msg-id="${message.id}"]`)) {
+        const myIdentity = DuduChatCrypto.getStoredIdentity();
+        listContainer.insertAdjacentHTML('beforeend', renderMessageBubble(message, myIdentity));
+      }
       scrollToBottom(true);
     }
 
@@ -1875,17 +1884,21 @@
           }
         }
 
-        // If message is for currently open session, append directly
+        // If message is for currently open session, append directly (deduplicated)
         if (decryptedMsg.sessionId === activeSessionId) {
-          activeSessionAllMessages.push(decryptedMsg);
-          renderedMessageCount++;
+          if (!activeSessionAllMessages.some(m => m.id === decryptedMsg.id)) {
+            activeSessionAllMessages.push(decryptedMsg);
+            renderedMessageCount++;
+          }
 
           const listContainer = document.getElementById('chat-messages-container');
           if (listContainer) {
             const emptyState = listContainer.querySelector('.select-none.my-auto');
             if (emptyState) listContainer.innerHTML = '';
 
-            listContainer.insertAdjacentHTML('beforeend', renderMessageBubble(decryptedMsg, myIdentity));
+            if (!listContainer.querySelector(`.chat-bubble-row[data-msg-id="${decryptedMsg.id}"]`)) {
+              listContainer.insertAdjacentHTML('beforeend', renderMessageBubble(decryptedMsg, myIdentity));
+            }
             scrollToBottom(true);
           }
           window.duduAudio?.playPop(380);
@@ -2199,26 +2212,28 @@
     });
   }
 
-  function sendDirectImageSticker(imgUrl) {
-    const textInput = document.getElementById('chat-text-input');
+  async function sendDirectImageSticker(imgUrl) {
+    if (!activeSessionId) {
+      if (window.showToast) window.showToast('Please create a topic first!');
+      return;
+    }
     const sender = DuduChatCrypto.getStoredIdentity() || 'dudu';
+    const replyToData = activeReplyMessage ? { ...activeReplyMessage } : null;
+    cancelReply();
+
     const message = {
-      id: 'stk_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      id: 'stk_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8),
       sessionId: activeSessionId,
       sender: sender,
       type: 'image',
       content: imgUrl,
       timestamp: Date.now(),
-      status: 'sent',
-      replyTo: activeReplyMessage ? { ...activeReplyMessage } : null
+      status: 'pending',
+      replyTo: replyToData
     };
 
-    DuduChatStorage.saveMessage(message).then(() => {
-      renderMessagesList(true);
-      DuduChatSocket.broadcastMessage(message);
-      window.duduAudio?.playPop?.(800);
-      cancelReply();
-    });
+    await handleOutboundMessage(message);
+    window.duduAudio?.playSparkle?.();
   }
 
   function toggleStickerTray() {
@@ -2289,27 +2304,48 @@
     // Call, Video Call, and Lock buttons matching chat.jpg
     document.getElementById('btn-chat-call')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(600);
-      alert('📞 Calling Bubu... ❤️\n"Ring ring! Dudu is calling his favorite person!"');
+      const partner = isSenderDudu(DuduChatCrypto.getStoredIdentity()) ? 'Bubu 🐼' : 'Dudu 🐻';
+      if (window.showToast) window.showToast(`📞 Calling ${partner}... Ring ring! ❤️`);
     });
     document.getElementById('btn-chat-videocall')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(700);
-      alert('📹 Video Call with Bubu... 🐼\n"Connecting sweet cozy video peek!"');
+      const partner = isSenderDudu(DuduChatCrypto.getStoredIdentity()) ? 'Bubu 🐼' : 'Dudu 🐻';
+      if (window.showToast) window.showToast(`📹 Starting cozy video peek with ${partner}! ✨`);
     });
     document.getElementById('btn-chat-e2ee-lock')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(500);
-      alert('🔒 End-to-End Encrypted\nMessages and photos are protected with AES-GCM 256-bit encryption.');
+      const settingsModal = document.getElementById('modal-chat-settings');
+      if (settingsModal) {
+        openChatSettingsModal();
+      } else if (window.showToast) {
+        window.showToast('🔒 AES-GCM 256-bit End-to-End Encryption Active');
+      }
     });
 
     // Camera, Photo, and Mic buttons
+    const chatImageInput = document.getElementById('chat-image-input');
     document.getElementById('btn-chat-photo')?.addEventListener('click', () => {
-      document.getElementById('chat-image-input')?.click();
+      if (chatImageInput) {
+        chatImageInput.removeAttribute('capture');
+        chatImageInput.click();
+      }
     });
     document.getElementById('btn-chat-camera')?.addEventListener('click', () => {
-      document.getElementById('chat-image-input')?.click();
+      if (chatImageInput) {
+        chatImageInput.setAttribute('capture', 'environment');
+        chatImageInput.click();
+      }
+    });
+    chatImageInput?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        await sendMediaMessage(file);
+        chatImageInput.value = '';
+      }
     });
     document.getElementById('btn-chat-mic')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(500);
-      alert('🎙️ Voice Note: Hold to record a sweet voice whisper for Honey! 🧸');
+      if (window.showToast) window.showToast('🎙️ Voice notes coming soon! Send a sweet text or sticker 🧸');
     });
 
     // Reply Bar Cancel Trigger
@@ -3013,10 +3049,13 @@
       .replace(/'/g, '&#039;');
   }
 
+  window.scrollToChatBottom = () => scrollToBottom(false);
+  window.sendDirectImageSticker = sendDirectImageSticker;
   window.DuduChatUI = {
     init: initChat,
     sendText: sendTextMessage,
     sendSticker: sendStickerMessage,
+    sendDirectImageSticker: sendDirectImageSticker,
     sendPhoto: sendPhotoMessage,
     sendMedia: sendMediaMessage,
     startReply: startReply,

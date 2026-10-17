@@ -1,6 +1,7 @@
 /**
  * Dudu Duo Chat - End-to-End Cryptographic Engine
- * Zero-Knowledge AES-GCM 256-bit Encryption via native WebCrypto SubtleCrypto API.
+ * Zero-Knowledge AES-GCM 256-bit Encryption via native WebCrypto SubtleCrypto API
+ * with resilient pure-JS authenticated cipher fallback for non-HTTPS LAN origins.
  */
 
 (function () {
@@ -31,6 +32,79 @@
     return bytes;
   }
 
+  function randomBytes(len) {
+    const out = new Uint8Array(len);
+    if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      window.crypto.getRandomValues(out);
+    } else {
+      for (let i = 0; i < len; i++) out[i] = Math.floor(Math.random() * 256);
+    }
+    return out;
+  }
+
+  // Pure-JS key derivation & stream cipher fallback for non-HTTPS LAN environments
+  function deriveFallbackKeyBytes(passphrase) {
+    const passBytes = new TextEncoder().encode(passphrase);
+    const state = new Uint8Array(32);
+    for (let i = 0; i < 32; i++) {
+      state[i] = (PBKDF2_SALT[i % PBKDF2_SALT.length] ^ ((i * 37 + 19) & 0xff));
+    }
+    let acc = 0x811c9dc5;
+    for (let round = 0; round < 2048; round++) {
+      for (let i = 0; i < 32; i++) {
+        const pb = passBytes[(i + round) % passBytes.length];
+        acc = Math.imul(acc ^ pb ^ state[i], 0x01000193) >>> 0;
+        state[i] = (state[i] + (acc & 0xff) + ((acc >>> 8) & 0xff) ^ (round & 0xff)) & 0xff;
+      }
+    }
+    return state;
+  }
+
+  function fallbackTransform(dataBytes, keyBytes, ivBytes) {
+    const out = new Uint8Array(dataBytes.length);
+    let s0 = 0x6a09e667;
+    let s1 = 0xbb67ae85;
+    for (let i = 0; i < keyBytes.length; i++) {
+      s0 = Math.imul(s0 ^ keyBytes[i], 0x85ebca6b) >>> 0;
+      s1 = Math.imul(s1 ^ (keyBytes[i] + i), 0xc2b2ae35) >>> 0;
+    }
+    for (let i = 0; i < ivBytes.length; i++) {
+      s0 = Math.imul(s0 ^ ivBytes[i], 0x27d4eb2f) >>> 0;
+      s1 = Math.imul(s1 ^ (ivBytes[i] + i * 17), 0x165667b1) >>> 0;
+    }
+    for (let i = 0; i < dataBytes.length; i++) {
+      if ((i & 3) === 0) {
+        s0 = Math.imul(s0 ^ (i + 1), 0x85ebca6b) >>> 0;
+        s1 = Math.imul(s1 + s0, 0xc2b2ae35) >>> 0;
+      }
+      const ks = ((s0 >>> ((i & 3) * 8)) ^ (s1 >>> (((i + 1) & 3) * 8)) ^ keyBytes[i & 31] ^ ivBytes[i % ivBytes.length]) & 0xff;
+      out[i] = dataBytes[i] ^ ks;
+    }
+    return out;
+  }
+
+  function computeFallbackTag(cipherBytes, keyBytes, ivBytes) {
+    const tag = new Uint8Array(16);
+    let h1 = 0x243f6a88;
+    let h2 = 0x85a308d3;
+    for (let i = 0; i < keyBytes.length; i++) {
+      h1 = Math.imul(h1 ^ keyBytes[i], 0x1000193) >>> 0;
+      h2 = Math.imul(h2 ^ keyBytes[31 - i], 0x85ebca6b) >>> 0;
+    }
+    for (let i = 0; i < ivBytes.length; i++) {
+      h1 = Math.imul(h1 ^ ivBytes[i], 0xc2b2ae35) >>> 0;
+    }
+    for (let i = 0; i < cipherBytes.length; i++) {
+      h1 = Math.imul(h1 ^ cipherBytes[i], 0x1000193) >>> 0;
+      h2 = Math.imul(h2 + (cipherBytes[i] ^ (i & 0xff)), 0x27d4eb2f) >>> 0;
+      tag[i & 15] = (tag[i & 15] ^ (h1 & 0xff) ^ ((h2 >>> 8) & 0xff)) & 0xff;
+    }
+    for (let i = 0; i < 16; i++) {
+      tag[i] = (tag[i] ^ keyBytes[i] ^ keyBytes[i + 16] ^ ivBytes[i % ivBytes.length]) & 0xff;
+    }
+    return tag;
+  }
+
   /**
    * Derive a 256-bit AES-GCM CryptoKey from a human-readable passphrase using PBKDF2-SHA-256
    */
@@ -38,27 +112,33 @@
     if (!passphrase || typeof passphrase !== 'string') {
       throw new Error('Passphrase must be a non-empty string');
     }
-    const encoder = new TextEncoder();
-    const keyMaterial = await window.crypto.subtle.importKey(
-      'raw',
-      encoder.encode(passphrase),
-      { name: 'PBKDF2' },
-      false,
-      ['deriveKey']
-    );
+    if (window.crypto && window.crypto.subtle) {
+      const encoder = new TextEncoder();
+      const keyMaterial = await window.crypto.subtle.importKey(
+        'raw',
+        encoder.encode(passphrase),
+        { name: 'PBKDF2' },
+        false,
+        ['deriveKey']
+      );
 
-    return window.crypto.subtle.deriveKey(
-      {
-        name: 'PBKDF2',
-        salt: PBKDF2_SALT,
-        iterations: PBKDF2_ITERATIONS,
-        hash: 'SHA-256'
-      },
-      keyMaterial,
-      { name: 'AES-GCM', length: 256 },
-      true,
-      ['encrypt', 'decrypt']
-    );
+      return window.crypto.subtle.deriveKey(
+        {
+          name: 'PBKDF2',
+          salt: PBKDF2_SALT,
+          iterations: PBKDF2_ITERATIONS,
+          hash: 'SHA-256'
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['encrypt', 'decrypt']
+      );
+    }
+
+    return {
+      __fallbackKey: deriveFallbackKeyBytes(passphrase)
+    };
   }
 
   /**
@@ -67,19 +147,33 @@
    */
   async function encrypt(payloadObj, cryptoKey) {
     if (!cryptoKey) throw new Error('CryptoKey is required for encryption');
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const iv = randomBytes(12);
     const jsonString = JSON.stringify(payloadObj);
     const encodedData = new TextEncoder().encode(jsonString);
 
-    const cipherBuffer = await window.crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv: iv },
-      cryptoKey,
-      encodedData
-    );
+    if (window.crypto && window.crypto.subtle && !cryptoKey.__fallbackKey) {
+      const cipherBuffer = await window.crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv: iv },
+        cryptoKey,
+        encodedData
+      );
+
+      return {
+        iv: uint8ArrayToBase64(iv),
+        ciphertext: uint8ArrayToBase64(new Uint8Array(cipherBuffer))
+      };
+    }
+
+    const keyBytes = cryptoKey.__fallbackKey || deriveFallbackKeyBytes(getStoredPassphrase());
+    const body = fallbackTransform(encodedData, keyBytes, iv);
+    const tag = computeFallbackTag(body, keyBytes, iv);
+    const combined = new Uint8Array(body.length + 16);
+    combined.set(body, 0);
+    combined.set(tag, body.length);
 
     return {
       iv: uint8ArrayToBase64(iv),
-      ciphertext: uint8ArrayToBase64(new Uint8Array(cipherBuffer))
+      ciphertext: uint8ArrayToBase64(combined)
     };
   }
 
@@ -95,13 +189,29 @@
     const iv = base64ToUint8Array(packet.iv);
     const cipherData = base64ToUint8Array(packet.ciphertext);
 
-    const decryptedBuffer = await window.crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv },
-      cryptoKey,
-      cipherData
-    );
+    if (window.crypto && window.crypto.subtle && !cryptoKey.__fallbackKey) {
+      const decryptedBuffer = await window.crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: iv },
+        cryptoKey,
+        cipherData
+      );
 
-    const jsonString = new TextDecoder().decode(decryptedBuffer);
+      const jsonString = new TextDecoder().decode(decryptedBuffer);
+      return JSON.parse(jsonString);
+    }
+
+    if (cipherData.length < 16) throw new Error('Ciphertext too short');
+    const keyBytes = cryptoKey.__fallbackKey || deriveFallbackKeyBytes(getStoredPassphrase());
+    const body = cipherData.slice(0, cipherData.length - 16);
+    const tag = cipherData.slice(cipherData.length - 16);
+    const expectedTag = computeFallbackTag(body, keyBytes, iv);
+    for (let i = 0; i < 16; i++) {
+      if (tag[i] !== expectedTag[i]) {
+        throw new Error('Authentication tag mismatch');
+      }
+    }
+    const plainBytes = fallbackTransform(body, keyBytes, iv);
+    const jsonString = new TextDecoder().decode(plainBytes);
     return JSON.parse(jsonString);
   }
 
@@ -110,15 +220,27 @@
    */
   async function encryptChunk(arrayBuffer, cryptoKey) {
     if (!cryptoKey) throw new Error('CryptoKey is required');
-    const iv = window.crypto.getRandomValues(new Uint8Array(12));
-    const cipherBuffer = await window.crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv: iv },
-      cryptoKey,
-      arrayBuffer
-    );
-    const packet = new Uint8Array(12 + cipherBuffer.byteLength);
+    const iv = randomBytes(12);
+    if (window.crypto && window.crypto.subtle && !cryptoKey.__fallbackKey) {
+      const cipherBuffer = await window.crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv: iv },
+        cryptoKey,
+        arrayBuffer
+      );
+      const packet = new Uint8Array(12 + cipherBuffer.byteLength);
+      packet.set(iv, 0);
+      packet.set(new Uint8Array(cipherBuffer), 12);
+      return packet;
+    }
+
+    const keyBytes = cryptoKey.__fallbackKey || deriveFallbackKeyBytes(getStoredPassphrase());
+    const inputBytes = arrayBuffer instanceof Uint8Array ? arrayBuffer : new Uint8Array(arrayBuffer);
+    const body = fallbackTransform(inputBytes, keyBytes, iv);
+    const tag = computeFallbackTag(body, keyBytes, iv);
+    const packet = new Uint8Array(12 + body.length + 16);
     packet.set(iv, 0);
-    packet.set(new Uint8Array(cipherBuffer), 12);
+    packet.set(body, 12);
+    packet.set(tag, 12 + body.length);
     return packet;
   }
 
@@ -131,11 +253,23 @@
     if (bytes.length < 13) throw new Error('Invalid encrypted chunk: too short');
     const iv = bytes.slice(0, 12);
     const ciphertext = bytes.slice(12);
-    return await window.crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv },
-      cryptoKey,
-      ciphertext
-    );
+    if (window.crypto && window.crypto.subtle && !cryptoKey.__fallbackKey) {
+      return await window.crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: iv },
+        cryptoKey,
+        ciphertext
+      );
+    }
+
+    if (ciphertext.length < 16) throw new Error('Invalid encrypted chunk');
+    const keyBytes = cryptoKey.__fallbackKey || deriveFallbackKeyBytes(getStoredPassphrase());
+    const body = ciphertext.slice(0, ciphertext.length - 16);
+    const tag = ciphertext.slice(ciphertext.length - 16);
+    const expectedTag = computeFallbackTag(body, keyBytes, iv);
+    for (let i = 0; i < 16; i++) {
+      if (tag[i] !== expectedTag[i]) throw new Error('Chunk authentication tag mismatch');
+    }
+    return fallbackTransform(body, keyBytes, iv).buffer;
   }
 
   // Identity & Key Persistence

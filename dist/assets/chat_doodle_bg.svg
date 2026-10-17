@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <!-- Subtle doodles inspired by Huang Xiao B / Dudu mock up -->
+  <!-- Leaves / Botanical branch -->
+  <path d="M25 45 C 32 35, 45 40, 48 52 C 40 55, 30 52, 25 45 Z" fill="#D8C5B3" opacity="0.45"/>
+  <path d="M48 52 C 55 45, 65 52, 62 62 C 52 64, 45 58, 48 52 Z" fill="#C5B19E" opacity="0.45"/>
+  <path d="M22 42 Q 38 52 65 65" stroke="#C5B19E" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Four point sparkle star -->
+  <path d="M195 35 Q 200 45 200 45 Q 200 35 210 35 Q 200 35 200 25 Q 200 35 195 35 Z" fill="#E2BA86" opacity="0.55"/>
+  <circle cx="185" cy="50" r="1.5" fill="#E2BA86" opacity="0.4"/>
+
+  <!-- Cute Heart -->
+  <path d="M95 28 C 95 24, 91 20, 86 20 C 82 20, 79 23, 79 26 C 79 23, 76 20, 72 20 C 67 20, 63 24, 63 28 C 63 36, 74 42, 79 46 C 84 42, 95 36, 95 28 Z" fill="#E5A89E" opacity="0.4"/>
+
+  <!-- Small floating heart -->
+  <path d="M152 110 C 152 107, 149 104, 145 104 C 142 104, 140 106, 140 108 C 140 106, 138 104, 135 104 C 131 104, 128 107, 128 110 C 128 116, 136 121, 140 124 C 144 121, 152 116, 152 110 Z" fill="#E8B0A8" opacity="0.35"/>
+
+  <!-- Tiny Paw Print -->
+  <ellipse cx="28" cy="140" rx="3.5" ry="4" fill="#BFA795" opacity="0.4"/>
+  <circle cx="23" cy="132" r="1.8" fill="#BFA795" opacity="0.4"/>
+  <circle cx="28" cy="130" r="1.8" fill="#BFA795" opacity="0.4"/>
+  <circle cx="33" cy="132" r="1.8" fill="#BFA795" opacity="0.4"/>
+
+  <!-- Delicate flower sprig -->
+  <circle cx="205" cy="155" r="3" fill="#E5A89E" opacity="0.45"/>
+  <circle cx="200" cy="151" r="2.5" fill="#F4D2BA" opacity="0.45"/>
+  <circle cx="210" cy="151" r="2.5" fill="#F4D2BA" opacity="0.45"/>
+  <circle cx="200" cy="160" r="2.5" fill="#F4D2BA" opacity="0.45"/>
+  <circle cx="210" cy="160" r="2.5" fill="#F4D2BA" opacity="0.45"/>
+  <path d="M205 163 Q 207 175 212 182" stroke="#BFA795" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- Scattered star sparkle -->
+  <path d="M80 185 Q 83 192 83 192 Q 83 185 90 185 Q 83 185 83 178 Q 83 185 80 185 Z" fill="#E2BA86" opacity="0.5"/>
+  <circle cx="115" cy="205" r="1.5" fill="#BFA795" opacity="0.35"/>
+  <circle cx="160" cy="190" r="2" fill="#E5A89E" opacity="0.3"/>
+</svg>

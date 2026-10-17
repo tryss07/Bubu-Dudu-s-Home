@@ -18,8 +18,19 @@ async function runTests() {
   // Wait 600ms for server to start listening
   await new Promise(r => setTimeout(r, 600));
 
+  const TOKEN = process.env.RELAY_AUTH_TOKEN || '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a';
   const BASE_URL = 'http://127.0.0.1:3555';
-  const WS_URL = 'ws://127.0.0.1:3555/chat-socket';
+  const WS_URL = `ws://127.0.0.1:3555/chat-socket?token=${TOKEN}`;
+
+  const authFetch = (url, options = {}) => fetch(url, {
+    ...options,
+    headers: { ...options.headers, 'x-relay-token': TOKEN }
+  });
+
+  // Verify Layer 1 Security: Unauthorized access without token is rejected
+  const unauthRes = await fetch(`${BASE_URL}/api/calendar`);
+  assert.strictEqual(unauthRes.status, 401, 'Unauthorized request should be 401');
+  console.log('✓ Layer 1 Security verified: Unauthorized request returned 401');
 
   // =========================================================================
   // 1. HTTP REST ENDPOINTS VERIFICATION
@@ -27,28 +38,28 @@ async function runTests() {
   console.log('\n--- 1. Testing REST Endpoints ---');
 
   // Calendar
-  const calRes = await fetch(`${BASE_URL}/api/calendar`);
+  const calRes = await authFetch(`${BASE_URL}/api/calendar`);
   const calData = await calRes.json();
   assert.strictEqual(calData.status, 'ok');
   assert.ok(Array.isArray(calData.events) && calData.events.length >= 3);
   console.log(`✓ GET /api/calendar: ${calData.events.length} events returned`);
 
   // Planner
-  const planRes = await fetch(`${BASE_URL}/api/planner`);
+  const planRes = await authFetch(`${BASE_URL}/api/planner`);
   const planData = await planRes.json();
   assert.strictEqual(planData.status, 'ok');
   assert.ok(Array.isArray(planData.items) && planData.items.length >= 5);
   console.log(`✓ GET /api/planner: ${planData.items.length} items returned`);
 
   // Notes
-  const notesRes = await fetch(`${BASE_URL}/api/notes`);
+  const notesRes = await authFetch(`${BASE_URL}/api/notes`);
   const notesData = await notesRes.json();
   assert.strictEqual(notesData.status, 'ok');
   assert.ok(Array.isArray(notesData.notes) && notesData.notes.length >= 3);
   console.log(`✓ GET /api/notes: ${notesData.notes.length} notes returned`);
 
   // Memories
-  const memRes = await fetch(`${BASE_URL}/api/memories`);
+  const memRes = await authFetch(`${BASE_URL}/api/memories`);
   const memData = await memRes.json();
   assert.strictEqual(memData.status, 'ok');
   assert.ok(Array.isArray(memData.polaroids) && memData.polaroids.length >= 4);
@@ -56,14 +67,21 @@ async function runTests() {
   console.log(`✓ GET /api/memories: ${memData.polaroids.length} polaroids, ${memData.milestones.length} milestones`);
 
   // Couple Space
-  const csRes = await fetch(`${BASE_URL}/api/couple-space`);
+  const csRes = await authFetch(`${BASE_URL}/api/couple-space`);
   const csData = await csRes.json();
   assert.strictEqual(csData.status, 'ok');
   assert.strictEqual(csData.data.anniversaryDate, '2025-11-04');
   console.log(`✓ GET /api/couple-space: anniversary=${csData.data.anniversaryDate}, loveBattery=${csData.data.loveBattery}`);
 
+  // Wardrobe / Couple Closet
+  const wardRes = await authFetch(`${BASE_URL}/api/wardrobe`);
+  const wardData = await wardRes.json();
+  assert.strictEqual(wardData.status, 'ok');
+  assert.ok(wardData.data && wardData.data.wardrobe && wardData.data.wardrobe.dudu && wardData.data.wardrobe.bubu);
+  console.log(`✓ GET /api/wardrobe: dudu.hat=${wardData.data.wardrobe.dudu.hat}, bubu.hat=${wardData.data.wardrobe.bubu.hat}, highScore=${wardData.data.miniGameHighScore}`);
+
   // Test POST & DELETE via REST for Calendar
-  const postCal = await fetch(`${BASE_URL}/api/calendar`, {
+  const postCal = await authFetch(`${BASE_URL}/api/calendar`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: 'rest_cal_1', date: 15, month: 10, year: 2026, title: 'REST Test Dinner' })
@@ -72,7 +90,7 @@ async function runTests() {
   assert.strictEqual(postCalJson.status, 'ok');
   assert.strictEqual(postCalJson.event.title, 'REST Test Dinner');
 
-  const delCal = await fetch(`${BASE_URL}/api/calendar/rest_cal_1`, { method: 'DELETE' });
+  const delCal = await authFetch(`${BASE_URL}/api/calendar/rest_cal_1`, { method: 'DELETE' });
   const delCalJson = await delCal.json();
   assert.strictEqual(delCalJson.status, 'ok');
   console.log('✓ POST & DELETE /api/calendar verified');
@@ -105,13 +123,15 @@ async function runTests() {
   const duduNotesSync = duduReceived.find(m => m.type === 'notes_sync');
   const duduMemoriesSync = duduReceived.find(m => m.type === 'memories_sync');
   const duduCoupleSync = duduReceived.find(m => m.type === 'couple_space_sync');
+  const duduWardrobeSync = duduReceived.find(m => m.type === 'wardrobe_sync');
 
   assert.ok(duduCalSync, 'Dudu should receive calendar_sync on connect');
   assert.ok(duduPlannerSync, 'Dudu should receive planner_sync on connect');
   assert.ok(duduNotesSync, 'Dudu should receive notes_sync on connect');
   assert.ok(duduMemoriesSync, 'Dudu should receive memories_sync on connect');
   assert.ok(duduCoupleSync, 'Dudu should receive couple_space_sync on connect');
-  console.log('✓ Initial connection sync packets verified for all 5 domains');
+  assert.ok(duduWardrobeSync, 'Dudu should receive wardrobe_sync on connect');
+  console.log('✓ Initial connection sync packets verified for all 6 domains (including Wardrobe)');
 
   // Test A: Dudu creates calendar event -> Bubu receives
   clientDudu.send(JSON.stringify({
@@ -168,6 +188,36 @@ async function runTests() {
   assert.ok(bubuGotCouple, 'Bubu must receive couple_space_updated');
   assert.strictEqual(bubuGotCouple.data.statuses.dudu, 'Planning dinner 🍝');
   console.log(`✓ Couple space real-time sync verified: status="${bubuGotCouple.data.statuses.dudu}"`);
+
+  // Test F: Dudu updates Couple Closet outfit & Mini-Game High Score -> Bubu receives in real time
+  clientDudu.send(JSON.stringify({
+    type: 'update_wardrobe',
+    data: {
+      wardrobe: {
+        dudu: { hat: 'beret', sweater: 'hoodie', coat: 'trench', accs: 'scarf' },
+        bubu: { hat: 'beret', sweater: 'hoodie', coat: 'trench', accs: 'satchel' }
+      },
+      miniGameHighScore: 680,
+      updatedBy: 'dudu'
+    }
+  }));
+  await new Promise(r => setTimeout(r, 200));
+
+  const bubuGotWardrobe = bubuReceived.find(m => m.type === 'wardrobe_updated');
+  assert.ok(bubuGotWardrobe, 'Bubu must receive wardrobe_updated');
+  assert.strictEqual(bubuGotWardrobe.data.wardrobe.dudu.hat, 'beret');
+  assert.strictEqual(bubuGotWardrobe.data.wardrobe.bubu.accs, 'satchel');
+  assert.strictEqual(bubuGotWardrobe.data.miniGameHighScore, 680);
+  console.log(`✓ Wardrobe real-time sync verified: dudu.hat="${bubuGotWardrobe.data.wardrobe.dudu.hat}", highScore=${bubuGotWardrobe.data.miniGameHighScore}`);
+
+  // Restore default wardrobe state after test
+  db.saveWardrobe({
+    wardrobe: {
+      dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+      bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+    },
+    miniGameHighScore: 420
+  });
 
   // Clean up test items
   db.deleteCalendarEvent('ws_cal_1');

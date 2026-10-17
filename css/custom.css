@@ -641,3 +641,71 @@ html.dark .doodle-bg {
 .flip-card-back {
   transform: rotateY(180deg);
 }
+
+
+/* ==========================================================================
+   DARK MODE CONTRAST & ACCESSIBILITY FIXES (WCAG AA - R-25 / R-34)
+   ========================================================================== */
+html.dark .polaroid-card {
+  background-color: #292524 !important;
+  border-color: rgba(120, 113, 108, 0.45) !important;
+  color: #f5f5f4 !important;
+}
+
+html.dark #home-anniversary-pill {
+  background-color: #3b2a22 !important;
+  border-color: #6b4c3e !important;
+}
+
+html.dark #home-anniversary-pill span {
+  color: #f5ece7 !important;
+}
+
+html.dark .wardrobe-item-card {
+  background-color: #382c27 !important;
+  border-color: #57453d !important;
+  color: #f5ece7 !important;
+}
+
+/* Offline Material Symbols Fallback (preserves textContent while rendering clean glyphs offline) */
+html.offline-icons .material-symbols-outlined[data-fallback] {
+  font-size: 0 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html.offline-icons .material-symbols-outlined[data-fallback]::before {
+  content: attr(data-fallback);
+  font-size: 15px;
+  font-family: 'Plus Jakarta Sans', 'Noto Color Emoji', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Wardrobe Interactive Stage Utilities */
+.top-\[6\%\] { top: 6%; }
+.top-\[8\%\] { top: 8%; }
+.left-\[12\%\] { left: 12%; }
+.right-\[10\%\] { right: 10%; }
+.w-\[38\%\] { width: 38%; }
+.h-\[68\%\] { height: 68%; }
+.h-\[66\%\] { height: 66%; }
+.bottom-1\.5 { bottom: 0.375rem; }
+.inset-x-3 { left: 0.75rem; right: 0.75rem; }
+.max-w-\[92\%\] { max-width: 92%; }
+.bg-white\/95 { background-color: rgba(255, 255, 255, 0.95); }
+.bg-white\/10 { background-color: rgba(255, 255, 255, 0.1); }
+.bg-\[\#4A3222\]\/90 { background-color: rgba(74, 50, 34, 0.9); }
+.bg-\[\#8D5B4C\]\/90 { background-color: rgba(141, 91, 76, 0.9); }
+.bg-\[\#C98A6B\] { background-color: #C98A6B; }
+.bg-\[\#F1C8B1\] { background-color: #F1C8B1; }
+.border-\[\#4A3222\]\/20 { border-color: rgba(74, 50, 34, 0.2); }
+.border-\[\#E8DACB\]\/60 { border-color: rgba(232, 218, 203, 0.6); }
+.pointer-events-auto { pointer-events: auto; }
+html.dark .dark\:bg-stone-800\/95 { background-color: rgba(41, 37, 36, 0.95); }
+.bottom-1 { bottom: 0.25rem; }
+.inset-x-6 { left: 1.5rem; right: 1.5rem; }
+.bg-\[\#FAF6F0\] { background-color: #FAF6F0; }

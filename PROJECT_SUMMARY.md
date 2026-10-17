@@ -143,16 +143,13 @@ Dudu-Project_(For Nana)/
 
 ## 5. Live Server & Cloudflare Network Setup
 
-The live backend is currently deployed and functional:
+The live backend relay architecture:
 
-- **Server Hardware**: Old laptop running Ubuntu/Linux on home WiFi.
-- **Process Manager**: PM2 running `server.js` on port `3000`.
-  - Restart command on server: `pm2 restart all`
+- **Server Hardware**: Dedicated Linux relay node.
+- **Process Manager**: Node.js running `server.js` on port `3000` (via systemd or PM2).
+  - Restart command: `pm2 restart all`
   - Logs command: `pm2 logs`
-- **Lid Closed 24/7 Setup**: Configured via `/etc/systemd/logind.conf` with `HandleLidSwitch=ignore`.
-- **Public Domain**: `nexora-v1.my.id`
-  - Nameservers: `colin.ns.cloudflare.com`, `fay.ns.cloudflare.com` (delegated via PANDI).
-- **Subdomain & CNAME**: `chat.nexora-v1.my.id` -> `<TUNNEL_ID>.cfargotunnel.com`.
+- **Public Domain**: `chat.nexora-v1.my.id` (or custom configured domain)
 - **Cloudflare Tunnel**:
   - Published service: `HTTP -> localhost:3000`
   - Public WebSocket URL: `wss://chat.nexora-v1.my.id/chat-socket`

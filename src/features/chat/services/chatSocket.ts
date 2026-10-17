@@ -11,7 +11,7 @@ export class ChatSocketClient {
   private reconnectTimer: any = null;
   private heartbeatTimer: any = null;
 
-  constructor(url = 'wss://chat.nexora-v1.my.id/chat-socket') {
+  constructor(url = 'wss://chat.nexora-v1.my.id/chat-socket?token=415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a') {
     this.url = url;
   }
 

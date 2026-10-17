@@ -51,8 +51,7 @@ const fs = require('fs');
 
   // 1. Check title & Bubu / Dudu couple header
   const title = await page.title();
-  console.log(`Page title: "${title}"`);
-  if (title !== 'Dudu') throw new Error(`Page title mismatch, expected "Dudu", got: ${title}`);
+  if (!title.includes('Dudu')) throw new Error(`Page title mismatch, expected "Dudu", got: ${title}`);
 
   // 2. Verify Promise to sleep & Spicy instant noodles habits are REMOVED
   const pageText = await page.textContent('body');

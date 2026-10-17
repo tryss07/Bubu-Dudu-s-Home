@@ -16,6 +16,7 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
+    if (typeof tailwind !== 'undefined') {
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -43,6 +44,7 @@
           }
         }
       }
+    };
     }
   </script>
   
@@ -319,7 +321,7 @@
           <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
             <span>Our Polaroids 📸</span>
           </h3>
-          <span class="text-[11px] font-bold text-[#8D5B4C] cursor-pointer hover:underline">View All</span>
+          <button id="btn-view-all-polaroids" type="button" class="text-[11px] font-bold text-[#8D5B4C] cursor-pointer hover:underline focus:outline-none">View All</button>
         </div>
 
         <!-- 4 Polaroid Grid with Washi Tape & Peeking Bears -->
@@ -336,7 +338,10 @@
           <h3 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
             <span>⌛ Memory Timeline ⌛</span>
           </h3>
-          <span class="font-handwriting text-base text-[#8D5B4C]">Handwritten notes, washi/scrapbook</span>
+          <div class="flex items-center gap-2">
+            <span class="font-handwriting text-base text-[#8D5B4C] hidden xs:inline">Handwritten notes</span>
+            <button id="btn-add-milestone" type="button" class="px-2.5 py-0.5 rounded-full bg-[#FAF0E6] dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer">+ Add</button>
+          </div>
         </div>
 
         <div id="memory-timeline-nodes" class="flex flex-col gap-1 pt-1">
@@ -360,8 +365,8 @@
           </h2>
           <p class="text-[11px] text-on-surface-variant font-medium">Adventures &amp; dreams together</p>
         </div>
-        <span class="px-2.5 py-1 rounded-full bg-[#FAF0E6] border border-[#E8DACB] text-[10px] font-bold text-[#8D5B4C]">
-          Lvl 8 | 42 Completed ✨
+        <span id="bucket-header-badge" class="px-2.5 py-1 rounded-full bg-[#FAF0E6] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">
+          Lvl 8 | 3 Completed ✨
         </span>
       </div>
 
@@ -487,21 +492,8 @@
           <span class="font-handwriting text-base text-[#8D5B4C]">Handwritten notes</span>
         </div>
 
-        <div class="flex flex-col gap-2 pt-1 text-xs text-primary dark:text-stone-200">
-          <div class="flex items-start gap-2">
-            <span class="text-base">🎂</span>
-            <div>
-              <span class="font-bold">Anniversary Cake Prep</span>
-              <p class="text-[11px] text-on-surface-variant">October 24th — Pick up the custom sweet cake! 🐾</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-2">
-            <span class="text-base">🤎</span>
-            <div>
-              <span class="font-bold">100th Day Celebration!</span>
-              <p class="text-[11px] text-on-surface-variant">October 26th — Special dinner and cozy walks 🐼🐻</p>
-            </div>
-          </div>
+        <div id="calendar-upcoming-list" class="flex flex-col gap-2 pt-1 text-xs text-primary dark:text-stone-200">
+          <!-- Rendered dynamically by js/dudu_mockup.js -->
         </div>
       </div>
 
@@ -580,11 +572,11 @@
         <!-- Scrubber Bar with Star Handle -->
         <div class="flex items-center gap-2 pt-1">
           <span class="material-symbols-outlined text-xs text-stone-400">volume_up</span>
-          <div class="flex-1 h-1.5 rounded-full bg-[#E8DACB] relative flex items-center">
-            <div class="w-1/2 h-full bg-[#8D5B4C] rounded-full"></div>
-            <span class="absolute left-1/2 -translate-x-1/2 text-xs">⭐</span>
+          <div id="lofi-volume-bar" class="flex-1 h-2 rounded-full bg-[#E8DACB] dark:bg-stone-700 relative flex items-center cursor-pointer" title="Tap to adjust volume">
+            <div id="lofi-volume-fill" class="w-2/3 h-full bg-[#8D5B4C] rounded-full transition-all duration-150"></div>
+            <span id="lofi-volume-star" class="absolute left-2/3 -translate-x-1/2 text-xs select-none pointer-events-none transition-all duration-150">⭐</span>
           </div>
-          <span class="text-xs">⭐</span>
+          <span id="lofi-volume-label" class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300 w-8 text-right">65%</span>
         </div>
 
       </div>
@@ -602,28 +594,83 @@
           <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
             Couple Closet &amp; Mini Game 🎮🧥
           </h2>
-          <span class="text-[11px] text-on-surface-variant font-medium">Lvl 8 | Cozy Room</span>
+          <span class="text-[11px] text-on-surface-variant font-medium">Lvl 8 | Cozy Room • Live Synced</span>
         </div>
+        <button id="btn-wardrobe-match-couple" type="button" class="px-3 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white text-[11px] font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
+          <span>Match Us ✨</span>
+        </button>
       </div>
 
       <!-- Dressing Room Card (wardrobe.jpg) -->
       <div class="bg-[#FAF5EE] dark:bg-stone-800 rounded-[2.5rem] p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col items-center relative overflow-hidden">
         
-        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 self-start mb-2">
-          Dressing Room
-        </h3>
+        <div class="w-full flex items-center justify-between mb-2 gap-2">
+          <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 shrink-0">
+            Dressing Room
+          </h3>
+          <span id="wardrobe-equipped-summary" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[#8D5B4C] dark:text-stone-200 truncate">
+            Dudu 🐻: Knit Beanie • Cable Knit
+          </span>
+        </div>
 
-        <!-- Dressing Room Illustration -->
-        <div class="w-full rounded-2xl overflow-hidden bg-stone-100 flex items-center justify-center">
-          <img src="assets/mockup_art/wardrobe_room.png" alt="Dressing Room" class="w-full object-cover">
+        <!-- Interactive Dressing Room Stage -->
+        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none">
+          <img src="assets/mockup_art/wardrobe_room.png" alt="Dressing Room" class="w-full object-cover block">
+
+          <!-- Dudu Interactive Hitbox & Live Equipped Badges (Left Bear) -->
+          <div id="wardrobe-stage-dudu" class="absolute top-[6%] left-[12%] w-[38%] h-[68%] rounded-2xl cursor-pointer transition-all flex flex-col justify-between p-1.5 group" title="Tap to dress Dudu 🐻">
+            <div class="flex items-center justify-between">
+              <span id="dudu-stage-hat" class="px-2 py-0.5 rounded-full bg-white/95 dark:bg-stone-800/95 text-[#4A3222] dark:text-stone-100 text-[10px] font-extrabold shadow-md border border-[#E8DACB] flex items-center gap-1">
+                🧶 Beanie
+              </span>
+              <span id="dudu-stage-accs" class="w-6 h-6 rounded-full bg-white/95 dark:bg-stone-800/95 text-xs flex items-center justify-center shadow-md border border-[#E8DACB]">
+                👓
+              </span>
+            </div>
+            <div class="flex justify-center pb-1">
+              <span id="dudu-stage-top" class="px-2 py-0.5 rounded-full bg-[#4A3222]/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1">
+                🧣 Cable Knit • 🧥 Duffle
+              </span>
+            </div>
+          </div>
+
+          <!-- Bubu Interactive Hitbox & Live Equipped Badges (Right Panda) -->
+          <div id="wardrobe-stage-bubu" class="absolute top-[8%] right-[10%] w-[38%] h-[66%] rounded-2xl cursor-pointer transition-all flex flex-col justify-between p-1.5 group" title="Tap to dress Bubu 🐼">
+            <div class="flex items-center justify-between">
+              <span id="bubu-stage-accs" class="w-6 h-6 rounded-full bg-white/95 dark:bg-stone-800/95 text-xs flex items-center justify-center shadow-md border border-[#E8DACB]">
+                🎀
+              </span>
+              <span id="bubu-stage-hat" class="px-2 py-0.5 rounded-full bg-white/95 dark:bg-stone-800/95 text-[#4A3222] dark:text-stone-100 text-[10px] font-extrabold shadow-md border border-[#E8DACB] flex items-center gap-1">
+                🐻 Earflap
+              </span>
+            </div>
+            <div class="flex justify-center pb-1">
+              <span id="bubu-stage-top" class="px-2 py-0.5 rounded-full bg-[#8D5B4C]/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1">
+                🐑 Cream • ❄️ Parka
+              </span>
+            </div>
+          </div>
+
+          <!-- Live Dynamic Stage Footer Banner (Covers baked-in bottom text cleanly) -->
+          <div class="absolute bottom-1 inset-x-6 flex flex-col items-center pointer-events-auto">
+            <div id="wardrobe-match-banner" class="w-full bg-[#FAF6F0] dark:bg-stone-800 rounded-xl py-1.5 px-3 text-center shadow-xs border border-[#E8DACB] dark:border-stone-600">
+              <span id="wardrobe-match-text" class="font-heading font-extrabold text-xs text-[#4A3222] dark:text-stone-100">
+                Warm &amp; Cozy! (Perfect Match ✨)
+              </span>
+            </div>
+          </div>
         </div>
 
       </div>
 
       <!-- Choose Clothes Category Selector (wardrobe.jpg) -->
       <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
-        <div class="flex items-center justify-between">
-          <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Choose Clothes</h4>
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5">
+            <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Choose Clothes</h4>
+            <button id="btn-wardrobe-prev-preset" type="button" class="w-6 h-6 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 font-bold text-xs flex items-center justify-center border border-[#E8DACB] dark:border-stone-600 button-press cursor-pointer" title="Previous Outfit Set">&lt;</button>
+            <button id="btn-wardrobe-next-preset" type="button" class="w-6 h-6 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 font-bold text-xs flex items-center justify-center border border-[#E8DACB] dark:border-stone-600 button-press cursor-pointer" title="Next Outfit Set">&gt;</button>
+          </div>
           <div class="flex items-center gap-1.5 text-xs font-bold">
             <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu's Wardrobe</button>
             <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer">Bubu's Wardrobe</button>
@@ -631,22 +678,34 @@
         </div>
 
         <div class="grid grid-cols-4 gap-2 text-center text-xs">
-          <button type="button" data-type="hat" data-val="beanie" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center">
-            <span class="text-2xl mb-1">🧶</span>
-            <span>Hats</span>
+          <button type="button" data-type="hat" data-val="beanie" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border-2 border-[#8D5B4C] flex flex-col items-center relative">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Hats</span>
+            <span class="wardrobe-card-icon text-2xl mb-0.5">🧶</span>
+            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Knit Beanie</span>
+            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
           </button>
-          <button type="button" data-type="sweater" data-val="cable" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center">
-            <span class="text-2xl mb-1">🧣</span>
-            <span>Sweaters</span>
+          <button type="button" data-type="sweater" data-val="cable" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Sweaters</span>
+            <span class="wardrobe-card-icon text-2xl mb-0.5">🧣</span>
+            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Cable Knit</span>
+            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
           </button>
-          <button type="button" data-type="coat" data-val="duffle" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center">
-            <span class="text-2xl mb-1">🧥</span>
-            <span>Coats</span>
+          <button type="button" data-type="coat" data-val="duffle" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Coats</span>
+            <span class="wardrobe-card-icon text-2xl mb-0.5">🧥</span>
+            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Duffle Coat</span>
+            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
           </button>
-          <button type="button" data-type="accs" data-val="scarf" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center">
-            <span class="text-2xl mb-1">👓</span>
-            <span>Accs</span>
+          <button type="button" data-type="accs" data-val="scarf" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center relative">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Accs</span>
+            <span class="wardrobe-card-icon text-2xl mb-0.5">👓</span>
+            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Round Glasses</span>
+            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
           </button>
+        </div>
+
+        <!-- Direct Item Picker Strip for Active Category -->
+        <div id="wardrobe-slot-picker" class="pt-1 border-t border-[#E8DACB]/60 dark:border-stone-700 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
         </div>
       </div>
 
@@ -661,7 +720,7 @@
           <div class="flex-1 min-w-0">
             <h5 class="font-heading font-bold text-xs text-primary dark:text-stone-100">Outfit Matcher Game</h5>
             <p class="text-[11px] text-on-surface-variant leading-tight mt-0.5">
-              Mix &amp; match for today's high score! Daily Bonus 🐻✨
+              Mix &amp; match pairs! Best score: <span id="wardrobe-high-score" class="font-bold text-[#8D5B4C] dark:text-amber-300">420</span> 🐻✨
             </p>
             <button id="btn-play-minigame" type="button" class="mt-2 py-1.5 px-4 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white text-xs font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
               <span>Play 🎮</span>
@@ -718,11 +777,46 @@
         <!-- Rendered dynamically by js/chat/ui.js -->
       </div>
 
+      <!-- Multi-Message Selection Bar -->
+      <div id="chat-selection-bar" class="hidden bg-white dark:bg-stone-800 rounded-2xl px-3 py-1.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-2">
+          <button id="btn-exit-selection" type="button" class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary cursor-pointer button-press" title="Exit selection">✕</button>
+          <span id="chat-selection-count" class="text-xs font-heading font-bold text-primary dark:text-stone-100">1 selected</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button id="btn-selection-copy" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Copy selected">
+            <span class="material-symbols-outlined text-xs">content_copy</span>
+            <span>Copy</span>
+          </button>
+          <button id="btn-selection-forward" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Forward selected">
+            <span class="material-symbols-outlined text-xs">forward</span>
+            <span>Forward</span>
+          </button>
+          <button id="btn-selection-delete" type="button" class="px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Delete selected">
+            <span class="material-symbols-outlined text-xs">delete</span>
+            <span>Delete</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Chat Feed Container (Doodle Background matching chat.jpg) -->
       <div class="doodle-bg rounded-[2rem] p-3 sm:p-4 border border-[#E8DACB] dark:border-stone-700 flex flex-col flex-1 min-h-0 overflow-hidden relative plush-shadow">
         <div id="chat-messages-container" class="relative z-10 flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 overscroll-contain">
           <!-- Messages rendered dynamically -->
         </div>
+        <div id="chat-typing-indicator" class="hidden relative z-10 px-2 pt-1 flex items-center gap-1.5 text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300 shrink-0">
+          <span class="w-2 h-2 rounded-full bg-[#8D5B4C] animate-pulse"></span>
+          <span id="chat-typing-indicator-text">she is typing...</span>
+        </div>
+      </div>
+
+      <!-- Reply Quote Preview Banner -->
+      <div id="chat-reply-bar" class="hidden bg-white dark:bg-stone-800 rounded-2xl px-3.5 py-2 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
+        <div class="flex flex-col min-w-0 border-l-2 border-[#8D5B4C] pl-2">
+          <span id="chat-reply-sender" class="text-[10px] font-heading font-extrabold text-[#8D5B4C]">Replying to Bubu</span>
+          <span id="chat-reply-snippet" class="text-xs text-primary dark:text-stone-200 truncate">Message preview</span>
+        </div>
+        <button id="btn-cancel-reply" type="button" class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-stone-500 cursor-pointer button-press" title="Cancel reply">✕</button>
       </div>
 
       <!-- Bottom Chat Bar (chat.jpg: camera, pill input, photo, mic, bear sticker) -->
@@ -734,8 +828,11 @@
         </button>
 
         <!-- Input Pill -->
-        <div class="flex-1 bg-white dark:bg-stone-800 rounded-full px-3.5 py-1.5 flex items-center gap-1 shadow-inner">
+        <div class="flex-1 bg-white dark:bg-stone-800 rounded-full pl-3.5 pr-1.5 py-1 flex items-center gap-1.5 shadow-inner">
           <input type="text" id="chat-text-input" placeholder="Send a message... 🧸" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0">
+          <button id="btn-send-message" type="button" class="w-6 h-6 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Send">
+            <span class="material-symbols-outlined text-[14px]">send</span>
+          </button>
         </div>
 
         <!-- Photo Gallery Button -->
@@ -894,14 +991,18 @@
 
       <p class="text-xs text-on-surface-variant">Send a sweet handwritten note into our shared space:</p>
 
-      <div class="flex items-center gap-2 text-xs">
+      <div class="flex items-center gap-2 flex-wrap text-xs">
         <label class="flex items-center gap-1 cursor-pointer">
-          <input type="radio" name="note-style" value="envelope" checked>
-          <span>Wax Seal Envelope</span>
+          <input type="radio" name="note-style" value="envelope" checked class="accent-[#8D5B4C]">
+          <span>Wax Seal</span>
         </label>
         <label class="flex items-center gap-1 cursor-pointer">
-          <input type="radio" name="note-style" value="craft">
+          <input type="radio" name="note-style" value="craft" class="accent-[#8D5B4C]">
           <span>Craft Paper</span>
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer">
+          <input type="radio" name="note-style" value="card" class="accent-[#8D5B4C]">
+          <span>Sweet Card</span>
         </label>
       </div>
 
@@ -929,6 +1030,14 @@
         
         <label class="font-bold">Date</label>
         <input type="text" id="input-polaroid-date" placeholder="Oct 15" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700">
+
+        <label class="font-bold mt-1">Photo Scene</label>
+        <select id="select-polaroid-art" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100">
+          <option value="assets/mockup_art/polaroid_picnic.png">🧺 Cozy Picnic</option>
+          <option value="assets/mockup_art/polaroid_cafe.png">☕ Warm Cafe Date</option>
+          <option value="assets/mockup_art/polaroid_sunset.png">🌅 Sunset Gaze</option>
+          <option value="assets/mockup_art/polaroid_autumn.png">🍁 Autumn Walk</option>
+        </select>
       </div>
 
       <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] text-white font-heading font-bold text-xs button-press cursor-pointer">
@@ -1097,6 +1206,9 @@
       <div class="flex items-center gap-2 pt-1">
         <button id="btn-delete-view-note" type="button" class="py-2 px-3.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
           <span>🗑️ Delete</span>
+        </button>
+        <button id="btn-fav-view-note" type="button" class="py-2 px-3 rounded-full bg-amber-50 dark:bg-stone-700 text-[#8D5B4C] dark:text-amber-300 border border-[#E8DACB] font-heading font-bold text-xs button-press cursor-pointer">
+          <span>♥ Favorite</span>
         </button>
         <button id="btn-dismiss-view-note" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
           Keep in Heart ♡
@@ -1374,6 +1486,133 @@
     </div>
   </div>
 
+  <!-- MODAL: ADD MILESTONE -->
+  <div id="modal-add-milestone" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">⌛ Add Memory Milestone</h3>
+        <button id="btn-close-add-milestone" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+      <div class="flex flex-col gap-2 text-xs">
+        <label class="font-bold">Milestone Title</label>
+        <input type="text" id="input-milestone-title" placeholder="e.g. First Road Trip Together 🚗" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
+        <label class="font-bold">Date</label>
+        <input type="text" id="input-milestone-date" placeholder="e.g. October 17th" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
+        <label class="font-bold">Sweet Note</label>
+        <input type="text" id="input-milestone-desc" placeholder="sang our favorite songs all the way" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
+      </div>
+      <button id="btn-submit-milestone" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Save Milestone ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: CHAT MESSAGE ACTIONS -->
+  <div id="modal-message-actions" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-xs w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Message Options</h3>
+        <button id="btn-close-msg-actions" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+      <p id="msg-action-preview-text" class="text-xs text-[#8D5B4C] dark:text-stone-300 italic truncate px-1"></p>
+      <div class="flex flex-col gap-2">
+        <button id="btn-action-reply" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C]">reply</span>
+          <span>Reply</span>
+        </button>
+        <button id="btn-action-copy" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C]">content_copy</span>
+          <span>Copy</span>
+        </button>
+        <button id="btn-action-forward" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C]">forward</span>
+          <span>Forward to Topic</span>
+        </button>
+        <button id="btn-action-delete" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 flex items-center gap-2.5 text-xs font-bold text-rose-600 dark:text-rose-400 button-press cursor-pointer">
+          <span class="material-symbols-outlined text-base">delete</span>
+          <span>Delete Message</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DELETE MESSAGE CONFIRMATION -->
+  <div id="modal-delete-message-confirm" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-xs w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-rose-300 dark:border-rose-900 flex flex-col gap-3 relative text-center animate-squish">
+      <div class="w-11 h-11 mx-auto rounded-full bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-500">
+        <span class="material-symbols-outlined text-2xl">delete</span>
+      </div>
+      <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Delete Message?</h3>
+      <p id="delete-message-confirm-text" class="text-xs text-[#8D5B4C] dark:text-stone-300 leading-relaxed">Are you sure you want to delete this message?</p>
+      <div class="flex items-center gap-2 pt-1">
+        <button id="btn-cancel-delete-msg" type="button" class="flex-1 py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs button-press cursor-pointer">Cancel</button>
+        <button id="btn-confirm-delete-msg" type="button" class="flex-1 py-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs button-press cursor-pointer shadow-xs">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FORWARD MESSAGE TO TOPIC -->
+  <div id="modal-forward-topic" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C]">forward</span>
+          <span>Forward to Topic</span>
+        </h3>
+        <button id="btn-close-forward-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+      <div id="forward-topics-list" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
+        <!-- Rendered by js/chat/ui.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PHOTO PREVIEW LIGHTBOX -->
+  <div id="modal-photo-preview" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex flex-col items-center justify-center p-4">
+    <button id="btn-close-photo-preview" type="button" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-sm font-bold cursor-pointer">✕</button>
+    <img id="img-full-preview" src="" alt="Full Preview" class="max-w-full max-h-[82vh] rounded-2xl object-contain shadow-2xl">
+  </div>
+
+  <!-- MODAL: E2EE CHAT SETTINGS -->
+  <div id="modal-chat-settings" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#8D5B4C]">lock</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">E2EE Security &amp; Relay</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">AES-GCM 256-bit Zero-Knowledge</span>
+          </div>
+        </div>
+        <button id="btn-close-chat-settings" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
+      </div>
+      <form id="form-chat-settings" class="flex flex-col gap-2.5 text-xs">
+        <div>
+          <label class="font-bold block mb-1">Viewing Role</label>
+          <select id="select-chat-identity" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
+            <option value="dudu">Dudu 🐻 (Kevin)</option>
+            <option value="bubu">Bubu 🐼 (Nana)</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">Shared Secret Passphrase</label>
+          <input type="password" id="input-chat-passphrase" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
+        </div>
+        <div>
+          <label class="font-bold block mb-1">Relay Server URL</label>
+          <input type="text" id="input-chat-server-url" value="wss://chat.nexora-v1.my.id/chat-socket" placeholder="wss://chat.nexora-v1.my.id/chat-socket" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
+          <div class="flex items-center gap-2 mt-1.5">
+            <button id="btn-use-localhost" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer">Local Server</button>
+            <button id="btn-use-remote" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer">Cloudflare Relay</button>
+          </div>
+        </div>
+        <button type="submit" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Save Security Settings ♡
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- TOGETHER OFFLINE SLEEP OVERLAY -->
   <div id="offline-sleep-overlay" class="hidden fixed inset-0 z-50 bg-[#120E18]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center text-white animate-fade-in">
     <span class="text-6xl mb-4 animate-bounce">🌙</span>
@@ -1394,11 +1633,11 @@
   <!-- SCRIPTS -->
   <script src="js/stickers.js?v=v5"></script>
   <script src="js/audio.js?v=v5"></script>
-  <script src="js/chat/crypto.js?v=v1"></script>
-  <script src="js/chat/storage.js?v=v1"></script>
-  <script src="js/chat/socket.js?v=v1"></script>
-  <script src="js/chat/ui.js?v=v2"></script>
-  <script src="js/dudu_mockup.js?v=v1"></script>
+  <script src="js/chat/crypto.js?v=v6"></script>
+  <script src="js/chat/storage.js?v=v6"></script>
+  <script src="js/chat/socket.js?v=v6"></script>
+  <script src="js/chat/ui.js?v=v6"></script>
+  <script src="js/dudu_mockup.js?v=v6"></script>
 
 </body>
 </html>

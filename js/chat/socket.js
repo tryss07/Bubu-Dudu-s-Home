@@ -7,7 +7,9 @@
   'use strict';
 
   const STORAGE_KEY_SERVER = 'DUDU_CHAT_SERVER_URL';
+  const STORAGE_KEY_AUTH_TOKEN = 'DUDU_RELAY_AUTH_TOKEN';
   const DEFAULT_REMOTE_URL = 'wss://chat.nexora-v1.my.id/chat-socket';
+  const DEFAULT_AUTH_TOKEN = '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a';
   const LOCAL_DEV_URL = 'ws://localhost:3000/chat-socket';
 
   let ws = null;
@@ -49,20 +51,41 @@
     milestoneDeleted: new Set(),
     coupleSpaceSync: new Set(),
     coupleSpaceUpdated: new Set(),
+    wardrobeSync: new Set(),
+    wardrobeUpdated: new Set(),
     typing: new Set()
   };
 
-  function getServerUrl() {
-    const custom = localStorage.getItem(STORAGE_KEY_SERVER) || localStorage.getItem('dudu_chat_server_url');
-    if (custom) return custom;
-    if (typeof window !== 'undefined' && window.location) {
-      const host = window.location.hostname;
-      if (host === 'chat.nexora-v1.my.id') {
-        const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        return `${proto}//${window.location.host}/chat-socket`;
-      }
+  function getAuthToken() {
+    return localStorage.getItem(STORAGE_KEY_AUTH_TOKEN) || localStorage.getItem('dudu_relay_auth_token') || DEFAULT_AUTH_TOKEN;
+  }
+
+  function setAuthToken(token) {
+    if (token) {
+      localStorage.setItem(STORAGE_KEY_AUTH_TOKEN, token.trim());
+      localStorage.setItem('dudu_relay_auth_token', token.trim());
     }
-    return DEFAULT_REMOTE_URL;
+  }
+
+  function getServerUrl() {
+    let custom = localStorage.getItem(STORAGE_KEY_SERVER) || localStorage.getItem('dudu_chat_server_url');
+    // Clear legacy auto-detected localhost entries so Cloudflare relay is always the default
+    if (custom === LOCAL_DEV_URL || custom === 'ws://127.0.0.1:3000/chat-socket') {
+      custom = null;
+      localStorage.removeItem(STORAGE_KEY_SERVER);
+      localStorage.removeItem('dudu_chat_server_url');
+    }
+    let raw = (custom && custom.trim()) ? custom.trim() : DEFAULT_REMOTE_URL;
+
+    // Attach token query param if not already present
+    try {
+      const token = getAuthToken();
+      if (token && !raw.includes('token=') && !raw.includes('auth=')) {
+        const separator = raw.includes('?') ? '&' : '?';
+        return `${raw}${separator}token=${encodeURIComponent(token)}`;
+      }
+    } catch (_) {}
+    return raw;
   }
 
   function setServerUrl(url) {
@@ -318,6 +341,20 @@
           return;
         }
 
+        // Wardrobe / Couple Closet
+        if (payload.type === 'wardrobe_sync' && payload.data) {
+          listeners.wardrobeSync.forEach(fn => {
+            try { fn(payload.data); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+        if (payload.type === 'wardrobe_updated' && payload.data) {
+          listeners.wardrobeUpdated.forEach(fn => {
+            try { fn(payload.data, payload.updatedBy); } catch (e) { console.error(e); }
+          });
+          return;
+        }
+
         if (payload.type === 'typing') {
           listeners.typing.forEach(fn => {
             try { fn(payload); } catch (e) { console.error(e); }
@@ -520,31 +557,38 @@
 
   async function fetchAllFeaturesRest() {
     const baseUrl = getHttpBaseUrl();
+    const token = getAuthToken();
+    const query = token ? `?token=${encodeURIComponent(token)}` : '';
+    const headers = token ? { 'x-relay-token': token } : {};
     const result = {
       calendar: [],
       planner: [],
       notes: [],
       polaroids: [],
       milestones: [],
-      coupleSpace: null
+      coupleSpace: null,
+      wardrobe: null
     };
 
     try {
-      const [calRes, planRes, notesRes, polRes, msRes, spaceRes] = await Promise.allSettled([
-        fetch(`${baseUrl}/api/calendar`).then(r => r.ok ? r.json() : null),
-        fetch(`${baseUrl}/api/planner`).then(r => r.ok ? r.json() : null),
-        fetch(`${baseUrl}/api/notes`).then(r => r.ok ? r.json() : null),
-        fetch(`${baseUrl}/api/memories/polaroids`).then(r => r.ok ? r.json() : null),
-        fetch(`${baseUrl}/api/memories/milestones`).then(r => r.ok ? r.json() : null),
-        fetch(`${baseUrl}/api/couple-space`).then(r => r.ok ? r.json() : null)
+      const [calRes, planRes, notesRes, memRes, spaceRes, wardRes] = await Promise.allSettled([
+        fetch(`${baseUrl}/api/calendar${query}`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/planner${query}`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/notes${query}`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/memories${query}`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/couple-space${query}`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${baseUrl}/api/wardrobe${query}`, { headers }).then(r => r.ok ? r.json() : null)
       ]);
 
       if (calRes.status === 'fulfilled' && calRes.value?.events) result.calendar = calRes.value.events;
       if (planRes.status === 'fulfilled' && planRes.value?.items) result.planner = planRes.value.items;
       if (notesRes.status === 'fulfilled' && notesRes.value?.notes) result.notes = notesRes.value.notes;
-      if (polRes.status === 'fulfilled' && polRes.value?.polaroids) result.polaroids = polRes.value.polaroids;
-      if (msRes.status === 'fulfilled' && msRes.value?.milestones) result.milestones = msRes.value.milestones;
+      if (memRes.status === 'fulfilled' && memRes.value) {
+        if (Array.isArray(memRes.value.polaroids)) result.polaroids = memRes.value.polaroids;
+        if (Array.isArray(memRes.value.milestones)) result.milestones = memRes.value.milestones;
+      }
       if (spaceRes.status === 'fulfilled' && spaceRes.value?.data) result.coupleSpace = spaceRes.value.data;
+      if (wardRes.status === 'fulfilled' && wardRes.value?.data) result.wardrobe = wardRes.value.data;
     } catch (err) {
       console.warn('[Socket] fetchAllFeaturesRest error:', err);
     }
@@ -723,6 +767,17 @@
     }
   }
 
+  function sendUpdateWardrobe(data) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    try {
+      ws.send(JSON.stringify({ type: 'update_wardrobe', data }));
+      return true;
+    } catch (e) {
+      console.error('[Socket] Failed to send update_wardrobe:', e);
+      return false;
+    }
+  }
+
   function sendTyping(sender, isTyping, sessionId) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
@@ -764,6 +819,7 @@
     sendSaveMilestone,
     sendDeleteMilestone,
     sendUpdateCoupleSpace,
+    sendUpdateWardrobe,
     sendTyping,
     getStatus: () => currentStatus,
     getServerUrl,
@@ -801,8 +857,12 @@
     onMilestoneDeleted: (fn) => listeners.milestoneDeleted.add(fn),
     onCoupleSpaceSync: (fn) => listeners.coupleSpaceSync.add(fn),
     onCoupleSpaceUpdated: (fn) => listeners.coupleSpaceUpdated.add(fn),
+    onWardrobeSync: (fn) => listeners.wardrobeSync.add(fn),
+    onWardrobeUpdated: (fn) => listeners.wardrobeUpdated.add(fn),
     onTyping: (fn) => listeners.typing.add(fn),
     fetchAllFeaturesRest,
+    getAuthToken,
+    setAuthToken,
     LOCAL_DEV_URL,
     DEFAULT_REMOTE_URL
   };

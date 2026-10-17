@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "python3 -m http.server 3000",
+    "start": "node server/server.js",
+    "start:static": "python3 -m http.server 3000",
+    "cap:sync": "rm -rf dist && mkdir -p dist && cp index.html dist/ && cp -r css js assets 'Dudu Stickers' 'Dudu mock up' dist/ && npx cap sync android",
+    "build:apk": "npm run cap:sync && cd android && JAVA_HOME=/usr/lib/jvm/java-21-openjdk ANDROID_HOME=/home/tryss-archos/android-sdk ./gradlew assembleDebug && cd .. && cp android/app/build/outputs/apk/debug/Dudu.apk ./Dudu.apk",
     "test": "node tests/test_companion.js"
   },
   "keywords": [],

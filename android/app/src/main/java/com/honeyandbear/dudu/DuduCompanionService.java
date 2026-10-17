@@ -43,8 +43,8 @@ public class DuduCompanionService extends Service {
     private static final String KEY_IDENTITY = "my_identity";
     private static final String KEY_PARTNER_LABEL = "partner_label";
     private static final String KEY_LAST_NOTIFIED_TS = "last_notified_ts";
-
-    private static final String WS_URL = "wss://chat.nexora-v1.my.id/chat-socket";
+    private static final String RELAY_AUTH_TOKEN = "415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a";
+    private static final String WS_URL = "wss://chat.nexora-v1.my.id/chat-socket?token=" + RELAY_AUTH_TOKEN;
 
     private static volatile boolean isAppForeground = false;
 
@@ -244,6 +244,7 @@ public class DuduCompanionService extends Service {
 
         Request request = new Request.Builder()
                 .url(WS_URL)
+                .header("x-relay-token", RELAY_AUTH_TOKEN)
                 .build();
 
         webSocket = httpClient.newWebSocket(request, new WebSocketListener() {

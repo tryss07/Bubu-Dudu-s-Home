@@ -11,6 +11,7 @@ const path = require('path');
 const DATA_DIR = path.resolve(__dirname, 'data');
 const DB_PATH = process.env.DB_PATH || path.join(DATA_DIR, 'chat.db');
 const BACKUP_JSON_PATH = path.join(DATA_DIR, 'messages_fallback.json');
+const STATE_JSON_PATH = path.join(DATA_DIR, 'state_fallback.json');
 
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -19,17 +20,136 @@ if (!fs.existsSync(DATA_DIR)) {
 let db = null;
 let useFallback = false;
 let fallbackMemoryMessages = [];
+let fallbackPresence = {
+  dudu: { online: false, lastSeen: null },
+  bubu: { online: false, lastSeen: null }
+};
+
+let fallbackTopics = [
+  { id: 'daily_banter', title: 'Daily Banter', emoji: '💬', isPinned: true, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() },
+  { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 },
+  { id: 'watchlist', title: 'Watchlist', emoji: '🎬', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 7200000 },
+  { id: 'vent_space', title: 'Vent Space', emoji: '🧸', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 10800000 },
+  { id: 'deep_talks', title: 'Deep Talks', emoji: '🌙', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 14400000 }
+];
+
+let fallbackTummyLogs = [];
+let fallbackPushTokens = {};
+
+let fallbackCalendarEvents = [
+  { id: 'cal_1', date: 10, month: 9, year: 2026, title: 'Picnic Date 🧺', icon: '🧺', createdAt: 1728000000000 },
+  { id: 'cal_2', date: 24, month: 9, year: 2026, title: 'Anniversary Cake Prep 🎂', icon: '🎂', createdAt: 1728000000000 },
+  { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼', createdAt: 1728000000000 }
+];
+
+let fallbackPlannerItems = [
+  { id: 'bl_1', title: 'Cozy coffee shop date ☕🍂', desc: 'Find a warm local café, order seasonal lattes, and read or sketch together. Include polaroid photos.', plannedDate: '26 June • 12:30 PM', statusBadge: 'Ready to Go', category: 'indoor', completed: true, image: 'assets/mockup_art/date_coffee.png', createdAt: 1728000000000 },
+  { id: 'bl_2', title: 'Stargazing trip ✨🏕️', desc: 'Drive out of the city, pack a cozy blanket, and look at the night sky. Point out constellations.', plannedDate: 'Next weekend', statusBadge: 'Added today', category: 'outdoor', completed: false, image: 'assets/mockup_art/date_stargazing.png', createdAt: 1728000000000 - 86400000 },
+  { id: 'bl_3', title: 'Bake a sweet treat together 🍰🧑‍🍳', desc: 'Try baking a messy chocolate cake or cookies from scratch.', plannedDate: 'Rainy Sunday', statusBadge: 'Done!', category: 'indoor', completed: true, image: 'assets/mockup_art/date_baking.png', createdAt: 1728000000000 - 172800000 },
+  { id: 'bl_4', title: 'Autumn foliage stroll 🍁', desc: 'Walk through the park with warm knit scarves, crunch leaves, and take cute polaroids.', plannedDate: 'October 2026', statusBadge: 'Ready to Go', category: 'outdoor', completed: false, image: 'assets/mockup_art/polaroid_autumn.png', createdAt: 1728000000000 - 259200000 },
+  { id: 'bl_5', title: 'Nintendo Switch cozy marathon 🎮', desc: 'Play Animal Crossing or Mario Kart while sharing warm hot cocoa and fluffy marshmallows.', plannedDate: 'Friday Night', statusBadge: 'Ready to Go', category: 'indoor', completed: true, image: 'assets/mockup_art/minigame_switch.png', createdAt: 1728000000000 - 345600000 }
+];
+
+let fallbackNotes = [
+  { id: 'note_1', style: 'envelope', body: "Can't wait to see you tonight! Bring your cozy sweater... 💌", sender: 'Dudu 🐻', senderRole: 'dudu', time: '10:15 AM', date: 'Today', isFavorite: true, isRead: false, createdAt: 1728000000000 },
+  { id: 'note_2', style: 'craft', body: 'You are my favorite person to drink warm tea with. Have a lovely afternoon, Bubu! ☕✨', sender: 'Honey', senderRole: 'dudu', time: 'Yesterday', date: 'Yesterday', isFavorite: true, isRead: true, createdAt: 1728000000000 - 86400000 },
+  { id: 'note_3', style: 'card', body: 'Reminding you to smile today! You got this! 💪❤️', sender: 'Dudu 🐻', senderRole: 'dudu', time: '2 days ago', date: '2 days ago', isFavorite: false, isRead: true, createdAt: 1728000000000 - 172800000 }
+];
+
+let fallbackPolaroids = [
+  { id: 'pol_1', title: 'Cafe date', date: 'Oct 10', image: 'assets/mockup_art/polaroid_cafe.png', tape: 'washi-tape-grid', rotate: -2, createdAt: 1728000000000 },
+  { id: 'pol_2', title: 'Picnic day', date: 'Sep 28', image: 'assets/mockup_art/polaroid_picnic.png', tape: 'washi-tape-grid', rotate: 1.5, createdAt: 1728000000000 - 86400000 },
+  { id: 'pol_3', title: 'Sunset gaze', date: 'Sep 24', image: 'assets/mockup_art/polaroid_sunset.png', tape: 'washi-tape-peach', rotate: -1, createdAt: 1728000000000 - 172800000 },
+  { id: 'pol_4', title: 'Autumn walk', date: 'Oct 05', image: 'assets/mockup_art/polaroid_autumn.png', tape: 'washi-tape-grid', rotate: 2, createdAt: 1728000000000 - 259200000 }
+];
+
+let fallbackMilestones = [
+  { id: 'ms_1', title: '100th Day Anniversary 🤎', date: 'October 12th', desc: 'celebrated with sweet cake & walks 🐻🐼', createdAt: 1728000000000 },
+  { id: 'ms_2', title: 'First Photo in the Jar', date: 'September 15th', desc: 'the rainy day we started our memory jar', createdAt: 1728000000000 - 86400000 },
+  { id: 'ms_3', title: 'Cozy Autumn Picnic 🧺', date: 'September 28th', desc: 'warm blankets, honey sandwiches & soft wind', createdAt: 1728000000000 - 172800000 }
+];
+
+let fallbackCoupleSpace = {
+  anniversaryDate: '2025-11-04',
+  loveBattery: 100,
+  statuses: {
+    dudu: 'Thinking of you! 💭',
+    bubu: 'Eating snacks! 🐼'
+  },
+  wardrobe: {
+    dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+    bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+  },
+  miniGameHighScore: 420
+};
+
+function persistFallbackState() {
+  if (!useFallback) return;
+  try {
+    fs.writeFileSync(STATE_JSON_PATH, JSON.stringify({
+      topics: fallbackTopics,
+      tummyLogs: fallbackTummyLogs,
+      pushTokens: fallbackPushTokens,
+      calendarEvents: fallbackCalendarEvents,
+      plannerItems: fallbackPlannerItems,
+      notes: fallbackNotes,
+      polaroids: fallbackPolaroids,
+      milestones: fallbackMilestones,
+      coupleSpace: fallbackCoupleSpace,
+      presence: fallbackPresence
+    }, null, 2));
+  } catch (err) {
+    console.error('[Database] Error saving fallback state JSON:', err.message);
+  }
+}
+
+function loadFallbackState() {
+  if (!fs.existsSync(STATE_JSON_PATH)) return;
+  try {
+    const parsed = JSON.parse(fs.readFileSync(STATE_JSON_PATH, 'utf8'));
+    if (Array.isArray(parsed.topics)) fallbackTopics = parsed.topics;
+    if (Array.isArray(parsed.tummyLogs)) fallbackTummyLogs = parsed.tummyLogs;
+    if (parsed.pushTokens && typeof parsed.pushTokens === 'object') fallbackPushTokens = parsed.pushTokens;
+    if (Array.isArray(parsed.calendarEvents)) fallbackCalendarEvents = parsed.calendarEvents;
+    if (Array.isArray(parsed.plannerItems)) fallbackPlannerItems = parsed.plannerItems;
+    if (Array.isArray(parsed.notes)) fallbackNotes = parsed.notes;
+    if (Array.isArray(parsed.polaroids)) fallbackPolaroids = parsed.polaroids;
+    if (Array.isArray(parsed.milestones)) fallbackMilestones = parsed.milestones;
+    if (parsed.coupleSpace && typeof parsed.coupleSpace === 'object') {
+      const defaultW = {
+        dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+        bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+      };
+      fallbackCoupleSpace = {
+        ...fallbackCoupleSpace,
+        ...parsed.coupleSpace,
+        wardrobe: {
+          dudu: { ...defaultW.dudu, ...(fallbackCoupleSpace.wardrobe?.dudu || {}), ...(parsed.coupleSpace.wardrobe?.dudu || {}) },
+          bubu: { ...defaultW.bubu, ...(fallbackCoupleSpace.wardrobe?.bubu || {}), ...(parsed.coupleSpace.wardrobe?.bubu || {}) }
+        }
+      };
+    }
+    if (parsed.presence && typeof parsed.presence === 'object') {
+      fallbackPresence = {
+        dudu: { online: false, lastSeen: parsed.presence.dudu?.lastSeen || null },
+        bubu: { online: false, lastSeen: parsed.presence.bubu?.lastSeen || null }
+      };
+    }
+  } catch (e) {
+    console.warn('[Database] Failed loading state_fallback.json:', e.message);
+  }
+}
 
 // Try initializing native node:sqlite
 try {
   const { DatabaseSync } = require('node:sqlite');
   db = new DatabaseSync(DB_PATH);
-  
+
   // Enable WAL mode for high performance on HDD
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA synchronous = NORMAL;');
 
-  // Create messages table
+  // Create tables
   db.exec(`
     CREATE TABLE IF NOT EXISTS messages (
       id TEXT PRIMARY KEY,
@@ -49,7 +169,6 @@ try {
       online INTEGER NOT NULL DEFAULT 0,
       last_seen INTEGER NOT NULL
     );
-    -- Reset all online states to 0 on server startup
     UPDATE presence SET online = 0;
 
     CREATE TABLE IF NOT EXISTS topics (
@@ -156,14 +275,7 @@ try {
       INSERT OR REPLACE INTO topics (id, title, emoji, is_pinned, is_archived, created_at, last_activity)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    const DEFAULT_TOPICS = [
-      { id: 'daily_banter', title: 'Daily Banter', emoji: '💬', isPinned: 1, isArchived: 0, createdAt: 1728000000000, lastActivity: Date.now() },
-      { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: 0, isArchived: 0, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 },
-      { id: 'watchlist', title: 'Watchlist', emoji: '🎬', isPinned: 0, isArchived: 0, createdAt: 1728000000000, lastActivity: Date.now() - 7200000 },
-      { id: 'vent_space', title: 'Vent Space', emoji: '🧸', isPinned: 0, isArchived: 0, createdAt: 1728000000000, lastActivity: Date.now() - 10800000 },
-      { id: 'deep_talks', title: 'Deep Talks', emoji: '🌙', isPinned: 0, isArchived: 0, createdAt: 1728000000000, lastActivity: Date.now() - 14400000 }
-    ];
-    DEFAULT_TOPICS.forEach(t => {
+    fallbackTopics.forEach(t => {
       insertTopic.run(t.id, t.title, t.emoji, t.isPinned ? 1 : 0, t.isArchived ? 1 : 0, t.createdAt, t.lastActivity);
     });
     db.prepare("INSERT OR REPLACE INTO meta (key, val) VALUES ('seeded_topics', '1')").run();
@@ -172,70 +284,36 @@ try {
 
   const seededFeatures = db.prepare("SELECT val FROM meta WHERE key = 'seeded_features_v1'").get();
   if (!seededFeatures) {
-    // 1. Calendar
     const insertCal = db.prepare(`
       INSERT OR REPLACE INTO calendar_events (id, date, month, year, title, icon, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    const DEFAULT_CALENDAR = [
-      { id: 'cal_1', date: 10, month: 9, year: 2026, title: 'Picnic Date 🧺', icon: '🧺', createdAt: 1728000000000 },
-      { id: 'cal_2', date: 24, month: 9, year: 2026, title: 'Anniversary Cake Prep 🎂', icon: '🎂', createdAt: 1728000000000 },
-      { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼', createdAt: 1728000000000 }
-    ];
-    DEFAULT_CALENDAR.forEach(c => insertCal.run(c.id, c.date, c.month, c.year, c.title, c.icon, c.createdAt));
+    fallbackCalendarEvents.forEach(c => insertCal.run(c.id, c.date, c.month, c.year, c.title, c.icon, c.createdAt));
 
-    // 2. Planner / Bucket list
     const insertPlanner = db.prepare(`
       INSERT OR REPLACE INTO planner_items (id, title, desc, planned_date, status_badge, category, completed, image, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    const DEFAULT_PLANNER = [
-      { id: 'bl_1', title: 'Cozy coffee shop date ☕🍂', desc: 'Find a warm local café, order seasonal lattes, and read or sketch together. Include polaroid photos.', plannedDate: '26 June • 12:30 PM', statusBadge: 'Ready to Go', category: 'indoor', completed: 1, image: 'assets/mockup_art/date_coffee.png', createdAt: 1728000000000 },
-      { id: 'bl_2', title: 'Stargazing trip ✨🏕️', desc: 'Drive out of the city, pack a cozy blanket, and look at the night sky. Point out constellations.', plannedDate: 'Next weekend', statusBadge: 'Added today', category: 'outdoor', completed: 0, image: 'assets/mockup_art/date_stargazing.png', createdAt: 1728000000000 - 86400000 },
-      { id: 'bl_3', title: 'Bake a sweet treat together 🍰🧑‍🍳', desc: 'Try baking a messy chocolate cake or cookies from scratch.', plannedDate: 'Rainy Sunday', statusBadge: 'Done!', category: 'indoor', completed: 1, image: 'assets/mockup_art/date_baking.png', createdAt: 1728000000000 - 172800000 },
-      { id: 'bl_4', title: 'Autumn foliage stroll 🍁', desc: 'Walk through the park with warm knit scarves, crunch leaves, and take cute polaroids.', plannedDate: 'October 2026', statusBadge: 'Ready to Go', category: 'outdoor', completed: 0, image: 'assets/mockup_art/polaroid_autumn.png', createdAt: 1728000000000 - 259200000 },
-      { id: 'bl_5', title: 'Nintendo Switch cozy marathon 🎮', desc: 'Play Animal Crossing or Mario Kart while sharing warm hot cocoa and fluffy marshmallows.', plannedDate: 'Friday Night', statusBadge: 'Ready to Go', category: 'indoor', completed: 1, image: 'assets/mockup_art/minigame_switch.png', createdAt: 1728000000000 - 345600000 }
-    ];
-    DEFAULT_PLANNER.forEach(p => insertPlanner.run(p.id, p.title, p.desc, p.plannedDate, p.statusBadge, p.category, p.completed, p.image, p.createdAt));
+    fallbackPlannerItems.forEach(p => insertPlanner.run(p.id, p.title, p.desc, p.plannedDate, p.statusBadge, p.category, p.completed ? 1 : 0, p.image, p.createdAt));
 
-    // 3. Love Notes
     const insertNote = db.prepare(`
       INSERT OR REPLACE INTO love_notes (id, style, body, sender, sender_role, time, date, is_favorite, is_read, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    const DEFAULT_NOTES = [
-      { id: 'note_1', style: 'envelope', body: "Can't wait to see you tonight! Bring your cozy sweater... 💌", sender: 'Dudu 🐻', senderRole: 'dudu', time: '10:15 AM', date: 'Today', isFavorite: 1, isRead: 0, createdAt: 1728000000000 },
-      { id: 'note_2', style: 'craft', body: 'You are my favorite person to drink warm tea with. Have a lovely afternoon, Bubu! ☕✨', sender: 'Honey', senderRole: 'dudu', time: 'Yesterday', date: 'Yesterday', isFavorite: 1, isRead: 1, createdAt: 1728000000000 - 86400000 },
-      { id: 'note_3', style: 'card', body: 'Reminding you to smile today! You got this! 💪❤️', sender: 'Dudu 🐻', senderRole: 'dudu', time: '2 days ago', date: '2 days ago', isFavorite: 0, isRead: 1, createdAt: 1728000000000 - 172800000 }
-    ];
-    DEFAULT_NOTES.forEach(n => insertNote.run(n.id, n.style, n.body, n.sender, n.senderRole, n.time, n.date, n.isFavorite, n.isRead, n.createdAt));
+    fallbackNotes.forEach(n => insertNote.run(n.id, n.style, n.body, n.sender, n.senderRole, n.time, n.date, n.isFavorite ? 1 : 0, n.isRead ? 1 : 0, n.createdAt));
 
-    // 4. Polaroids
     const insertPol = db.prepare(`
       INSERT OR REPLACE INTO polaroids (id, title, date, image, tape, rotate, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    const DEFAULT_POLAROIDS = [
-      { id: 'pol_1', title: 'Cafe date', date: 'Oct 10', image: 'assets/mockup_art/polaroid_cafe.png', tape: 'washi-tape-grid', rotate: -2, createdAt: 1728000000000 },
-      { id: 'pol_2', title: 'Picnic day', date: 'Sep 28', image: 'assets/mockup_art/polaroid_picnic.png', tape: 'washi-tape-grid', rotate: 1.5, createdAt: 1728000000000 - 86400000 },
-      { id: 'pol_3', title: 'Sunset gaze', date: 'Sep 24', image: 'assets/mockup_art/polaroid_sunset.png', tape: 'washi-tape-peach', rotate: -1, createdAt: 1728000000000 - 172800000 },
-      { id: 'pol_4', title: 'Autumn walk', date: 'Oct 05', image: 'assets/mockup_art/polaroid_autumn.png', tape: 'washi-tape-grid', rotate: 2, createdAt: 1728000000000 - 259200000 }
-    ];
-    DEFAULT_POLAROIDS.forEach(p => insertPol.run(p.id, p.title, p.date, p.image, p.tape, p.rotate, p.createdAt));
+    fallbackPolaroids.forEach(p => insertPol.run(p.id, p.title, p.date, p.image, p.tape, p.rotate, p.createdAt));
 
-    // 5. Milestones
     const insertMs = db.prepare(`
       INSERT OR REPLACE INTO milestones (id, title, date, desc, created_at)
       VALUES (?, ?, ?, ?, ?)
     `);
-    const DEFAULT_MILESTONES = [
-      { id: 'ms_1', title: '100th Day Anniversary 🤎', date: 'October 12th', desc: 'celebrated with sweet cake & walks 🐻🐼', createdAt: 1728000000000 },
-      { id: 'ms_2', title: 'First Photo in the Jar', date: 'September 15th', desc: 'the rainy day we started our memory jar', createdAt: 1728000000000 - 86400000 },
-      { id: 'ms_3', title: 'Cozy Autumn Picnic 🧺', date: 'September 28th', desc: 'warm blankets, honey sandwiches & soft wind', createdAt: 1728000000000 - 172800000 }
-    ];
-    DEFAULT_MILESTONES.forEach(m => insertMs.run(m.id, m.title, m.date, m.desc, m.createdAt));
+    fallbackMilestones.forEach(m => insertMs.run(m.id, m.title, m.date, m.desc, m.createdAt));
 
-    // 6. Couple Space
     const insertCouple = db.prepare(`
       INSERT OR REPLACE INTO couple_space (key, val, updated_at)
       VALUES (?, ?, ?)
@@ -244,9 +322,26 @@ try {
     insertCouple.run('love_battery', '100', Date.now());
     insertCouple.run('status_dudu', 'Thinking of you! 💭', Date.now());
     insertCouple.run('status_bubu', 'Eating snacks! 🐼', Date.now());
+    insertCouple.run('wardrobe_dudu', JSON.stringify(fallbackCoupleSpace.wardrobe.dudu), Date.now());
+    insertCouple.run('wardrobe_bubu', JSON.stringify(fallbackCoupleSpace.wardrobe.bubu), Date.now());
+    insertCouple.run('minigame_high_score', '420', Date.now());
 
     db.prepare("INSERT OR REPLACE INTO meta (key, val) VALUES ('seeded_features_v1', '1')").run();
     console.log('[Database] Seeded calendar, planner, notes, memories, and couple space in SQLite');
+  }
+
+  // Ensure wardrobe & minigame rows exist even if SQLite database was created prior to wardrobe feature
+  try {
+    const hasWardrobe = db.prepare("SELECT val FROM couple_space WHERE key = 'wardrobe_dudu'").get();
+    if (!hasWardrobe) {
+      const insertCouple = db.prepare("INSERT OR REPLACE INTO couple_space (key, val, updated_at) VALUES (?, ?, ?)");
+      insertCouple.run('wardrobe_dudu', JSON.stringify(fallbackCoupleSpace.wardrobe.dudu), Date.now());
+      insertCouple.run('wardrobe_bubu', JSON.stringify(fallbackCoupleSpace.wardrobe.bubu), Date.now());
+      insertCouple.run('minigame_high_score', '420', Date.now());
+      console.log('[Database] Migrated & initialized wardrobe state in SQLite');
+    }
+  } catch (mErr) {
+    console.warn('[Database] Wardrobe migration check warning:', mErr.message);
   }
 
   console.log(`[Database] SQLite initialized at ${DB_PATH} (WAL mode)`);
@@ -260,6 +355,7 @@ try {
       fallbackMemoryMessages = [];
     }
   }
+  loadFallbackState();
 }
 
 function persistFallback() {
@@ -473,6 +569,12 @@ function setPresence(identity, isOnline) {
     } catch (e) {
       console.error('[Database] setPresence error:', e.message);
     }
+  } else {
+    fallbackPresence[ident] = {
+      online: Boolean(online),
+      lastSeen
+    };
+    persistFallbackState();
   }
 }
 
@@ -496,6 +598,11 @@ function getAllPresence() {
     } catch (e) {
       console.error('[Database] getAllPresence error:', e.message);
     }
+  } else {
+    return {
+      dudu: { ...(fallbackPresence.dudu || { online: false, lastSeen: null }) },
+      bubu: { ...(fallbackPresence.bubu || { online: false, lastSeen: null }) }
+    };
   }
 
   return result;
@@ -510,14 +617,6 @@ function getPresence(identity) {
 /**
  * Topic / Multi-Session Synchronization
  */
-let fallbackTopics = [
-  { id: 'daily_banter', title: 'Daily Banter', emoji: '💬', isPinned: true, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() },
-  { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 },
-  { id: 'watchlist', title: 'Watchlist', emoji: '🎬', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 7200000 },
-  { id: 'vent_space', title: 'Vent Space', emoji: '🧸', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 10800000 },
-  { id: 'deep_talks', title: 'Deep Talks', emoji: '🌙', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 14400000 }
-];
-
 function getAllTopics() {
   if (!useFallback && db) {
     try {
@@ -571,6 +670,7 @@ function saveTopic(topic) {
     const item = { id, title, emoji, isPinned: !!isPinned, isArchived: !!isArchived, createdAt, lastActivity };
     if (idx >= 0) fallbackTopics[idx] = item;
     else fallbackTopics.push(item);
+    persistFallbackState();
     return true;
   }
 }
@@ -594,6 +694,7 @@ function deleteTopic(sessionId) {
     const idx = fallbackTopics.findIndex(t => t.id === sid);
     if (idx >= 0) {
       fallbackTopics.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -612,6 +713,7 @@ function clearAllTopics() {
     }
   } else {
     fallbackTopics = [];
+    persistFallbackState();
     return true;
   }
 }
@@ -619,8 +721,6 @@ function clearAllTopics() {
 /**
  * Tummy Logs / Health Tracking Synchronization
  */
-let fallbackTummyLogs = [];
-
 function getAllTummyLogs() {
   if (!useFallback && db) {
     try {
@@ -672,6 +772,7 @@ function saveTummyLog(log) {
     const entry = { id, date, time, item, category, spiceLevel, portionLevel, penalty, status, note, eater, createdAt };
     if (idx >= 0) fallbackTummyLogs[idx] = entry;
     else fallbackTummyLogs.unshift(entry);
+    persistFallbackState();
     return true;
   }
 }
@@ -692,6 +793,7 @@ function deleteTummyLog(id) {
     const idx = fallbackTummyLogs.findIndex(l => l.id === logId);
     if (idx >= 0) {
       fallbackTummyLogs.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -709,11 +811,10 @@ function clearAllTummyLogs() {
     }
   } else {
     fallbackTummyLogs = [];
+    persistFallbackState();
     return true;
   }
 }
-
-let fallbackPushTokens = {};
 
 function savePushToken(identity, token) {
   const norm = String(identity || '').toLowerCase().includes('dudu') || String(identity || '').toLowerCase().includes('kevin') ? 'dudu' : 'bubu';
@@ -731,6 +832,7 @@ function savePushToken(identity, token) {
     }
   } else {
     fallbackPushTokens[norm] = String(token);
+    persistFallbackState();
     return true;
   }
 }
@@ -755,12 +857,6 @@ function getPushToken(identity) {
  * Calendar Events Synchronization
  * ============================================================================
  */
-let fallbackCalendarEvents = [
-  { id: 'cal_1', date: 10, month: 9, year: 2026, title: 'Picnic Date 🧺', icon: '🧺', createdAt: 1728000000000 },
-  { id: 'cal_2', date: 24, month: 9, year: 2026, title: 'Anniversary Cake Prep 🎂', icon: '🎂', createdAt: 1728000000000 },
-  { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼', createdAt: 1728000000000 }
-];
-
 function getAllCalendarEvents() {
   if (!useFallback && db) {
     try {
@@ -783,7 +879,7 @@ function saveCalendarEvent(ev) {
   if (!ev || !ev.title) return null;
   const id = String(ev.id || ('cal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)));
   const date = Number(ev.date || 1);
-  const month = Number(ev.month || 0);
+  const month = Number(ev.month !== undefined ? ev.month : 9);
   const year = Number(ev.year || new Date().getFullYear());
   const title = String(ev.title);
   const icon = String(ev.icon || '❤️');
@@ -807,6 +903,7 @@ function saveCalendarEvent(ev) {
     const idx = fallbackCalendarEvents.findIndex(c => c.id === id);
     if (idx >= 0) fallbackCalendarEvents[idx] = eventObj;
     else fallbackCalendarEvents.push(eventObj);
+    persistFallbackState();
     return eventObj;
   }
 }
@@ -827,6 +924,7 @@ function deleteCalendarEvent(id) {
     const idx = fallbackCalendarEvents.findIndex(c => c.id === calId);
     if (idx >= 0) {
       fallbackCalendarEvents.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -838,14 +936,6 @@ function deleteCalendarEvent(id) {
  * Planner Items / Bucket List Synchronization
  * ============================================================================
  */
-let fallbackPlannerItems = [
-  { id: 'bl_1', title: 'Cozy coffee shop date ☕🍂', desc: 'Find a warm local café, order seasonal lattes, and read or sketch together. Include polaroid photos.', plannedDate: '26 June • 12:30 PM', statusBadge: 'Ready to Go', category: 'indoor', completed: true, image: 'assets/mockup_art/date_coffee.png', createdAt: 1728000000000 },
-  { id: 'bl_2', title: 'Stargazing trip ✨🏕️', desc: 'Drive out of the city, pack a cozy blanket, and look at the night sky. Point out constellations.', plannedDate: 'Next weekend', statusBadge: 'Added today', category: 'outdoor', completed: false, image: 'assets/mockup_art/date_stargazing.png', createdAt: 1728000000000 - 86400000 },
-  { id: 'bl_3', title: 'Bake a sweet treat together 🍰🧑‍🍳', desc: 'Try baking a messy chocolate cake or cookies from scratch.', plannedDate: 'Rainy Sunday', statusBadge: 'Done!', category: 'indoor', completed: true, image: 'assets/mockup_art/date_baking.png', createdAt: 1728000000000 - 172800000 },
-  { id: 'bl_4', title: 'Autumn foliage stroll 🍁', desc: 'Walk through the park with warm knit scarves, crunch leaves, and take cute polaroids.', plannedDate: 'October 2026', statusBadge: 'Ready to Go', category: 'outdoor', completed: false, image: 'assets/mockup_art/polaroid_autumn.png', createdAt: 1728000000000 - 259200000 },
-  { id: 'bl_5', title: 'Nintendo Switch cozy marathon 🎮', desc: 'Play Animal Crossing or Mario Kart while sharing warm hot cocoa and fluffy marshmallows.', plannedDate: 'Friday Night', statusBadge: 'Ready to Go', category: 'indoor', completed: true, image: 'assets/mockup_art/minigame_switch.png', createdAt: 1728000000000 - 345600000 }
-];
-
 function getAllPlannerItems() {
   if (!useFallback && db) {
     try {
@@ -895,6 +985,7 @@ function savePlannerItem(item) {
     const idx = fallbackPlannerItems.findIndex(b => b.id === id);
     if (idx >= 0) fallbackPlannerItems[idx] = savedObj;
     else fallbackPlannerItems.unshift(savedObj);
+    persistFallbackState();
     return savedObj;
   }
 }
@@ -915,6 +1006,7 @@ function deletePlannerItem(id) {
     const idx = fallbackPlannerItems.findIndex(b => b.id === itemId);
     if (idx >= 0) {
       fallbackPlannerItems.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -926,12 +1018,6 @@ function deletePlannerItem(id) {
  * Love Notes Synchronization
  * ============================================================================
  */
-let fallbackNotes = [
-  { id: 'note_1', style: 'envelope', body: "Can't wait to see you tonight! Bring your cozy sweater... 💌", sender: 'Dudu 🐻', senderRole: 'dudu', time: '10:15 AM', date: 'Today', isFavorite: true, isRead: false, createdAt: 1728000000000 },
-  { id: 'note_2', style: 'craft', body: 'You are my favorite person to drink warm tea with. Have a lovely afternoon, Bubu! ☕✨', sender: 'Honey', senderRole: 'dudu', time: 'Yesterday', date: 'Yesterday', isFavorite: true, isRead: true, createdAt: 1728000000000 - 86400000 },
-  { id: 'note_3', style: 'card', body: 'Reminding you to smile today! You got this! 💪❤️', sender: 'Dudu 🐻', senderRole: 'dudu', time: '2 days ago', date: '2 days ago', isFavorite: false, isRead: true, createdAt: 1728000000000 - 172800000 }
-];
-
 function getAllNotes() {
   if (!useFallback && db) {
     try {
@@ -982,6 +1068,7 @@ function saveNote(note) {
     const idx = fallbackNotes.findIndex(n => n.id === id);
     if (idx >= 0) fallbackNotes[idx] = noteObj;
     else fallbackNotes.unshift(noteObj);
+    persistFallbackState();
     return noteObj;
   }
 }
@@ -1002,6 +1089,7 @@ function deleteNote(id) {
     const idx = fallbackNotes.findIndex(n => n.id === noteId);
     if (idx >= 0) {
       fallbackNotes.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -1013,19 +1101,6 @@ function deleteNote(id) {
  * Memories (Polaroids & Milestones) Synchronization
  * ============================================================================
  */
-let fallbackPolaroids = [
-  { id: 'pol_1', title: 'Cafe date', date: 'Oct 10', image: 'assets/mockup_art/polaroid_cafe.png', tape: 'washi-tape-grid', rotate: -2, createdAt: 1728000000000 },
-  { id: 'pol_2', title: 'Picnic day', date: 'Sep 28', image: 'assets/mockup_art/polaroid_picnic.png', tape: 'washi-tape-grid', rotate: 1.5, createdAt: 1728000000000 - 86400000 },
-  { id: 'pol_3', title: 'Sunset gaze', date: 'Sep 24', image: 'assets/mockup_art/polaroid_sunset.png', tape: 'washi-tape-peach', rotate: -1, createdAt: 1728000000000 - 172800000 },
-  { id: 'pol_4', title: 'Autumn walk', date: 'Oct 05', image: 'assets/mockup_art/polaroid_autumn.png', tape: 'washi-tape-grid', rotate: 2, createdAt: 1728000000000 - 259200000 }
-];
-
-let fallbackMilestones = [
-  { id: 'ms_1', title: '100th Day Anniversary 🤎', date: 'October 12th', desc: 'celebrated with sweet cake & walks 🐻🐼', createdAt: 1728000000000 },
-  { id: 'ms_2', title: 'First Photo in the Jar', date: 'September 15th', desc: 'the rainy day we started our memory jar', createdAt: 1728000000000 - 86400000 },
-  { id: 'ms_3', title: 'Cozy Autumn Picnic 🧺', date: 'September 28th', desc: 'warm blankets, honey sandwiches & soft wind', createdAt: 1728000000000 - 172800000 }
-];
-
 function getAllPolaroids() {
   if (!useFallback && db) {
     try {
@@ -1072,6 +1147,7 @@ function savePolaroid(p) {
     const idx = fallbackPolaroids.findIndex(item => item.id === id);
     if (idx >= 0) fallbackPolaroids[idx] = polObj;
     else fallbackPolaroids.unshift(polObj);
+    persistFallbackState();
     return polObj;
   }
 }
@@ -1092,6 +1168,7 @@ function deletePolaroid(id) {
     const idx = fallbackPolaroids.findIndex(p => p.id === polId);
     if (idx >= 0) {
       fallbackPolaroids.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -1142,6 +1219,7 @@ function saveMilestone(m) {
     const idx = fallbackMilestones.findIndex(item => item.id === id);
     if (idx >= 0) fallbackMilestones[idx] = msObj;
     else fallbackMilestones.push(msObj);
+    persistFallbackState();
     return msObj;
   }
 }
@@ -1162,6 +1240,7 @@ function deleteMilestone(id) {
     const idx = fallbackMilestones.findIndex(m => m.id === msId);
     if (idx >= 0) {
       fallbackMilestones.splice(idx, 1);
+      persistFallbackState();
       return true;
     }
     return false;
@@ -1173,13 +1252,9 @@ function deleteMilestone(id) {
  * Couple Space (Anniversary, Love Battery, Statuses)
  * ============================================================================
  */
-let fallbackCoupleSpace = {
-  anniversaryDate: '2025-11-04',
-  loveBattery: 100,
-  statuses: {
-    dudu: 'Thinking of you! 💭',
-    bubu: 'Eating snacks! 🐼'
-  }
+const DEFAULT_WARDROBE = {
+  dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+  bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
 };
 
 function getCoupleSpace() {
@@ -1188,20 +1263,35 @@ function getCoupleSpace() {
       const rows = db.prepare('SELECT key, val FROM couple_space').all();
       const map = {};
       rows.forEach(r => { map[r.key] = r.val; });
+      let duduW = { ...DEFAULT_WARDROBE.dudu, ...(fallbackCoupleSpace?.wardrobe?.dudu || {}) };
+      let bubuW = { ...DEFAULT_WARDROBE.bubu, ...(fallbackCoupleSpace?.wardrobe?.bubu || {}) };
+      try { if (map['wardrobe_dudu']) duduW = { ...duduW, ...JSON.parse(map['wardrobe_dudu']) }; } catch (_) {}
+      try { if (map['wardrobe_bubu']) bubuW = { ...bubuW, ...JSON.parse(map['wardrobe_bubu']) }; } catch (_) {}
       return {
         anniversaryDate: map['anniversary_date'] || '2025-11-04',
         loveBattery: map['love_battery'] ? Number(map['love_battery']) : 100,
         statuses: {
           dudu: map['status_dudu'] || 'Thinking of you! 💭',
           bubu: map['status_bubu'] || 'Eating snacks! 🐼'
-        }
+        },
+        wardrobe: {
+          dudu: duduW,
+          bubu: bubuW
+        },
+        miniGameHighScore: map['minigame_high_score'] ? Number(map['minigame_high_score']) : 420
       };
     } catch (e) {
       console.error('[Database] getCoupleSpace error:', e.message);
-      return fallbackCoupleSpace;
+      return {
+        ...fallbackCoupleSpace,
+        wardrobe: fallbackCoupleSpace?.wardrobe || DEFAULT_WARDROBE
+      };
     }
   } else {
-    return fallbackCoupleSpace;
+    return {
+      ...fallbackCoupleSpace,
+      wardrobe: fallbackCoupleSpace?.wardrobe || DEFAULT_WARDROBE
+    };
   }
 }
 
@@ -1219,6 +1309,20 @@ function saveCoupleSpace(data) {
         if (data.statuses.dudu !== undefined) stmt.run('status_dudu', String(data.statuses.dudu), now);
         if (data.statuses.bubu !== undefined) stmt.run('status_bubu', String(data.statuses.bubu), now);
       }
+      if (data.wardrobe) {
+        const current = getCoupleSpace().wardrobe || DEFAULT_WARDROBE;
+        if (data.wardrobe.dudu) {
+          stmt.run('wardrobe_dudu', JSON.stringify({ ...(current?.dudu || DEFAULT_WARDROBE.dudu), ...data.wardrobe.dudu }), now);
+        }
+        if (data.wardrobe.bubu) {
+          stmt.run('wardrobe_bubu', JSON.stringify({ ...(current?.bubu || DEFAULT_WARDROBE.bubu), ...data.wardrobe.bubu }), now);
+        }
+      }
+      if (data.miniGameHighScore !== undefined) {
+        const curScore = getCoupleSpace().miniGameHighScore || 0;
+        const nextScore = Math.max(curScore, Number(data.miniGameHighScore) || 0);
+        stmt.run('minigame_high_score', String(nextScore), now);
+      }
       return true;
     } catch (e) {
       console.error('[Database] saveCoupleSpace error:', e.message);
@@ -1233,8 +1337,56 @@ function saveCoupleSpace(data) {
       if (data.statuses.dudu !== undefined) fallbackCoupleSpace.statuses.dudu = String(data.statuses.dudu);
       if (data.statuses.bubu !== undefined) fallbackCoupleSpace.statuses.bubu = String(data.statuses.bubu);
     }
+    if (!fallbackCoupleSpace.wardrobe) {
+      fallbackCoupleSpace.wardrobe = {
+        dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+        bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+      };
+    }
+    if (data.wardrobe) {
+      if (data.wardrobe.dudu) {
+        fallbackCoupleSpace.wardrobe.dudu = { ...fallbackCoupleSpace.wardrobe.dudu, ...data.wardrobe.dudu };
+      }
+      if (data.wardrobe.bubu) {
+        fallbackCoupleSpace.wardrobe.bubu = { ...fallbackCoupleSpace.wardrobe.bubu, ...data.wardrobe.bubu };
+      }
+    }
+    if (data.miniGameHighScore !== undefined) {
+      fallbackCoupleSpace.miniGameHighScore = Math.max(
+        Number(fallbackCoupleSpace.miniGameHighScore) || 0,
+        Number(data.miniGameHighScore) || 0
+      );
+    }
+    persistFallbackState();
     return true;
   }
+}
+
+function getWardrobe() {
+  const space = getCoupleSpace();
+  return {
+    wardrobe: space.wardrobe || {
+      dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
+      bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+    },
+    miniGameHighScore: space.miniGameHighScore || 420
+  };
+}
+
+function saveWardrobe(data) {
+  if (!data) return false;
+  const payload = {};
+  if (data.wardrobe) {
+    payload.wardrobe = data.wardrobe;
+  } else if (data.dudu || data.bubu) {
+    payload.wardrobe = {};
+    if (data.dudu) payload.wardrobe.dudu = data.dudu;
+    if (data.bubu) payload.wardrobe.bubu = data.bubu;
+  }
+  if (data.miniGameHighScore !== undefined) {
+    payload.miniGameHighScore = data.miniGameHighScore;
+  }
+  return saveCoupleSpace(payload);
 }
 
 module.exports = {
@@ -1274,5 +1426,7 @@ module.exports = {
   saveMilestone,
   deleteMilestone,
   getCoupleSpace,
-  saveCoupleSpace
+  saveCoupleSpace,
+  getWardrobe,
+  saveWardrobe
 };
