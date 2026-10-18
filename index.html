@@ -68,6 +68,22 @@
 </head>
 <body class="bg-surface text-primary min-h-screen antialiased pb-28 selection:bg-secondary-container font-body transition-colors">
 
+  <!-- IN-APP FLOATING NOTIFICATION BANNER -->
+  <aside id="in-app-notification-banner" class="hidden fixed top-3 left-0 right-0 mx-auto w-[calc(100%-1.5rem)] max-w-sm z-[100] transition-all duration-300 ease-out cursor-pointer select-none" role="alert" aria-live="assertive">
+    <div class="p-3 rounded-2xl bg-[#5A3825]/95 dark:bg-stone-800/95 text-white shadow-2xl border border-white/20 backdrop-blur-md flex items-center gap-3">
+      <div id="in-app-notif-icon-box" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-xl shrink-0">
+        💖
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <h4 id="in-app-notif-title" class="font-heading font-extrabold text-xs text-white truncate">Love Battery</h4>
+          <span class="text-[9px] text-white/60 font-bold shrink-0 ml-1">Now</span>
+        </div>
+        <p id="in-app-notif-body" class="text-[11px] text-white/90 font-medium leading-tight mt-0.5 line-clamp-2">Love is full!</p>
+      </div>
+    </div>
+  </aside>
+
   <!-- TOP STICKY HEADER -->
   <header class="sticky top-0 z-40 bg-[#FAF5EE]/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-[#E8DACB]/60 dark:border-stone-800 max-w-xl mx-auto transition-all">
     <div class="flex justify-between items-center px-4 py-2.5">
@@ -115,12 +131,14 @@
     <section id="tab-home" class="flex flex-col gap-4">
       
       <!-- Top Title Bar -->
-      <div class="text-center pt-1 pb-0.5">
-        <h2 class="font-heading font-extrabold text-xl text-[#4A3222] dark:text-stone-100 tracking-tight flex items-center justify-center gap-2">
-          <span>✨</span>
-          <span>our space ♡</span>
-          <span>🍃</span>
-        </h2>
+      <div class="text-center pt-1 pb-0.5 flex flex-col items-center">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/70 dark:bg-stone-800/70 border border-[#E8DACB] dark:border-stone-700 shadow-2xs">
+          <svg class="w-3.5 h-3.5 text-[#E08D8D]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span class="font-heading font-extrabold text-xs uppercase tracking-widest text-[#5A3825] dark:text-stone-200">Our Space</span>
+          <span class="text-[10px] text-[#8D5B4C] font-serif italic opacity-75">together</span>
+        </div>
       </div>
 
       <!-- Main Framed Couple Card (timeline.jpg) -->
@@ -150,31 +168,74 @@
       <div class="grid grid-cols-2 gap-3 relative">
         <div id="heart-burst-container" class="absolute inset-0 pointer-events-none z-30"></div>
 
-        <!-- Left: Love Battery Card -->
-        <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col justify-between">
-          <div>
-            <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">love battery</span>
-            <div id="home-battery-text" class="text-base font-heading font-black text-[#8D5B4C] mt-0.5">100%</div>
+        <!-- Left: Dual Battery Card (Love Battery & Badmood Meter) -->
+        <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col justify-between">
+          
+          <!-- Bar 1: Love Battery -->
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1">
+                <span class="text-xs">💖</span> love battery
+              </span>
+              <button id="btn-open-battery-adjust" type="button" class="text-[9px] font-bold text-[#8D5B4C] hover:text-[#5A3825] dark:text-stone-300 underline cursor-pointer button-press focus:outline-none" title="Set love level">
+                adjust
+              </button>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button id="btn-boost-battery" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to check love battery notification!">
+                <div id="home-battery-fill" class="h-full bg-gradient-to-r from-rose-400 to-[#F5A5A5] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
+                  <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">♥</span>
+                </div>
+              </button>
+              <span id="home-battery-text" class="text-xs font-heading font-black text-[#8D5B4C] dark:text-rose-300 w-8 text-right shrink-0">100%</span>
+            </div>
           </div>
 
-          <div class="flex items-center gap-2 mt-2">
-            <!-- Battery Graphic with Heart -->
-            <button id="btn-boost-battery" type="button" class="flex-1 h-8 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to charge love!">
-              <div id="home-battery-fill" class="h-full bg-[#F5A5A5] rounded-lg transition-all duration-300 flex items-center justify-center" style="width: 100%;">
-                <span class="text-xs">♥</span>
-              </div>
-            </button>
-            <!-- Bubu Cute Face -->
-            <img src="assets/mockup_art/bubu_head.png" alt="Bubu" class="w-7 h-7 object-contain shrink-0 rounded-full">
+          <div class="w-full h-px bg-[#DFCBB7]/40 dark:bg-stone-700 my-1"></div>
+
+          <!-- Bar 2: Badmood Battery -->
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1">
+                <span class="text-xs">⚡</span> badmood
+              </span>
+              <button id="btn-open-badmood-adjust" type="button" class="text-[9px] font-bold text-[#7E6589] hover:text-[#5A3825] dark:text-purple-300 underline cursor-pointer button-press focus:outline-none" title="Set badmood level">
+                adjust
+              </button>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button id="btn-boost-badmood" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to check badmood notification!">
+                <div id="home-badmood-fill" class="h-full bg-gradient-to-r from-indigo-400 to-[#A78BFA] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 0%;">
+                  <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">⚡</span>
+                </div>
+              </button>
+              <span id="home-badmood-text" class="text-xs font-heading font-black text-[#7E6589] dark:text-purple-300 w-8 text-right shrink-0">0%</span>
+            </div>
           </div>
+
         </div>
 
         <!-- Right: Current Status Card -->
-        <button id="home-status-card" type="button" class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col text-left justify-between button-press cursor-pointer" title="Tap to update status">
-          <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">current status</span>
-          <div class="flex flex-col gap-1 mt-1 text-[11px] text-[#4A3222] dark:text-stone-300 font-semibold leading-tight">
-            <span class="truncate">Dudu: <span id="home-status-dudu" class="font-normal text-on-surface-variant">Thinking of you! 💭</span></span>
-            <span class="truncate">Bubu: <span id="home-status-bubu" class="font-normal text-on-surface-variant">Eating snacks! 🐼</span></span>
+        <button id="home-status-card" type="button" class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col text-left justify-between button-press cursor-pointer relative group overflow-hidden" title="Tap to update status">
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">current status</span>
+            </div>
+            <span class="material-symbols-outlined text-[13px] text-stone-400 group-hover:text-[#8D5B4C] transition-colors">edit</span>
+          </div>
+
+          <div class="flex flex-col gap-1.5 mt-2 text-[11px] w-full">
+            <!-- Dudu chip -->
+            <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
+              <span class="px-1.5 py-0.2 rounded-md bg-[#8D5B4C] text-white text-[9px] font-extrabold shrink-0">Dudu</span>
+              <span id="home-status-dudu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Thinking of you! 💭</span>
+            </div>
+            <!-- Bubu chip -->
+            <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
+              <span class="px-1.5 py-0.2 rounded-md bg-[#EAA684] text-white text-[9px] font-extrabold shrink-0">Bubu</span>
+              <span id="home-status-bubu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Eating snacks! 🐼</span>
+            </div>
           </div>
         </button>
 
@@ -190,7 +251,9 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           <!-- Room: Love Notes -->
           <a href="#notes" data-tab="notes" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">💌</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">mail</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Love Notes</span>
               <span class="text-[10px] text-on-surface-variant truncate">Shared letters</span>
@@ -199,7 +262,9 @@
 
           <!-- Room: Memory Jar -->
           <a href="#memories" data-tab="memories" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🍯</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">photo_library</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Memory Jar</span>
               <span class="text-[10px] text-on-surface-variant truncate">Our Polaroids</span>
@@ -208,7 +273,9 @@
 
           <!-- Room: Our Calendar -->
           <a href="#calendar" data-tab="calendar" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🗓️</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">calendar_month</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Our Calendar</span>
               <span id="home-portal-calendar-next" class="text-[10px] text-on-surface-variant truncate">Next: 1 Year (Nov 4)</span>
@@ -217,7 +284,9 @@
 
           <!-- Room: Bucket List -->
           <a href="#bucket" data-tab="bucket" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">📋</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">checklist</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bucket List</span>
               <span class="text-[10px] text-on-surface-variant truncate">Date Planner</span>
@@ -226,7 +295,9 @@
 
           <!-- Room: Bedtime Lofi -->
           <a href="#music" data-tab="music" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">🌙</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">bedtime</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bedtime Lofi</span>
               <span class="text-[10px] text-on-surface-variant truncate">Soothing beats</span>
@@ -235,7 +306,9 @@
 
           <!-- Room: Couple Closet & Games -->
           <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item bg-white dark:bg-stone-800 rounded-2xl p-3 border border-[#E8DACB] dark:border-stone-700 plush-shadow flex items-center gap-2.5 button-press">
-            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-lg">👗</span>
+            <span class="w-8 h-8 rounded-xl bg-[#FAF0E6] dark:bg-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-200">
+              <span class="material-symbols-outlined text-lg">checkroom</span>
+            </span>
             <div class="flex flex-col min-w-0">
               <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Couple Closet</span>
               <span class="text-[10px] text-on-surface-variant truncate">Outfits &amp; Games</span>
@@ -737,7 +810,7 @@
     <section id="tab-chat" class="hidden flex flex-col gap-2 relative h-[calc(100dvh-5.5rem)] pb-18 transition-all">
       
       <!-- Top Chat Header Bar (chat.jpg) -->
-      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
+      <div id="chat-top-header" class="w-full bg-white dark:bg-stone-800 rounded-2xl p-3 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
         <div class="flex items-center gap-2 min-w-0">
           <a href="#home" data-tab="home" class="mockup-nav-item w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold button-press cursor-pointer">
             &lt;
@@ -823,32 +896,33 @@
       <div id="chat-input-bar-container" class="bg-[#8D5B4C] rounded-full p-2 plush-shadow flex items-center gap-2 relative z-30 shrink-0 transition-all">
         
         <!-- Camera Button -->
-        <button id="btn-chat-camera" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Snap Photo">
+        <button id="btn-chat-camera" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Snap Photo">
           <span class="material-symbols-outlined text-xl">photo_camera</span>
         </button>
 
         <!-- Input Pill -->
-        <div class="flex-1 bg-white dark:bg-stone-800 rounded-full pl-3.5 pr-1.5 py-1 flex items-center gap-1.5 shadow-inner">
-          <input type="text" id="chat-text-input" placeholder="Send a message... 🧸" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0">
-          <button id="btn-send-message" type="button" class="w-6 h-6 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Send">
-            <span class="material-symbols-outlined text-[14px]">send</span>
+        <div class="flex-1 bg-white dark:bg-stone-800 rounded-2xl sm:rounded-full pl-3 pr-1.5 py-1 flex items-end gap-1.5 shadow-inner min-h-[36px]">
+          <textarea id="chat-text-input" rows="1" placeholder="Send a message... 🧸" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0 resize-none max-h-28 overflow-y-auto leading-relaxed py-1 self-center"></textarea>
+          <!-- Bear Sticker Toggle Button moved inside input pill -->
+          <button id="btn-toggle-sticker-tray" type="button" class="w-7 h-7 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer shrink-0 self-center" title="Open Stickers">
+            <span class="text-base leading-none">🧸</span>
           </button>
         </div>
 
         <!-- Photo Gallery Button -->
-        <button id="btn-chat-photo" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Send Photo">
+        <button id="btn-chat-photo" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Send Photo">
           <span class="material-symbols-outlined text-xl">image</span>
         </button>
         <input type="file" id="chat-image-input" accept="image/*" class="hidden">
 
         <!-- Voice Note / Mic Button -->
-        <button id="btn-chat-mic" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer" title="Record Voice">
+        <button id="btn-chat-mic" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Record Voice">
           <span class="material-symbols-outlined text-xl">mic</span>
         </button>
 
-        <!-- Bear Sticker Toggle Button (chat.jpg) -->
-        <button id="btn-toggle-sticker-tray" type="button" class="w-8 h-8 rounded-full bg-[#FAF4ED] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer shadow-xs" title="Open Stickers">
-          <span class="text-base font-bold">🐻</span>
+        <!-- Send Message Button swapped to outer right end -->
+        <button id="btn-send-message" type="button" class="w-8 h-8 rounded-full bg-[#FAF4ED] text-[#8D5B4C] hover:bg-white flex items-center justify-center button-press cursor-pointer shadow-xs shrink-0" title="Send message">
+          <span class="material-symbols-outlined text-lg">send</span>
         </button>
 
       </div>
@@ -884,7 +958,7 @@
        BOTTOM DOCK (timeline.jpg warm brown dock)
        ==================================================================== -->
   <!-- MORE POPUP MENU (Floats above dock on small screens) -->
-  <div id="bottom-nav-more-popup" class="hidden fixed bottom-16 left-0 right-0 mx-auto w-[calc(100%-2rem)] max-w-[380px] z-50 cozy-brown-dock rounded-3xl p-3 shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-200 animate-squish">
+  <div id="bottom-nav-more-popup" class="hidden fixed left-0 right-0 mx-auto w-[calc(100%-2rem)] max-w-[380px] z-50 cozy-brown-dock rounded-3xl p-3 shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-200">
     <div class="grid grid-cols-4 gap-2 text-center">
       <!-- Calendar -->
       <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
@@ -1024,23 +1098,48 @@
         <button id="btn-close-add-polaroid" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
 
-      <div class="flex flex-col gap-2 text-xs">
-        <label class="font-bold">Memory Title</label>
-        <input type="text" id="input-polaroid-title" placeholder="Starlight Picnic" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700">
+      <div class="flex flex-col gap-2.5 text-xs">
+        <div>
+          <label class="font-bold block mb-1">Memory Title</label>
+          <input type="text" id="input-polaroid-title" placeholder="Starlight Picnic" class="w-full p-2.5 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
         
-        <label class="font-bold">Date</label>
-        <input type="text" id="input-polaroid-date" placeholder="Oct 15" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700">
+        <div>
+          <label class="font-bold block mb-1">Date</label>
+          <input type="text" id="input-polaroid-date" placeholder="Oct 15" class="w-full p-2.5 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        </div>
 
-        <label class="font-bold mt-1">Photo Scene</label>
-        <select id="select-polaroid-art" class="p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100">
-          <option value="assets/mockup_art/polaroid_picnic.png">🧺 Cozy Picnic</option>
-          <option value="assets/mockup_art/polaroid_cafe.png">☕ Warm Cafe Date</option>
-          <option value="assets/mockup_art/polaroid_sunset.png">🌅 Sunset Gaze</option>
-          <option value="assets/mockup_art/polaroid_autumn.png">🍁 Autumn Walk</option>
-        </select>
+        <!-- Custom Photo Upload Section -->
+        <div>
+          <label class="font-bold block mb-1">Polaroid Photo</label>
+          <input type="file" id="input-polaroid-file" accept="image/*" class="hidden">
+          
+          <div id="polaroid-custom-preview-box" class="hidden relative rounded-xl border-2 border-dashed border-[#8D5B4C] p-2 bg-[#FAF5EE] dark:bg-stone-700 flex flex-col items-center gap-1.5 mb-2">
+            <img id="polaroid-custom-preview-img" src="" alt="Custom Preview" class="w-full max-h-40 object-cover rounded-lg">
+            <button id="btn-remove-polaroid-custom" type="button" class="text-[10px] text-rose-500 font-bold hover:underline cursor-pointer">✕ Remove custom photo</button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="btn-upload-polaroid-file" type="button" class="w-full py-2 px-3 rounded-xl bg-[#FAF0E6] hover:bg-[#F2E4D5] dark:bg-stone-700 border border-[#DFCBB7] text-[#8D5B4C] dark:text-amber-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer button-press">
+              <span class="material-symbols-outlined text-base">upload_file</span>
+              <span>Upload Custom Photo</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 my-1.5 text-stone-400 text-[10px] justify-center">
+            <span>or choose a preset art scene:</span>
+          </div>
+
+          <select id="select-polaroid-art" class="w-full p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100">
+            <option value="assets/mockup_art/polaroid_picnic.png">🧺 Cozy Picnic</option>
+            <option value="assets/mockup_art/polaroid_cafe.png">☕ Warm Cafe Date</option>
+            <option value="assets/mockup_art/polaroid_sunset.png">🌅 Sunset Gaze</option>
+            <option value="assets/mockup_art/polaroid_autumn.png">🍁 Autumn Walk</option>
+          </select>
+        </div>
       </div>
 
-      <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] text-white font-heading font-bold text-xs button-press cursor-pointer">
+      <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
         Save to Jar ✨
       </button>
     </div>
@@ -1115,13 +1214,22 @@
             <span>💍 Milestone</span>
           </label>
           <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
-            <input type="radio" name="cal-icon" value="🌲" class="accent-[#8D5B4C]">
-            <span>🌲 Trip</span>
+            <input type="radio" name="cal-icon" value="🎂" class="accent-[#8D5B4C]">
+            <span>🎂 Birthday</span>
+          </label>
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="🐾" class="accent-[#8D5B4C]">
+            <span>🐾 Paw</span>
           </label>
           <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
             <input type="radio" name="cal-icon" value="☕" class="accent-[#8D5B4C]">
             <span>☕ Everyday</span>
           </label>
+          <label class="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-800 border border-[#E8DACB] cursor-pointer">
+            <input type="radio" name="cal-icon" value="🧸" class="accent-[#8D5B4C]">
+            <span>🧸 Bear</span>
+          </label>
+          <input type="text" id="input-cal-custom-icon" placeholder="Other emoji" maxlength="4" class="w-24 px-2 py-0.5 rounded-full border border-[#E8DACB] dark:border-stone-600 text-[10px] bg-[#FAF5EE] dark:bg-stone-800 text-[#4A3222] dark:text-stone-100 text-center" title="Type custom emoji here">
         </div>
 
         <button id="btn-submit-cal-event" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
@@ -1235,16 +1343,37 @@
         <div class="aspect-4/3 w-full rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
           <img id="modal-polaroid-img" src="" alt="Polaroid" class="w-full h-full object-cover">
         </div>
-        <div class="text-center pt-2.5">
-          <h4 id="modal-polaroid-title" class="font-handwriting text-2xl text-[#4A3222] dark:text-stone-100 font-bold leading-tight">Sweet Memory</h4>
+        <div id="polaroid-caption-display" class="text-center pt-2.5">
+          <div class="flex items-center justify-center gap-1.5">
+            <h4 id="modal-polaroid-title" class="font-handwriting text-2xl text-[#4A3222] dark:text-stone-100 font-bold leading-tight">Sweet Memory</h4>
+            <button id="btn-edit-polaroid-caption" type="button" class="text-stone-400 hover:text-[#8D5B4C] dark:hover:text-stone-200 p-1 rounded-full cursor-pointer transition-colors button-press" title="Edit caption">
+              <span class="material-symbols-outlined text-[16px]">edit</span>
+            </button>
+          </div>
           <span id="modal-polaroid-date" class="text-xs font-bold text-[#8D5B4C] dark:text-stone-400">Oct 15</span>
+        </div>
+
+        <!-- Inline Edit Caption Form -->
+        <div id="polaroid-caption-edit-box" class="hidden flex flex-col gap-2 pt-2.5">
+          <div class="flex flex-col gap-1 text-left">
+            <label class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">Edit Caption</label>
+            <input type="text" id="input-edit-polaroid-caption" class="w-full text-center font-handwriting text-xl text-[#4A3222] dark:text-stone-100 p-2 rounded-xl border border-[#DFCBB7] dark:border-stone-600 bg-[#FAF4ED] dark:bg-stone-800 focus:outline-none" placeholder="Enter new caption...">
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-cancel-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full border border-stone-300 dark:border-stone-600 text-xs font-bold text-stone-600 dark:text-stone-300 button-press cursor-pointer">Cancel</button>
+            <button id="btn-save-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-xs font-bold text-white button-press cursor-pointer shadow-xs">Save Caption ♡</button>
+          </div>
         </div>
       </div>
 
       <!-- Action Footer -->
       <div class="flex items-center gap-2 pt-1">
-        <button id="btn-delete-view-polaroid" type="button" class="py-2 px-3.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
+        <button id="btn-delete-view-polaroid" type="button" class="py-2 px-3 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
           <span>🗑️ Delete</span>
+        </button>
+        <button id="btn-edit-view-polaroid" type="button" class="py-2 px-3 rounded-full bg-amber-50 dark:bg-stone-700 text-[#8D5B4C] dark:text-amber-300 border border-[#E8DACB] font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">edit</span>
+          <span>Edit</span>
         </button>
         <button id="btn-dismiss-view-polaroid" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
           Cherish Forever ✨
@@ -1288,6 +1417,126 @@
         Update Status ♡
       </button>
 
+    </div>
+  </div>
+
+  <!-- MODAL: ADJUST LOVE BATTERY -->
+  <div id="modal-adjust-battery" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔋</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Love Battery</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">how full is your heart right now? ♡</span>
+          </div>
+        </div>
+        <button id="btn-close-battery-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <!-- Current percentage badge -->
+      <div class="flex flex-col items-center py-2">
+        <span id="slider-battery-val" class="font-heading font-black text-3xl text-[#8D5B4C] dark:text-rose-300">100%</span>
+        <div class="w-full h-4 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden p-0.5 border border-[#DFCBB7] dark:border-stone-600 mt-2">
+          <div id="slider-battery-bar" class="h-full bg-gradient-to-r from-rose-400 to-[#F5A5A5] rounded-full transition-all" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Range Slider -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-[10px] font-bold text-stone-500 dark:text-stone-400">
+          <span>0%</span>
+          <span>50%</span>
+          <span>100%</span>
+        </div>
+        <input type="range" id="input-love-battery-slider" min="0" max="100" step="5" value="100" class="w-full accent-[#8D5B4C] cursor-pointer">
+      </div>
+
+      <!-- Quick Mood Buttons -->
+      <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+        <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="25">
+          <span>🥺</span>
+          <span>Low Energy (25%)</span>
+        </button>
+        <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="50">
+          <span>🤗</span>
+          <span>Need Hugs (50%)</span>
+        </button>
+        <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="75">
+          <span>🥰</span>
+          <span>Happy (75%)</span>
+        </button>
+        <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="100">
+          <span>💖</span>
+          <span>Full Love (100%)</span>
+        </button>
+      </div>
+
+      <button id="btn-save-battery-slider" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Save Love Level ♡
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: ADJUST BADMOOD METER -->
+  <div id="modal-adjust-badmood" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⚡</span>
+          <div>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Badmood Meter</h3>
+            <span class="text-[10px] text-[#7E6589] dark:text-purple-300 font-bold">seberapa persen tingkat ngambek / bete? 🥺</span>
+          </div>
+        </div>
+        <button id="btn-close-badmood-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+      </div>
+
+      <!-- Current percentage badge -->
+      <div class="flex flex-col items-center py-2">
+        <span id="slider-badmood-val" class="font-heading font-black text-3xl text-[#7E6589] dark:text-purple-300">0%</span>
+        <div class="w-full h-4 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden p-0.5 border border-[#DFCBB7] dark:border-stone-600 mt-2">
+          <div id="slider-badmood-bar" class="h-full bg-gradient-to-r from-indigo-400 to-[#A78BFA] rounded-full transition-all" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Range Slider -->
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between text-[10px] font-bold text-stone-500 dark:text-stone-400">
+          <span>0%</span>
+          <span>50%</span>
+          <span>100%</span>
+        </div>
+        <input type="range" id="input-badmood-slider" min="0" max="100" step="5" value="0" class="w-full accent-[#7E6589] cursor-pointer">
+      </div>
+
+      <!-- Quick Mood Buttons -->
+      <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="0">
+          <span>🥰</span>
+          <span>Super Happy (0%)</span>
+        </button>
+        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="25">
+          <span>🙁</span>
+          <span>Sedikit Bete (25%)</span>
+        </button>
+        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="50">
+          <span>🥺</span>
+          <span>Need Cuddle (50%)</span>
+        </button>
+        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="75">
+          <span>😤</span>
+          <span>Ngambek Berat (75%)</span>
+        </button>
+        <button type="button" class="btn-badmood-preset col-span-2 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center justify-center gap-1.5 cursor-pointer button-press text-rose-600 dark:text-rose-400" data-val="100">
+          <span>🌋</span>
+          <span>Darurat Manja (100%)</span>
+        </button>
+      </div>
+
+      <button id="btn-save-badmood-slider" type="button" class="w-full py-2.5 rounded-full bg-[#7E6589] hover:bg-[#684E74] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        Save Badmood Level ⚡
+      </button>
     </div>
   </div>
 

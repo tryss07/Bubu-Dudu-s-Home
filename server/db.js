@@ -1373,6 +1373,7 @@ function getCoupleSpace() {
         ...(encryptedPayload || {}),
         anniversaryDate: map['anniversary_date'] || '2025-11-04',
         loveBattery: map['love_battery'] ? Number(map['love_battery']) : 100,
+        badmoodLevel: map['badmood_level'] !== undefined ? Number(map['badmood_level']) : 0,
         statuses: {
           dudu: map['status_dudu'] || 'Thinking of you! 💭',
           bubu: map['status_bubu'] || 'Eating snacks! 🐼'
@@ -1387,12 +1388,14 @@ function getCoupleSpace() {
       console.error('[Database] getCoupleSpace error:', e.message);
       return {
         ...fallbackCoupleSpace,
+        badmoodLevel: fallbackCoupleSpace?.badmoodLevel ?? 0,
         wardrobe: fallbackCoupleSpace?.wardrobe || DEFAULT_WARDROBE
       };
     }
   } else {
     return {
       ...fallbackCoupleSpace,
+      badmoodLevel: fallbackCoupleSpace?.badmoodLevel ?? 0,
       wardrobe: fallbackCoupleSpace?.wardrobe || DEFAULT_WARDROBE
     };
   }
@@ -1409,6 +1412,7 @@ function saveCoupleSpace(data) {
       }
       if (data.anniversaryDate) stmt.run('anniversary_date', String(data.anniversaryDate), now);
       if (data.loveBattery !== undefined) stmt.run('love_battery', String(data.loveBattery), now);
+      if (data.badmoodLevel !== undefined) stmt.run('badmood_level', String(data.badmoodLevel), now);
       if (data.statusDudu !== undefined) stmt.run('status_dudu', String(data.statusDudu), now);
       if (data.statusBubu !== undefined) stmt.run('status_bubu', String(data.statusBubu), now);
       if (data.statuses) {
