@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Wooden Wall Frame on Left -->
+      <rect x="0" y="50" width="160" height="420" rx="12" fill="#DDB892" stroke="#2B2421" stroke-width="8"/>
+      <line x1="160" y1="50" x2="160" y2="470" stroke="#7F5539" stroke-width="6"/>
+      <!-- Peeking Head -->
+      <g transform="translate(30, 20)">
+        
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="124" cy="155" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <circle cx="316" cy="155" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
+    <path d="M 110 230
+             C 90 175, 145 130, 220 130
+             C 295 130, 350 175, 330 230
+             C 350 285, 315 325, 220 325
+             C 125 325, 90 285, 110 230 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="144" cy="252" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="296" cy="252" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
+  
+        
+    <!-- Bubu Solid Chocolate Eyes (Pure Huang Xiao B Style, No Patches) -->
+    <circle cx="168" cy="226" r="13" fill="#2B2421"/>
+    <circle cx="272" cy="226" r="13" fill="#2B2421"/>
+    <!-- Iconic Cute ω Mouth -->
+    <path d="M 204 242 Q 212 252 220 244 Q 228 252 236 242"
+          fill="none" stroke="#2B2421" stroke-width="5.5" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M 220 322 L 196 312 L 200 334 Z M 220 322 L 244 312 L 240 334 Z" fill="#2B2421"/>
+    <circle cx="220" cy="323" r="6" fill="#2B2421"/>
+  
+        <!-- Clinging Paws on the Wall Edge -->
+        <ellipse cx="130" cy="200" rx="16" ry="22" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.5"/>
+        <ellipse cx="130" cy="270" rx="16" ry="22" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.5"/>
+      </g>
+      <!-- Big Blushing Floating Heart -->
+      <path d="M 370 160 C 370 140, 345 125, 345 150 C 345 175, 370 195, 370 200 C 370 195, 395 175, 395 150 C 395 125, 370 140, 370 160 Z" fill="#FF758C" stroke="#2B2421" stroke-width="5"/>
+    
+</g>
+</svg>

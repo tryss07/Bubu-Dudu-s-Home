@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+    <defs>
+      <linearGradient id="nightSky" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#0F172A"/>
+        <stop offset="45%" stop-color="#1E1B4B"/>
+        <stop offset="80%" stop-color="#311042"/>
+        <stop offset="100%" stop-color="#4C1D95"/>
+      </linearGradient>
+      <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FFFBEB"/>
+        <stop offset="40%" stop-color="#FEF08A"/>
+        <stop offset="80%" stop-color="#FDE047" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#FDE047" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="hillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#1E293B"/>
+        <stop offset="100%" stop-color="#0F172A"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Night Sky -->
+    <rect width="1080" height="1920" fill="url(#nightSky)"/>
+
+    <!-- Glowing Moon Halo & Crescent -->
+    <circle cx="800" cy="380" r="280" fill="url(#moonGlow)"/>
+    <circle cx="800" cy="380" r="140" fill="#FFFDEB"/>
+    <circle cx="845" cy="350" r="130" fill="#1A1838"/>
+
+    <!-- Stars Constellations -->
+    <g fill="#FFFFFF" opacity="0.9">
+      <circle cx="150" cy="220" r="4"/>
+      <circle cx="280" cy="180" r="5.5"/>
+      <circle cx="380" cy="260" r="3.5"/>
+      <circle cx="220" cy="340" r="6"/>
+      <circle cx="490" cy="150" r="4"/>
+      <circle cx="620" cy="220" r="5"/>
+      <circle cx="120" cy="460" r="3"/>
+      <circle cx="340" cy="520" r="4.5"/>
+      <circle cx="580" cy="440" r="3.5"/>
+      <circle cx="200" cy="680" r="5"/>
+      <circle cx="450" cy="720" r="4"/>
+      <circle cx="780" cy="750" r="3"/>
+      <circle cx="920" cy="620" r="4.5"/>
+      <circle cx="950" cy="220" r="5"/>
+    </g>
+    <!-- Bear Paw Constellation lines -->
+    <path d="M 220 340 L 280 180 L 380 260 M 280 180 L 150 220" fill="none" stroke="#A5B4FC" stroke-width="2" opacity="0.5"/>
+
+    <!-- Shooting Stars -->
+    <line x1="180" y1="520" x2="350" y2="400" stroke="#FFF" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+    <line x1="180" y1="520" x2="280" y2="450" stroke="#FDE047" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Soft Rolling Dark Hills -->
+    <path d="M -50 1520 Q 350 1380 750 1500 Q 950 1550 1150 1480 L 1150 1920 L -50 1920 Z" fill="url(#hillGrad)"/>
+    <path d="M -50 1620 Q 400 1500 850 1640 L 1150 1600 L 1150 1920 L -50 1920 Z" fill="#0B1120"/>
+
+    <!-- Soft Hilltop Grass Grass Blips -->
+    <path d="M 280 1440 L 285 1425 L 290 1440" stroke="#334155" stroke-width="3"/>
+    <path d="M 780 1510 L 785 1495 L 790 1510" stroke="#334155" stroke-width="3"/>
+
+    <!-- Dudu & Bubu Sitting Together Under Starlight -->
+    
+    <g transform="translate(430, 1460) scale(2.3)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <circle cx="55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <!-- Body -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#FFFFFF" stroke="#2B2421" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <!-- Head -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#FFFFFF" stroke="#2B2421" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Patches, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#2B2421"/>
+      <circle cx="32" cy="-5" r="9" fill="#2B2421"/>
+      <!-- Iconic Cute ω Mouth Directly on Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#2B2421" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Signature Dark Chocolate Bowtie Collar Ribbon -->
+      <path d="M 0 54 L -14 47 L -12 61 Z M 0 54 L 14 47 L 12 61 Z" fill="#2B2421"/>
+      <circle cx="0" cy="54" r="4" fill="#2B2421"/>
+    </g>
+  
+    
+    <g transform="translate(660, 1460) scale(2.3)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="-55" cy="-45" r="12" fill="#4A2E1B"/>
+      <circle cx="55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="55" cy="-45" r="12" fill="#4A2E1B"/>
+      <!-- Body (Solid Honey Brown, NO Belly Patch) -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <!-- Head (Chubby Honey Brown Face, NO Muzzle Patch) -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#BA8358" stroke="#3E2723" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#3E2723"/>
+      <circle cx="32" cy="-5" r="9" fill="#3E2723"/>
+      <!-- Iconic Cute ω Mouth Directly on Honey Brown Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  
+
+    <!-- Warm Quilt Blanket Over Shoulders -->
+    <path d="M 320 1520 C 440 1480, 650 1480, 770 1520 C 740 1660, 350 1660, 320 1520 Z" fill="#F43F5E" stroke="#2B2421" stroke-width="8"/>
+    <polygon points="500,1540 505,1552 518,1554 507,1560 511,1572 500,1564 489,1572 493,1560 482,1554 495,1552" fill="#FDE047"/>
+    <polygon points="590,1550 595,1562 608,1564 597,1570 601,1582 590,1574 579,1582 583,1570 572,1564 585,1562" fill="#FDE047"/>
+
+    <!-- Floating Starlight Sparkles -->
+    <polygon points="540,1180 545,1198 563,1203 545,1208 540,1226 535,1208 517,1203 535,1198" fill="#FDE047"/>
+  </svg>

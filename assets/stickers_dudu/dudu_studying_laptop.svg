@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
+  
+      
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="160" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="160" cy="130" r="20" fill="#4A2E1B"/>
+    <circle cx="352" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="352" cy="130" r="20" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+  
+      
+    <!-- Dudu Solid Dark Chocolate Eyes (Pure Huang Xiao B Style, No Highlights) -->
+    <circle cx="204" cy="201" r="13" fill="#3E2723"/>
+    <circle cx="308" cy="201" r="13" fill="#3E2723"/>
+    <!-- Iconic Cute ω Mouth Directly on Brown Fur -->
+    <path d="M 240 217 Q 248 227 256 219 Q 264 227 272 217"
+          fill="none" stroke="#3E2723" stroke-width="5.5" stroke-linecap="round"/>
+  
+      <!-- Desk Surface -->
+      <rect x="90" y="360" width="332" height="20" rx="10" fill="#DDB892" stroke="#3E2723" stroke-width="7"/>
+      <!-- Silver Laptop -->
+      <g transform="translate(256, 335)">
+        <!-- Screen -->
+        <polygon points="-55,-60 55,-60 48,0 -48,0" fill="#E2E8F0" stroke="#3E2723" stroke-width="6"/>
+        <polygon points="-46,-52 46,-52 40,-6 -40,-6" fill="#93C5FD"/>
+        <!-- Apple/Bear logo on screen -->
+        <circle cx="0" cy="-30" r="8" fill="#FFFFFF"/>
+        <!-- Keyboard Base -->
+        <polygon points="-65,25 65,25 50,0 -50,0" fill="#CBD5E1" stroke="#3E2723" stroke-width="6"/>
+      </g>
+      <!-- Coffee Mug with Steam -->
+      <g transform="translate(140, 325)">
+        <rect x="0" y="0" width="28" height="35" rx="5" fill="#FF758C" stroke="#3E2723" stroke-width="5"/>
+        <path d="M 28 8 C 38 8, 38 25, 28 25" fill="none" stroke="#3E2723" stroke-width="4.5"/>
+        <path d="M 10 -5 Q 15 -15 10 -22" fill="none" stroke="#FFA8A3" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    
+</g>
+</svg>

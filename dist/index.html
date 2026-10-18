@@ -101,7 +101,7 @@
             <span id="header-identity-name" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 tracking-tight leading-none">Dudu 🐻</span>
             <span class="material-symbols-outlined text-[14px] text-stone-500 group-hover:text-secondary leading-none">expand_more</span>
           </div>
-          <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold mt-0.5">our shared space ♡</span>
+          <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold mt-0.5" data-i18n="header_shared_space">our shared space ♡</span>
         </button>
       </div>
 
@@ -109,16 +109,21 @@
       <div class="flex items-center gap-1.5 sm:gap-2">
         <div id="header-sync-status" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 dark:bg-stone-800 border border-[#E8DACB] text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300 transition-all shadow-2xs" style="display: none !important;" title="Connection status with partner">
           <span id="header-sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span id="header-sync-text" class="hidden sm:inline">synced ♡</span>
+          <span id="header-sync-text" class="hidden sm:inline" data-i18n="header_synced">synced ♡</span>
         </div>
 
-        <button id="btn-header-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications">
+        <button id="btn-header-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications" data-i18n-title="header_notif_title">
           <span class="material-symbols-outlined text-base">notifications</span>
           <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
         </button>
 
-        <button id="btn-theme-toggle" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-400 button-press cursor-pointer" title="Toggle Theme">
+        <button id="btn-theme-toggle" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-400 button-press cursor-pointer" title="Toggle Theme" data-i18n-title="header_theme_title">
           <span class="material-symbols-outlined text-base">dark_mode</span>
+        </button>
+
+        <button id="btn-lang-toggle" type="button" class="btn-lang-toggle h-8 px-2.5 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center gap-1 text-[11px] font-black text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer shadow-2xs hover:bg-[#FAF0E6] dark:hover:bg-stone-700" title="Switch Language" data-i18n-title="header_lang_title">
+          <span class="material-symbols-outlined text-[14px]">translate</span>
+          <span class="lang-indicator-text uppercase font-bold text-[10px]">ID</span>
         </button>
       </div>
 
@@ -139,8 +144,8 @@
           <svg class="w-3.5 h-3.5 text-[#E08D8D]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>
-          <span class="font-heading font-extrabold text-xs uppercase tracking-widest text-[#5A3825] dark:text-stone-200">Our Space</span>
-          <span class="text-[10px] text-[#8D5B4C] font-serif italic opacity-75">together</span>
+          <span class="font-heading font-extrabold text-xs uppercase tracking-widest text-[#5A3825] dark:text-stone-200" data-i18n="home_our_space">Our Space</span>
+          <span class="text-[10px] text-[#8D5B4C] font-serif italic opacity-75" data-i18n="home_days_together">together</span>
         </div>
       </div>
 
@@ -180,7 +185,7 @@
               <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1.5">
                 <span class="px-1.5 py-0.2 rounded-md bg-[#8D5B4C] text-white text-[9px] font-extrabold shrink-0">Dudu</span>
                 <span class="text-xs">🐻</span>
-                <span class="truncate">love battery</span>
+                <span class="truncate" data-i18n="home_battery_love">love battery</span>
               </span>
             </div>
             <div class="flex items-center gap-1.5">
@@ -201,7 +206,7 @@
               <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1.5">
                 <span class="px-1.5 py-0.2 rounded-md bg-[#EAA684] text-white text-[9px] font-extrabold shrink-0">Bubu</span>
                 <span class="text-xs">🐼</span>
-                <span class="truncate">love battery</span>
+                <span class="truncate" data-i18n="home_battery_love">love battery</span>
               </span>
             </div>
             <div class="flex items-center gap-1.5">
@@ -220,7 +225,7 @@
         <button id="home-status-card" type="button" class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col text-left justify-between button-press cursor-pointer relative group overflow-hidden" title="Tap to update status">
           <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-1.5">
-              <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">current status</span>
+              <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200" data-i18n="home_status_title">current status</span>
             </div>
             <span class="material-symbols-outlined text-[13px] text-stone-400 group-hover:text-[#8D5B4C] transition-colors">edit</span>
           </div>
@@ -244,7 +249,7 @@
       <!-- Quick Room Portals Hub -->
       <div class="flex flex-col gap-2 pt-2">
         <h4 class="font-heading font-bold text-xs text-[#8D5B4C] px-1 uppercase tracking-wider flex items-center justify-between">
-          <span>Our Cozy Rooms</span>
+          <span data-i18n="home_cozy_rooms">Our Cozy Rooms</span>
           <span class="text-[10px] font-normal normal-case opacity-80">Tap to visit</span>
         </h4>
 
@@ -648,7 +653,7 @@
       <!-- Top Bar -->
       <div class="flex items-center justify-between px-1">
         <div>
-          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+          <h2 data-i18n="closet_title" class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
             Couple Closet &amp; Mini Game 🎮🧥
           </h2>
           <span class="text-[11px] text-on-surface-variant font-medium">Cozy Room</span>
@@ -823,9 +828,13 @@
           </div>
         </div>
 
-        <!-- Right Side: Wallpaper, Notification Bell & Theme Toggle -->
+        <!-- Language Toggle, Wallpaper, Notification Bell & Theme Toggle -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <button id="btn-chat-wallpaper" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer" title="Ganti Wallpaper Chat &amp; Aplikasi">
+          <button id="btn-chat-lang-toggle" type="button" class="btn-lang-toggle h-8 px-2 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 hover:bg-[#F2E4D5] text-[#8D5B4C] dark:text-stone-200 flex items-center justify-center gap-1 text-[11px] font-bold button-press cursor-pointer shadow-2xs" title="Switch Language" data-i18n-title="header_lang_title">
+            <span class="material-symbols-outlined text-[13px]">translate</span>
+            <span class="lang-indicator-text uppercase text-[10px]">ID</span>
+          </button>
+          <button id="btn-chat-wallpaper" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer" title="Ganti Wallpaper Chat &amp; Aplikasi" data-i18n-title="chat_wallpaper_title">
             <span class="material-symbols-outlined text-base">wallpaper</span>
           </button>
           <button id="btn-chat-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications">
@@ -929,19 +938,19 @@
 
         <div class="flex items-center justify-between pb-1 border-b border-[#E8DACB]/40 dark:border-stone-700">
           <div class="flex items-center gap-2">
-            <span class="font-heading font-extrabold text-xs text-[#4A3222] dark:text-stone-100">Dudu &amp; Bubu Stickers</span>
-            <span class="text-[9px] px-2 py-0.5 rounded-full bg-[#8D5B4C]/10 text-[#8D5B4C] dark:text-stone-300 font-semibold">karya Huang Xiao B</span>
+            <span class="font-heading font-extrabold text-xs text-[#4A3222] dark:text-stone-100" data-i18n="stk_title">Dudu &amp; Bubu Stickers</span>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-[#8D5B4C]/10 text-[#8D5B4C] dark:text-stone-300 font-semibold" data-i18n="stk_author">art by Huang Xiao B</span>
           </div>
           <button id="btn-close-sticker-tray" type="button" class="text-xs font-bold text-stone-500 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer p-1">✕</button>
         </div>
 
-        <!-- Bottom Sticker Tabs (Semua, Only Dudu, Only Bubu, Bubu & Dudu Berdua, Sticker GIF) -->
+        <!-- Bottom Sticker Tabs (All, Only Dudu, Only Bubu, Together, GIF) -->
         <div class="flex flex-wrap justify-center items-center gap-1.5 pt-1 border-b border-[#E8DACB]/30 dark:border-stone-700/50 pb-2">
-          <button type="button" data-cat="all" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white text-[11px] font-bold button-press shadow-xs">🌟 Semua (140+)</button>
-          <button type="button" data-cat="dudu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press">🐻 Only Dudu (70)</button>
-          <button type="button" data-cat="bubu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press">🐼 Only Bubu (17)</button>
-          <button type="button" data-cat="couple" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press">🐻🐼 Bubu &amp; Dudu (34)</button>
-          <button type="button" data-cat="gif" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press">✨ Sticker GIF (95)</button>
+          <button type="button" data-cat="all" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white text-[11px] font-bold button-press shadow-xs" data-i18n="stk_tab_all">🌟 All (135+)</button>
+          <button type="button" data-cat="dudu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_dudu">🐻 Only Dudu (83)</button>
+          <button type="button" data-cat="bubu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_bubu">🐼 Only Bubu (15)</button>
+          <button type="button" data-cat="couple" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_couple">🐻🐼 Together (39)</button>
+          <button type="button" data-cat="gif" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_gif">✨ GIF Stickers (95)</button>
         </div>
 
         <!-- Sticker Grid -->
@@ -950,8 +959,8 @@
         </div>
 
         <!-- Footer note -->
-        <div class="text-center text-[10px] text-stone-400 dark:text-stone-500">
-          Sentuh sticker atau GIF untuk langsung mengirim ke chat ♡
+        <div class="text-center text-[10px] text-stone-400 dark:text-stone-500" data-i18n="stk_footer">
+          Tap any sticker or GIF to send directly to chat ♡
         </div>
       </div>
 
@@ -968,22 +977,22 @@
       <!-- Calendar -->
       <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
         <span class="material-symbols-outlined text-2xl">calendar_month</span>
-        <span class="text-[10px] font-heading font-bold mt-1">Calendar</span>
+        <span class="text-[10px] font-heading font-bold mt-1" data-i18n="nav_calendar">Calendar</span>
       </a>
       <!-- Planner -->
       <a href="#bucket" data-tab="bucket" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
         <span class="material-symbols-outlined text-2xl">checklist</span>
-        <span class="text-[10px] font-heading font-bold mt-1">Planner</span>
+        <span class="text-[10px] font-heading font-bold mt-1" data-i18n="nav_bucket">Planner</span>
       </a>
       <!-- Music -->
       <a href="#music" data-tab="music" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
         <span class="material-symbols-outlined text-2xl">music_note</span>
-        <span class="text-[10px] font-heading font-bold mt-1">Music</span>
+        <span class="text-[10px] font-heading font-bold mt-1" data-i18n="nav_music">Music</span>
       </a>
       <!-- Closet -->
       <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
         <span class="material-symbols-outlined text-2xl">styler</span>
-        <span class="text-[10px] font-heading font-bold mt-1">Closet</span>
+        <span class="text-[10px] font-heading font-bold mt-1" data-i18n="nav_wardrobe">Closet</span>
       </a>
     </div>
   </div>
@@ -994,13 +1003,13 @@
       <!-- Home -->
       <a href="#home" data-tab="home" class="mockup-nav-item dock-item-active flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">home</span>
-        <span class="text-[9px] font-heading font-bold">Home</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_home">Home</span>
       </a>
 
       <!-- Love Notes -->
       <a href="#notes" data-tab="notes" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">mail</span>
-        <span class="text-[9px] font-heading font-bold">Notes</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_notes">Notes</span>
       </a>
 
       <!-- Chat -->
@@ -1009,37 +1018,37 @@
           <span class="material-symbols-outlined text-xl">chat</span>
           <span id="nav-chat-unread-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-white"></span>
         </div>
-        <span class="text-[9px] font-heading font-bold">Chat</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_chat">Chat</span>
       </a>
 
       <!-- Memory Jar -->
       <a href="#memories" data-tab="memories" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">photo_library</span>
-        <span class="text-[9px] font-heading font-bold">Memories</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_memories">Memories</span>
       </a>
 
       <!-- Calendar (Secondary) -->
       <a href="#calendar" data-tab="calendar" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">calendar_month</span>
-        <span class="text-[9px] font-heading font-bold">Calendar</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_calendar">Calendar</span>
       </a>
 
       <!-- Bucket List (Secondary) -->
       <a href="#bucket" data-tab="bucket" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">checklist</span>
-        <span class="text-[9px] font-heading font-bold">Planner</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_bucket">Planner</span>
       </a>
 
       <!-- Bedtime Music (Secondary) -->
       <a href="#music" data-tab="music" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">music_note</span>
-        <span class="text-[9px] font-heading font-bold">Music</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_music">Music</span>
       </a>
 
       <!-- Closet & Game (Secondary) -->
       <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item bottom-nav-secondary opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
         <span class="material-symbols-outlined text-xl">styler</span>
-        <span class="text-[9px] font-heading font-bold">Closet</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_wardrobe">Closet</span>
       </a>
 
       <!-- More Menu Button (Arrow Up) -->
@@ -1048,7 +1057,7 @@
           <span id="bottom-nav-more-icon" class="material-symbols-outlined text-xl transition-transform duration-200">keyboard_arrow_up</span>
           <span id="bottom-nav-more-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-300 ring-2 ring-[#855943]"></span>
         </div>
-        <span class="text-[9px] font-heading font-bold">More</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_more">More</span>
       </button>
 
     </div>
@@ -1843,8 +1852,8 @@
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[#8D5B4C]">wallpaper</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Wallpaper Chat &amp; Aplikasi</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">Koleksi Dudu Bubu &amp; Custom Foto</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="wp_modal_title">Wallpaper Chat &amp; Aplikasi</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="wp_modal_subtitle">Koleksi Dudu Bubu &amp; Custom Foto</span>
           </div>
         </div>
         <button id="btn-close-wallpaper-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
@@ -1852,36 +1861,36 @@
 
       <!-- Custom Upload Section -->
       <div class="flex flex-col gap-2 p-3 rounded-2xl bg-white dark:bg-stone-700/60 border border-[#E8DACB] dark:border-stone-600">
-        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-200">Foto Custom Sendiri</span>
+        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-200" data-i18n="wp_custom_photo_title">Foto Custom Sendiri</span>
         <div class="flex items-center gap-2">
           <button id="btn-upload-custom-wallpaper" type="button" class="flex-1 py-2 px-3 rounded-full bg-[#8D5B4C] text-white text-xs font-bold button-press cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
             <span class="material-symbols-outlined text-sm">photo_library</span>
-            <span>Unggah Foto dari Galeri</span>
+            <span data-i18n="wp_gallery_btn">Unggah Foto dari Galeri</span>
           </button>
           <input type="file" id="input-custom-wallpaper-file" accept="image/*" class="hidden">
         </div>
         <div id="wallpaper-custom-preview-box" class="hidden flex items-center gap-2 pt-1 border-t border-[#E8DACB]/40">
           <img id="wallpaper-custom-preview-img" src="" alt="Custom preview" class="w-12 h-12 rounded-xl object-cover border border-[#E8DACB]">
           <div class="flex-1 min-w-0">
-            <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 block truncate">Foto Custom Aktif ✓</span>
-            <button id="btn-remove-custom-wallpaper" type="button" class="text-[10px] text-rose-500 hover:underline font-bold cursor-pointer">Hapus foto custom</button>
+            <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 block truncate" data-i18n="wp_custom_active">Foto Custom Aktif ✓</span>
+            <button id="btn-remove-custom-wallpaper" type="button" class="text-[10px] text-rose-500 hover:underline font-bold cursor-pointer" data-i18n="wp_remove_custom">Hapus foto custom</button>
           </div>
         </div>
       </div>
 
       <!-- Scope Selector -->
       <div class="flex items-center justify-between gap-2 p-2.5 rounded-2xl bg-white dark:bg-stone-700/60 border border-[#E8DACB] dark:border-stone-600 text-xs">
-        <span class="font-bold text-stone-600 dark:text-stone-300">Terapkan Ke:</span>
+        <span class="font-bold text-stone-600 dark:text-stone-300" data-i18n="wp_scope_label">Terapkan Ke:</span>
         <div class="flex items-center gap-1.5">
-          <button type="button" id="btn-scope-chat" class="wallpaper-scope-btn px-3 py-1.5 rounded-full text-xs font-bold bg-[#8D5B4C] text-white shadow-xs cursor-pointer">Chat Saja</button>
-          <button type="button" id="btn-scope-all" class="wallpaper-scope-btn px-3 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border border-[#E8DACB] dark:border-stone-600 cursor-pointer">Seluruh Aplikasi</button>
+          <button type="button" id="btn-scope-chat" class="wallpaper-scope-btn px-3 py-1.5 rounded-full text-xs font-bold bg-[#8D5B4C] text-white shadow-xs cursor-pointer" data-i18n="wp_scope_chat">Chat Saja</button>
+          <button type="button" id="btn-scope-all" class="wallpaper-scope-btn px-3 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border border-[#E8DACB] dark:border-stone-600 cursor-pointer" data-i18n="wp_scope_all">Seluruh Aplikasi</button>
         </div>
       </div>
 
       <!-- Opacity Slider -->
       <div class="flex flex-col gap-1 p-2.5 rounded-2xl bg-white dark:bg-stone-700/60 border border-[#E8DACB] dark:border-stone-600">
         <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-stone-600 dark:text-stone-300">Transparansi / Kecerahan</span>
+          <span class="font-bold text-stone-600 dark:text-stone-300" data-i18n="wp_opacity_label">Transparansi / Kecerahan</span>
           <span id="wallpaper-opacity-val" class="font-extrabold text-[#8D5B4C] dark:text-stone-200">85%</span>
         </div>
         <input type="range" id="wallpaper-opacity-slider" min="20" max="100" value="85" class="w-full accent-[#8D5B4C] cursor-pointer">
@@ -1889,7 +1898,7 @@
 
       <!-- Presets Section 1: Dudu & Bubu Original -->
       <div class="flex flex-col gap-2">
-        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300">🐻🐼 Wallpaper Dudu &amp; Bubu (Huang Xiao B)</span>
+        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300" data-i18n="wp_tab_dudububu">🐻🐼 Wallpaper Dudu &amp; Bubu (Huang Xiao B)</span>
         <div id="wallpaper-dudububu-grid" class="grid grid-cols-3 gap-2">
           <!-- Populated by wallpaper.js -->
         </div>
@@ -1897,7 +1906,7 @@
 
       <!-- Presets Section 2: Aesthetic & Pastel -->
       <div class="flex flex-col gap-2">
-        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300">🎨 Aesthetic &amp; Pastel</span>
+        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300" data-i18n="wp_tab_aesthetic">🎨 Aesthetic &amp; Pastel</span>
         <div id="wallpaper-aesthetic-grid" class="grid grid-cols-3 gap-2">
           <!-- Populated by wallpaper.js -->
         </div>
@@ -1905,7 +1914,7 @@
 
       <!-- Reset button -->
       <div class="pt-2 border-t border-[#E8DACB]/60 dark:border-stone-700">
-        <button id="btn-reset-wallpaper" type="button" class="w-full py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer button-press">
+        <button id="btn-reset-wallpaper" type="button" class="w-full py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer button-press" data-i18n="wp_reset_btn">
           Kembalikan ke Wallpaper Default
         </button>
       </div>
@@ -1930,6 +1939,7 @@
   </div>
 
   <!-- SCRIPTS -->
+  <script src="js/i18n.js?v=v6"></script>
   <script src="js/stickers.js?v=v5"></script>
   <script src="js/audio.js?v=v5"></script>
   <script src="js/chat/crypto.js?v=v6"></script>

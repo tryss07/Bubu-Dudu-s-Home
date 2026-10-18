@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Tilting Body -->
+      <g transform="rotate(6 256 320)">
+        
+    <!-- Feet with dark bottom curves -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
+    <!-- Chubby Pure White Body -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#FFFFFF" stroke="#2B2421" stroke-width="8"/>
+  
+        
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="160" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <circle cx="352" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
+  
+        
+    <!-- Both Eyes Happy Curved Lines -->
+    <path d="M 190 201 Q 204 187 218 201"
+          fill="none" stroke="#2B2421" stroke-width="7.5" stroke-linecap="round"/>
+    <path d="M 294 201 Q 308 187 322 201"
+          fill="none" stroke="#2B2421" stroke-width="7.5" stroke-linecap="round"/>
+    <!-- Sweet Smile -->
+    <path d="M 240 217 Q 248 227 256 219 Q 264 227 272 217"
+          fill="none" stroke="#2B2421" stroke-width="5.5" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M 256 297 L 232 287 L 236 309 Z M 256 297 L 280 287 L 276 309 Z" fill="#2B2421"/>
+    <circle cx="256" cy="298" r="6" fill="#2B2421"/>
+  
+        <!-- Joyful Arms Up in the air -->
+        <path d="M 170 290 C 145 250, 140 215, 160 205 C 175 195, 195 235, 190 270 Z" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5" stroke-linejoin="round"/>
+        <path d="M 342 290 C 367 250, 372 215, 352 205 C 337 195, 317 235, 322 270 Z" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5" stroke-linejoin="round"/>
+      </g>
+      <!-- Musical Notes -->
+      <g fill="#FF758C" stroke="#2B2421" stroke-width="3.5">
+        <path d="M 100 150 L 100 190 A 12 10 0 1 1 88 180 L 88 150 Z" />
+        <path d="M 400 150 L 400 190 A 12 10 0 1 1 388 180 L 388 150 Z" />
+      </g>
+      <!-- Flower on head -->
+      <g transform="translate(256, 110)">
+        <circle cx="-12" cy="0" r="10" fill="#FFD166"/>
+        <circle cx="12" cy="0" r="10" fill="#FFD166"/>
+        <circle cx="0" cy="-12" r="10" fill="#FFD166"/>
+        <circle cx="0" cy="12" r="10" fill="#FFD166"/>
+        <circle cx="0" cy="0" r="8" fill="#FF5277"/>
+      </g>
+    
+</g>
+</svg>

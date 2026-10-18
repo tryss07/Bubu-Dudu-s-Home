@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
+  
+      
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="160" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="160" cy="130" r="20" fill="#4A2E1B"/>
+    <circle cx="352" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="352" cy="130" r="20" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+  
+      <!-- Sleepy Nightcap on Head -->
+      <g transform="translate(256, 125)">
+        <path d="M -80 0 Q 0 -60 120 20 Q 80 40 0 10 Z" fill="#54A0FF" stroke="#3E2723" stroke-width="7"/>
+        <line x1="-50" y1="-5" x2="-35" y2="10" stroke="#FFFFFF" stroke-width="8"/>
+        <line x1="-15" y1="-20" x2="0" y2="-5" stroke="#FFFFFF" stroke-width="8"/>
+        <line x1="25" y1="-15" x2="40" y2="0" stroke="#FFFFFF" stroke-width="8"/>
+        <circle cx="120" cy="20" r="16" fill="#FFFFFF" stroke="#3E2723" stroke-width="5"/>
+      </g>
+      <!-- Closed Sleepy Eyes -->
+      <path d="M 185 195 Q 200 205 215 195" fill="none" stroke="#3E2723" stroke-width="7" stroke-linecap="round"/>
+      <path d="M 297 195 Q 312 205 327 195" fill="none" stroke="#3E2723" stroke-width="7" stroke-linecap="round"/>
+      <!-- Giant Yawning Mouth -->
+      <ellipse cx="256" cy="235" rx="22" ry="26" fill="#FF6B6B" stroke="#3E2723" stroke-width="6"/>
+      <ellipse cx="256" cy="245" rx="14" ry="10" fill="#FF8E85"/>
+      <!-- Sleep Bubble -->
+      <circle cx="285" cy="180" r="16" fill="#DCE7F5" stroke="#3E2723" stroke-width="4" opacity="0.8"/>
+      <circle cx="282" cy="176" r="4" fill="#FFFFFF"/>
+    
+</g>
+</svg>

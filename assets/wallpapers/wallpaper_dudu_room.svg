@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+    <defs>
+      <linearGradient id="wallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FDFBF7"/>
+        <stop offset="60%" stop-color="#F5EFE6"/>
+        <stop offset="100%" stop-color="#EBDDCB"/>
+      </linearGradient>
+      <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#D4A373"/>
+        <stop offset="100%" stop-color="#BC8A5F"/>
+      </linearGradient>
+      <linearGradient id="windowSunset" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FFD6A5"/>
+        <stop offset="50%" stop-color="#FFADAD"/>
+        <stop offset="100%" stop-color="#FDFFB6"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Room Wall -->
+    <rect width="1080" height="1350" fill="url(#wallGrad)"/>
+    
+    <!-- Floor -->
+    <rect y="1350" width="1080" height="570" fill="url(#floorGrad)"/>
+    <!-- Floor Planks -->
+    <line x1="0" y1="1480" x2="1080" y2="1480" stroke="#A7744E" stroke-width="4"/>
+    <line x1="0" y1="1620" x2="1080" y2="1620" stroke="#A7744E" stroke-width="4"/>
+    <line x1="0" y1="1770" x2="1080" y2="1770" stroke="#A7744E" stroke-width="4"/>
+    <line x1="320" y1="1350" x2="320" y2="1480" stroke="#A7744E" stroke-width="3"/>
+    <line x1="720" y1="1350" x2="720" y2="1480" stroke="#A7744E" stroke-width="3"/>
+    <line x1="500" y1="1480" x2="500" y2="1620" stroke="#A7744E" stroke-width="3"/>
+    <line x1="880" y1="1480" x2="880" y2="1620" stroke="#A7744E" stroke-width="3"/>
+
+    <!-- Round Sunset Window -->
+    <circle cx="540" cy="550" r="260" fill="url(#windowSunset)" stroke="#FFFFFF" stroke-width="24"/>
+    <line x1="540" y1="290" x2="540" y2="810" stroke="#FFFFFF" stroke-width="12"/>
+    <line x1="280" y1="550" x2="800" y2="550" stroke="#FFFFFF" stroke-width="12"/>
+    <!-- Small bird silhouettes outside -->
+    <path d="M 450 420 Q 460 410 470 420 Q 480 410 490 420" fill="none" stroke="#E29578" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 580 380 Q 590 370 600 380 Q 610 370 620 380" fill="none" stroke="#E29578" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Hanging Fairy Lights -->
+    <path d="M 50 140 Q 280 260 540 180 Q 800 260 1030 140" fill="none" stroke="#8D5B4C" stroke-width="4"/>
+    <circle cx="160" cy="190" r="14" fill="#FFE066" filter="drop-shadow(0 0 8px #FFD166)"/>
+    <circle cx="280" cy="225" r="14" fill="#FF9E99" filter="drop-shadow(0 0 8px #FF9E99)"/>
+    <circle cx="410" cy="210" r="14" fill="#A8DADC" filter="drop-shadow(0 0 8px #A8DADC)"/>
+    <circle cx="540" cy="180" r="15" fill="#FFE066" filter="drop-shadow(0 0 8px #FFD166)"/>
+    <circle cx="670" cy="210" r="14" fill="#A8DADC" filter="drop-shadow(0 0 8px #A8DADC)"/>
+    <circle cx="800" cy="225" r="14" fill="#FF9E99" filter="drop-shadow(0 0 8px #FF9E99)"/>
+    <circle cx="920" cy="190" r="14" fill="#FFE066" filter="drop-shadow(0 0 8px #FFD166)"/>
+
+    <!-- Wooden Shelf with Potted Cactus & Books -->
+    <rect x="80" y="700" width="280" height="24" rx="8" fill="#C59B6D" stroke="#5D3A1A" stroke-width="5"/>
+    <!-- Plant Pot -->
+    <polygon points="120,700 130,640 170,640 180,700" fill="#E07A5F" stroke="#5D3A1A" stroke-width="4"/>
+    <circle cx="150" cy="625" r="22" fill="#81B29A" stroke="#5D3A1A" stroke-width="4"/>
+    <!-- Books -->
+    <rect x="220" y="630" width="22" height="70" rx="4" fill="#FFB4A2" stroke="#5D3A1A" stroke-width="3"/>
+    <rect x="245" y="640" width="20" height="60" rx="4" fill="#B5E48C" stroke="#5D3A1A" stroke-width="3"/>
+    <rect x="268" y="620" width="24" height="80" rx="4" fill="#99D98C" stroke="#5D3A1A" stroke-width="3"/>
+
+    <!-- Fluffy Oval Bedroom Rug -->
+    <ellipse cx="540" cy="1540" rx="440" ry="220" fill="#FFF8F0" stroke="#E8DACB" stroke-width="12"/>
+    <ellipse cx="540" cy="1540" rx="410" ry="195" fill="none" stroke="#F5EAE0" stroke-width="6" stroke-dasharray="15,15"/>
+
+    <!-- Dudu & Bubu Sitting Together on the Rug -->
+    
+    <g transform="translate(420, 1420) scale(2.2)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <circle cx="55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <!-- Body -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#FFFFFF" stroke="#2B2421" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <!-- Head -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#FFFFFF" stroke="#2B2421" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Patches, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#2B2421"/>
+      <circle cx="32" cy="-5" r="9" fill="#2B2421"/>
+      <!-- Iconic Cute ω Mouth Directly on Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#2B2421" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Signature Dark Chocolate Bowtie Collar Ribbon -->
+      <path d="M 0 54 L -14 47 L -12 61 Z M 0 54 L 14 47 L 12 61 Z" fill="#2B2421"/>
+      <circle cx="0" cy="54" r="4" fill="#2B2421"/>
+    </g>
+  
+    
+    <g transform="translate(660, 1420) scale(2.2)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="-55" cy="-45" r="12" fill="#4A2E1B"/>
+      <circle cx="55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="55" cy="-45" r="12" fill="#4A2E1B"/>
+      <!-- Body (Solid Honey Brown, NO Belly Patch) -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <!-- Head (Chubby Honey Brown Face, NO Muzzle Patch) -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#BA8358" stroke="#3E2723" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#3E2723"/>
+      <circle cx="32" cy="-5" r="9" fill="#3E2723"/>
+      <!-- Iconic Cute ω Mouth Directly on Honey Brown Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  
+
+    <!-- Hot Cocoa Mugs in Center -->
+    <rect x="515" y="1520" width="24" height="28" rx="5" fill="#FF9E99" stroke="#5D3A1A" stroke-width="3.5"/>
+    <path d="M 539 1526 Q 548 1533 539 1540" fill="none" stroke="#5D3A1A" stroke-width="3"/>
+    <rect x="548" y="1520" width="24" height="28" rx="5" fill="#A8DADC" stroke="#5D3A1A" stroke-width="3.5"/>
+    <path d="M 572 1526 Q 581 1533 572 1540" fill="none" stroke="#5D3A1A" stroke-width="3"/>
+    <!-- Steam -->
+    <path d="M 527 1515 Q 523 1505 528 1495" fill="none" stroke="#FFA8A3" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 560 1515 Q 564 1505 559 1495" fill="none" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Warm Loving Floating Heart -->
+    <path d="M 540 1200 C 540 1160, 480 1130, 480 1180 C 480 1230, 540 1280, 540 1290 C 540 1280, 600 1230, 600 1180 C 600 1130, 540 1160, 540 1200 Z" fill="#FF758C" stroke="#2B2421" stroke-width="8"/>
+  </svg>

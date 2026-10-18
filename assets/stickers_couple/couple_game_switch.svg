@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet with dark bottom curves -->
+    <ellipse cx="136.8" cy="404.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <ellipse cx="223.2" cy="404.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <!-- Chubby Pure White Body -->
+    <ellipse cx="180" cy="337" rx="94.5" ry="79.2" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2"/>
+  
+      
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="93.6" cy="137.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <circle cx="266.4" cy="137.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
+    <path d="M 81 205
+             C 63 155.5, 112.5 115, 180 115
+             C 247.5 115, 297 155.5, 279 205
+             C 297 254.5, 265.5 290.5, 180 290.5
+             C 94.5 290.5, 63 254.5, 81 205 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="111.6" cy="224.8" rx="25.2" ry="16.2" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="248.4" cy="224.8" rx="25.2" ry="16.2" fill="#FFA8A3" opacity="0.85"/>
+  
+      
+    <!-- Bubu Solid Chocolate Eyes (Pure Huang Xiao B Style, No Patches) -->
+    <circle cx="133.2" cy="201.4" r="11.700000000000001" fill="#2B2421"/>
+    <circle cx="226.8" cy="201.4" r="11.700000000000001" fill="#2B2421"/>
+    <!-- Iconic Cute ω Mouth -->
+    <path d="M 165.6 215.8 Q 172.8 224.8 180 217.6 Q 187.2 224.8 194.4 215.8"
+          fill="none" stroke="#2B2421" stroke-width="4.95" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M 180 287.8 L 158.4 278.8 L 162 298.6 Z M 180 287.8 L 201.6 278.8 L 198 298.6 Z" fill="#2B2421"/>
+    <circle cx="180" cy="288.7" r="5.4" fill="#2B2421"/>
+  
+      
+    <!-- Feet -->
+    <ellipse cx="288.8" cy="404.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <ellipse cx="375.2" cy="404.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
+    <ellipse cx="332" cy="337" rx="94.5" ry="79.2" fill="#BA8358" stroke="#3E2723" stroke-width="7.2"/>
+  
+      
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="245.6" cy="137.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="245.6" cy="137.5" r="18" fill="#4A2E1B"/>
+    <circle cx="418.4" cy="137.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="418.4" cy="137.5" r="18" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
+    <path d="M 233 205
+             C 215 155.5, 264.5 115, 332 115
+             C 399.5 115, 449 155.5, 431 205
+             C 449 254.5, 417.5 290.5, 332 290.5
+             C 246.5 290.5, 215 254.5, 233 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="263.6" cy="224.8" rx="25.2" ry="16.2" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="400.4" cy="224.8" rx="25.2" ry="16.2" fill="#F6A77E" opacity="0.85"/>
+  
+      
+    <!-- Dudu Solid Dark Chocolate Eyes (Pure Huang Xiao B Style, No Highlights) -->
+    <circle cx="285.2" cy="201.4" r="11.700000000000001" fill="#3E2723"/>
+    <circle cx="378.8" cy="201.4" r="11.700000000000001" fill="#3E2723"/>
+    <!-- Iconic Cute ω Mouth Directly on Brown Fur -->
+    <path d="M 317.6 215.8 Q 324.8 224.8 332 217.6 Q 339.2 224.8 346.4 215.8"
+          fill="none" stroke="#3E2723" stroke-width="4.95" stroke-linecap="round"/>
+  
+      <!-- Bubu Blue Joycon -->
+      <g transform="translate(200, 290) rotate(15)">
+        <rect x="-14" y="-28" width="28" height="56" rx="12" fill="#54A0FF" stroke="#2B2421" stroke-width="5"/>
+        <circle cx="0" cy="-12" r="6" fill="#2B2421"/>
+        <circle cx="0" cy="10" r="4" fill="#2B2421"/>
+      </g>
+      <!-- Dudu Red Joycon -->
+      <g transform="translate(312, 290) rotate(-15)">
+        <rect x="-14" y="-28" width="28" height="56" rx="12" fill="#FF4757" stroke="#3E2723" stroke-width="5"/>
+        <circle cx="0" cy="-12" r="6" fill="#2B2421"/>
+        <circle cx="0" cy="10" r="4" fill="#2B2421"/>
+      </g>
+      <!-- Victory Sparkles -->
+      <polygon points="256,120 260,132 272,135 260,138 256,150 252,138 240,135 252,132" fill="#FFD166"/>
+    
+</g>
+</svg>
