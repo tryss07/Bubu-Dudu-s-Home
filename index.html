@@ -659,7 +659,7 @@
     <!-- ====================================================================
          SCREEN 7: COUPLE CLOSET & MINI GAME (wardrobe.jpg)
          ==================================================================== -->
-    <section id="tab-wardrobe" class="hidden flex flex-col gap-4">
+    <section id="tab-wardrobe" class="hidden flex flex-col gap-4 pb-28">
       
       <!-- Top Bar -->
       <div class="flex items-center justify-between px-1">
@@ -677,59 +677,56 @@
       <!-- Dressing Room Card (wardrobe.jpg) -->
       <div class="bg-[#FAF5EE] dark:bg-stone-800 rounded-[2.5rem] p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col items-center relative overflow-hidden">
         
-        <div class="w-full flex items-center justify-between mb-2 gap-2">
-          <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 shrink-0">
-            Dressing Room
-          </h3>
-          <span id="wardrobe-equipped-summary" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[#8D5B4C] dark:text-stone-200 truncate">
-            Dudu 🐻: Knit Beanie • Cable Knit
+        <div class="w-full flex items-center justify-between mb-2 gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 shrink-0">
+              Dressing Room
+            </h3>
+            <!-- View Mode Switcher: Dudu Room / Bubu Room / Couple Room -->
+            <div class="flex items-center gap-1 bg-white/80 dark:bg-stone-700/80 p-0.5 rounded-full border border-[#E8DACB] dark:border-stone-600 text-[10px] font-bold">
+              <button id="btn-stage-view-dudu" type="button" class="px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu 🐻</button>
+              <button id="btn-stage-view-bubu" type="button" class="px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 button-press cursor-pointer">Bubu 🐼</button>
+              <button id="btn-stage-view-couple" type="button" class="px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 button-press cursor-pointer">Berdua ✨</button>
+            </div>
+          </div>
+          <span id="wardrobe-equipped-summary" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[#8D5B4C] dark:text-stone-200 truncate max-w-[200px]">
+            Dudu 🐻: Polos Mentahan
           </span>
         </div>
 
         <!-- Interactive Dressing Room Stage -->
-        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none">
-          <img src="assets/mockup_art/wardrobe_room.png" alt="Dressing Room" class="w-full object-cover block">
+        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300">
+          <img id="wardrobe-stage-art" src="assets/mockup_art/wardrobe/stage_dudu_room.jpg" alt="Dressing Room" class="w-full h-full object-cover block pointer-events-none">
 
-          <!-- Dudu Interactive Hitbox & Live Equipped Badges (Left Bear) -->
-          <div id="wardrobe-stage-dudu" class="absolute top-[6%] left-[12%] w-[38%] h-[68%] rounded-2xl cursor-pointer transition-all flex flex-col justify-between p-1.5 group" title="Tap to dress Dudu 🐻">
-            <div class="flex items-center justify-between">
-              <span id="dudu-stage-hat" class="px-2 py-0.5 rounded-full bg-white/95 dark:bg-stone-800/95 text-[#4A3222] dark:text-stone-100 text-[10px] font-extrabold shadow-md border border-[#E8DACB] flex items-center gap-1">
-                🧶 Beanie
-              </span>
-              <span id="dudu-stage-accs" class="w-6 h-6 rounded-full bg-white/95 dark:bg-stone-800/95 text-xs flex items-center justify-center shadow-md border border-[#E8DACB]">
-                👓
-              </span>
-            </div>
-            <div class="flex justify-center pb-1">
-              <span id="dudu-stage-top" class="px-2 py-0.5 rounded-full bg-[#4A3222]/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1">
-                🧣 Cable Knit • 🧥 Duffle
-              </span>
-            </div>
+          <!-- Dudu Interactive Stage Layers -->
+          <div id="wardrobe-dudu-layers" class="absolute inset-0 pointer-events-none">
+            <img id="layer-dudu-shoes" class="wardrobe-layer-item absolute" alt="Dudu Shoes" style="display:none;" />
+            <img id="layer-dudu-outfit" class="wardrobe-layer-item absolute" alt="Dudu Outfit" style="display:none;" />
+            <img id="layer-dudu-accs" class="wardrobe-layer-item absolute" alt="Dudu Accessories" style="display:none;" />
+            <img id="layer-dudu-hat" class="wardrobe-layer-item absolute" alt="Dudu Hat" style="display:none;" />
           </div>
 
-          <!-- Bubu Interactive Hitbox & Live Equipped Badges (Right Panda) -->
-          <div id="wardrobe-stage-bubu" class="absolute top-[8%] right-[10%] w-[38%] h-[66%] rounded-2xl cursor-pointer transition-all flex flex-col justify-between p-1.5 group" title="Tap to dress Bubu 🐼">
-            <div class="flex items-center justify-between">
-              <span id="bubu-stage-accs" class="w-6 h-6 rounded-full bg-white/95 dark:bg-stone-800/95 text-xs flex items-center justify-center shadow-md border border-[#E8DACB]">
-                🎀
-              </span>
-              <span id="bubu-stage-hat" class="px-2 py-0.5 rounded-full bg-white/95 dark:bg-stone-800/95 text-[#4A3222] dark:text-stone-100 text-[10px] font-extrabold shadow-md border border-[#E8DACB] flex items-center gap-1">
-                🐻 Earflap
-              </span>
-            </div>
-            <div class="flex justify-center pb-1">
-              <span id="bubu-stage-top" class="px-2 py-0.5 rounded-full bg-[#8D5B4C]/90 text-white text-[10px] font-bold shadow-md flex items-center gap-1">
-                🐑 Cream • ❄️ Parka
-              </span>
-            </div>
+          <!-- Bubu Interactive Stage Layers -->
+          <div id="wardrobe-bubu-layers" class="absolute inset-0 pointer-events-none" style="display:none;">
+            <img id="layer-bubu-shoes" class="wardrobe-layer-item absolute" alt="Bubu Shoes" style="display:none;" />
+            <img id="layer-bubu-outfit" class="wardrobe-layer-item absolute" alt="Bubu Outfit" style="display:none;" />
+            <img id="layer-bubu-accs" class="wardrobe-layer-item absolute" alt="Bubu Accessories" style="display:none;" />
+            <img id="layer-bubu-hat" class="wardrobe-layer-item absolute" alt="Bubu Hat" style="display:none;" />
           </div>
 
-          <!-- Live Dynamic Stage Footer Banner (Covers baked-in bottom text cleanly) -->
-          <div class="absolute bottom-1 inset-x-6 flex flex-col items-center pointer-events-auto">
-            <div id="wardrobe-match-banner" class="w-full bg-[#FAF6F0] dark:bg-stone-800 rounded-xl py-1.5 px-3 text-center shadow-xs border border-[#E8DACB] dark:border-stone-600">
-              <span id="wardrobe-match-text" class="font-heading font-extrabold text-xs text-[#4A3222] dark:text-stone-100">
-                Warm &amp; Cozy! (Perfect Match ✨)
+          <!-- Clickable Tap zones on characters to select character -->
+          <div id="wardrobe-stage-hit-dudu" class="absolute cursor-pointer rounded-2xl" title="Pilih Dudu 🐻"></div>
+          <div id="wardrobe-stage-hit-bubu" class="absolute cursor-pointer rounded-2xl" title="Pilih Bubu 🐼"></div>
+
+          <!-- Live Dynamic Stage Footer Banner -->
+          <div class="absolute bottom-2 inset-x-3 flex flex-col items-center pointer-events-auto">
+            <div id="wardrobe-match-banner" class="w-full bg-white/95 dark:bg-stone-800/95 backdrop-blur-xs rounded-xl py-1 px-2.5 text-center shadow-xs border border-[#E8DACB] dark:border-stone-600 flex items-center justify-between gap-1">
+              <span id="wardrobe-match-text" class="font-heading font-extrabold text-[11px] text-[#4A3222] dark:text-stone-100 truncate flex-1 text-center">
+                Bears Asli Mentahan (Natural 🐻🐼)
               </span>
+              <button id="btn-wardrobe-undress-all" type="button" class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 hover:bg-[#8D5B4C] hover:text-white transition-all button-press cursor-pointer border border-[#E8DACB] dark:border-stone-600" title="Lepas Semua Pakaian">
+                Lepas Semua
+              </button>
             </div>
           </div>
         </div>
@@ -745,40 +742,52 @@
             <button id="btn-wardrobe-next-preset" type="button" class="w-6 h-6 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 font-bold text-xs flex items-center justify-center border border-[#E8DACB] dark:border-stone-600 button-press cursor-pointer" title="Next Outfit Set">&gt;</button>
           </div>
           <div class="flex items-center gap-1.5 text-xs font-bold">
-            <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu's Wardrobe</button>
-            <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer">Bubu's Wardrobe</button>
+            <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu's Wardrobe 🐻</button>
+            <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer">Bubu's Wardrobe 🐼</button>
           </div>
         </div>
 
         <div class="grid grid-cols-4 gap-2 text-center text-xs">
-          <button type="button" data-type="hat" data-val="beanie" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border-2 border-[#8D5B4C] flex flex-col items-center relative">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Hats</span>
-            <span class="wardrobe-card-icon text-2xl mb-0.5">🧶</span>
-            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Knit Beanie</span>
-            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
+          <button type="button" data-type="hat" class="wardrobe-item-card p-2 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border-2 border-[#8D5B4C] flex flex-col items-center relative transition-all">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Topi</span>
+            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
+              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Hat Thumb" />
+              <span class="wardrobe-card-icon text-2xl hidden">🧢</span>
+            </div>
+            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Topi Beret</span>
+            <span class="wardrobe-card-idx text-[8px] opacity-70">1/6</span>
           </button>
-          <button type="button" data-type="sweater" data-val="cable" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Sweaters</span>
-            <span class="wardrobe-card-icon text-2xl mb-0.5">🧣</span>
-            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Cable Knit</span>
-            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
+          <button type="button" data-type="outfit" class="wardrobe-item-card p-2 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative transition-all">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Baju</span>
+            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
+              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Outfit Thumb" />
+              <span class="wardrobe-card-icon text-2xl hidden">👕</span>
+            </div>
+            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Baju Kodok</span>
+            <span class="wardrobe-card-idx text-[8px] opacity-70">1/9</span>
           </button>
-          <button type="button" data-type="coat" data-val="duffle" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Coats</span>
-            <span class="wardrobe-card-icon text-2xl mb-0.5">🧥</span>
-            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Duffle Coat</span>
-            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
+          <button type="button" data-type="accs" class="wardrobe-item-card p-2 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative transition-all">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Aksesoris</span>
+            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
+              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Accs Thumb" />
+              <span class="wardrobe-card-icon text-2xl hidden">👓</span>
+            </div>
+            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Kacamata</span>
+            <span class="wardrobe-card-idx text-[8px] opacity-70">1/5</span>
           </button>
-          <button type="button" data-type="accs" data-val="scarf" class="wardrobe-item-card p-2.5 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center relative">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Accs</span>
-            <span class="wardrobe-card-icon text-2xl mb-0.5">👓</span>
-            <span class="wardrobe-card-label text-[11px] leading-tight truncate w-full">Round Glasses</span>
-            <span class="wardrobe-card-idx text-[9px] opacity-70 mt-0.5">1/4</span>
+          <button type="button" data-type="shoes" class="wardrobe-item-card p-2 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center relative transition-all">
+            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Sepatu</span>
+            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
+              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Shoes Thumb" />
+              <span class="wardrobe-card-icon text-2xl hidden">👞</span>
+            </div>
+            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Sandal</span>
+            <span class="wardrobe-card-idx text-[8px] opacity-70">1/6</span>
           </button>
         </div>
 
         <!-- Direct Item Picker Strip for Active Category -->
-        <div id="wardrobe-slot-picker" class="pt-1 border-t border-[#E8DACB]/60 dark:border-stone-700 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div id="wardrobe-slot-picker" class="pt-2 border-t border-[#E8DACB]/60 dark:border-stone-700 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
         </div>
       </div>
 

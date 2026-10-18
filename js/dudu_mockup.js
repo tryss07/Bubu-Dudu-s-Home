@@ -14,30 +14,78 @@
   const defaultAnniversaryIso = '2025-11-04';
 
   const WARDROBE_CATALOG = {
-    hat: [
-      { val: 'beanie', label: 'Knit Beanie', shortLabel: 'Beanie', icon: '🧶', theme: 'cozy' },
-      { val: 'earflap', label: 'Plush Earflap', shortLabel: 'Earflap', icon: '🐻', theme: 'cozy' },
-      { val: 'beret', label: 'Cozy Beret', shortLabel: 'Beret', icon: '🎨', theme: 'chic' },
-      { val: 'earmuffs', label: 'Snow Earmuffs', shortLabel: 'Earmuffs', icon: '🎧', theme: 'winter' }
-    ],
-    sweater: [
-      { val: 'cable', label: 'Cable Knit', shortLabel: 'Cable Knit', icon: '🧣', theme: 'cozy' },
-      { val: 'cream', label: 'Cream Fleece', shortLabel: 'Cream', icon: '🐑', theme: 'cozy' },
-      { val: 'hoodie', label: 'Berry Hoodie', shortLabel: 'Hoodie', icon: '🍓', theme: 'chic' },
-      { val: 'cardigan', label: 'Honey Cardigan', shortLabel: 'Cardigan', icon: '🍯', theme: 'winter' }
-    ],
-    coat: [
-      { val: 'duffle', label: 'Duffle Coat', shortLabel: 'Duffle', icon: '🧥', theme: 'cozy' },
-      { val: 'winter', label: 'Winter Parka', shortLabel: 'Parka', icon: '❄️', theme: 'winter' },
-      { val: 'trench', label: 'Teddy Trench', shortLabel: 'Trench', icon: '🧸', theme: 'chic' },
-      { val: 'puffer', label: 'Cloud Puffer', shortLabel: 'Puffer', icon: '☁️', theme: 'winter' }
-    ],
-    accs: [
-      { val: 'scarf', label: 'Round Glasses', shortLabel: 'Glasses', icon: '👓', theme: 'chic' },
-      { val: 'pompom', label: 'Silk Ribbon', shortLabel: 'Ribbon', icon: '🎀', theme: 'cozy' },
-      { val: 'satchel', label: 'Honey Satchel', shortLabel: 'Satchel', icon: '👜', theme: 'chic' },
-      { val: 'mitten', label: 'Warm Mittens', shortLabel: 'Mittens', icon: '🧤', theme: 'winter' }
-    ]
+    dudu: {
+      hat: [
+        { val: 'none', label: 'Tanpa Topi', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_hat_sleep_beanie', label: 'Topi Tidur Bergaris', shortLabel: 'Topi Tidur', icon: '🧢', img: 'assets/mockup_art/wardrobe/items/dudu_hat_sleep_beanie.png', theme: 'sleep' },
+        { val: 'dudu_hat_bucket', label: 'Topi Rimba Safari', shortLabel: 'Topi Rimba', icon: '🤠', img: 'assets/mockup_art/wardrobe/items/dudu_hat_bucket.png', theme: 'summer' },
+        { val: 'dudu_hat_newsboy', label: 'Topi Newsboy Tweed', shortLabel: 'Newsboy', icon: '🎩', img: 'assets/mockup_art/wardrobe/items/dudu_hat_newsboy.png', theme: 'vintage' },
+        { val: 'dudu_hat_beret', label: 'Topi Beret Cokelat', shortLabel: 'Beret', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/dudu_hat_beret.png', theme: 'chic' },
+        { val: 'dudu_hat_pompom', label: 'Kupluk Rajut Pom-Pom', shortLabel: 'Pom-Pom', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/dudu_hat_pompom.png', theme: 'cozy' }
+      ],
+      outfit: [
+        { val: 'none', label: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_outfit_overalls', label: 'Baju Kodok Denim', shortLabel: 'Overalls', icon: '👖', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_overalls.png', theme: 'casual' },
+        { val: 'dudu_outfit_pajamas', label: 'Piyama Tidur Garis', shortLabel: 'Piyama Garis', icon: '🛌', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_pajamas.png', theme: 'sleep' },
+        { val: 'dudu_outfit_nightshirt', label: 'Baju Tidur Bulan Bintang', shortLabel: 'Nightshirt', icon: '🌙', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_nightshirt.png', theme: 'sleep' },
+        { val: 'dudu_outfit_hawaiian', label: 'Kemeja Pantai Tropis', shortLabel: 'Hawaiian', icon: '🌺', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_hawaiian.png', theme: 'summer' },
+        { val: 'dudu_outfit_palmtree', label: 'Kaos Kelapa & Celana Pendek', shortLabel: 'Kaos Kelapa', icon: '🌴', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_palmtree.png', theme: 'summer' },
+        { val: 'dudu_outfit_tuxedo', label: 'Jas Tuxedo Formal', shortLabel: 'Tuxedo', icon: '🤵', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_tuxedo.png', theme: 'chic' },
+        { val: 'dudu_outfit_cardigan', label: 'Kardigan Rajut Hangat', shortLabel: 'Kardigan', icon: '🧣', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_cardigan.png', theme: 'cozy' },
+        { val: 'dudu_outfit_corduroy', label: 'Jaket Corduroy Musim Dingin', shortLabel: 'Jaket Corduroy', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_corduroy.png', theme: 'winter' }
+      ],
+      accs: [
+        { val: 'none', label: 'Tanpa Aksesoris', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_accs_eyemask', label: 'Penutup Mata Beruang', shortLabel: 'Eye Mask', icon: '💤', img: 'assets/mockup_art/wardrobe/items/dudu_accs_eyemask.png', theme: 'sleep' },
+        { val: 'dudu_accs_round_glasses', label: 'Kacamata Bulat Klasik', shortLabel: 'Kacamata', icon: '👓', img: 'assets/mockup_art/wardrobe/items/dudu_accs_round_glasses.png', theme: 'chic' },
+        { val: 'dudu_accs_sunglasses', label: 'Kacamata Hitam Keren', shortLabel: 'Sunglasses', icon: '🕶️', img: 'assets/mockup_art/wardrobe/items/dudu_accs_sunglasses.png', theme: 'chic' },
+        { val: 'dudu_accs_retro_sunglasses', label: 'Kacamata Retro Cokelat', shortLabel: 'Retro Shades', icon: '🕶️', img: 'assets/mockup_art/wardrobe/items/dudu_accs_retro_sunglasses.png', theme: 'summer' }
+      ],
+      shoes: [
+        { val: 'none', label: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
+        { val: 'dudu_shoes_bear_slippers', label: 'Sandal Bulu Beruang', shortLabel: 'Sandal Beruang', icon: '🥿', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_bear_slippers.png', theme: 'sleep' },
+        { val: 'dudu_shoes_sandals', label: 'Sandal Kulit Buckle', shortLabel: 'Sandal Buckle', icon: '🩴', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_sandals.png', theme: 'summer' },
+        { val: 'dudu_shoes_winter_boots', label: 'Sepatu Boot Musim Dingin', shortLabel: 'Winter Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_winter_boots.png', theme: 'winter' },
+        { val: 'dudu_shoes_oxfords', label: 'Sepatu Pantofel Oxford', shortLabel: 'Oxfords', icon: '👞', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_oxfords.png', theme: 'chic' },
+        { val: 'dudu_shoes_sneakers', label: 'Sepatu Kets Sneakers', shortLabel: 'Sneakers', icon: '👟', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_sneakers.png', theme: 'casual' }
+      ]
+    },
+    bubu: {
+      hat: [
+        { val: 'none', label: 'Tanpa Topi', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_hat_nightcap', label: 'Topi Tidur Pita Manis', shortLabel: 'Nightcap', icon: '🎀', img: 'assets/mockup_art/wardrobe/items/bubu_hat_nightcap.png', theme: 'sleep' },
+        { val: 'bubu_hat_straw_hat', label: 'Topi Jerami Pantai Pita', shortLabel: 'Topi Jerami', icon: '👒', img: 'assets/mockup_art/wardrobe/items/bubu_hat_straw_hat.png', theme: 'summer' },
+        { val: 'bubu_hat_artist_beret', label: 'Topi Beret Seniman', shortLabel: 'Beret Seni', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/bubu_hat_artist_beret.png', theme: 'chic' },
+        { val: 'bubu_hat_earflap', label: 'Topi Bulu Telinga Panda', shortLabel: 'Trapper Hat', icon: '🐼', img: 'assets/mockup_art/wardrobe/items/bubu_hat_earflap.png', theme: 'cozy' },
+        { val: 'bubu_accs_hair_bow', label: 'Pita Rambut Cokelat Manis', shortLabel: 'Pita Rambut', icon: '🎀', img: 'assets/mockup_art/wardrobe/items/bubu_accs_hair_bow.png', theme: 'chic' }
+      ],
+      outfit: [
+        { val: 'none', label: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_outfit_ruffle_dress', label: 'Gaun Princess Ruffle Pink', shortLabel: 'Ruffle Dress', icon: '👗', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_ruffle_dress.png', theme: 'chic' },
+        { val: 'bubu_outfit_strawberry_pj', label: 'Piyama Motif Stroberi', shortLabel: 'Piyama Stroberi', icon: '🍓', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_strawberry_pj.png', theme: 'sleep' },
+        { val: 'bubu_outfit_floral_dress', label: 'Dress Bunga Musim Panas', shortLabel: 'Floral Dress', icon: '🌸', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_floral_dress.png', theme: 'summer' },
+        { val: 'bubu_outfit_tennis_skirt', label: 'Setelan Rok Tenis Stroberi', shortLabel: 'Tennis Skirt', icon: '🎾', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_tennis_skirt.png', theme: 'casual' },
+        { val: 'bubu_outfit_vintage_dress', label: 'Dress Vintage Peter Pan', shortLabel: 'Vintage Dress', icon: '🌼', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_vintage_dress.png', theme: 'vintage' },
+        { val: 'bubu_outfit_apron_dress', label: 'Gaun Celemek Cafe Maid', shortLabel: 'Apron Dress', icon: '☕', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_apron_dress.png', theme: 'chic' },
+        { val: 'bubu_outfit_trench', label: 'Mantel Trench Klasik Elegan', shortLabel: 'Trench Coat', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_trench.png', theme: 'chic' },
+        { val: 'bubu_outfit_sweater_skirt', label: 'Sweater Rajut & Rok Pink', shortLabel: 'Sweater & Rok', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_sweater_skirt.png', theme: 'cozy' }
+      ],
+      accs: [
+        { val: 'none', label: 'Tanpa Aksesoris', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_accs_panda_mask', label: 'Penutup Mata Panda Lucu', shortLabel: 'Panda Mask', icon: '💤', img: 'assets/mockup_art/wardrobe/items/bubu_accs_panda_mask.png', theme: 'sleep' },
+        { val: 'bubu_accs_heart_glasses', label: 'Kacamata Hati Merah Muda', shortLabel: 'Kacamata Hati', icon: '💖', img: 'assets/mockup_art/wardrobe/items/bubu_accs_heart_glasses.png', theme: 'chic' },
+        { val: 'bubu_accs_round_glasses', label: 'Kacamata Bulat Manis', shortLabel: 'Kacamata Bulat', icon: '👓', img: 'assets/mockup_art/wardrobe/items/bubu_accs_round_glasses.png', theme: 'chic' },
+        { val: 'bubu_accs_straw_bag', label: 'Tas Anyaman Jerami Beruang', shortLabel: 'Tas Jerami', icon: '👜', img: 'assets/mockup_art/wardrobe/items/bubu_accs_straw_bag.png', theme: 'summer' },
+        { val: 'bubu_accs_bear_satchel', label: 'Tas Selempang Beruang Kecil', shortLabel: 'Tas Selempang', icon: '👝', img: 'assets/mockup_art/wardrobe/items/bubu_accs_bear_satchel.png', theme: 'cozy' }
+      ],
+      shoes: [
+        { val: 'none', label: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
+        { val: 'bubu_shoes_bunny_slippers', label: 'Sandal Bulu Kelinci', shortLabel: 'Sandal Kelinci', icon: '🐰', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_bunny_slippers.png', theme: 'sleep' },
+        { val: 'bubu_shoes_pink_sandals', label: 'Sandal Jepit Buckle Pink', shortLabel: 'Sandal Pink', icon: '🩴', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_pink_sandals.png', theme: 'summer' },
+        { val: 'bubu_shoes_mary_janes', label: 'Sepatu Tali Mary Jane', shortLabel: 'Mary Janes', icon: '🥿', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_mary_janes.png', theme: 'chic' },
+        { val: 'bubu_shoes_ankle_boots', label: 'Sepatu Boot Tali Cokelat', shortLabel: 'Ankle Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_ankle_boots.png', theme: 'vintage' }
+      ]
+    }
   };
 
   const defaultMockupData = {
@@ -196,8 +244,8 @@
       { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼' }
     ],
     wardrobe: {
-      dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
-      bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_ruffle_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_bunny_slippers' }
     },
     miniGameHighScore: 420
   };
@@ -221,6 +269,14 @@
         }
         if (!parsed.wardrobe || !parsed.wardrobe.dudu || !parsed.wardrobe.bubu) {
           parsed.wardrobe = JSON.parse(JSON.stringify(defaultMockupData.wardrobe));
+        } else {
+          ['dudu', 'bubu'].forEach(c => {
+            const w = parsed.wardrobe[c];
+            if (w) {
+              if (!w.outfit && w.sweater) w.outfit = w.sweater;
+              if (!w.shoes && w.coat) w.shoes = w.coat;
+            }
+          });
         }
         if (sessionRole && (sessionRole === 'dudu' || sessionRole === 'bubu')) {
           parsed.userRole = sessionRole;
@@ -583,6 +639,10 @@
           if (!appData.wardrobe.bubu) appData.wardrobe.bubu = { ...defaultMockupData.wardrobe.bubu };
           if (data.coupleSpace.wardrobe.dudu) appData.wardrobe.dudu = { ...appData.wardrobe.dudu, ...data.coupleSpace.wardrobe.dudu };
           if (data.coupleSpace.wardrobe.bubu) appData.wardrobe.bubu = { ...appData.wardrobe.bubu, ...data.coupleSpace.wardrobe.bubu };
+          ['dudu', 'bubu'].forEach(c => {
+            if (!appData.wardrobe[c].outfit && appData.wardrobe[c].sweater) appData.wardrobe[c].outfit = appData.wardrobe[c].sweater;
+            if (!appData.wardrobe[c].shoes && appData.wardrobe[c].coat) appData.wardrobe[c].shoes = appData.wardrobe[c].coat;
+          });
         }
         if (data.coupleSpace.miniGameHighScore !== undefined) {
           appData.miniGameHighScore = Math.max(appData.miniGameHighScore || 0, Number(data.coupleSpace.miniGameHighScore) || 0);
@@ -596,6 +656,10 @@
         const w = data.wardrobe.wardrobe || data.wardrobe;
         if (w.dudu) appData.wardrobe.dudu = { ...appData.wardrobe.dudu, ...w.dudu };
         if (w.bubu) appData.wardrobe.bubu = { ...appData.wardrobe.bubu, ...w.bubu };
+        ['dudu', 'bubu'].forEach(c => {
+          if (!appData.wardrobe[c].outfit && appData.wardrobe[c].sweater) appData.wardrobe[c].outfit = appData.wardrobe[c].sweater;
+          if (!appData.wardrobe[c].shoes && appData.wardrobe[c].coat) appData.wardrobe[c].shoes = appData.wardrobe[c].coat;
+        });
         if (data.wardrobe.miniGameHighScore !== undefined) {
           appData.miniGameHighScore = Math.max(appData.miniGameHighScore || 0, Number(data.wardrobe.miniGameHighScore) || 0);
         }
@@ -960,6 +1024,10 @@
         appData.wardrobe.bubu = { ...appData.wardrobe.bubu, ...w.bubu };
         changed = true;
       }
+      ['dudu', 'bubu'].forEach(c => {
+        if (!appData.wardrobe[c].outfit && appData.wardrobe[c].sweater) appData.wardrobe[c].outfit = appData.wardrobe[c].sweater;
+        if (!appData.wardrobe[c].shoes && appData.wardrobe[c].coat) appData.wardrobe[c].shoes = appData.wardrobe[c].coat;
+      });
       if (data.miniGameHighScore !== undefined && Number(data.miniGameHighScore) > (appData.miniGameHighScore || 0)) {
         appData.miniGameHighScore = Number(data.miniGameHighScore);
         changed = true;
@@ -2256,35 +2324,76 @@
 
   // --- 7. COUPLE CLOSET & MINI GAME (wardrobe.jpg) ---
   let activeWardrobeChar = 'dudu'; // 'dudu' or 'bubu'
-  let activeWardrobeSlot = 'hat'; // 'hat', 'sweater', 'coat', 'accs'
+  let activeWardrobeSlot = 'hat'; // 'hat', 'outfit', 'accs', 'shoes'
+  let activeStageView = 'dudu'; // 'dudu', 'bubu', 'couple'
   let activePresetIdx = 0;
+
+  const LEGACY_VAL_MAP = {
+    beanie: 'dudu_hat_pompom',
+    cable: 'dudu_outfit_cardigan',
+    duffle: 'dudu_outfit_corduroy',
+    scarf: 'dudu_accs_round_glasses',
+    earflap: 'bubu_hat_earflap',
+    cream: 'bubu_outfit_sweater_skirt',
+    winter: 'bubu_outfit_trench',
+    pompom: 'bubu_accs_hair_bow',
+    earmuffs: 'dudu_hat_sleep_beanie',
+    cardigan: 'dudu_outfit_cardigan',
+    puffer: 'bubu_outfit_trench',
+    mitten: 'dudu_shoes_bear_slippers',
+    beret: 'dudu_hat_beret',
+    hoodie: 'bubu_outfit_tennis_skirt',
+    trench: 'bubu_outfit_trench',
+    satchel: 'bubu_accs_bear_satchel'
+  };
 
   const COUPLE_OUTFIT_PRESETS = [
     {
-      name: 'Warm & Cozy Knit',
-      dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },
-      bubu: { hat: 'earflap', sweater: 'cream', coat: 'winter', accs: 'pompom' }
+      name: 'Bears Asli Mentahan 🐻🐼',
+      dudu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' },
+      bubu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' }
     },
     {
-      name: 'Snowy Parka Duo',
-      dudu: { hat: 'earmuffs', sweater: 'cardigan', coat: 'winter', accs: 'mitten' },
-      bubu: { hat: 'earmuffs', sweater: 'cream', coat: 'puffer', accs: 'mitten' }
+      name: 'Piyama Malam Manis 🌙💤',
+      dudu: { hat: 'dudu_hat_sleep_beanie', outfit: 'dudu_outfit_pajamas', accs: 'dudu_accs_eyemask', shoes: 'dudu_shoes_bear_slippers' },
+      bubu: { hat: 'bubu_hat_nightcap', outfit: 'bubu_outfit_strawberry_pj', accs: 'bubu_accs_panda_mask', shoes: 'bubu_shoes_bunny_slippers' }
     },
     {
-      name: 'Sweet Cafe Date',
-      dudu: { hat: 'beret', sweater: 'hoodie', coat: 'trench', accs: 'scarf' },
-      bubu: { hat: 'beret', sweater: 'hoodie', coat: 'trench', accs: 'satchel' }
+      name: 'Kencan Romantis Mewah 🌹✨',
+      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_tuxedo', accs: 'dudu_accs_round_glasses', shoes: 'dudu_shoes_oxfords' },
+      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_ruffle_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
     },
     {
-      name: 'Honey Bear Twins',
-      dudu: { hat: 'earflap', sweater: 'cardigan', coat: 'duffle', accs: 'satchel' },
-      bubu: { hat: 'earflap', sweater: 'cardigan', coat: 'duffle', accs: 'pompom' }
+      name: 'Liburan Pantai Tropis 🏖️🌴',
+      dudu: { hat: 'dudu_hat_bucket', outfit: 'dudu_outfit_hawaiian', accs: 'dudu_accs_retro_sunglasses', shoes: 'dudu_shoes_sandals' },
+      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_floral_dress', accs: 'bubu_accs_straw_bag', shoes: 'bubu_shoes_pink_sandals' }
+    },
+    {
+      name: 'Santai di Kafe Kopi ☕🍂',
+      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_accs_hair_bow', outfit: 'bubu_outfit_apron_dress', accs: 'bubu_accs_bear_satchel', shoes: 'bubu_shoes_ankle_boots' }
+    },
+    {
+      name: 'Musim Dingin Hangat ❄️🧣',
+      dudu: { hat: 'dudu_hat_pompom', outfit: 'dudu_outfit_cardigan', accs: 'dudu_accs_round_glasses', shoes: 'dudu_shoes_winter_boots' },
+      bubu: { hat: 'bubu_hat_earflap', outfit: 'bubu_outfit_sweater_skirt', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
     }
   ];
 
   function syncWardrobeToServer() {
     const payload = {
-      wardrobe: appData.wardrobe,
+      wardrobe: {
+        dudu: {
+          ...appData.wardrobe.dudu,
+          sweater: appData.wardrobe.dudu.outfit,
+          coat: appData.wardrobe.dudu.shoes
+        },
+        bubu: {
+          ...appData.wardrobe.bubu,
+          sweater: appData.wardrobe.bubu.outfit,
+          coat: appData.wardrobe.bubu.shoes
+        }
+      },
       miniGameHighScore: appData.miniGameHighScore || 420,
       updatedBy: appData.userRole || 'dudu'
     };
@@ -2292,43 +2401,139 @@
     sendSaveRest('/api/wardrobe', payload);
   }
 
-  function getItemMeta(slot, val) {
-    const list = WARDROBE_CATALOG[slot] || [];
-    return list.find(o => o.val === val) || list[0] || { val: '', label: '', shortLabel: '', icon: '✨', theme: 'cozy' };
+  function getItemMeta(slot, rawVal, char) {
+    let resolvedSlot = slot;
+    if (resolvedSlot === 'sweater') resolvedSlot = 'outfit';
+    if (resolvedSlot === 'coat') resolvedSlot = 'shoes';
+
+    const charKey = (char === 'bubu') ? 'bubu' : 'dudu';
+    let val = rawVal;
+    if (LEGACY_VAL_MAP[val]) {
+      val = LEGACY_VAL_MAP[val];
+    }
+    const catList = WARDROBE_CATALOG[charKey]?.[resolvedSlot] || WARDROBE_CATALOG.dudu[resolvedSlot] || [];
+    if (!val || val === 'none') {
+      return { val: 'none', label: 'Polos Mentahan', shortLabel: 'Polos', icon: charKey === 'bubu' ? '🐼' : '🐻', img: '', theme: 'natural' };
+    }
+    const match = catList.find(o => o.val === val);
+    if (match) return match;
+    const otherChar = charKey === 'bubu' ? 'dudu' : 'bubu';
+    const altMatch = WARDROBE_CATALOG[otherChar]?.[resolvedSlot]?.find(o => o.val === val);
+    if (altMatch) return altMatch;
+
+    return catList[0] || { val: 'none', label: 'Polos Mentahan', shortLabel: 'Polos', icon: '✨', img: '', theme: 'natural' };
   }
 
   function computeCoupleMatchBanner() {
     const d = appData.wardrobe?.dudu || {};
     const b = appData.wardrobe?.bubu || {};
-    const slots = ['hat', 'sweater', 'coat', 'accs'];
+    const slots = ['hat', 'outfit', 'accs', 'shoes'];
     let exactMatches = 0;
     let themeMatches = 0;
     const themes = [];
 
     slots.forEach(s => {
-      const dm = getItemMeta(s, d[s]);
-      const bm = getItemMeta(s, b[s]);
-      if (dm.val === bm.val) exactMatches++;
-      if (dm.theme === bm.theme) themeMatches++;
+      const dm = getItemMeta(s, d[s] || d[s === 'outfit' ? 'sweater' : s === 'shoes' ? 'coat' : s], 'dudu');
+      const bm = getItemMeta(s, b[s] || b[s === 'outfit' ? 'sweater' : s === 'shoes' ? 'coat' : s], 'bubu');
+      if (dm.val !== 'none' && dm.val === bm.val) exactMatches++;
+      if (dm.theme !== 'natural' && dm.theme === bm.theme) themeMatches++;
       themes.push(dm.theme, bm.theme);
     });
 
-    const winterCount = themes.filter(t => t === 'winter').length;
+    const sleepCount = themes.filter(t => t === 'sleep').length;
     const chicCount = themes.filter(t => t === 'chic').length;
+    const summerCount = themes.filter(t => t === 'summer').length;
+    const winterCount = themes.filter(t => t === 'winter').length;
+    const naturalCount = themes.filter(t => t === 'natural').length;
 
-    if (exactMatches >= 3) {
-      return 'Twinning Bears! (100% Twin Match 🐻🐼✨)';
+    if (naturalCount >= 6) {
+      return 'Bears Asli Mentahan! (Raw Cute Bears 🐻🐼✨)';
     }
-    if (winterCount >= 5) {
-      return 'Snowy Adventure Ready! (Winter Match ❄️✨)';
+    if (sleepCount >= 4) {
+      return 'Piyama Tidur Berdua! (Sweet Sleepy Match 🌙💤✨)';
     }
-    if (chicCount >= 5) {
-      return 'Sweet Café Date Look! (Chic Match ☕✨)';
+    if (chicCount >= 4) {
+      return 'Kencan Mewah Berdua! (Chic Date Match 🌹✨)';
     }
-    if (themeMatches >= 2) {
-      return 'Warm & Cozy! (Perfect Match ✨)';
+    if (summerCount >= 4) {
+      return 'Liburan Tropis Serasi! (Summer Holiday Match 🏖️🌴✨)';
     }
-    return 'Playful Mix & Match! (Cozy Combo 🧸💕)';
+    if (winterCount >= 4) {
+      return 'Hangat di Musim Dingin! (Cozy Winter Match ❄️✨)';
+    }
+    if (exactMatches >= 2 || themeMatches >= 2) {
+      return 'Pasangan Serasi! (Perfect Couple Match 💖✨)';
+    }
+    return 'Mix & Match Menggemaskan! (Cozy Playful Match 🧸💕)';
+  }
+
+  function applyLayerStyle(imgEl, slot, itemVal, char, mode) {
+    if (!imgEl) return;
+    const meta = getItemMeta(slot, itemVal, char);
+    if (!meta || !meta.img || meta.val === 'none') {
+      imgEl.style.display = 'none';
+      imgEl.removeAttribute('src');
+      return;
+    }
+
+    imgEl.src = meta.img;
+    imgEl.style.display = 'block';
+
+    let w = 39;
+    let l = 30.5;
+    let t = 62.5;
+
+    if (char === 'dudu') {
+      if (slot === 'hat') {
+        if (meta.val === 'dudu_hat_bucket') { w = 44; l = 28; t = 34; }
+        else if (meta.val === 'dudu_hat_sleep_beanie') { w = 39; l = 31; t = 31; }
+        else { w = 38; l = 31; t = 36.5; }
+      } else if (slot === 'accs') {
+        if (meta.val === 'dudu_accs_eyemask') { w = 42; l = 29; t = 48.5; }
+        else { w = 34; l = 33; t = 51.5; }
+      } else if (slot === 'outfit') {
+        if (meta.val === 'dudu_outfit_overalls') { w = 39; l = 30.5; t = 62.8; }
+        else if (meta.val === 'dudu_outfit_pajamas') { w = 40; l = 30; t = 61.5; }
+        else if (meta.val === 'dudu_outfit_nightshirt') { w = 41; l = 29.5; t = 61; }
+        else if (meta.val === 'dudu_outfit_tuxedo') { w = 42; l = 29; t = 61; }
+        else if (meta.val === 'dudu_outfit_cardigan') { w = 42; l = 29; t = 61; }
+        else { w = 40; l = 30; t = 62; }
+      } else if (slot === 'shoes') {
+        w = 34; l = 33; t = 83.5;
+      }
+    } else {
+      // Bubu
+      if (slot === 'hat') {
+        if (meta.val === 'bubu_hat_straw_hat' || meta.val === 'bubu_hat_straw_hat_2') { w = 44; l = 28; t = 32.5; }
+        else if (meta.val === 'bubu_hat_nightcap') { w = 42; l = 29; t = 29.5; }
+        else if (meta.val === 'bubu_hat_earflap') { w = 33; l = 33.5; t = 33; }
+        else if (meta.val === 'bubu_accs_hair_bow') { w = 20; l = 48; t = 36; }
+        else { w = 36; l = 32; t = 34.5; }
+      } else if (slot === 'accs') {
+        if (meta.val === 'bubu_accs_panda_mask') { w = 42; l = 29; t = 48; }
+        else if (meta.val === 'bubu_accs_straw_bag') { w = 28; l = 17; t = 63; }
+        else if (meta.val === 'bubu_accs_bear_satchel') { w = 25; l = 56; t = 63; }
+        else { w = 36; l = 32; t = 50.5; }
+      } else if (slot === 'outfit') {
+        if (meta.val === 'bubu_outfit_ruffle_dress') { w = 40; l = 30; t = 63; }
+        else if (meta.val === 'bubu_outfit_trench') { w = 41; l = 29.5; t = 61.5; }
+        else { w = 39; l = 30.5; t = 62; }
+      } else if (slot === 'shoes') {
+        w = 35; l = 32.5; t = 83.5;
+      }
+    }
+
+    if (mode === 'couple') {
+      const coupleW = w / 2;
+      const coupleL = (char === 'dudu') ? (l / 2) : (50 + (l / 2));
+      imgEl.style.width = `${coupleW.toFixed(1)}%`;
+      imgEl.style.left = `${coupleL.toFixed(1)}%`;
+      imgEl.style.top = `${t.toFixed(1)}%`;
+    } else {
+      imgEl.style.width = `${w}%`;
+      imgEl.style.left = `${l}%`;
+      imgEl.style.top = `${t}%`;
+    }
   }
 
   function renderWardrobeRoom() {
@@ -2338,24 +2543,74 @@
 
     const duduBadge = document.getElementById('wardrobe-badge-dudu');
     const bubuBadge = document.getElementById('wardrobe-badge-bubu');
-    const stageDudu = document.getElementById('wardrobe-stage-dudu');
-    const stageBubu = document.getElementById('wardrobe-stage-bubu');
     const prevPresetBtn = document.getElementById('btn-wardrobe-prev-preset');
     const nextPresetBtn = document.getElementById('btn-wardrobe-next-preset');
     const matchCoupleBtn = document.getElementById('btn-wardrobe-match-couple');
+    const undressAllBtn = document.getElementById('btn-wardrobe-undress-all');
+    const viewDuduBtn = document.getElementById('btn-stage-view-dudu');
+    const viewBubuBtn = document.getElementById('btn-stage-view-bubu');
+    const viewCoupleBtn = document.getElementById('btn-stage-view-couple');
+    const stageHitDudu = document.getElementById('wardrobe-stage-hit-dudu');
+    const stageHitBubu = document.getElementById('wardrobe-stage-hit-bubu');
     const highScoreEl = document.getElementById('wardrobe-high-score');
     if (highScoreEl) highScoreEl.textContent = String(appData.miniGameHighScore || 420);
 
     const selectChar = (char) => {
       activeWardrobeChar = (char === 'bubu') ? 'bubu' : 'dudu';
+      if (activeStageView !== 'couple') {
+        activeStageView = activeWardrobeChar;
+      }
       updateWardrobeTabs();
       window.duduAudio?.playPop?.(520);
     };
 
     if (duduBadge) duduBadge.onclick = () => selectChar('dudu');
     if (bubuBadge) bubuBadge.onclick = () => selectChar('bubu');
-    if (stageDudu) stageDudu.onclick = () => selectChar('dudu');
-    if (stageBubu) stageBubu.onclick = () => selectChar('bubu');
+
+    if (viewDuduBtn) {
+      viewDuduBtn.onclick = () => {
+        activeStageView = 'dudu';
+        activeWardrobeChar = 'dudu';
+        updateWardrobeTabs();
+        window.duduAudio?.playPop?.(500);
+      };
+    }
+    if (viewBubuBtn) {
+      viewBubuBtn.onclick = () => {
+        activeStageView = 'bubu';
+        activeWardrobeChar = 'bubu';
+        updateWardrobeTabs();
+        window.duduAudio?.playPop?.(500);
+      };
+    }
+    if (viewCoupleBtn) {
+      viewCoupleBtn.onclick = () => {
+        activeStageView = 'couple';
+        updateWardrobeTabs();
+        window.duduAudio?.playPop?.(600);
+      };
+    }
+
+    if (stageHitDudu) {
+      stageHitDudu.onclick = () => {
+        if (activeStageView === 'couple') {
+          activeWardrobeChar = 'dudu';
+          updateWardrobeTabs();
+        }
+        window.duduAudio?.playPop?.(650);
+        showFeedbackToast('Dudu 🐻 siap didandani!');
+      };
+    }
+    if (stageHitBubu) {
+      stageHitBubu.onclick = () => {
+        if (activeStageView === 'couple') {
+          activeWardrobeChar = 'bubu';
+          updateWardrobeTabs();
+        }
+        window.duduAudio?.playPop?.(650);
+        showFeedbackToast('Bubu 🐼 siap didandani!');
+      };
+    }
 
     const applyPreset = (idx) => {
       activePresetIdx = (idx + COUPLE_OUTFIT_PRESETS.length) % COUPLE_OUTFIT_PRESETS.length;
@@ -2366,31 +2621,51 @@
       updateWardrobeTabs();
       syncWardrobeToServer();
       window.duduAudio?.playPop?.(820);
-      showFeedbackToast(`✨ Equipped "${preset.name}" couple set!`);
+      showFeedbackToast(`✨ Memakai set: "${preset.name}"!`);
     };
 
     if (prevPresetBtn) prevPresetBtn.onclick = () => applyPreset(activePresetIdx - 1);
     if (nextPresetBtn) nextPresetBtn.onclick = () => applyPreset(activePresetIdx + 1);
     if (matchCoupleBtn) matchCoupleBtn.onclick = () => applyPreset(activePresetIdx + 1);
 
+    if (undressAllBtn) {
+      undressAllBtn.onclick = () => {
+        if (activeStageView === 'couple') {
+          appData.wardrobe.dudu = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
+          appData.wardrobe.bubu = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
+          showFeedbackToast('Semua pakaian dilepas! 🐻🐼 Mentahan polos');
+        } else {
+          const char = (activeWardrobeChar === 'bubu') ? 'bubu' : 'dudu';
+          appData.wardrobe[char] = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
+          showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} kembali ke mentahan polos!`);
+        }
+        saveState();
+        updateWardrobeTabs();
+        syncWardrobeToServer();
+        window.duduAudio?.playPop?.(400);
+      };
+    }
+
     document.querySelectorAll('.wardrobe-item-card').forEach(card => {
       card.onclick = () => {
-        const itemType = card.getAttribute('data-type');
-        const options = WARDROBE_CATALOG[itemType];
-        if (itemType && options && options.length > 0) {
-          activeWardrobeSlot = itemType;
-          const char = (activeWardrobeChar === 'bubu') ? 'bubu' : 'dudu';
+        let itemType = card.getAttribute('data-type');
+        if (itemType === 'sweater') itemType = 'outfit';
+        if (itemType === 'coat') itemType = 'shoes';
+        activeWardrobeSlot = itemType;
+
+        const char = (activeWardrobeChar === 'bubu') ? 'bubu' : 'dudu';
+        const catalog = WARDROBE_CATALOG[char]?.[activeWardrobeSlot] || [];
+        if (catalog && catalog.length > 0) {
           if (!appData.wardrobe[char]) appData.wardrobe[char] = { ...defaultMockupData.wardrobe[char] };
-          const currentVal = appData.wardrobe[char][itemType];
-          const curIdx = options.findIndex(o => o.val === currentVal);
-          const nextOpt = options[(curIdx + 1) % options.length];
-          appData.wardrobe[char][itemType] = nextOpt.val;
-          card.setAttribute('data-val', nextOpt.val);
+          const currentVal = appData.wardrobe[char][activeWardrobeSlot] || appData.wardrobe[char][activeWardrobeSlot === 'outfit' ? 'sweater' : activeWardrobeSlot === 'shoes' ? 'coat' : activeWardrobeSlot];
+          const curIdx = catalog.findIndex(o => o.val === currentVal);
+          const nextOpt = catalog[(curIdx + 1) % catalog.length];
+          appData.wardrobe[char][activeWardrobeSlot] = nextOpt.val;
           saveState();
           updateWardrobeTabs();
           syncWardrobeToServer();
           window.duduAudio?.playPop?.(750);
-          showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} equipped ${nextOpt.label}! ${nextOpt.icon}`);
+          showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${nextOpt.label}! ${nextOpt.icon}`);
         }
       };
     });
@@ -2414,9 +2689,17 @@
 
     const duduBadge = document.getElementById('wardrobe-badge-dudu');
     const bubuBadge = document.getElementById('wardrobe-badge-bubu');
-    const stageDudu = document.getElementById('wardrobe-stage-dudu');
-    const stageBubu = document.getElementById('wardrobe-stage-bubu');
+    const viewDuduBtn = document.getElementById('btn-stage-view-dudu');
+    const viewBubuBtn = document.getElementById('btn-stage-view-bubu');
+    const viewCoupleBtn = document.getElementById('btn-stage-view-couple');
+    const stageArt = document.getElementById('wardrobe-stage-art');
+    const stageEl = document.getElementById('wardrobe-stage');
+    const duduLayers = document.getElementById('wardrobe-dudu-layers');
+    const bubuLayers = document.getElementById('wardrobe-bubu-layers');
+    const stageHitDudu = document.getElementById('wardrobe-stage-hit-dudu');
+    const stageHitBubu = document.getElementById('wardrobe-stage-hit-bubu');
 
+    // Wardrobe character badges
     if (duduBadge && bubuBadge) {
       if (isDudu) {
         duduBadge.className = 'px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer';
@@ -2427,88 +2710,151 @@
       }
     }
 
-    if (stageDudu && stageBubu) {
-      stageDudu.classList.toggle('ring-2', isDudu);
-      stageDudu.classList.toggle('ring-[#8D5B4C]', isDudu);
-      stageDudu.classList.toggle('bg-white/10', isDudu);
-      stageBubu.classList.toggle('ring-2', !isDudu);
-      stageBubu.classList.toggle('ring-[#8D5B4C]', !isDudu);
-      stageBubu.classList.toggle('bg-white/10', !isDudu);
+    // View switcher buttons styling
+    if (viewDuduBtn && viewBubuBtn && viewCoupleBtn) {
+      const activeClass = 'px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer shadow-xs';
+      const inactiveClass = 'px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 hover:text-stone-900 button-press cursor-pointer';
+      viewDuduBtn.className = (activeStageView === 'dudu') ? activeClass : inactiveClass;
+      viewBubuBtn.className = (activeStageView === 'bubu') ? activeClass : inactiveClass;
+      viewCoupleBtn.className = (activeStageView === 'couple') ? activeClass : inactiveClass;
     }
 
-    // Update live Dressing Room Stage badges for both Dudu & Bubu
+    // Stage Background and Aspect Ratio
+    if (stageArt && stageEl) {
+      if (activeStageView === 'dudu') {
+        stageArt.src = 'assets/mockup_art/wardrobe/stage_dudu_room.jpg';
+        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300';
+      } else if (activeStageView === 'bubu') {
+        stageArt.src = 'assets/mockup_art/wardrobe/stage_bubu_room.jpg';
+        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300';
+      } else {
+        stageArt.src = 'assets/mockup_art/wardrobe/stage_couple_room.jpg';
+        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[1400/781] transition-all duration-300';
+      }
+    }
+
+    // Hitboxes
+    if (stageHitDudu && stageHitBubu) {
+      if (activeStageView === 'couple') {
+        stageHitDudu.style.cssText = 'top: 30%; left: 10%; width: 30%; height: 60%;';
+        stageHitBubu.style.cssText = 'top: 30%; right: 10%; width: 30%; height: 60%;';
+        stageHitDudu.style.display = 'block';
+        stageHitBubu.style.display = 'block';
+      } else if (activeStageView === 'dudu') {
+        stageHitDudu.style.cssText = 'top: 30%; left: 25%; width: 50%; height: 60%;';
+        stageHitDudu.style.display = 'block';
+        stageHitBubu.style.display = 'none';
+      } else {
+        stageHitBubu.style.cssText = 'top: 30%; left: 25%; width: 50%; height: 60%;';
+        stageHitBubu.style.display = 'block';
+        stageHitDudu.style.display = 'none';
+      }
+    }
+
+    // Overlay Layers Rendering
     const dOut = appData.wardrobe?.dudu || {};
     const bOut = appData.wardrobe?.bubu || {};
 
-    const dHat = getItemMeta('hat', dOut.hat);
-    const dSweater = getItemMeta('sweater', dOut.sweater);
-    const dCoat = getItemMeta('coat', dOut.coat);
-    const dAccs = getItemMeta('accs', dOut.accs);
+    const dHat = dOut.hat;
+    const dOutfit = dOut.outfit || dOut.sweater;
+    const dAccs = dOut.accs;
+    const dShoes = dOut.shoes || dOut.coat;
 
-    const bHat = getItemMeta('hat', bOut.hat);
-    const bSweater = getItemMeta('sweater', bOut.sweater);
-    const bCoat = getItemMeta('coat', bOut.coat);
-    const bAccs = getItemMeta('accs', bOut.accs);
+    const bHat = bOut.hat;
+    const bOutfit = bOut.outfit || bOut.sweater;
+    const bAccs = bOut.accs;
+    const bShoes = bOut.shoes || bOut.coat;
 
-    const duduHatEl = document.getElementById('dudu-stage-hat');
-    const duduTopEl = document.getElementById('dudu-stage-top');
-    const duduAccsEl = document.getElementById('dudu-stage-accs');
-    if (duduHatEl) duduHatEl.textContent = `${dHat.icon} ${dHat.shortLabel || dHat.label}`;
-    if (duduTopEl) duduTopEl.textContent = `${dSweater.icon} ${dSweater.shortLabel} • ${dCoat.icon} ${dCoat.shortLabel}`;
-    if (duduAccsEl) duduAccsEl.textContent = dAccs.icon;
+    if (activeStageView === 'couple') {
+      if (duduLayers) duduLayers.style.display = 'block';
+      if (bubuLayers) bubuLayers.style.display = 'block';
+      applyLayerStyle(document.getElementById('layer-dudu-shoes'), 'shoes', dShoes, 'dudu', 'couple');
+      applyLayerStyle(document.getElementById('layer-dudu-outfit'), 'outfit', dOutfit, 'dudu', 'couple');
+      applyLayerStyle(document.getElementById('layer-dudu-accs'), 'accs', dAccs, 'dudu', 'couple');
+      applyLayerStyle(document.getElementById('layer-dudu-hat'), 'hat', dHat, 'dudu', 'couple');
 
-    const bubuHatEl = document.getElementById('bubu-stage-hat');
-    const bubuTopEl = document.getElementById('bubu-stage-top');
-    const bubuAccsEl = document.getElementById('bubu-stage-accs');
-    if (bubuHatEl) bubuHatEl.textContent = `${bHat.icon} ${bHat.shortLabel || bHat.label}`;
-    if (bubuTopEl) bubuTopEl.textContent = `${bSweater.icon} ${bSweater.shortLabel} • ${bCoat.icon} ${bCoat.shortLabel}`;
-    if (bubuAccsEl) bubuAccsEl.textContent = bAccs.icon;
+      applyLayerStyle(document.getElementById('layer-bubu-shoes'), 'shoes', bShoes, 'bubu', 'couple');
+      applyLayerStyle(document.getElementById('layer-bubu-outfit'), 'outfit', bOutfit, 'bubu', 'couple');
+      applyLayerStyle(document.getElementById('layer-bubu-accs'), 'accs', bAccs, 'bubu', 'couple');
+      applyLayerStyle(document.getElementById('layer-bubu-hat'), 'hat', bHat, 'bubu', 'couple');
+    } else if (activeStageView === 'dudu') {
+      if (duduLayers) duduLayers.style.display = 'block';
+      if (bubuLayers) bubuLayers.style.display = 'none';
+      applyLayerStyle(document.getElementById('layer-dudu-shoes'), 'shoes', dShoes, 'dudu', 'solo');
+      applyLayerStyle(document.getElementById('layer-dudu-outfit'), 'outfit', dOutfit, 'dudu', 'solo');
+      applyLayerStyle(document.getElementById('layer-dudu-accs'), 'accs', dAccs, 'dudu', 'solo');
+      applyLayerStyle(document.getElementById('layer-dudu-hat'), 'hat', dHat, 'dudu', 'solo');
+    } else {
+      if (duduLayers) duduLayers.style.display = 'none';
+      if (bubuLayers) bubuLayers.style.display = 'block';
+      applyLayerStyle(document.getElementById('layer-bubu-shoes'), 'shoes', bShoes, 'bubu', 'solo');
+      applyLayerStyle(document.getElementById('layer-bubu-outfit'), 'outfit', bOutfit, 'bubu', 'solo');
+      applyLayerStyle(document.getElementById('layer-bubu-accs'), 'accs', bAccs, 'bubu', 'solo');
+      applyLayerStyle(document.getElementById('layer-bubu-hat'), 'hat', bHat, 'bubu', 'solo');
+    }
 
+    // Match text
     const matchTextEl = document.getElementById('wardrobe-match-text');
     if (matchTextEl) {
       matchTextEl.textContent = computeCoupleMatchBanner();
     }
 
+    // Category Cards UI for active character
     const currentOutfit = appData.wardrobe[char] || {};
     const equippedLabels = [];
 
     document.querySelectorAll('.wardrobe-item-card').forEach(card => {
-      const type = card.getAttribute('data-type');
-      const catalog = WARDROBE_CATALOG[type] || [];
-      const activeIdx = Math.max(0, catalog.findIndex(o => o.val === currentOutfit[type]));
-      const activeOpt = catalog[activeIdx] || catalog[0];
+      let type = card.getAttribute('data-type');
+      if (type === 'sweater') type = 'outfit';
+      if (type === 'coat') type = 'shoes';
+      const catalog = WARDROBE_CATALOG[char]?.[type] || [];
+      const curVal = currentOutfit[type] || currentOutfit[type === 'outfit' ? 'sweater' : type === 'shoes' ? 'coat' : type];
+      const activeIdx = Math.max(0, catalog.findIndex(o => o.val === curVal));
+      const activeOpt = catalog[activeIdx] || catalog[0] || { val: 'none', label: 'Polos', shortLabel: 'Polos', icon: '🐾', img: '' };
       const isSelectedSlot = type === activeWardrobeSlot;
+
       card.classList.toggle('border-2', isSelectedSlot);
       card.classList.toggle('border-[#8D5B4C]', isSelectedSlot);
+      card.classList.toggle('shadow-sm', isSelectedSlot);
 
-      if (activeOpt) {
+      if (activeOpt.val !== 'none') {
         equippedLabels.push(`${activeOpt.icon} ${activeOpt.shortLabel || activeOpt.label}`);
-        const iconSpan = card.querySelector('.wardrobe-card-icon');
-        const labelSpan = card.querySelector('.wardrobe-card-label');
-        const idxSpan = card.querySelector('.wardrobe-card-idx');
-        if (iconSpan && labelSpan) {
-          iconSpan.textContent = activeOpt.icon;
-          labelSpan.textContent = activeOpt.label;
-          if (idxSpan) idxSpan.textContent = `${activeIdx + 1}/${catalog.length}`;
-        } else {
-          const spans = card.querySelectorAll('span');
-          if (spans[0]) spans[0].textContent = activeOpt.icon;
-          if (spans[1]) spans[1].textContent = activeOpt.label;
+      }
+
+      const imgEl = card.querySelector('.wardrobe-card-img');
+      const iconSpan = card.querySelector('.wardrobe-card-icon');
+      const labelSpan = card.querySelector('.wardrobe-card-label');
+      const idxSpan = card.querySelector('.wardrobe-card-idx');
+
+      if (labelSpan) labelSpan.textContent = activeOpt.shortLabel || activeOpt.label;
+      if (idxSpan) idxSpan.textContent = `${activeIdx + 1}/${catalog.length}`;
+
+      if (activeOpt.img && imgEl) {
+        imgEl.src = activeOpt.img;
+        imgEl.style.display = 'block';
+        if (iconSpan) iconSpan.classList.add('hidden');
+      } else {
+        if (imgEl) imgEl.style.display = 'none';
+        if (iconSpan) {
+          iconSpan.classList.remove('hidden');
+          iconSpan.textContent = activeOpt.icon || (char === 'bubu' ? '🐼' : '🐻');
         }
       }
     });
 
-    // Populate direct item picker pills for activeWardrobeSlot
+    // Populate direct item picker pills/chips for activeWardrobeSlot
     const slotPicker = document.getElementById('wardrobe-slot-picker');
     if (slotPicker) {
-      const catalog = WARDROBE_CATALOG[activeWardrobeSlot] || [];
-      const curVal = currentOutfit[activeWardrobeSlot];
+      const catalog = WARDROBE_CATALOG[char]?.[activeWardrobeSlot] || [];
+      const curVal = currentOutfit[activeWardrobeSlot] || currentOutfit[activeWardrobeSlot === 'outfit' ? 'sweater' : activeWardrobeSlot === 'shoes' ? 'coat' : activeWardrobeSlot];
+
       slotPicker.innerHTML = catalog.map(opt => {
         const active = opt.val === curVal;
+        const isNone = opt.val === 'none';
         return `
-          <button type="button" data-pick-val="${opt.val}" class="px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0 flex items-center gap-1 cursor-pointer button-press transition-all ${active ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border border-[#E8DACB] dark:border-stone-600'}">
-            <span>${opt.icon}</span>
-            <span>${opt.label}</span>
+          <button type="button" data-pick-val="${opt.val}" class="wardrobe-slot-chip px-2.5 py-1.5 rounded-2xl text-[11px] font-bold shrink-0 flex items-center gap-2 cursor-pointer button-press transition-all border ${active ? 'bg-[#8D5B4C] text-white shadow-xs border-[#78493C]' : 'bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border-[#E8DACB] dark:border-stone-600 hover:border-[#8D5B4C]'}">
+            ${opt.img ? `<img src="${opt.img}" class="w-7 h-7 object-contain drop-shadow-xs" alt="${opt.shortLabel}" />` : `<span class="text-lg">${opt.icon}</span>`}
+            <span class="truncate max-w-[120px]">${isNone ? '❌ Lepas / Polos' : opt.label}</span>
           </button>
         `;
       }).join('');
@@ -2523,7 +2869,11 @@
             updateWardrobeTabs();
             syncWardrobeToServer();
             window.duduAudio?.playPop?.(780);
-            showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} wore ${opt.label}! ${opt.icon}`);
+            if (opt.val === 'none') {
+              showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} melepas pakaian!`);
+            } else {
+              showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${opt.label}! ${opt.icon}`);
+            }
           }
         };
       });
@@ -2532,7 +2882,7 @@
     const summaryEl = document.getElementById('wardrobe-equipped-summary');
     if (summaryEl) {
       const charLabel = isDudu ? 'Dudu 🐻' : 'Bubu 🐼';
-      summaryEl.textContent = `${charLabel}: ${equippedLabels.join(' • ')}`;
+      summaryEl.textContent = `${charLabel}: ${equippedLabels.length > 0 ? equippedLabels.join(' • ') : 'Polos Mentahan 🐾'}`;
     }
   }
 

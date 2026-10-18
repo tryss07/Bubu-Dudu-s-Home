@@ -9,7 +9,7 @@ process.env.HOST = '127.0.0.1';
 // Load db and server
 const db = require('../server/db');
 require('../server/server.js');
-const WebSocket = require('../server/node_modules/ws');
+const WebSocket = require('ws');
 
 (async () => {
   console.log('Testing server & db wardrobe handling...');
