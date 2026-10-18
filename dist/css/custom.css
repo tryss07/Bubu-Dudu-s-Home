@@ -502,6 +502,29 @@ html.dark .doodle-bg {
   background-image: none;
 }
 
+/* Dynamic Chat & Global Wallpaper Layers */
+#chat-wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  z-index: 1;
+}
+
+#global-app-wallpaper-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  z-index: 0;
+}
+
 /* Washi Tape styling for polaroids and countdown cards */
 .washi-tape {
   position: absolute;
@@ -769,3 +792,26 @@ html.dark .dark\:bg-stone-800\/95 { background-color: rgba(41, 37, 36, 0.95); }
   }
 }
 .bg-\[\#FAF6F0\] { background-color: #FAF6F0; }
+
+/* Wardrobe Stage Paper Doll Layers & Visual Overhaul */
+#wardrobe-stage {
+  touch-action: pan-y;
+  user-select: none;
+}
+.wardrobe-layer-item {
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.14));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.wardrobe-card-thumb {
+  min-height: 44px;
+}
+.wardrobe-card-img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+}
+.wardrobe-slot-chip {
+  transition: all 0.15s ease-out;
+}
+.wardrobe-slot-chip:active {
+  transform: scale(0.96);
+}
