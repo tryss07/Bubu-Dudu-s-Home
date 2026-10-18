@@ -103,7 +103,7 @@
     if (!indicator || !textEl) return;
 
     if (data.isTyping) {
-      textEl.textContent = isSenderDudu ? 'dudu is typing...' : 'she is typing...';
+      textEl.textContent = isSenderDudu ? 'dudu is typing...' : 'bubu is typing...';
       indicator.classList.remove('hidden');
 
       clearTimeout(incomingTypingTimeout);
@@ -175,9 +175,17 @@
     }
   }
 
+  function truncateWords(text, maxWords = 6) {
+    if (!text) return '';
+    const trimmed = String(text).trim();
+    const words = trimmed.split(/\s+/);
+    if (words.length <= maxWords) return trimmed;
+    return words.slice(0, maxWords).join(' ') + '...';
+  }
+
   async function notifyUser(title, body) {
     const cleanTitle = removeEmojis(title) || 'Dudu Chat';
-    const cleanBody = removeEmojis(body) || 'New update';
+    const cleanBody = truncateWords(removeEmojis(body) || 'New update', 6);
     try {
       if (window.Capacitor?.Plugins?.LocalNotifications) {
         await window.Capacitor.Plugins.LocalNotifications.schedule({
@@ -241,8 +249,12 @@
       partnerNameEl.textContent = isMeDudu ? 'Bubu 🐼❤️' : 'Dudu 🐻❤️';
     }
 
+    if (dotEl) {
+      dotEl.style.display = 'none';
+      dotEl.className = 'hidden';
+    }
+
     if (isOnline) {
-      if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 shadow-xs ring-2 ring-emerald-200 dark:ring-emerald-900 shrink-0 animate-pulse';
       if (textEl) {
         textEl.textContent = 'online 💫';
         textEl.className = 'text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate';
@@ -254,7 +266,6 @@
       }
       lastPartnerOnlineState = 1;
     } else {
-      if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-stone-400 dark:bg-stone-600 shrink-0';
       if (textEl) {
         const lastSeenTs = partnerState && (partnerState.lastSeen || partnerState.last_seen);
         const lastSeenStr = lastSeenTs ? formatLastSeen(lastSeenTs) : 'recently';
@@ -1875,7 +1886,17 @@
           else if (decryptedMsg.type === 'video') preview = 'Sent a video';
           else preview = removeEmojis(decryptedMsg.content) || decryptedMsg.content || 'New message';
 
-          notifyUser(`[${topicName}] ${partnerLabel}`, preview);
+          const truncated = truncateWords(preview, 6);
+          notifyUser(`[${topicName}] ${partnerLabel}`, truncated);
+
+          if (window.DuduMockup?.addNotification) {
+            window.DuduMockup.addNotification({
+              icon: '💬',
+              title: `${partnerLabel} (${topicName})`,
+              message: truncated,
+              timestamp: Date.now()
+            });
+          }
 
           const isChatTabActive = document.body.classList.contains('chat-tab-active');
           const isViewingThisSession = isChatTabActive && activeSessionId === decryptedMsg.sessionId;
@@ -1965,7 +1986,17 @@
               else if (decryptedMsg.type === 'video') preview = 'Sent a video';
               else preview = removeEmojis(decryptedMsg.content) || decryptedMsg.content || 'New message';
 
-              notifyUser(`[${topicName}] ${partnerLabel}`, preview);
+              const truncated = truncateWords(preview, 6);
+              notifyUser(`[${topicName}] ${partnerLabel}`, truncated);
+
+              if (window.DuduMockup?.addNotification) {
+                window.DuduMockup.addNotification({
+                  icon: '💬',
+                  title: `${partnerLabel} (${topicName})`,
+                  message: truncated,
+                  timestamp: Date.now()
+                });
+              }
 
               const isChatTabActive = document.body.classList.contains('chat-tab-active');
               const isViewingThisSession = isChatTabActive && activeSessionId === decryptedMsg.sessionId;

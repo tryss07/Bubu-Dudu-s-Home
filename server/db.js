@@ -71,7 +71,7 @@ let fallbackMilestones = [
 
 let fallbackCoupleSpace = {
   anniversaryDate: '2025-11-04',
-  loveBattery: 100,
+  loveBattery: { dudu: 100, bubu: 100 },
   statuses: {
     dudu: 'Thinking of you! 💭',
     bubu: 'Eating snacks! 🐼'
@@ -1369,10 +1369,29 @@ function getCoupleSpace() {
         try { encryptedPayload = JSON.parse(map['encrypted_payload']); } catch (_) {}
       }
 
+      let loveBattery = { dudu: 100, bubu: 100 };
+      if (map['love_battery']) {
+        try {
+          const parsed = JSON.parse(map['love_battery']);
+          if (typeof parsed === 'object' && parsed !== null) {
+            loveBattery = {
+              dudu: Number(parsed.dudu ?? 100),
+              bubu: Number(parsed.bubu ?? 100)
+            };
+          } else {
+            const num = Number(parsed) || 100;
+            loveBattery = { dudu: num, bubu: num };
+          }
+        } catch {
+          const num = Number(map['love_battery']) || 100;
+          loveBattery = { dudu: num, bubu: num };
+        }
+      }
+
       return {
         ...(encryptedPayload || {}),
         anniversaryDate: map['anniversary_date'] || '2025-11-04',
-        loveBattery: map['love_battery'] ? Number(map['love_battery']) : 100,
+        loveBattery,
         badmoodLevel: map['badmood_level'] !== undefined ? Number(map['badmood_level']) : 0,
         statuses: {
           dudu: map['status_dudu'] || 'Thinking of you! 💭',
@@ -1411,7 +1430,12 @@ function saveCoupleSpace(data) {
         stmt.run('encrypted_payload', JSON.stringify({ iv: data.iv, ciphertext: data.ciphertext, isEncrypted: true }), now);
       }
       if (data.anniversaryDate) stmt.run('anniversary_date', String(data.anniversaryDate), now);
-      if (data.loveBattery !== undefined) stmt.run('love_battery', String(data.loveBattery), now);
+      if (data.loveBattery !== undefined) {
+        const lbVal = typeof data.loveBattery === 'object' && data.loveBattery !== null
+          ? JSON.stringify(data.loveBattery)
+          : String(data.loveBattery);
+        stmt.run('love_battery', lbVal, now);
+      }
       if (data.badmoodLevel !== undefined) stmt.run('badmood_level', String(data.badmoodLevel), now);
       if (data.statusDudu !== undefined) stmt.run('status_dudu', String(data.statusDudu), now);
       if (data.statusBubu !== undefined) stmt.run('status_bubu', String(data.statusBubu), now);
@@ -1440,7 +1464,17 @@ function saveCoupleSpace(data) {
     }
   } else {
     if (data.anniversaryDate) fallbackCoupleSpace.anniversaryDate = String(data.anniversaryDate);
-    if (data.loveBattery !== undefined) fallbackCoupleSpace.loveBattery = Number(data.loveBattery);
+    if (data.loveBattery !== undefined) {
+      if (typeof data.loveBattery === 'object' && data.loveBattery !== null) {
+        fallbackCoupleSpace.loveBattery = {
+          dudu: Number(data.loveBattery.dudu ?? 100),
+          bubu: Number(data.loveBattery.bubu ?? 100)
+        };
+      } else {
+        const num = Number(data.loveBattery) || 100;
+        fallbackCoupleSpace.loveBattery = { dudu: num, bubu: num };
+      }
+    }
     if (data.statusDudu !== undefined) fallbackCoupleSpace.statuses.dudu = String(data.statusDudu);
     if (data.statusBubu !== undefined) fallbackCoupleSpace.statuses.bubu = String(data.statusBubu);
     if (data.statuses) {

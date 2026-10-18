@@ -168,48 +168,46 @@
       <div class="grid grid-cols-2 gap-3 relative">
         <div id="heart-burst-container" class="absolute inset-0 pointer-events-none z-30"></div>
 
-        <!-- Left: Dual Battery Card (Love Battery & Badmood Meter) -->
+        <!-- Left: Dual Battery Card (Dudu & Bubu Love Batteries) -->
         <div class="bg-white dark:bg-stone-800 rounded-3xl p-3 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col justify-between">
           
-          <!-- Bar 1: Love Battery -->
+          <!-- Bar 1: Dudu's Love Battery -->
           <div class="flex flex-col gap-1">
             <div class="flex items-center justify-between">
-              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1">
-                <span class="text-xs">💖</span> love battery
+              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded-md bg-[#8D5B4C] text-white text-[9px] font-extrabold shrink-0">Dudu</span>
+                <span class="text-xs">🐻</span>
+                <span class="truncate">love battery</span>
               </span>
-              <button id="btn-open-battery-adjust" type="button" class="text-[9px] font-bold text-[#8D5B4C] hover:text-[#5A3825] dark:text-stone-300 underline cursor-pointer button-press focus:outline-none" title="Set love level">
-                adjust
-              </button>
             </div>
             <div class="flex items-center gap-1.5">
-              <button id="btn-boost-battery" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to check love battery notification!">
-                <div id="home-battery-fill" class="h-full bg-gradient-to-r from-rose-400 to-[#F5A5A5] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
+              <button id="btn-boost-battery" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to view or adjust Dudu's love battery">
+                <div id="home-battery-fill" class="h-full bg-gradient-to-r from-amber-500 via-[#8D5B4C] to-[#EAA684] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
                   <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">♥</span>
                 </div>
               </button>
-              <span id="home-battery-text" class="text-xs font-heading font-black text-[#8D5B4C] dark:text-rose-300 w-8 text-right shrink-0">100%</span>
+              <span id="home-battery-text" class="text-xs font-heading font-black text-[#8D5B4C] dark:text-amber-200 w-8 text-right shrink-0">100%</span>
             </div>
           </div>
 
           <div class="w-full h-px bg-[#DFCBB7]/40 dark:bg-stone-700 my-1"></div>
 
-          <!-- Bar 2: Badmood Battery -->
+          <!-- Bar 2: Bubu's Love Battery -->
           <div class="flex flex-col gap-1">
             <div class="flex items-center justify-between">
-              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1">
-                <span class="text-xs">⚡</span> badmood
+              <span class="font-heading font-extrabold text-[11px] text-[#5A3825] dark:text-stone-200 flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded-md bg-[#EAA684] text-white text-[9px] font-extrabold shrink-0">Bubu</span>
+                <span class="text-xs">🐼</span>
+                <span class="truncate">love battery</span>
               </span>
-              <button id="btn-open-badmood-adjust" type="button" class="text-[9px] font-bold text-[#7E6589] hover:text-[#5A3825] dark:text-purple-300 underline cursor-pointer button-press focus:outline-none" title="Set badmood level">
-                adjust
-              </button>
             </div>
             <div class="flex items-center gap-1.5">
-              <button id="btn-boost-badmood" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to check badmood notification!">
-                <div id="home-badmood-fill" class="h-full bg-gradient-to-r from-indigo-400 to-[#A78BFA] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 0%;">
-                  <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">⚡</span>
+              <button id="btn-boost-battery-bubu" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to view or adjust Bubu's love battery">
+                <div id="home-battery-bubu-fill" class="h-full bg-gradient-to-r from-rose-400 to-[#FDA4AF] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
+                  <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">♥</span>
                 </div>
               </button>
-              <span id="home-badmood-text" class="text-xs font-heading font-black text-[#7E6589] dark:text-purple-300 w-8 text-right shrink-0">0%</span>
+              <span id="home-battery-bubu-text" class="text-xs font-heading font-black text-[#EAA684] dark:text-rose-300 w-8 text-right shrink-0">100%</span>
             </div>
           </div>
 
@@ -219,7 +217,6 @@
         <button id="home-status-card" type="button" class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border-2 border-[#5A3825] dark:border-stone-600 flex flex-col text-left justify-between button-press cursor-pointer relative group overflow-hidden" title="Tap to update status">
           <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span class="font-heading font-extrabold text-xs text-[#5A3825] dark:text-stone-200">current status</span>
             </div>
             <span class="material-symbols-outlined text-[13px] text-stone-400 group-hover:text-[#8D5B4C] transition-colors">edit</span>
@@ -378,9 +375,6 @@
           <p class="text-[11px] text-on-surface-variant font-medium">Capturing our together today</p>
         </div>
         <div class="flex items-center gap-2">
-          <span class="px-2.5 py-1 rounded-full bg-[#FBE4D5] text-[10px] font-bold text-[#8D5B4C]">
-            Lvl 8 • Synced ⏱️
-          </span>
           <button id="btn-add-polaroid" type="button" class="w-8 h-8 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center button-press cursor-pointer shadow-xs" title="Add Polaroid">
             <span class="material-symbols-outlined text-base">add_a_photo</span>
           </button>
@@ -439,7 +433,7 @@
           <p class="text-[11px] text-on-surface-variant font-medium">Adventures &amp; dreams together</p>
         </div>
         <span id="bucket-header-badge" class="px-2.5 py-1 rounded-full bg-[#FAF0E6] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">
-          Lvl 8 | 3 Completed ✨
+          3 Completed ✨
         </span>
       </div>
 
@@ -667,7 +661,7 @@
           <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
             Couple Closet &amp; Mini Game 🎮🧥
           </h2>
-          <span class="text-[11px] text-on-surface-variant font-medium">Lvl 8 | Cozy Room • Live Synced</span>
+          <span class="text-[11px] text-on-surface-variant font-medium">Cozy Room</span>
         </div>
         <button id="btn-wardrobe-match-couple" type="button" class="px-3 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white text-[11px] font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
           <span>Match Us ✨</span>
@@ -816,14 +810,13 @@
             &lt;
           </a>
           <div class="flex flex-col min-w-0">
-            <button id="chat-partner-toggle-btn" type="button" class="flex items-center gap-1 text-left button-press cursor-pointer group focus:outline-none" title="Tap to switch viewing role (Dudu / Bubu)">
+            <div class="flex items-center text-left">
               <h3 id="chat-partner-name" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 truncate leading-tight">
                 Bubu 🐼❤️
               </h3>
-              <span class="material-symbols-outlined text-[13px] text-stone-400 group-hover:text-[#8D5B4C] leading-none">swap_horiz</span>
-            </button>
+            </div>
             <button id="chat-partner-presence-container" type="button" class="flex items-center gap-1.5 mt-0.5 cursor-pointer button-press text-left focus:outline-none" title="Tap to toggle online/offline state">
-              <span id="chat-partner-presence-dot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-xs ring-2 ring-emerald-200 dark:ring-emerald-900 shrink-0 animate-pulse"></span>
+              <span id="chat-partner-presence-dot" class="hidden" style="display: none !important;"></span>
               <span id="chat-partner-presence-text" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">
                 online 💫
               </span>
@@ -831,16 +824,14 @@
           </div>
         </div>
 
-        <!-- Call, Video Call, Security Lock Action Buttons -->
+        <!-- Right Side: Notification Bell & Theme Toggle -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <button id="btn-chat-call" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="Voice Call">
-            <span class="material-symbols-outlined text-base">call</span>
+          <button id="btn-chat-bell" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press relative cursor-pointer" title="Notifications">
+            <span class="material-symbols-outlined text-base">notifications</span>
+            <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 hidden"></span>
           </button>
-          <button id="btn-chat-videocall" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="Video Call">
-            <span class="material-symbols-outlined text-base">videocam</span>
-          </button>
-          <button id="btn-chat-e2ee-lock" type="button" class="w-8 h-8 rounded-full bg-surface-container hover:bg-[#F2E4D5] text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer" title="E2EE Security Verified">
-            <span class="material-symbols-outlined text-base">lock</span>
+          <button id="btn-chat-theme-toggle" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-amber-400 button-press cursor-pointer" title="Toggle Theme">
+            <span class="material-symbols-outlined text-base">dark_mode</span>
           </button>
         </div>
       </div>
@@ -879,7 +870,7 @@
         </div>
         <div id="chat-typing-indicator" class="hidden relative z-10 px-2 pt-1 flex items-center gap-1.5 text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300 shrink-0">
           <span class="w-2 h-2 rounded-full bg-[#8D5B4C] animate-pulse"></span>
-          <span id="chat-typing-indicator-text">she is typing...</span>
+          <span id="chat-typing-indicator-text">bubu is typing...</span>
         </div>
       </div>
 
@@ -1420,15 +1411,15 @@
     </div>
   </div>
 
-  <!-- MODAL: ADJUST LOVE BATTERY -->
+  <!-- MODAL: ADJUST LOVE BATTERY (Dudu & Bubu) -->
   <div id="modal-adjust-battery" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
         <div class="flex items-center gap-2">
-          <span class="text-xl">🔋</span>
+          <span id="battery-modal-avatar" class="text-2xl">🐻</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Love Battery</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">how full is your heart right now? ♡</span>
+            <h3 id="battery-modal-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Dudu's Love Battery</h3>
+            <span id="battery-modal-subtitle" class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">how full is Dudu's heart right now? ♡</span>
           </div>
         </div>
         <button id="btn-close-battery-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1438,7 +1429,7 @@
       <div class="flex flex-col items-center py-2">
         <span id="slider-battery-val" class="font-heading font-black text-3xl text-[#8D5B4C] dark:text-rose-300">100%</span>
         <div class="w-full h-4 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden p-0.5 border border-[#DFCBB7] dark:border-stone-600 mt-2">
-          <div id="slider-battery-bar" class="h-full bg-gradient-to-r from-rose-400 to-[#F5A5A5] rounded-full transition-all" style="width: 100%;"></div>
+          <div id="slider-battery-bar" class="h-full bg-gradient-to-r from-amber-500 via-[#8D5B4C] to-[#EAA684] rounded-full transition-all" style="width: 100%;"></div>
         </div>
       </div>
 
@@ -1453,7 +1444,7 @@
       </div>
 
       <!-- Quick Mood Buttons -->
-      <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+      <div id="battery-modal-presets" class="grid grid-cols-2 gap-2 text-xs font-bold">
         <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="25">
           <span>🥺</span>
           <span>Low Energy (25%)</span>
@@ -1478,65 +1469,34 @@
     </div>
   </div>
 
-  <!-- MODAL: ADJUST BADMOOD METER -->
-  <div id="modal-adjust-badmood" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+  <!-- MODAL: NOTIFICATION HISTORY (Latest 5) -->
+  <div id="modal-notification-history" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3.5 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
         <div class="flex items-center gap-2">
-          <span class="text-xl">⚡</span>
+          <span class="text-xl">🔔</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Badmood Meter</h3>
-            <span class="text-[10px] text-[#7E6589] dark:text-purple-300 font-bold">seberapa persen tingkat ngambek / bete? 🥺</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Notifications</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">latest 5 updates from our space ♡</span>
           </div>
         </div>
-        <button id="btn-close-badmood-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
+        <button id="btn-close-notif-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
       </div>
 
-      <!-- Current percentage badge -->
-      <div class="flex flex-col items-center py-2">
-        <span id="slider-badmood-val" class="font-heading font-black text-3xl text-[#7E6589] dark:text-purple-300">0%</span>
-        <div class="w-full h-4 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden p-0.5 border border-[#DFCBB7] dark:border-stone-600 mt-2">
-          <div id="slider-badmood-bar" class="h-full bg-gradient-to-r from-indigo-400 to-[#A78BFA] rounded-full transition-all" style="width: 0%;"></div>
-        </div>
+      <!-- Notification list container -->
+      <div id="notif-history-list" class="flex flex-col gap-2 max-h-[320px] overflow-y-auto no-scrollbar py-1">
+        <!-- Rendered dynamically -->
       </div>
 
-      <!-- Range Slider -->
-      <div class="flex flex-col gap-1">
-        <div class="flex justify-between text-[10px] font-bold text-stone-500 dark:text-stone-400">
-          <span>0%</span>
-          <span>50%</span>
-          <span>100%</span>
-        </div>
-        <input type="range" id="input-badmood-slider" min="0" max="100" step="5" value="0" class="w-full accent-[#7E6589] cursor-pointer">
-      </div>
-
-      <!-- Quick Mood Buttons -->
-      <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="0">
-          <span>🥰</span>
-          <span>Super Happy (0%)</span>
+      <!-- Bottom actions -->
+      <div class="flex items-center justify-between pt-1 border-t border-[#E8DACB]/40 dark:border-stone-700 text-xs">
+        <button id="btn-clear-notif-history" type="button" class="text-[11px] font-bold text-stone-400 hover:text-[#8D5B4C] dark:text-stone-400 cursor-pointer button-press">
+          Clear history
         </button>
-        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="25">
-          <span>🙁</span>
-          <span>Sedikit Bete (25%)</span>
-        </button>
-        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="50">
-          <span>🥺</span>
-          <span>Need Cuddle (50%)</span>
-        </button>
-        <button type="button" class="btn-badmood-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="75">
-          <span>😤</span>
-          <span>Ngambek Berat (75%)</span>
-        </button>
-        <button type="button" class="btn-badmood-preset col-span-2 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F3E8FF] dark:hover:bg-stone-600 text-left flex items-center justify-center gap-1.5 cursor-pointer button-press text-rose-600 dark:text-rose-400" data-val="100">
-          <span>🌋</span>
-          <span>Darurat Manja (100%)</span>
+        <button id="btn-dismiss-notif-modal" type="button" class="px-4 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+          Close ♡
         </button>
       </div>
-
-      <button id="btn-save-badmood-slider" type="button" class="w-full py-2.5 rounded-full bg-[#7E6589] hover:bg-[#684E74] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
-        Save Badmood Level ⚡
-      </button>
     </div>
   </div>
 

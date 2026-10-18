@@ -43,7 +43,10 @@
   const defaultMockupData = {
     userRole: 'dudu', // 'dudu' (Kevin) or 'bubu' (Nana)
     anniversaryDate: defaultAnniversaryIso,
-    loveBattery: 100,
+    loveBattery: {
+      dudu: 100,
+      bubu: 100
+    },
     badmoodLevel: 0,
     statuses: {
       dudu: 'Thinking of you! 💭',
@@ -202,6 +205,22 @@
     miniGameHighScore: 420
   };
 
+  function normalizeLoveBattery(val) {
+    if (typeof val === 'number') {
+      const n = Math.max(0, Math.min(100, val));
+      return { dudu: n, bubu: n };
+    }
+    if (val && typeof val === 'object') {
+      const d = val.dudu !== undefined ? Number(val.dudu) : (val.bubu !== undefined ? Number(val.bubu) : 100);
+      const b = val.bubu !== undefined ? Number(val.bubu) : (val.dudu !== undefined ? Number(val.dudu) : 100);
+      return {
+        dudu: Math.max(0, Math.min(100, isNaN(d) ? 100 : d)),
+        bubu: Math.max(0, Math.min(100, isNaN(b) ? 100 : b))
+      };
+    }
+    return { dudu: 100, bubu: 100 };
+  }
+
   // --- STATE CONTAINER ---
   let appData = loadState();
 
@@ -225,7 +244,9 @@
         if (sessionRole && (sessionRole === 'dudu' || sessionRole === 'bubu')) {
           parsed.userRole = sessionRole;
         }
-        return Object.assign({}, defaultMockupData, parsed);
+        const merged = Object.assign({}, defaultMockupData, parsed);
+        merged.loveBattery = normalizeLoveBattery(merged.loveBattery);
+        return merged;
       }
     } catch (e) {
       console.warn('Failed to parse mockup state', e);
@@ -485,11 +506,105 @@
     }
   }
 
+  // --- NOTIFICATION HISTORY (Latest 5) ---
+  const NOTIF_HISTORY_STORAGE_KEY = 'dudu_notification_history';
+  const NOTIF_UNREAD_STORAGE_KEY = 'dudu_has_unread_notifs';
+
+  function getNotificationHistory() {
+    try {
+      const raw = localStorage.getItem(NOTIF_HISTORY_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed.slice(0, 5);
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  function saveNotificationHistory(list) {
+    try {
+      localStorage.setItem(NOTIF_HISTORY_STORAGE_KEY, JSON.stringify((list || []).slice(0, 5)));
+    } catch (_) {}
+  }
+
+  function formatTimeAgo(ts) {
+    if (!ts) return 'Just now';
+    const diffMs = Math.max(0, Date.now() - Number(ts));
+    const diffSec = Math.floor(diffMs / 1000);
+    if (diffSec < 45) return 'Just now';
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr}h ago`;
+    const diffDay = Math.floor(diffHr / 24);
+    if (diffDay === 1) return 'Yesterday';
+    if (diffDay < 7) return `${diffDay}d ago`;
+    return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function addNotification(item) {
+    if (!item) return;
+    const history = getNotificationHistory();
+    const notifItem = {
+      id: item.id || `notif_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      icon: item.icon || '💖',
+      title: item.title || 'Space update',
+      message: item.message || '',
+      timestamp: item.timestamp || Date.now()
+    };
+    const updated = [notifItem, ...history.filter(h => h.id !== notifItem.id)].slice(0, 5);
+    saveNotificationHistory(updated);
+    try {
+      localStorage.setItem(NOTIF_UNREAD_STORAGE_KEY, 'true');
+    } catch (_) {}
+    updateNotificationBellBadge();
+    renderNotificationHistory();
+  }
+
+  function clearNotificationHistory() {
+    saveNotificationHistory([]);
+    try {
+      localStorage.removeItem(NOTIF_UNREAD_STORAGE_KEY);
+    } catch (_) {}
+    updateNotificationBellBadge();
+    renderNotificationHistory();
+  }
+
+  function renderNotificationHistory() {
+    const listEl = document.getElementById('notif-history-list');
+    if (!listEl) return;
+    const history = getNotificationHistory();
+
+    if (history.length === 0) {
+      listEl.innerHTML = `
+        <div class="py-8 text-center text-stone-400 dark:text-stone-500">
+          <span class="text-3xl block mb-2 opacity-60">📭</span>
+          <p class="text-xs font-heading font-bold text-[#4A3222] dark:text-stone-200">No notifications yet ♡</p>
+          <p class="text-[10px] text-[#8D5B4C] dark:text-stone-400 mt-1">Updates and chat alerts will appear here</p>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = history.map(item => `
+      <div class="flex items-start gap-2.5 p-2.5 rounded-2xl bg-white dark:bg-stone-700/60 border border-[#E8DACB] dark:border-stone-600/60 shadow-2xs">
+        <div class="w-8 h-8 rounded-full bg-[#FAF5EE] dark:bg-stone-600 flex items-center justify-center text-base shrink-0 border border-[#E8DACB]/80 dark:border-stone-500">
+          ${escapeHtml(item.icon || '💖')}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1">
+            <span class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 truncate">${escapeHtml(item.title)}</span>
+            <span class="text-[9px] text-stone-400 dark:text-stone-400 shrink-0 font-medium">${formatTimeAgo(item.timestamp)}</span>
+          </div>
+          <p class="text-[11px] text-[#8D5B4C] dark:text-stone-300 font-medium leading-snug mt-0.5 break-words">${escapeHtml(item.message)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
   function updateNotificationBellBadge() {
     const bellBtn = document.getElementById('btn-header-bell');
-    if (!bellBtn) return;
-    const dot = bellBtn.querySelector('span.bg-rose-500');
-    if (!dot) return;
+    const chatBellBtn = document.getElementById('btn-chat-bell');
 
     const hasUnreadNotes = Array.isArray(appData.notes) && appData.notes.some(n => !n.isRead);
     let hasUnreadChat = false;
@@ -497,8 +612,15 @@
       const raw = localStorage.getItem('dudu_unread_topics');
       if (raw) hasUnreadChat = JSON.parse(raw).length > 0;
     } catch (_) {}
+    const hasUnreadNotifs = localStorage.getItem(NOTIF_UNREAD_STORAGE_KEY) === 'true';
 
-    dot.classList.toggle('hidden', !(hasUnreadNotes || hasUnreadChat));
+    const showBadge = hasUnreadNotes || hasUnreadChat || hasUnreadNotifs;
+
+    [bellBtn, chatBellBtn].forEach(btn => {
+      if (!btn) return;
+      const dot = btn.querySelector('span.bg-rose-500');
+      if (dot) dot.classList.toggle('hidden', !showBadge);
+    });
   }
 
   function sendDeleteRest(endpoint, id) {
@@ -571,7 +693,7 @@
       }
       if (data.coupleSpace) {
         if (data.coupleSpace.anniversaryDate) appData.anniversaryDate = data.coupleSpace.anniversaryDate;
-        if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = data.coupleSpace.loveBattery;
+        if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = normalizeLoveBattery(data.coupleSpace.loveBattery);
         if (data.coupleSpace.badmoodLevel !== undefined) appData.badmoodLevel = Number(data.coupleSpace.badmoodLevel);
         if (data.coupleSpace.statuses) {
           if (data.coupleSpace.statuses.dudu) appData.statuses.dudu = data.coupleSpace.statuses.dudu;
@@ -680,15 +802,19 @@
   // --- THEME & HEADER CONTROLS ---
   function initThemeAndHeaderControls() {
     const themeBtn = document.getElementById('btn-theme-toggle');
+    const chatThemeBtn = document.getElementById('btn-chat-theme-toggle');
     const bellBtn = document.getElementById('btn-header-bell');
+    const chatBellBtn = document.getElementById('btn-chat-bell');
 
     const applyTheme = (isDark) => {
       document.documentElement.classList.toggle('dark', isDark);
-      const iconSpan = themeBtn?.querySelector('.material-symbols-outlined');
-      if (iconSpan) {
-        iconSpan.textContent = isDark ? 'light_mode' : 'dark_mode';
-        syncOfflineIcons();
-      }
+      [themeBtn, chatThemeBtn].forEach(btn => {
+        const iconSpan = btn?.querySelector('.material-symbols-outlined');
+        if (iconSpan) {
+          iconSpan.textContent = isDark ? 'light_mode' : 'dark_mode';
+        }
+      });
+      syncOfflineIcons();
     };
 
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
@@ -698,7 +824,7 @@
       applyTheme(false);
     }
 
-    themeBtn?.addEventListener('click', () => {
+    const toggleTheme = () => {
       const nextDark = !document.documentElement.classList.contains('dark');
       applyTheme(nextDark);
       try {
@@ -706,36 +832,43 @@
       } catch (_) {}
       window.duduAudio?.playPop?.(nextDark ? 420 : 620);
       showFeedbackToast(nextDark ? 'Cozy night mode active 🌙' : 'Warm daylight mode active ☀️');
-    });
+    };
 
-    bellBtn?.addEventListener('click', () => {
+    themeBtn?.addEventListener('click', toggleTheme);
+    chatThemeBtn?.addEventListener('click', toggleTheme);
+
+    const openNotifModal = () => {
       window.duduAudio?.playPop?.(540);
-      let unreadChat = [];
+      renderNotificationHistory();
+      const modal = document.getElementById('modal-notification-history');
+      if (modal) modal.classList.remove('hidden');
       try {
-        const raw = localStorage.getItem('dudu_unread_topics');
-        if (raw) unreadChat = JSON.parse(raw);
+        localStorage.removeItem(NOTIF_UNREAD_STORAGE_KEY);
       } catch (_) {}
-
-      const unreadNotesCount = (appData.notes || []).filter(n => !n.isRead).length;
-      if (unreadChat.length > 0) {
-        switchTab('chat');
-        showFeedbackToast(`Opening ${unreadChat.length} unread chat topic(s) 💬`);
-      } else if (unreadNotesCount > 0) {
-        activeNotesFilter = 'unread';
-        document.querySelectorAll('.notes-filter-chip').forEach(b => {
-          const isUnread = b.getAttribute('data-filter') === 'unread';
-          b.classList.toggle('bg-[#8D5B4C]', isUnread);
-          b.classList.toggle('text-white', isUnread);
-          b.classList.toggle('bg-surface-container', !isUnread);
-          b.classList.toggle('text-primary', !isUnread);
-        });
-        renderLoveNotes();
-        switchTab('notes');
-        showFeedbackToast(`You have ${unreadNotesCount} unread love note(s)! 💌`);
-      } else {
-        showFeedbackToast('All caught up! Zero unread notes or messages ♡');
-      }
       updateNotificationBellBadge();
+    };
+
+    bellBtn?.addEventListener('click', openNotifModal);
+    chatBellBtn?.addEventListener('click', openNotifModal);
+
+    const notifModal = document.getElementById('modal-notification-history');
+    const closeBtn = document.getElementById('btn-close-notif-modal');
+    const dismissBtn = document.getElementById('btn-dismiss-notif-modal');
+    const clearBtn = document.getElementById('btn-clear-notif-history');
+
+    const closeNotifModal = () => {
+      if (notifModal) notifModal.classList.add('hidden');
+    };
+
+    closeBtn?.addEventListener('click', closeNotifModal);
+    dismissBtn?.addEventListener('click', closeNotifModal);
+    notifModal?.addEventListener('click', (e) => {
+      if (e.target === notifModal) closeNotifModal();
+    });
+    clearBtn?.addEventListener('click', () => {
+      clearNotificationHistory();
+      window.duduAudio?.playPop?.(380);
+      showFeedbackToast('Notification history cleared ♡');
     });
 
     updateNotificationBellBadge();
@@ -916,9 +1049,12 @@
         appData.anniversaryDate = data.anniversaryDate;
         changed = true;
       }
-      if (data.loveBattery !== undefined && data.loveBattery !== appData.loveBattery) {
-        appData.loveBattery = data.loveBattery;
-        changed = true;
+      if (data.loveBattery !== undefined) {
+        const norm = normalizeLoveBattery(data.loveBattery);
+        if (!appData.loveBattery || norm.dudu !== appData.loveBattery.dudu || norm.bubu !== appData.loveBattery.bubu) {
+          appData.loveBattery = norm;
+          changed = true;
+        }
       }
       if (data.badmoodLevel !== undefined && data.badmoodLevel !== appData.badmoodLevel) {
         appData.badmoodLevel = Number(data.badmoodLevel);
@@ -1213,54 +1349,41 @@
     }
 
     updateLoveBatteryUI();
-    updateBadmoodUI();
 
     const duduStatusEl = document.getElementById('home-status-dudu');
     const bubuStatusEl = document.getElementById('home-status-bubu');
     if (duduStatusEl) duduStatusEl.textContent = appData.statuses.dudu;
     if (bubuStatusEl) bubuStatusEl.textContent = appData.statuses.bubu;
 
-    // Bar 1: Love Battery Button
-    const batteryBtn = document.getElementById('btn-boost-battery');
-    if (batteryBtn) {
-      batteryBtn.onclick = () => {
-        if (appData.loveBattery < 100) {
-          appData.loveBattery = Math.min(100, (Number(appData.loveBattery) || 0) + 10);
-          saveState();
-          updateLoveBatteryUI();
-          window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
-          sendSaveRest('/api/couple-space', { loveBattery: appData.loveBattery });
-        }
-        triggerHeartBurst();
-        const notif = getLoveNotificationContent(appData.loveBattery);
-        showInAppNotification(notif.title, notif.message, notif.icon);
-        window.duduAudio?.playPop?.(650);
+    // Bar 1: Dudu Love Battery Meter (Tap to view/adjust Dudu's slider)
+    const duduBatteryBtn = document.getElementById('btn-boost-battery-dudu') || document.getElementById('btn-boost-battery');
+    if (duduBatteryBtn) {
+      duduBatteryBtn.onclick = () => {
+        openLoveBatteryModal('dudu');
       };
     }
 
-    const adjustBatteryBtn = document.getElementById('btn-open-battery-adjust');
-    if (adjustBatteryBtn) {
-      adjustBatteryBtn.onclick = (e) => {
+    const adjustDuduBtn = document.getElementById('btn-open-battery-adjust') || document.getElementById('btn-open-battery-dudu-adjust');
+    if (adjustDuduBtn) {
+      adjustDuduBtn.onclick = (e) => {
         e.stopPropagation();
-        openLoveBatteryModal();
+        openLoveBatteryModal('dudu');
       };
     }
 
-    // Bar 2: Badmood Meter Button
-    const badmoodBtn = document.getElementById('btn-boost-badmood');
-    if (badmoodBtn) {
-      badmoodBtn.onclick = () => {
-        const notif = getBadmoodNotificationContent(appData.badmoodLevel);
-        showInAppNotification(notif.title, notif.message, notif.icon);
-        window.duduAudio?.playPop?.(520);
+    // Bar 2: Bubu Love Battery Meter (Tap to view/adjust Bubu's slider)
+    const bubuBatteryBtn = document.getElementById('btn-boost-battery-bubu');
+    if (bubuBatteryBtn) {
+      bubuBatteryBtn.onclick = () => {
+        openLoveBatteryModal('bubu');
       };
     }
 
-    const adjustBadmoodBtn = document.getElementById('btn-open-badmood-adjust');
-    if (adjustBadmoodBtn) {
-      adjustBadmoodBtn.onclick = (e) => {
+    const adjustBubuBtn = document.getElementById('btn-open-battery-bubu-adjust');
+    if (adjustBubuBtn) {
+      adjustBubuBtn.onclick = (e) => {
         e.stopPropagation();
-        openBadmoodModal();
+        openLoveBatteryModal('bubu');
       };
     }
 
@@ -1278,6 +1401,8 @@
   // --- IN-APP FLOATING NOTIFICATION SYSTEM ---
   let inAppNotifTimer = null;
   function showInAppNotification(title, message, icon = '💖') {
+    addNotification({ title, message, icon, timestamp: Date.now() });
+
     const banner = document.getElementById('in-app-notification-banner');
     const titleEl = document.getElementById('in-app-notif-title');
     const bodyEl = document.getElementById('in-app-notif-body');
@@ -1311,36 +1436,48 @@
     }
   }
 
-  function getLoveNotificationContent(val) {
-    const current = Math.max(0, Math.min(100, Number(val) || 100));
+  function getLoveNotificationContent(roleOrVal, maybeVal) {
+    let role = 'dudu';
+    let val = 100;
+    if (typeof roleOrVal === 'string') {
+      role = roleOrVal;
+      val = Number(maybeVal) || 100;
+    } else {
+      val = Number(roleOrVal) || 100;
+      role = (appData?.userRole === 'bubu') ? 'bubu' : 'dudu';
+    }
+    const current = Math.max(0, Math.min(100, val));
+    const name = role === 'bubu' ? 'Bubu 🐼' : 'Dudu 🐻';
+    const partnerName = role === 'bubu' ? 'Dudu' : 'Bubu';
+
     if (current >= 100) {
       return {
-        title: 'Love Battery: 100% Full! 💖',
-        message: 'Cinta Bubu & Dudu penuh melimpah ruah! Kasih sayang kita tak terbatas hari ini 🥰',
+        title: `${name} Love Battery: 100% Full! 💖`,
+        message: `Cinta ${name} penuh melimpah ruah untuk ${partnerName}! Kasih sayang kita tak terbatas hari ini 🥰`,
         icon: '💖'
       };
     } else if (current >= 75) {
       return {
-        title: `Love Battery: ${current}% 🥰`,
-        message: 'Hati lagi berbunga-bunga dan senang banget dekat kamu! Semangat terus ya sayang ♡',
+        title: `${name} Love Battery: ${current}% 🥰`,
+        message: `Hati ${name} lagi berbunga-bunga dan senang banget! Semangat terus ya sayang ♡`,
         icon: '🥰'
       };
     } else if (current >= 50) {
       return {
-        title: `Love Battery: ${current}% 🤗`,
-        message: 'Energi cinta stabil, tapi tetap butuh recharge pelukan hangat ekstra dari ayang!',
+        title: `${name} Love Battery: ${current}% 🤗`,
+        message: `Energi cinta ${name} stabil, tapi tetap butuh recharge pelukan hangat ekstra dari ${partnerName}!`,
         icon: '🤗'
       };
     } else if (current >= 25) {
       return {
-        title: `Love Battery: ${current}% 🥺`,
-        message: 'Baterai cinta mulai low! Butuh disayang, dipuk-puk, dan ditemenin ngobrol manis ♡',
+        title: `${name} Love Battery: ${current}% 🥺`,
+        message: `Baterai cinta ${name} mulai low! Butuh disayang, dipuk-puk, dan ditemenin ngobrol manis ♡`,
         icon: '🥺'
       };
     } else {
       return {
-        title: `Love Battery: ${current}% Darurat! 🔋`,
-        message: 'Baterai cinta kritis! Segera peluk erat dan manjakan ayang sekarang juga!',
+        title: `${name} Love Battery: ${current}% Darurat! 🔋`,
+        message: `Baterai cinta ${name} kritis! Segera peluk erat dan manjakan sekarang juga!`,
         icon: '🔋'
       };
     }
@@ -1348,58 +1485,102 @@
 
   function getBadmoodNotificationContent(val) {
     const current = Math.max(0, Math.min(100, Number(val) || 0));
-    if (current <= 0) {
-      return {
-        title: 'Badmood: 0% (Super Happy!) ✨',
-        message: 'Mood lagi ceria dan berbunga-bunga! Tidak ada badmood sama sekali hari ini 🥰🌸',
-        icon: '✨'
-      };
-    } else if (current <= 25) {
-      return {
-        title: `Badmood: ${current}% (Sedikit Bete) ☁️`,
-        message: 'Ada sedikit rasa bete nih, kalau disemangatin manis atau dicium pasti langsung senyum! 🥺',
-        icon: '☁️'
-      };
-    } else if (current <= 50) {
-      return {
-        title: `Badmood: ${current}% (Mood Mendung) 🌧️`,
-        message: 'Mood agak mendung dan sensitif. Butuh dipuk-puk, didengerin curhatnya, plus es krim! 🍨',
-        icon: '🌧️'
-      };
-    } else if (current <= 75) {
-      return {
-        title: `Badmood: ${current}% (Ngambek Berat) 🌩️`,
-        message: 'Lagi ngambek! Tolong jangan bikin kesel dulu ya, wajib dibujuk dengan sabar dan beliin boba 🧋😤',
-        icon: '🌩️'
-      };
-    } else {
-      return {
-        title: `Badmood: ${current}% (DARURAT LEVEL 5!) ⚡`,
-        message: 'BAHAYA NGAMBEK MAKSIMAL! Segera peluk erat, minta maaf, dan bawakan makanan kesukaan! 🌋💔',
-        icon: '⚡'
-      };
-    }
+    return {
+      title: `Mood Level: ${current}%`,
+      message: 'Mood tracker updated',
+      icon: '✨'
+    };
   }
 
-  function openLoveBatteryModal() {
+  let activeBatteryModalRole = 'dudu';
+
+  function openLoveBatteryModal(targetRole = null) {
+    if (targetRole && (targetRole === 'dudu' || targetRole === 'bubu')) {
+      activeBatteryModalRole = targetRole;
+    } else {
+      activeBatteryModalRole = (appData?.userRole === 'bubu') ? 'bubu' : 'dudu';
+    }
+
+    const isOwnBattery = (activeBatteryModalRole === (appData?.userRole || 'dudu'));
+    const isDudu = activeBatteryModalRole === 'dudu';
+    const batt = normalizeLoveBattery(appData.loveBattery);
+    appData.loveBattery = batt;
+    const curVal = isDudu ? batt.dudu : batt.bubu;
+
     const slider = document.getElementById('input-love-battery-slider');
     const valText = document.getElementById('slider-battery-val');
     const bar = document.getElementById('slider-battery-bar');
-    const current = Math.max(0, Math.min(100, Number(appData.loveBattery) || 100));
+    const avatar = document.getElementById('battery-modal-avatar');
+    const title = document.getElementById('battery-modal-title');
+    const subtitle = document.getElementById('battery-modal-subtitle');
+    const presetsBox = document.getElementById('battery-modal-presets');
+    const saveBtn = document.getElementById('btn-save-battery-slider');
+
+    if (avatar) avatar.textContent = isDudu ? '🐻' : '🐼';
+
+    if (isOwnBattery) {
+      if (title) title.textContent = isDudu ? "Adjust Dudu's Love Battery" : "Adjust Bubu's Love Battery";
+      if (subtitle) subtitle.textContent = isDudu ? "how full is Dudu's heart right now? ♡" : "how full is Bubu's heart right now? ♡";
+
+      if (slider) {
+        slider.disabled = false;
+        slider.className = isDudu ? 'w-full accent-[#8D5B4C] cursor-pointer' : 'w-full accent-[#EAA684] cursor-pointer';
+      }
+
+      if (presetsBox) presetsBox.classList.remove('hidden');
+
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Love Level ♡';
+        saveBtn.className = isDudu
+          ? 'w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs'
+          : 'w-full py-2.5 rounded-full bg-[#EAA684] hover:bg-[#d8926f] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs';
+      }
+    } else {
+      // Partner's battery: Read-only! Dudu can only adjust Dudu, Bubu can only adjust Bubu
+      if (title) title.textContent = isDudu ? "Dudu's Love Battery 🐻" : "Bubu's Love Battery 🐼";
+      if (subtitle) subtitle.textContent = isDudu ? "Only Dudu can adjust Dudu's battery ♡" : "Only Bubu can adjust Bubu's battery ♡";
+
+      if (slider) {
+        slider.disabled = true;
+        slider.className = 'w-full opacity-60 cursor-not-allowed';
+      }
+
+      if (presetsBox) presetsBox.classList.add('hidden');
+
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = isDudu ? "Only Dudu can adjust this 🐻" : "Only Bubu can adjust this 🐼";
+        saveBtn.className = 'w-full py-2.5 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-400 font-heading font-bold text-xs cursor-not-allowed opacity-80';
+      }
+
+      showFeedbackToast(isDudu ? "Viewing Dudu's battery (Only Dudu can adjust) 🐻" : "Viewing Bubu's battery (Only Bubu can adjust) 🐼");
+    }
+
+    if (bar) {
+      bar.className = isDudu
+        ? 'h-full bg-gradient-to-r from-amber-500 via-[#8D5B4C] to-[#EAA684] rounded-full transition-all'
+        : 'h-full bg-gradient-to-r from-rose-400 to-[#FDA4AF] rounded-full transition-all';
+    }
 
     const updateSliderDisplay = (val) => {
-      if (valText) valText.textContent = `${val}%`;
-      if (bar) bar.style.width = `${val}%`;
+      const v = Math.max(0, Math.min(100, Number(val) || 0));
+      if (valText) valText.textContent = `${v}%`;
+      if (bar) bar.style.width = `${v}%`;
     };
 
     if (slider) {
-      slider.value = current;
-      updateSliderDisplay(current);
-      slider.oninput = () => updateSliderDisplay(slider.value);
+      slider.value = curVal;
+      updateSliderDisplay(curVal);
+      slider.oninput = () => {
+        if (!isOwnBattery) return;
+        updateSliderDisplay(slider.value);
+      };
     }
 
     document.querySelectorAll('.btn-battery-preset').forEach(btn => {
       btn.onclick = () => {
+        if (!isOwnBattery) return;
         const v = Number(btn.getAttribute('data-val'));
         if (slider) slider.value = v;
         updateSliderDisplay(v);
@@ -1410,18 +1591,22 @@
     const closeBtn = document.getElementById('btn-close-battery-modal');
     if (closeBtn) closeBtn.onclick = () => closeSheet('modal-adjust-battery');
 
-    const saveBtn = document.getElementById('btn-save-battery-slider');
     if (saveBtn) {
       saveBtn.onclick = () => {
-        const newVal = Number(slider?.value ?? appData.loveBattery ?? 100);
-        appData.loveBattery = Math.max(0, Math.min(100, newVal));
+        if (!isOwnBattery) return;
+        const newVal = Math.max(0, Math.min(100, Number(slider?.value ?? 100)));
+        if (activeBatteryModalRole === 'bubu') {
+          appData.loveBattery.bubu = newVal;
+        } else {
+          appData.loveBattery.dudu = newVal;
+        }
         saveState();
         updateLoveBatteryUI();
         window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
         sendSaveRest('/api/couple-space', { loveBattery: appData.loveBattery });
         triggerHeartBurst();
         closeSheet('modal-adjust-battery');
-        const notif = getLoveNotificationContent(appData.loveBattery);
+        const notif = getLoveNotificationContent(activeBatteryModalRole, newVal);
         showInAppNotification(notif.title, notif.message, notif.icon);
         window.duduAudio?.playPop?.(650);
       };
@@ -1431,67 +1616,28 @@
   }
 
   function openBadmoodModal() {
-    const slider = document.getElementById('input-badmood-slider');
-    const valText = document.getElementById('slider-badmood-val');
-    const bar = document.getElementById('slider-badmood-bar');
-    const current = Math.max(0, Math.min(100, Number(appData.badmoodLevel) || 0));
-
-    const updateSliderDisplay = (val) => {
-      if (valText) valText.textContent = `${val}%`;
-      if (bar) bar.style.width = `${val}%`;
-    };
-
-    if (slider) {
-      slider.value = current;
-      updateSliderDisplay(current);
-      slider.oninput = () => updateSliderDisplay(slider.value);
-    }
-
-    document.querySelectorAll('.btn-badmood-preset').forEach(btn => {
-      btn.onclick = () => {
-        const v = Number(btn.getAttribute('data-val'));
-        if (slider) slider.value = v;
-        updateSliderDisplay(v);
-        window.duduAudio?.playPop?.(520);
-      };
-    });
-
-    const closeBtn = document.getElementById('btn-close-badmood-modal');
-    if (closeBtn) closeBtn.onclick = () => closeSheet('modal-adjust-badmood');
-
-    const saveBtn = document.getElementById('btn-save-badmood-slider');
-    if (saveBtn) {
-      saveBtn.onclick = () => {
-        const newVal = Number(slider?.value ?? appData.badmoodLevel ?? 0);
-        appData.badmoodLevel = Math.max(0, Math.min(100, newVal));
-        saveState();
-        updateBadmoodUI();
-        window.DuduChatSocket?.sendUpdateCoupleSpace?.({ badmoodLevel: appData.badmoodLevel });
-        sendSaveRest('/api/couple-space', { badmoodLevel: appData.badmoodLevel });
-        closeSheet('modal-adjust-badmood');
-        const notif = getBadmoodNotificationContent(appData.badmoodLevel);
-        showInAppNotification(notif.title, notif.message, notif.icon);
-        window.duduAudio?.playPop?.(650);
-      };
-    }
-
-    openSheet('modal-adjust-badmood');
+    openLoveBatteryModal('bubu');
   }
 
   function updateLoveBatteryUI() {
-    const val = Math.max(0, Math.min(100, Number(appData.loveBattery) || 100));
-    const txt = document.getElementById('home-battery-text');
-    const fill = document.getElementById('home-battery-fill');
-    if (txt) txt.textContent = `${val}%`;
-    if (fill) fill.style.width = `${val}%`;
+    const batt = normalizeLoveBattery(appData.loveBattery);
+    appData.loveBattery = batt;
+
+    // Bar 1: Dudu
+    const duduTxt = document.getElementById('home-battery-dudu-text') || document.getElementById('home-battery-text');
+    const duduFill = document.getElementById('home-battery-dudu-fill') || document.getElementById('home-battery-fill');
+    if (duduTxt) duduTxt.textContent = `${batt.dudu}%`;
+    if (duduFill) duduFill.style.width = `${batt.dudu}%`;
+
+    // Bar 2: Bubu
+    const bubuTxt = document.getElementById('home-battery-bubu-text');
+    const bubuFill = document.getElementById('home-battery-bubu-fill');
+    if (bubuTxt) bubuTxt.textContent = `${batt.bubu}%`;
+    if (bubuFill) bubuFill.style.width = `${batt.bubu}%`;
   }
 
   function updateBadmoodUI() {
-    const val = Math.max(0, Math.min(100, Number(appData.badmoodLevel) || 0));
-    const txt = document.getElementById('home-badmood-text');
-    const fill = document.getElementById('home-badmood-fill');
-    if (txt) txt.textContent = `${val}%`;
-    if (fill) fill.style.width = `${val}%`;
+    // legacy stub
   }
 
   function triggerHeartBurst() {
@@ -1862,7 +2008,7 @@
     if (percentEl) percentEl.textContent = `${percent}%`;
     if (barFillEl) barFillEl.style.width = `${percent}%`;
     if (countEl) countEl.textContent = `${completedCount} of ${totalCount} Completed`;
-    if (headerBadgeEl) headerBadgeEl.textContent = `Lvl 8 | ${completedCount} Completed ✨`;
+    if (headerBadgeEl) headerBadgeEl.textContent = `${completedCount} Completed ✨`;
 
     // Update filter chip counts dynamically
     document.querySelectorAll('.bucket-filter-chip').forEach(btn => {
@@ -3168,14 +3314,6 @@
     const avatarBtn = document.getElementById('profile-avatar-btn');
     if (avatarBtn) avatarBtn.onclick = toggleUserRole;
 
-    const chatPartnerToggleBtn = document.getElementById('chat-partner-toggle-btn');
-    if (chatPartnerToggleBtn) {
-      chatPartnerToggleBtn.onclick = (e) => {
-        if (e.target.closest('#chat-partner-presence-container')) return;
-        toggleUserRole();
-      };
-    }
-
     updateIdentityUI();
   }
 
@@ -3303,9 +3441,14 @@
     getDaysTogether,
     updateNotificationBellBadge,
     renderLoveNotes,
-    renderOurCalendar
+    renderOurCalendar,
+    addNotification,
+    getNotificationHistory,
+    clearNotificationHistory,
+    renderNotificationHistory
   };
   window.duduMockup = window.DuduMockup;
+  window.duduApp = window.DuduMockup;
   window.showFeedbackToast = showFeedbackToast;
   window.showToast = showFeedbackToast;
 
