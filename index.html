@@ -583,21 +583,8 @@
       </div>
 
       <!-- Cozy Bedtime Illustration Card (music & bed time.jpg) -->
-      <div class="bg-[#1D1924] rounded-[2.5rem] p-2 plush-shadow-lg border-2 border-[#382E47] flex flex-col items-center overflow-hidden relative">
-        <img src="assets/mockup_art/music_bedtime.png" alt="Dudu & Bubu Bedtime" class="w-full rounded-[2rem] object-cover pointer-events-none select-none">
-      </div>
-
-      <!-- Bedtime Countdown & Together Offline Button -->
-      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2">
-        <div>
-          <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide">Bedtime Countdown 🌙</span>
-          <h3 id="bedtime-countdown-display" class="font-heading font-black text-sm text-[#4A3222] dark:text-stone-100">
-            Bedtime in 00:45:12
-          </h3>
-        </div>
-        <button id="btn-together-offline" type="button" class="py-2 px-3.5 rounded-full bg-[#EBD2B4] hover:bg-[#DEC09E] text-[#5C3D2E] text-xs font-bold button-press cursor-pointer shadow-xs">
-          Together Offline 💤
-        </button>
+      <div class="rounded-[2rem] overflow-hidden plush-shadow-lg border-2 border-[#4A3222]/30 dark:border-stone-700 flex flex-col items-center relative">
+        <img src="assets/mockup_art/music_bedtime.png" alt="Dudu & Bubu Bedtime" class="w-full h-auto object-cover pointer-events-none select-none">
       </div>
 
       <!-- Soothing Bedtime Lofi Player Card (music & bed time.jpg) -->
@@ -618,33 +605,33 @@
 
           <div class="flex-1 min-w-0">
             <h4 id="lofi-track-title" class="font-heading font-bold text-sm text-primary dark:text-stone-100 truncate">
-              Lofi Night Whispers 🌙
+              3 A.M. Radio 🌙
             </h4>
             <p id="lofi-track-sub" class="text-xs text-on-surface-variant truncate">
-              Lo-fi Beats for Two
+              lofi.radio • 24/7 Chill Beats
             </p>
           </div>
 
-          <!-- Controls -->
+          <!-- Controls with Prev & Next -->
           <div class="flex items-center gap-1">
-            <button id="btn-lofi-prev" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer">
+            <button id="btn-lofi-prev" type="button" class="w-8 h-8 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer" title="Previous Track">
               <span class="material-symbols-outlined text-lg">skip_previous</span>
             </button>
-            <button id="btn-lofi-play" type="button" class="w-10 h-10 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center button-press cursor-pointer shadow-xs">
+            <button id="btn-lofi-play" type="button" class="w-10 h-10 rounded-full bg-[#8D5B4C] hover:bg-[#7A4C3F] text-white flex items-center justify-center button-press cursor-pointer shadow-md transition-transform active:scale-95" title="Play / Pause">
               <span id="lofi-play-icon" class="material-symbols-outlined text-xl">play_arrow</span>
             </button>
-            <button id="btn-lofi-next" type="button" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer">
+            <button id="btn-lofi-next" type="button" class="w-8 h-8 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer" title="Next Track">
               <span class="material-symbols-outlined text-lg">skip_next</span>
             </button>
           </div>
         </div>
 
-        <!-- Scrubber Bar with Star Handle -->
+        <!-- Scrubber Bar with Circle Handle -->
         <div class="flex items-center gap-2 pt-1">
           <span class="material-symbols-outlined text-xs text-stone-400">volume_up</span>
           <div id="lofi-volume-bar" class="flex-1 h-2 rounded-full bg-[#E8DACB] dark:bg-stone-700 relative flex items-center cursor-pointer" title="Tap to adjust volume">
             <div id="lofi-volume-fill" class="w-2/3 h-full bg-[#8D5B4C] rounded-full transition-all duration-150"></div>
-            <span id="lofi-volume-star" class="absolute left-2/3 -translate-x-1/2 text-xs select-none pointer-events-none transition-all duration-150">⭐</span>
+            <div id="lofi-volume-thumb" class="absolute left-2/3 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#8D5B4C] border-2 border-white dark:border-stone-800 shadow-sm pointer-events-none transition-all duration-150"></div>
           </div>
           <span id="lofi-volume-label" class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300 w-8 text-right">65%</span>
         </div>

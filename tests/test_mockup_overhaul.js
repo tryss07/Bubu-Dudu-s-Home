@@ -136,12 +136,13 @@ const fs = require('fs');
   await page.evaluate(() => window.DuduMockup.switchTab('music'));
   await page.waitForTimeout(400);
 
-  const countdownText = await page.textContent('#bedtime-countdown-display');
-  console.log(`✓ Bedtime Countdown: ${countdownText.trim()}`);
-  if (!countdownText.includes('Bedtime in')) throw new Error('Countdown display missing!');
-
   const trackTitle = await page.textContent('#lofi-track-title');
   console.log(`✓ Lofi Track: ${trackTitle.trim()}`);
+  if (!trackTitle) throw new Error('Lofi track title missing!');
+
+  const hasVolumeThumb = await page.isVisible('#lofi-volume-thumb');
+  console.log(`✓ Volume Circle Handle Present: ${hasVolumeThumb}`);
+  if (!hasVolumeThumb) throw new Error('Volume circle thumb missing!');
 
   // Test Lofi Play Toggle
   await page.click('#btn-lofi-play');
@@ -153,14 +154,16 @@ const fs = require('fs');
   await page.click('#btn-lofi-play'); // pause
   await page.waitForTimeout(200);
 
-  // Test Together Offline Sleep Overlay
-  await page.click('#btn-together-offline');
-  await page.waitForTimeout(300);
-  const sleepVisible = await page.isVisible('#offline-sleep-overlay');
-  if (!sleepVisible) throw new Error('Sleep overlay failed to open!');
-  await page.click('#btn-close-sleep-overlay');
+  // Test Prev and Next Buttons
+  await page.click('#btn-lofi-next');
   await page.waitForTimeout(200);
-  console.log('✓ Sleep mode overlay tested successfully');
+  const nextTrackTitle = await page.textContent('#lofi-track-title');
+  console.log(`✓ Skipped to Next Track: ${nextTrackTitle.trim()}`);
+
+  await page.click('#btn-lofi-prev');
+  await page.waitForTimeout(200);
+  const prevTrackTitle = await page.textContent('#lofi-track-title');
+  console.log(`✓ Returned to Previous Track: ${prevTrackTitle.trim()}`);
 
   await page.screenshot({ path: path.join(screenshotsDir, '06_bedtime_music.png') });
 

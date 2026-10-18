@@ -373,59 +373,90 @@
     };
   }
 
-  // --- AUDIO & HAPTIC SYNTHESIZER FOR BEDTIME LOFI ---
+  // --- BEDTIME LOFI ENGINE WITH 24/7 LOFI.RADIO INTEGRATION ---
+  const LOFI_RADIO_SONGS = ["3 A.M. Radio.mp3", "A Place to Hide.mp3", "Adrift.mp3", "Aether.mp3", "After Hours.mp3", "All Curled Up.mp3", "Alley Cat.mp3", "Artifact.mp3", "Astral Projection.mp3", "Aurora.mp3", "Awakenings.mp3", "Bayou Blues.mp3", "Beautiful Day.mp3", "Bird Bath.mp3", "Birdhouse.mp3", "Blood Moon.mp3", "Bloom.mp3", "Breathing Underwater.mp3", "Cable Car.mp3", "Calm Waters.mp3", "Can't Sleep.mp3", "Carousel.mp3", "Cave of Solace.mp3", "Celestial Sands.mp3", "Changes.mp3", "Chasing Snowflakes.mp3", "Chugging Along.mp3", "Come One, Come All.mp3", "Comfy.mp3", "Constellations.mp3", "Contact.mp3", "Convergence.mp3", "Cool Breeze.mp3", "Corner Store.mp3", "Cosmic Echoes.mp3", "Cosmic Web.mp3", "Creation.mp3", "Creatures of the Night.mp3", "Crescent Moon.mp3", "Crossroads.mp3", "Cruisin'.mp3", "Dance of the Cacti.mp3", "Dancing Dandelions.mp3", "Dancing Shadows.mp3", "Dark Corners.mp3", "Dark Forest.mp3", "Day's End.mp3", "Day_s End.mp3", "Defunct.mp3", "Deja Vu.mp3", "Desert Rain.mp3", "Desolate.mp3", "Discovery.mp3", "Distant Ships.mp3", "Dont Look Back.mp3", "Downpour.mp3", "Downtown.mp3", "Dream Machine.mp3", "Dream State.mp3", "Drifting.mp3", "Dune Drifter.mp3", "Ebb and Flow.mp3", "Echoes of Yesterday.mp3", "Eerie Glow.mp3", "Egress.mp3", "Elevated.mp3", "Embrace.mp3", "Empty Sidewalks.mp3", "End of the Line.mp3", "Epiphany.mp3", "Equinox.mp3", "Ethereal.mp3", "Everchanging.mp3", "Exhale.mp3", "Exploration.mp3", "Eye of the Storm.mp3", "Eyes in the Dark.mp3", "Fading.mp3", "Fallen.mp3", "Familiar Faces.mp3", "Field Of Fireflies.mp3", "Flourish.mp3", "Fog Blanket.mp3", "Forget-Me-Not.mp3", "Fourth Dimension.mp3", "Fragments.mp3", "Frolic.mp3", "Frosted Evergreen.mp3", "Frozen Flowers.mp3", "Gentle Breeze.mp3", "Ghost Planet.mp3", "Ghost Town.mp3", "Ghosties.mp3", "Gingerbread House.mp3", "Glowing Tides.mp3", "Going With The Flow.mp3", "Goosebumps.mp3", "Green Tea.mp3", "Half Awake.mp3", "Happy Trails.mp3", "Heart of the Ocean.mp3", "Ice Palace.mp3", "Icicles.mp3", "In Between.mp3", "In the Moment.mp3", "In the Past.mp3", "In the Walls.mp3", "Infinite.mp3", "Insomnia.mp3", "Intertwined.mp3", "Labyrinth.mp3", "Lazy Afternoon.mp3", "Leviathan.mp3", "Lighthouse.mp3", "Lonely.mp3", "Long Day.mp3", "Looking Up.mp3", "Lost Paradise.mp3", "Lost Souls.mp3", "Lost and Found.mp3", "Lost at Sea.mp3", "Low Tide.mp3", "Lullaby.mp3", "Luminous.mp3", "Lurking in the Shadows.mp3", "Lush.mp3", "Maelstrom.mp3", "Magical Moments.mp3", "Mesa's Edge.mp3", "Message in a Bottle.mp3", "Meteorites.mp3", "Mirage.mp3", "Missing Pieces.mp3", "Morning Dew.mp3", "Moving Landscapes.mp3", "Mysterious Passenger.mp3", "Nevermore.mp3", "Nexus.mp3", "Night Light.mp3", "Night Owls.mp3", "Night Train.mp3", "Nightfall.mp3", "Not Alone.mp3", "Nowhere to Hide.mp3", "Oddity.mp3", "On the Brink.mp3", "Once in a Lifetime.mp3", "Otherworldly.mp3", "Out of Place.mp3", "Out of the Blue.mp3", "Palm Tree.mp3", "Paradox.mp3", "Passing Time.mp3", "Peppermint Mocha.mp3", "Phantom Waltz.mp3", "Pineapple Popsicle.mp3", "Pitter Patter.mp3", "Planetary Alignment.mp3", "Rainy Streets.mp3", "Refractions.mp3", "Rewind.mp3", "Rift in Time.mp3", "Rocky Shores.mp3", "Rooftop Rendezvous.mp3", "Running Late.mp3", "Sandstorm.mp3", "Satellite.mp3", "Sea Foam.mp3", "Sea of Stars.mp3", "Seashells.mp3", "Secret Of The Forest.mp3", "Serendipity.mp3", "Serenity Now.mp3", "Shelter.mp3", "Signs of Life.mp3", "Silent Wood.mp3", "Siren's Song.mp3", "Skeleton Dance.mp3", "Skyscrapers.mp3", "Snow Pillow.mp3", "Soft.mp3", "Solitude.mp3", "Sonder.mp3", "Spring Showers.mp3", "Star Bright.mp3", "Starlit Beach.mp3", "Starry Night.mp3", "Stars Collide.mp3", "Starseed.mp3", "Stasis.mp3", "Step Right Up.mp3", "Still of the Night.mp3", "Stranded.mp3", "Strange Fog.mp3", "Stray.mp3", "Streetlights.mp3", "Strike of Midnight.mp3", "Sunken Secrets.mp3", "Supernova.mp3", "Take Me With You.mp3", "The Bells.mp3", "The Dungeon.mp3", "The Midnight Diner.mp3", "The Murk.mp3", "The Portal.mp3", "The Toymaker.mp3", "Through the Trees.mp3", "Thunderous Waves.mp3", "Time Loop.mp3", "Time to Think.mp3", "Timeless.mp3", "Toasty.mp3", "Torn.mp3", "Tracks to Nowhere.mp3", "Transformation.mp3", "Tumbleweeds.mp3", "Tunnels.mp3", "Twilight Market.mp3", "UFO.mp3", "Under the Canopy.mp3", "Undertow.mp3", "Underwater Cavern.mp3", "Uninvited.mp3", "Unreality.mp3", "Upside Down.mp3", "Verdant.mp3", "Visions.mp3", "Waiting for the Sun.mp3", "Wanderlust.mp3", "Warm Horizon.mp3", "Weightless.mp3", "Weird Dream.mp3", "What Lies Beyond.mp3", "Wild Strawberry.mp3", "Window Seat.mp3", "Wish You Were Here.mp3", "Wishes.mp3", "Wishing Well.mp3", "Wonderland.mp3", "Wonderment.mp3", "Zero Gravity.mp3", "Zzz....mp3"];
+
   class BedtimeLofiEngine {
     constructor() {
-      this.ctx = null;
       this.isPlaying = false;
-      this.currentTrackIndex = 0;
       this.volume = 0.65;
-      this.chordTimer = null;
-      this.noiseNode = null;
-      this.noiseGain = null;
-      this.tracks = [
-        { title: 'Lofi Night Whispers 🌙', subtitle: 'Lo-fi Beats for Two', mood: 'Warm Electric Piano & Rain' },
-        { title: 'Starlit Dreams with Bubu 🐻', subtitle: 'Lo-fi Beats for Two', mood: 'Gentle Rhodes Chords' },
-        { title: 'Sweet Snooze & Soft Rain 🌧️', subtitle: 'Lo-fi Beats for Two', mood: 'Rain & Cozy Kalimba' },
-        { title: 'Honey Moonbeam Lullaby 🍯', subtitle: 'Lo-fi Beats for Two', mood: 'Mellow Velvet Tones' }
-      ];
+      this.audio = null;
+      this.tracks = LOFI_RADIO_SONGS.map(file => ({
+        title: `${file.replace(/\.mp3$/i, '')} 🌙`,
+        subtitle: 'lofi.radio • 24/7 Chill Beats',
+        filename: file,
+        url: `https://lofi.radio/songs/${encodeURIComponent(file)}`
+      }));
+      const songIntervalMs = 180000;
+      this.currentTrackIndex = Math.floor(Date.now() / songIntervalMs) % this.tracks.length;
     }
 
-    init() {
-      if (!this.ctx) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) this.ctx = new AudioCtx();
-      }
-      if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
-      }
+    get currentTrack() {
+      return this.tracks[this.currentTrackIndex] || this.tracks[0];
+    }
+
+    get liveTrack() {
+      return this.currentTrack;
+    }
+
+    initAudio() {
+      if (this.audio) return;
+      this.audio = new Audio();
+      this.audio.preload = 'none';
+      this.audio.volume = this.volume;
+
+      this.audio.addEventListener('ended', () => {
+        this.nextTrack();
+      });
+
+      this.audio.addEventListener('error', (e) => {
+        console.warn('[LofiRadio] Track error, skipping to next:', e);
+        if (this.isPlaying) {
+          setTimeout(() => this.nextTrack(), 500);
+        }
+      });
+
+      this.audio.addEventListener('play', () => {
+        this.isPlaying = true;
+        updateLofiUI();
+      });
+
+      this.audio.addEventListener('pause', () => {
+        this.isPlaying = false;
+        updateLofiUI();
+      });
     }
 
     setVolume(val) {
       this.volume = Math.max(0, Math.min(1, Number(val)));
-      if (this.noiseGain && this.ctx) {
-        this.noiseGain.gain.setValueAtTime(0.035 * this.volume, this.ctx.currentTime);
+      if (this.audio) {
+        this.audio.volume = this.volume;
       }
       updateLofiUI();
     }
 
-    start() {
-      this.init();
-      if (!this.ctx) return;
-      this.isPlaying = true;
-      this.startVinylCrackle();
-      this.playChordProgression();
+    async start() {
+      this.initAudio();
+      const track = this.currentTrack;
+      if (!this.audio.src || !this.audio.src.includes(encodeURIComponent(track.filename))) {
+        this.audio.src = track.url;
+      }
+      this.audio.volume = this.volume;
+      try {
+        await this.audio.play();
+        this.isPlaying = true;
+      } catch (err) {
+        console.warn('[LofiRadio] play() blocked or failed:', err);
+        this.isPlaying = false;
+      }
       updateLofiUI();
     }
 
     stop() {
-      this.isPlaying = false;
-      if (this.chordTimer) clearTimeout(this.chordTimer);
-      if (this.noiseNode) {
-        try { this.noiseNode.stop(); } catch (e) {}
-        this.noiseNode = null;
-        this.noiseGain = null;
+      if (this.audio) {
+        this.audio.pause();
       }
+      this.isPlaying = false;
       updateLofiUI();
     }
 
@@ -435,98 +466,27 @@
     }
 
     nextTrack() {
+      this.initAudio();
       this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-      updateLofiUI();
-      if (this.isPlaying) {
-        if (this.chordTimer) clearTimeout(this.chordTimer);
-        this.playChordProgression();
+      const wasPlaying = this.isPlaying;
+      this.audio.src = this.currentTrack.url;
+      this.audio.volume = this.volume;
+      if (wasPlaying) {
+        this.audio.play().catch(e => console.warn(e));
       }
+      updateLofiUI();
     }
 
     prevTrack() {
+      this.initAudio();
       this.currentTrackIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
+      const wasPlaying = this.isPlaying;
+      this.audio.src = this.currentTrack.url;
+      this.audio.volume = this.volume;
+      if (wasPlaying) {
+        this.audio.play().catch(e => console.warn(e));
+      }
       updateLofiUI();
-      if (this.isPlaying) {
-        if (this.chordTimer) clearTimeout(this.chordTimer);
-        this.playChordProgression();
-      }
-    }
-
-    startVinylCrackle() {
-      if (!this.ctx || this.noiseNode) return;
-      const bufferSize = this.ctx.sampleRate * 2;
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + (0.02 * white)) / 1.02;
-        lastOut = data[i];
-        if (Math.random() < 0.0006) data[i] += (Math.random() - 0.5) * 0.4;
-      }
-      this.noiseNode = this.ctx.createBufferSource();
-      this.noiseNode.buffer = buffer;
-      this.noiseNode.loop = true;
-
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 1400;
-
-      const gain = this.ctx.createGain();
-      gain.gain.value = 0.035 * this.volume;
-      this.noiseGain = gain;
-
-      this.noiseNode.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.ctx.destination);
-      this.noiseNode.start();
-    }
-
-    playChordProgression() {
-      if (!this.isPlaying || !this.ctx) return;
-      const chordBanks = [
-        [ [261.63, 329.63, 392.00, 493.88], [220.00, 261.63, 329.63, 392.00], [146.83, 174.61, 220.00, 261.63], [196.00, 246.94, 293.66, 349.23] ],
-        [ [174.61, 220.00, 261.63, 329.63], [164.81, 196.00, 246.94, 293.66], [146.83, 174.61, 220.00, 261.63], [130.81, 164.81, 196.00, 246.94] ]
-      ];
-      const bank = chordBanks[this.currentTrackIndex % chordBanks.length];
-      let step = 0;
-
-      const playNextChord = () => {
-        if (!this.isPlaying || !this.ctx) return;
-        const freqs = bank[step % bank.length];
-        const now = this.ctx.currentTime;
-        const chordDuration = 3.6;
-
-        freqs.forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          const filter = this.ctx.createBiquadFilter();
-
-          osc.type = (idx === 0) ? 'triangle' : 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-
-          filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(900, now);
-          filter.frequency.exponentialRampToValueAtTime(450, now + chordDuration);
-
-          const baseGain = 0.045 * this.volume;
-          gain.gain.setValueAtTime(0, now);
-          gain.gain.linearRampToValueAtTime(baseGain, now + 0.15 + idx * 0.03);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + chordDuration);
-
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(this.ctx.destination);
-
-          osc.start(now + idx * 0.03);
-          osc.stop(now + chordDuration);
-        });
-
-        step++;
-        this.chordTimer = setTimeout(playNextChord, (chordDuration - 0.4) * 1000);
-      };
-
-      playNextChord();
     }
   }
 
@@ -2421,13 +2381,13 @@
   }
 
   function updateLofiUI() {
-    const cur = lofiEngine.tracks[lofiEngine.currentTrackIndex];
+    const cur = lofiEngine.liveTrack || { title: '3 A.M. Radio 🌙', subtitle: 'lofi.radio • 24/7 Live Radio' };
     const titleEl = document.getElementById('lofi-track-title');
     const subEl = document.getElementById('lofi-track-sub');
     const discEl = document.getElementById('lofi-vinyl-disc');
     const iconEl = document.getElementById('lofi-play-icon');
     const volFill = document.getElementById('lofi-volume-fill');
-    const volStar = document.getElementById('lofi-volume-star');
+    const volThumb = document.getElementById('lofi-volume-thumb') || document.getElementById('lofi-volume-star');
     const volLabel = document.getElementById('lofi-volume-label');
 
     if (titleEl) titleEl.textContent = cur.title;
@@ -2445,7 +2405,7 @@
 
     const pct = Math.round((lofiEngine.volume ?? 0.65) * 100);
     if (volFill) volFill.style.width = `${pct}%`;
-    if (volStar) volStar.style.left = `${pct}%`;
+    if (volThumb) volThumb.style.left = `${pct}%`;
     if (volLabel) volLabel.textContent = `${pct}%`;
   }
 
