@@ -1341,14 +1341,24 @@
       `;
     }
 
+    const isSticker = msg.type === 'sticker';
+    const isGifOrStickerImg = msg.type === 'image' && typeof msg.content === 'string' && (msg.content.includes('stickers_gif') || msg.content.includes('chat_stk') || msg.content.endsWith('.gif'));
+    const isPureSticker = (isSticker || isGifOrStickerImg) && !msg.replyTo && !msg.forwardedFrom;
+
     let contentHtml = '';
     if (msg.type === 'sticker') {
       const stickerId = parseInt(msg.content, 10);
       const sticker = window.DuduTaxonomy?.getById(stickerId) || window.DUDU_STICKERS?.[0];
       const stickerFile = sticker ? sticker.file : 'STK-20260925-WA0187.webp';
       contentHtml = `
-        <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1.5 select-none pointer-events-none flex items-center justify-center">
-          <img src="Dudu Stickers/${stickerFile}" alt="Sticker" loading="lazy" class="w-full h-full object-contain">
+        <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
+          <img src="Dudu Stickers/${stickerFile}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm">
+        </div>
+      `;
+    } else if (isGifOrStickerImg) {
+      contentHtml = `
+        <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
+          <img src="${msg.content}" alt="Sticker Animasi" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm">
         </div>
       `;
     } else if (msg.type === 'image') {
@@ -1427,6 +1437,14 @@
       contentHtml = `<p class="text-[15px] sm:text-base leading-relaxed break-words whitespace-pre-wrap">${escapeHtml(msg.content)}</p>`;
     }
 
+    const bubbleBodyClassMe = isPureSticker
+      ? 'chat-bubble-body bg-transparent border-0 shadow-none p-0 cursor-pointer min-w-0 max-w-full'
+      : 'chat-bubble-body bg-[#8D5B4C] text-white rounded-2xl rounded-tr-xs px-4 py-2.5 shadow-sm border-0 cursor-pointer min-w-0 max-w-full break-words';
+
+    const bubbleBodyClassPartner = isPureSticker
+      ? 'chat-bubble-body bg-transparent border-0 shadow-none p-0 cursor-pointer min-w-0 max-w-full'
+      : 'chat-bubble-body bg-white dark:bg-stone-800 text-[#4A3222] dark:text-stone-100 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-sm border border-[#E8DACB] dark:border-stone-700 cursor-pointer min-w-0 max-w-full break-words';
+
     if (isMe) {
       return `
         <div class="chat-bubble-row flex flex-col items-end gap-0.5 max-w-[85%] self-end group relative transition-transform ${isSelectionMode && selectedMessageIds.has(msg.id) ? 'ring-2 ring-secondary bg-secondary/15 rounded-2xl p-1' : ''}" data-msg-id="${msg.id}">
@@ -1445,7 +1463,7 @@
                 <span class="material-symbols-outlined text-xs pointer-events-none">delete</span>
               </button>
             </div>
-            <div class="chat-bubble-body bg-[#8D5B4C] text-white rounded-2xl rounded-tr-xs px-4 py-2.5 shadow-sm border-0 cursor-pointer min-w-0 max-w-full break-words" data-msg-id="${msg.id}">
+            <div class="${bubbleBodyClassMe}" data-msg-id="${msg.id}">
               ${forwardedHtml}
               ${quoteHtml}
               ${contentHtml}
@@ -1464,7 +1482,7 @@
         <div class="chat-bubble-row flex flex-col items-start gap-0.5 max-w-[85%] self-start group relative transition-transform ${isSelectionMode && selectedMessageIds.has(msg.id) ? 'ring-2 ring-secondary bg-secondary/15 rounded-2xl p-1' : ''}" data-msg-id="${msg.id}">
           <span class="text-xs font-heading font-bold text-[#8D5B4C] dark:text-stone-300 px-1">${escapeHtml(partnerLabel)}</span>
           <div class="flex items-center gap-1 max-w-full justify-start">
-            <div class="chat-bubble-body bg-white dark:bg-stone-800 text-[#4A3222] dark:text-stone-100 rounded-2xl rounded-tl-xs px-4 py-2.5 shadow-sm border border-[#E8DACB] dark:border-stone-700 cursor-pointer min-w-0 max-w-full break-words" data-msg-id="${msg.id}">
+            <div class="${bubbleBodyClassPartner}" data-msg-id="${msg.id}">
               ${forwardedHtml}
               ${quoteHtml}
               ${contentHtml}
@@ -2129,6 +2147,55 @@
 
   // --- Sticker Tray Drawer ---
 
+  const DUDU_GIF_STICKERS = [
+    { file: 'assets/stickers_gif/STK-20260925-WA0187.gif', title: 'Wiggle Dance' },
+    { file: 'assets/stickers_gif/STK-20260925-WA0188.gif', title: 'Side Eye' },
+    { file: 'assets/stickers_gif/STK-20260925-WA0208.gif', title: 'Butterfly Chill' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0047.gif', title: 'Wall Peek' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0050.gif', title: 'Tummy Sick' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0056.gif', title: 'Happy Dance' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0103.gif', title: 'Nibbling Nuts' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0128.gif', title: 'Tears of Joy' },
+    { file: 'assets/stickers_gif/STK-20260926-WA0176.gif', title: 'Angry Milk Tea' },
+    { file: 'assets/stickers_gif/STK-20260927-WA0005.gif', title: 'Giving Rose' },
+    { file: 'assets/stickers_gif/STK-20260927-WA0006.gif', title: 'Floating Soft' },
+    { file: 'assets/stickers_gif/STK-20260927-WA0015.gif', title: 'Piggy Bank' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0000.gif', title: 'Guilty Thumbs' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0001.gif', title: 'Baby Hug' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0002.gif', title: 'Head Pat' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0003.gif', title: 'Warm Hug' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0035.gif', title: 'Love Heart' },
+    { file: 'assets/stickers_gif/STK-20260929-WA0063.gif', title: 'Cheering' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0024.gif', title: 'Bedtime Cuddle' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0037.gif', title: 'Cute Wink' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0048.gif', title: 'Blowing Kiss' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0057.gif', title: 'Panda Hug' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0071.gif', title: 'Happy Clap' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0075.gif', title: 'Holding Hands' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0076.gif', title: 'Shy Blush' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0081.gif', title: 'Eating Snack' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0091.gif', title: 'Pout Face' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0100.gif', title: 'Sweet Cuddle' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0101.gif', title: 'Excited Jump' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0102.gif', title: 'Blanket Snuggle' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0107.gif', title: 'Love Note' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0108.gif', title: 'Good Morning' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0109.gif', title: 'Good Night' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0111.gif', title: 'Tickle Giggle' },
+    { file: 'assets/stickers_gif/STK-20260930-WA0112.gif', title: 'Always Together' }
+  ];
+
+  function getStickerCategory(s) {
+    if (s.cat) return s.cat;
+    const title = (s.title || '').toLowerCase();
+    const tags = (s.tags || []).join(' ').toLowerCase();
+    const isCouple = /hug|cuddle|peluk|kiss|together|berdua|couple|holding_hands|snuggle|bed|crying|safe_space/.test(title + ' ' + tags);
+    if (isCouple) return 'couple';
+    const isBubu = /bubu|panda|dress|skirt|hair_bow|blush|shy|soft|cute|rose|flower|gentle|pat_pat|sweet/.test(title + ' ' + tags);
+    if (isBubu) return 'bubu';
+    return 'dudu';
+  }
+
   let activeStickerCategory = 'all';
 
   function setupStickerTray(category = 'all') {
@@ -2147,31 +2214,42 @@
 
     let itemsHtml = '';
 
-    // First render mockup stickers if matching category
-    const filteredMockup = mockupStickers.filter(s => category === 'all' || s.cat === category || (category === 'couple' && s.cat === 'couple'));
-    itemsHtml += filteredMockup.map(s => `
-      <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-2 rounded-2xl bg-[#FAF0E6] hover:bg-[#F5C7A9]/40 border border-[#E8DACB] flex flex-col items-center justify-center cursor-pointer transition-transform">
-        <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-          <img src="${s.file}" alt="${s.title}" class="max-h-full max-w-full object-contain">
-        </div>
-      </button>
-    `).join('');
-
-    // Followed by standard 95 webp stickers
-    if (window.DUDU_STICKERS) {
-      const filteredStandard = window.DUDU_STICKERS.filter(s => {
-        if (category === 'bubu') return (s.title || '').toLowerCase().includes('bubu');
-        if (category === 'dudu') return (s.title || '').toLowerCase().includes('dudu');
-        return true;
-      });
-
-      itemsHtml += filteredStandard.slice(0, 40).map(s => `
-        <button type="button" data-sticker-id="${s.id}" class="chat-sticker-select-btn button-press p-2 rounded-2xl bg-white dark:bg-stone-700 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] flex flex-col items-center justify-center cursor-pointer transition-transform">
+    if (category === 'gif') {
+      // Render animated GIF stickers with transparent background
+      itemsHtml = DUDU_GIF_STICKERS.map(s => `
+        <button type="button" data-gif-file="${s.file}" class="chat-gif-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group" title="${escapeHtml(s.title)}">
+          <span class="absolute top-1 right-1 px-1 py-0.2 rounded-md bg-[#8D5B4C] text-[8px] font-bold text-white tracking-wider pointer-events-none">GIF</span>
           <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="Dudu Stickers/${s.file}" alt="${s.title}" loading="lazy" class="max-h-full max-w-full object-contain">
+            <img src="${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
           </div>
         </button>
       `).join('');
+    } else {
+      // 1. Mockup stickers matching category
+      const filteredMockup = mockupStickers.filter(s => category === 'all' || s.cat === category);
+      itemsHtml += filteredMockup.map(s => `
+        <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105" title="${escapeHtml(s.title)}">
+          <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
+            <img src="${s.file}" alt="${escapeHtml(s.title)}" class="max-h-full max-w-full object-contain">
+          </div>
+        </button>
+      `).join('');
+
+      // 2. All 95 WebP animated stickers matching category
+      if (window.DUDU_STICKERS) {
+        const filteredStandard = window.DUDU_STICKERS.filter(s => {
+          if (category === 'all') return true;
+          return getStickerCategory(s) === category;
+        });
+
+        itemsHtml += filteredStandard.map(s => `
+          <button type="button" data-sticker-id="${s.id}" class="chat-sticker-select-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105" title="${escapeHtml(s.title)}">
+            <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
+              <img src="Dudu Stickers/${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+            </div>
+          </button>
+        `).join('');
+      }
     }
 
     grid.innerHTML = itemsHtml;
@@ -2198,15 +2276,26 @@
       });
     });
 
+    // Click handlers for GIF stickers
+    grid.querySelectorAll('.chat-gif-stk-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const gifFile = btn.getAttribute('data-gif-file');
+        if (gifFile) {
+          sendDirectImageSticker(gifFile);
+          closeStickerTray();
+        }
+      });
+    });
+
     // Wire up category filter buttons
     document.querySelectorAll('.stk-cat-btn').forEach(catBtn => {
       catBtn.onclick = () => {
         document.querySelectorAll('.stk-cat-btn').forEach(b => {
           b.classList.remove('bg-[#8D5B4C]', 'text-white');
-          b.classList.add('bg-[#F5EAE0]', 'text-primary');
+          b.classList.add('bg-[#F5EAE0]', 'dark:bg-stone-700', 'text-[#4A3222]', 'dark:text-stone-200');
         });
         catBtn.classList.add('bg-[#8D5B4C]', 'text-white');
-        catBtn.classList.remove('bg-[#F5EAE0]', 'text-primary');
+        catBtn.classList.remove('bg-[#F5EAE0]', 'dark:bg-stone-700', 'text-[#4A3222]', 'dark:text-stone-200');
         setupStickerTray(catBtn.getAttribute('data-cat') || 'all');
       };
     });

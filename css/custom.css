@@ -502,6 +502,29 @@ html.dark .doodle-bg {
   background-image: none;
 }
 
+/* Dynamic Chat & Global Wallpaper Layers */
+#chat-wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  z-index: 1;
+}
+
+#global-app-wallpaper-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  z-index: 0;
+}
+
 /* Washi Tape styling for polaroids and countdown cards */
 .washi-tape {
   position: absolute;
