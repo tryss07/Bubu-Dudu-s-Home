@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Wooden Wall Frame on Right -->
+      <rect x="352" y="50" width="160" height="420" rx="12" fill="#DDB892" stroke="#3E2723" stroke-width="8"/>
+      <line x1="352" y1="50" x2="352" y2="470" stroke="#7F5539" stroke-width="6"/>
+      <!-- Peeking Dudu -->
+      <g transform="translate(-10, 20)">
+        
+    <!-- Dudu Ears -->
+    <circle cx="172" cy="155" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="172" cy="155" r="22" fill="#8C5935"/>
+    <circle cx="368" cy="155" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="368" cy="155" r="22" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 160 230
+             C 140 175, 195 130, 270 130
+             C 345 130, 400 175, 380 230
+             C 400 285, 365 325, 270 325
+             C 175 325, 140 285, 160 230 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="270" cy="252" rx="50" ry="36" fill="#F5E3D0" stroke="#3E2723" stroke-width="5"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="192" cy="252" rx="28" ry="16" fill="url(#duduBlush)"/>
+    <ellipse cx="348" cy="252" rx="28" ry="16" fill="url(#duduBlush)"/>
+  
+        
+    <!-- Left Eye -->
+    <circle cx="212" cy="216" r="14" fill="#3E2723"/>
+    <circle cx="209" cy="212" r="5" fill="#FFFFFF"/>
+    <circle cx="216" cy="219" r="2.5" fill="#FFFFFF"/>
+    <!-- Right Eye -->
+    <circle cx="328" cy="216" r="14" fill="#3E2723"/>
+    <circle cx="325" cy="212" r="5" fill="#FFFFFF"/>
+    <circle cx="332" cy="219" r="2.5" fill="#FFFFFF"/>
+    <!-- Nose & Mouth on Snout -->
+    <path d="M 259 239 Q 270 233 281 239 Q 270 251 259 239 Z"
+          fill="#3E2723"/>
+    <path d="M 259 256 C 264 263, 270 263, 270 256 C 270 263, 276 263, 281 256"
+          fill="none" stroke="#3E2723" stroke-width="5" stroke-linecap="round"/>
+  
+        <!-- Clinging Paws on the Wall Edge -->
+        <ellipse cx="360" cy="200" rx="16" ry="22" fill="#BA8358" stroke="#3E2723" stroke-width="6.5"/>
+        <ellipse cx="360" cy="270" rx="16" ry="22" fill="#BA8358" stroke="#3E2723" stroke-width="6.5"/>
+      </g>
+    
+</g>
+</svg>

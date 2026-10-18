@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <!-- Chubby Brown Body -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
+    <!-- Light Cream Belly -->
+    <ellipse cx="256" cy="356" rx="60" ry="50" fill="#F5E3D0"/>
+  
+      
+    <!-- Dudu Ears -->
+    <circle cx="158" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="158" cy="130" r="22" fill="#8C5935"/>
+    <circle cx="354" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="354" cy="130" r="22" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="256" cy="227" rx="50" ry="36" fill="#F5E3D0" stroke="#3E2723" stroke-width="5"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="178" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+    <ellipse cx="334" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 184 193 Q 200 177 216 193"
+          fill="none" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 296 193 Q 312 177 328 193"
+          fill="none" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
+    <!-- Nose & Open Mouth with Tongue -->
+    <path d="M 245 214 Q 256 208 267 214 Q 256 226 245 214 Z"
+          fill="#3E2723"/>
+    <path d="M 244 231 Q 256 247 268 231 Z"
+          fill="#FF758C" stroke="#3E2723" stroke-width="4.5"/>
+  
+      <!-- Left Orange Pom-Pom -->
+      <g transform="translate(140, 180)">
+        <circle cx="0" cy="0" r="40" fill="#FFA502" stroke="#3E2723" stroke-width="6"/>
+        <circle cx="-15" cy="-15" r="25" fill="#FF7F50"/>
+        <circle cx="15" cy="15" r="25" fill="#FF7F50"/>
+        <circle cx="0" cy="0" r="20" fill="#FFD166"/>
+      </g>
+      <!-- Right Orange Pom-Pom -->
+      <g transform="translate(372, 180)">
+        <circle cx="0" cy="0" r="40" fill="#FFA502" stroke="#3E2723" stroke-width="6"/>
+        <circle cx="-15" cy="-15" r="25" fill="#FF7F50"/>
+        <circle cx="15" cy="15" r="25" fill="#FF7F50"/>
+        <circle cx="0" cy="0" r="20" fill="#FFD166"/>
+      </g>
+      <!-- Arms Raised -->
+      <path d="M 190 280 L 155 200" stroke="#3E2723" stroke-width="14" stroke-linecap="round"/>
+      <path d="M 190 280 L 155 200" stroke="#BA8358" stroke-width="8" stroke-linecap="round"/>
+      <path d="M 322 280 L 357 200" stroke="#3E2723" stroke-width="14" stroke-linecap="round"/>
+      <path d="M 322 280 L 357 200" stroke="#BA8358" stroke-width="8" stroke-linecap="round"/>
+    
+</g>
+</svg>

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
+    <!-- Chubby White Body -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#FFFFFF" stroke="#2B2421" stroke-width="8"/>
+  
+      
+    <!-- Bubu Ears -->
+    <circle cx="158" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <circle cx="354" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <!-- Bubu Head Contour -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="180" cy="230" rx="30" ry="18" fill="url(#bubuBlush)"/>
+    <ellipse cx="332" cy="230" rx="30" ry="18" fill="url(#bubuBlush)"/>
+  
+      
+    <!-- Left Eye Patch -->
+    <ellipse cx="200" cy="195" rx="21" ry="25" fill="#2B2421" transform="rotate(-7 200 195)"/>
+    <circle cx="197" cy="191" r="7" fill="#FFFFFF"/>
+    <circle cx="205" cy="200" r="3" fill="#FFFFFF"/>
+    <!-- Right Eye Patch -->
+    <ellipse cx="312" cy="195" rx="21" ry="25" fill="#2B2421" transform="rotate(7 312 195)"/>
+    <circle cx="309" cy="191" r="7" fill="#FFFFFF"/>
+    <circle cx="317" cy="200" r="3" fill="#FFFFFF"/>
+    <!-- Nose & Cat Mouth -->
+    <ellipse cx="256" cy="210" rx="6" ry="4" fill="#2B2421"/>
+    <path d="M 245 218 C 250 225, 256 225, 256 218 C 256 225, 262 225, 267 218"
+          fill="none" stroke="#2B2421" stroke-width="5.5" stroke-linecap="round"/>
+  
+      <!-- Giant Puffy Heart -->
+      <path d="M 256 270 C 256 225, 185 190, 185 250 C 185 305, 256 360, 256 370 C 256 360, 327 305, 327 250 C 327 190, 256 225, 256 270 Z"
+            fill="url(#heartPinkGrad)" stroke="#2B2421" stroke-width="7.5" stroke-linejoin="round"/>
+      <path d="M 205 240 C 205 220, 228 215, 235 225" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+      <!-- Hugging Arms -->
+      <path d="M 160 300 C 175 320, 205 325, 222 305" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5" stroke-linecap="round"/>
+      <path d="M 352 300 C 337 320, 307 325, 290 305" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5" stroke-linecap="round"/>
+      <!-- Sparkles -->
+      <polygon points="120,165 124,177 136,181 124,185 120,197 116,185 104,181 116,177" fill="#FFD166"/>
+      <polygon points="385,280 388,289 397,292 388,295 385,304 382,295 373,292 382,289" fill="#FFD166"/>
+    
+</g>
+</svg>

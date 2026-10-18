@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Dudu Sitting Proud -->
+      
+    <!-- Feet -->
+    <ellipse cx="286.8" cy="414.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <ellipse cx="373.2" cy="414.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <!-- Chubby Brown Body -->
+    <ellipse cx="330" cy="347" rx="94.5" ry="79.2" fill="#BA8358" stroke="#3E2723" stroke-width="7.2"/>
+    <!-- Light Cream Belly -->
+    <ellipse cx="330" cy="352.4" rx="54" ry="45" fill="#F5E3D0"/>
+  
+      
+    <!-- Dudu Ears -->
+    <circle cx="241.8" cy="147.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="241.8" cy="147.5" r="19.8" fill="#8C5935"/>
+    <circle cx="418.2" cy="147.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="418.2" cy="147.5" r="19.8" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 231 215
+             C 213 165.5, 262.5 125, 330 125
+             C 397.5 125, 447 165.5, 429 215
+             C 447 264.5, 415.5 300.5, 330 300.5
+             C 244.5 300.5, 213 264.5, 231 215 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="330" cy="234.8" rx="45" ry="32.4" fill="#F5E3D0" stroke="#3E2723" stroke-width="4.5"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="259.8" cy="234.8" rx="25.2" ry="14.4" fill="url(#duduBlush)"/>
+    <ellipse cx="400.2" cy="234.8" rx="25.2" ry="14.4" fill="url(#duduBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 265.2 204.2 Q 279.6 189.8 294 204.2"
+          fill="none" stroke="#3E2723" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 366 204.2 Q 380.4 189.8 394.8 204.2"
+          fill="none" stroke="#3E2723" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Nose & Open Mouth with Tongue -->
+    <path d="M 320.1 223.1 Q 330 217.7 339.9 223.1 Q 330 233.9 320.1 223.1 Z"
+          fill="#3E2723"/>
+    <path d="M 319.2 238.4 Q 330 252.8 340.8 238.4 Z"
+          fill="#FF758C" stroke="#3E2723" stroke-width="4.05"/>
+  
+      <!-- Bubu with Cheeks Stretched -->
+      <g transform="translate(-15, 10)">
+        
+    <!-- Feet -->
+    <ellipse cx="141.8" cy="414.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <ellipse cx="228.2" cy="414.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <!-- Chubby White Body -->
+    <ellipse cx="185" cy="347" rx="94.5" ry="79.2" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2"/>
+  
+        <!-- Bubu Head with Squished Cheeks -->
+        <circle cx="105" cy="155" r="32" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+        <circle cx="265" cy="155" r="32" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+        <!-- Extra Wide Squished Face Shape -->
+        <path d="M 85 220 C 70 170, 120 130, 185 130 C 250 130, 300 170, 285 220 C 310 260, 260 300, 185 300 C 110 300, 60 260, 85 220 Z"
+              fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
+        <!-- Silly Squished Eyes -->
+        <ellipse cx="145" cy="210" rx="15" ry="18" fill="#2B2421"/>
+        <circle cx="143" cy="207" r="5" fill="#FFFFFF"/>
+        <ellipse cx="225" cy="210" rx="15" ry="18" fill="#2B2421"/>
+        <circle cx="223" cy="207" r="5" fill="#FFFFFF"/>
+        <!-- Squished Round Pucker Mouth -->
+        <circle cx="185" cy="235" r="8" fill="#FF5277" stroke="#2B2421" stroke-width="4"/>
+      </g>
+      <!-- Dudu Paws Pinching Cheeks -->
+      <ellipse cx="145" cy="245" rx="18" ry="15" fill="#BA8358" stroke="#3E2723" stroke-width="6"/>
+      <ellipse cx="245" cy="245" rx="18" ry="15" fill="#BA8358" stroke="#3E2723" stroke-width="6"/>
+      <!-- Heart Bubbles -->
+      <path d="M 200 110 C 200 95, 185 85, 185 100 C 185 115, 200 130, 200 135 C 200 130, 215 115, 215 100 C 215 85, 200 95, 200 110 Z" fill="#FF758C" stroke="#2B2421" stroke-width="4"/>
+    
+</g>
+</svg>

@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Rain Droplets Background -->
+      <g stroke="#70A6FF" stroke-width="4" stroke-linecap="round">
+        <line x1="80" y1="80" x2="65" y2="120"/>
+        <line x1="120" y1="200" x2="105" y2="240"/>
+        <line x1="430" y1="90" x2="415" y2="130"/>
+        <line x1="450" y1="230" x2="435" y2="270"/>
+      </g>
+      <!-- Bubu & Dudu Snuggled Under Leaf -->
+      
+    <!-- Feet -->
+    <ellipse cx="146.8" cy="424.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <ellipse cx="233.2" cy="424.5" rx="25.2" ry="18" fill="#FFFFFF" stroke="#2B2421" stroke-width="6.75"/>
+    <!-- Chubby White Body -->
+    <ellipse cx="190" cy="357" rx="94.5" ry="79.2" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2"/>
+  
+      
+    <!-- Bubu Ears -->
+    <circle cx="101.8" cy="167.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <circle cx="278.2" cy="167.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <!-- Bubu Head Contour -->
+    <path d="M 91 235
+             C 73 185.5, 122.5 145, 190 145
+             C 257.5 145, 307 185.5, 289 235
+             C 307 284.5, 275.5 320.5, 190 320.5
+             C 104.5 320.5, 73 284.5, 91 235 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="121.6" cy="257.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
+    <ellipse cx="258.4" cy="257.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 125.2 227.8 Q 139.6 213.4 154 227.8"
+          fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 226 227.8 Q 240.4 213.4 254.8 227.8"
+          fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Nose & Sweet Smile -->
+    <ellipse cx="190" cy="239.5" rx="5.4" ry="3.6" fill="#2B2421"/>
+    <path d="M 180.1 246.7 C 184.6 253.9, 190 253.9, 190 246.7 C 190 253.9, 195.4 253.9, 199.9 246.7"
+          fill="none" stroke="#2B2421" stroke-width="4.95" stroke-linecap="round"/>
+  
+      
+    <!-- Feet -->
+    <ellipse cx="278.8" cy="424.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <ellipse cx="365.2" cy="424.5" rx="25.2" ry="18" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <!-- Chubby Brown Body -->
+    <ellipse cx="322" cy="357" rx="94.5" ry="79.2" fill="#BA8358" stroke="#3E2723" stroke-width="7.2"/>
+    <!-- Light Cream Belly -->
+    <ellipse cx="322" cy="362.4" rx="54" ry="45" fill="#F5E3D0"/>
+  
+      
+    <!-- Dudu Ears -->
+    <circle cx="233.8" cy="167.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="233.8" cy="167.5" r="19.8" fill="#8C5935"/>
+    <circle cx="410.2" cy="167.5" r="34.2" fill="#BA8358" stroke="#3E2723" stroke-width="6.75"/>
+    <circle cx="410.2" cy="167.5" r="19.8" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 223 235
+             C 205 185.5, 254.5 145, 322 145
+             C 389.5 145, 439 185.5, 421 235
+             C 439 284.5, 407.5 320.5, 322 320.5
+             C 236.5 320.5, 205 284.5, 223 235 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="322" cy="254.8" rx="45" ry="32.4" fill="#F5E3D0" stroke="#3E2723" stroke-width="4.5"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="251.8" cy="254.8" rx="25.2" ry="14.4" fill="url(#duduBlush)"/>
+    <ellipse cx="392.2" cy="254.8" rx="25.2" ry="14.4" fill="url(#duduBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 257.2 224.2 Q 271.6 209.8 286 224.2"
+          fill="none" stroke="#3E2723" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 358 224.2 Q 372.4 209.8 386.8 224.2"
+          fill="none" stroke="#3E2723" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Nose & Open Mouth with Tongue -->
+    <path d="M 312.1 243.1 Q 322 237.7 331.9 243.1 Q 322 253.9 312.1 243.1 Z"
+          fill="#3E2723"/>
+    <path d="M 311.2 258.4 Q 322 272.8 332.8 258.4 Z"
+          fill="#FF758C" stroke="#3E2723" stroke-width="4.05"/>
+  
+      <!-- Giant Green Leaf Umbrella -->
+      <g transform="translate(256, 120)">
+        <!-- Stem held by Dudu -->
+        <path d="M 60 170 Q 50 80 0 10" fill="none" stroke="#2ED573" stroke-width="9" stroke-linecap="round"/>
+        <!-- Big Leaf Canopy -->
+        <path d="M -160 20 C -120 -60, 120 -60, 160 20 C 80 10, -80 10, -160 20 Z" fill="#2ED573" stroke="#3E2723" stroke-width="7" stroke-linejoin="round"/>
+        <!-- Leaf Veins -->
+        <path d="M 0 -35 L 0 15 M -80 -10 L -40 -5 M 80 -10 L 40 -5" stroke="#10AC84" stroke-width="4.5" stroke-linecap="round"/>
+        <!-- Water drop slipping off leaf edge -->
+        <circle cx="160" cy="28" r="5" fill="#70A6FF"/>
+      </g>
+    
+</g>
+</svg>

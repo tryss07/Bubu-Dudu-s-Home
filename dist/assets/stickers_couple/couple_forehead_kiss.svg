@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Bubu (Left) with closed bliss eyes and blushing -->
+      
+    <!-- Feet -->
+    <ellipse cx="144.4" cy="409.75" rx="26.599999999999998" ry="19" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.125"/>
+    <ellipse cx="235.6" cy="409.75" rx="26.599999999999998" ry="19" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.125"/>
+    <!-- Chubby White Body -->
+    <ellipse cx="190" cy="338.5" rx="99.75" ry="83.6" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.6"/>
+  
+      
+    <!-- Bubu Ears -->
+    <circle cx="96.9" cy="143.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
+    <circle cx="283.1" cy="143.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
+    <!-- Bubu Head Contour -->
+    <path d="M 85.5 215
+             C 66.5 162.75, 118.75 120, 190 120
+             C 261.25 120, 313.5 162.75, 294.5 215
+             C 313.5 267.25, 280.25 305.25, 190 305.25
+             C 99.75 305.25, 66.5 267.25, 85.5 215 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="7.6" stroke-linejoin="round"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="117.8" cy="238.75" rx="28.5" ry="17.099999999999998" fill="url(#bubuBlush)"/>
+    <ellipse cx="262.2" cy="238.75" rx="28.5" ry="17.099999999999998" fill="url(#bubuBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 121.60000000000001 207.4 Q 136.8 192.2 152 207.4"
+          fill="none" stroke="#2B2421" stroke-width="7.125" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 228 207.4 Q 243.2 192.2 258.4 207.4"
+          fill="none" stroke="#2B2421" stroke-width="7.125" stroke-linecap="round"/>
+    <!-- Nose & Sweet Smile -->
+    <ellipse cx="190" cy="219.75" rx="5.699999999999999" ry="3.8" fill="#2B2421"/>
+    <path d="M 179.55 227.35 C 184.3 234.95, 190 234.95, 190 227.35 C 190 234.95, 195.7 234.95, 200.45 227.35"
+          fill="none" stroke="#2B2421" stroke-width="5.225" stroke-linecap="round"/>
+  
+      <!-- Dudu (Right) Leaning in kissing forehead -->
+      <g transform="translate(45, -10) rotate(-15 320 220)">
+        
+    <!-- Feet -->
+    <ellipse cx="254.4" cy="409.75" rx="26.599999999999998" ry="19" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <ellipse cx="345.6" cy="409.75" rx="26.599999999999998" ry="19" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <!-- Chubby Brown Body -->
+    <ellipse cx="300" cy="338.5" rx="99.75" ry="83.6" fill="#BA8358" stroke="#3E2723" stroke-width="7.6"/>
+    <!-- Light Cream Belly -->
+    <ellipse cx="300" cy="344.2" rx="57" ry="47.5" fill="#F5E3D0"/>
+  
+        
+    <!-- Dudu Ears -->
+    <circle cx="206.9" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <circle cx="206.9" cy="133.75" r="20.9" fill="#8C5935"/>
+    <circle cx="393.1" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <circle cx="393.1" cy="133.75" r="20.9" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 195.5 205
+             C 176.5 152.75, 228.75 110, 300 110
+             C 371.25 110, 423.5 152.75, 404.5 205
+             C 423.5 257.25, 390.25 295.25, 300 295.25
+             C 209.75 295.25, 176.5 257.25, 195.5 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="7.6" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="300" cy="225.9" rx="47.5" ry="34.199999999999996" fill="#F5E3D0" stroke="#3E2723" stroke-width="4.75"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="225.9" cy="225.9" rx="26.599999999999998" ry="15.2" fill="url(#duduBlush)"/>
+    <ellipse cx="374.1" cy="225.9" rx="26.599999999999998" ry="15.2" fill="url(#duduBlush)"/>
+  
+        
+    <!-- Left Happy Eye Curve -->
+    <path d="M 231.60000000000002 193.6 Q 246.8 178.4 262 193.6"
+          fill="none" stroke="#3E2723" stroke-width="7.125" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 338 193.6 Q 353.2 178.4 368.4 193.6"
+          fill="none" stroke="#3E2723" stroke-width="7.125" stroke-linecap="round"/>
+    <!-- Nose & Open Mouth with Tongue -->
+    <path d="M 289.55 213.55 Q 300 207.85 310.45 213.55 Q 300 224.95 289.55 213.55 Z"
+          fill="#3E2723"/>
+    <path d="M 288.6 229.7 Q 300 244.9 311.4 229.7 Z"
+          fill="#FF758C" stroke="#3E2723" stroke-width="4.2749999999999995"/>
+  
+      </g>
+      <!-- Tender Loving Hearts -->
+      <g transform="translate(230, 110)">
+        <path d="M 20 20 C 20 5, 0 -5, 0 10 C 0 25, 20 40, 20 45 C 20 40, 40 25, 40 10 C 40 -5, 20 5, 20 20 Z" fill="#FF5277" stroke="#2B2421" stroke-width="4.5"/>
+      </g>
+    
+</g>
+</svg>

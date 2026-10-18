@@ -1346,7 +1346,7 @@
     }
 
     const isSticker = msg.type === 'sticker';
-    const isGifOrStickerImg = msg.type === 'image' && typeof msg.content === 'string' && (msg.content.includes('stickers_') || msg.content.includes('chat_stk') || msg.content.includes('mockup_art') || msg.content.endsWith('.gif'));
+    const isGifOrStickerImg = msg.type === 'image' && typeof msg.content === 'string' && (msg.content.includes('stickers_') || msg.content.includes('chat_stk') || msg.content.includes('mockup_art') || msg.content.includes('Dudu Stickers') || msg.content.endsWith('.gif') || msg.content.endsWith('.webp') || msg.content.endsWith('.svg'));
     const isPureSticker = (isSticker || isGifOrStickerImg) && !msg.replyTo && !msg.forwardedFrom;
 
     let contentHtml = '';
@@ -2156,38 +2156,54 @@
   ]);
 
   const BUBU_STICKERS = [
-    { id: 'bubu_1', file: 'assets/stickers_bubu/bubu_wave.png', title: 'Bubu Halo (Waving)', cat: 'bubu' },
-    { id: 'bubu_2', file: 'assets/stickers_bubu/bubu_bamboo.png', title: 'Bubu Makan Bambu (Bamboo)', cat: 'bubu' },
-    { id: 'bubu_3', file: 'assets/stickers_bubu/bubu_sleep_cloud.png', title: 'Bubu Bobo Cantik (Cloud Sleep)', cat: 'bubu' },
-    { id: 'bubu_4', file: 'assets/stickers_bubu/bubu_sweet_head.png', title: 'Bubu Senyum Manis (Heart Smile)', cat: 'bubu' },
-    { id: 'bubu_5', file: 'assets/stickers_bubu/bubu_shy_avatar.png', title: 'Bubu Malu-Malu (Shy Blush)', cat: 'bubu' },
-    { id: 'bubu_6', file: 'assets/stickers_bubu/bubu_natural_stand.png', title: 'Bubu Pose Imut (Cute Stand)', cat: 'bubu' },
-    { id: 'bubu_7', file: 'assets/stickers_bubu/bubu_strawberry_pj.png', title: 'Bubu Baju Strawberry (Strawberry PJ)', cat: 'bubu' },
-    { id: 'bubu_8', file: 'assets/stickers_bubu/bubu_ruffle_dress.png', title: 'Bubu Gaun Ruffle (Ruffle Dress)', cat: 'bubu' },
-    { id: 'bubu_9', file: 'assets/stickers_bubu/bubu_floral_dress.png', title: 'Bubu Dress Floral (Floral Summer)', cat: 'bubu' },
-    { id: 'bubu_10', file: 'assets/stickers_bubu/bubu_apron_dress.png', title: 'Bubu Apron Koki (Sweet Chef Apron)', cat: 'bubu' },
-    { id: 'bubu_11', file: 'assets/stickers_bubu/bubu_trench_coat.png', title: 'Bubu Mantel Hangat (Cozy Trench)', cat: 'bubu' },
-    { id: 'bubu_12', file: 'assets/stickers_bubu/bubu_sweater_skirt.png', title: 'Bubu Rajut Hangat (Cozy Knit)', cat: 'bubu' },
-    { id: 'bubu_13', file: 'assets/stickers_bubu/bubu_tennis_skirt.png', title: 'Bubu Rok Tenis (Sporty Tennis)', cat: 'bubu' },
-    { id: 'bubu_14', file: 'assets/stickers_bubu/bubu_artist_beret.png', title: 'Bubu Beret Pelukis (Artist Beret & Satchel)', cat: 'bubu' },
-    { id: 'bubu_15', file: 'assets/stickers_bubu/bubu_straw_hat.png', title: 'Bubu Topi Pantai (Summer Straw Hat)', cat: 'bubu' },
-    { id: 'bubu_16', file: 'assets/stickers_bubu/bubu_nightcap_sleep.png', title: 'Bubu Sandal Kelinci (Nightcap & Bunny)', cat: 'bubu' },
-    { id: 'bubu_17', file: 'assets/stickers_bubu/bubu_heart_glasses.png', title: 'Bubu Kacamata Hati (Heart Glasses & Bow)', cat: 'bubu' }
+    { id: 'bubu_1', file: 'assets/stickers_bubu/bubu_love_heart.png', title: 'Bubu Peluk Hati Cinta (Love Heart)', cat: 'bubu' },
+    { id: 'bubu_2', file: 'assets/stickers_bubu/bubu_wave_hello.png', title: 'Bubu Halo Sayang (Wave Hello)', cat: 'bubu' },
+    { id: 'bubu_3', file: 'assets/stickers_bubu/bubu_boba_tea.png', title: 'Bubu Minum Boba (Boba Milk Tea)', cat: 'bubu' },
+    { id: 'bubu_4', file: 'assets/stickers_bubu/bubu_eating_bamboo.png', title: 'Bubu Makan Bambu (Sweet Bamboo)', cat: 'bubu' },
+    { id: 'bubu_5', file: 'assets/stickers_bubu/bubu_sleep_cloud.png', title: 'Bubu Bobo Cantik di Awan (Sleep Cloud)', cat: 'bubu' },
+    { id: 'bubu_6', file: 'assets/stickers_bubu/bubu_flying_kiss.png', title: 'Bubu Cium Jauh (Flying Kiss)', cat: 'bubu' },
+    { id: 'bubu_7', file: 'assets/stickers_bubu/bubu_pout_ngambek.png', title: 'Bubu Ngambek Imut (Cute Pout)', cat: 'bubu' },
+    { id: 'bubu_8', file: 'assets/stickers_bubu/bubu_happy_dance.png', title: 'Bubu Goyang Ceria (Happy Dance)', cat: 'bubu' },
+    { id: 'bubu_9', file: 'assets/stickers_bubu/bubu_crying_baby.png', title: 'Bubu Menangis Terharu (Sparkle Tears)', cat: 'bubu' },
+    { id: 'bubu_10', file: 'assets/stickers_bubu/bubu_blanket_burrito.png', title: 'Bubu Selimut Burrito (Cozy Burrito)', cat: 'bubu' },
+    { id: 'bubu_11', file: 'assets/stickers_bubu/bubu_shy_peek.png', title: 'Bubu Mengintip Malu (Shy Peek)', cat: 'bubu' },
+    { id: 'bubu_12', file: 'assets/stickers_bubu/bubu_sparkle_excited.png', title: 'Bubu Bintang Berbinar (Starry Excited)', cat: 'bubu' },
+    { id: 'bubu_13', file: 'assets/stickers_bubu/bubu_eat_strawberry.png', title: 'Bubu Makan Stroberi (Strawberry)', cat: 'bubu' },
+    { id: 'bubu_14', file: 'assets/stickers_bubu/bubu_flower_crown.png', title: 'Bubu Mahkota Bunga (Flower Crown)', cat: 'bubu' },
+    { id: 'bubu_15', file: 'assets/stickers_bubu/bubu_cheering_pompoms.png', title: 'Bubu Semangat Pom-Pom (Cheering)', cat: 'bubu' }
   ];
 
   const COUPLE_ART_STICKERS = [
-    { id: 'cpl_1', file: 'assets/mockup_art/chat_stk_hug.png', title: 'Pelukan Hangat (Warm Hug)', cat: 'couple' },
-    { id: 'cpl_2', file: 'assets/mockup_art/home_couple_hug.png', title: 'Rebahan Peluk Berdua (Home Hug)', cat: 'couple' },
-    { id: 'cpl_3', file: 'assets/mockup_art/adventure_couple.png', title: 'Petualangan Berdua (Adventure Stroll)', cat: 'couple' },
-    { id: 'cpl_4', file: 'assets/mockup_art/date_baking.png', title: 'Bikin Kue Bareng (Baking Date)', cat: 'couple' },
-    { id: 'cpl_5', file: 'assets/mockup_art/date_coffee.png', title: 'Ngopi Berdua (Coffee Shop Date)', cat: 'couple' },
-    { id: 'cpl_6', file: 'assets/mockup_art/date_stargazing.png', title: 'Lihat Bintang (Stargazing Night)', cat: 'couple' },
-    { id: 'cpl_7', file: 'assets/mockup_art/minigame_switch.png', title: 'Mabar Nintendo Switch (Game Time)', cat: 'couple' }
+    { id: 'cpl_1', file: 'assets/stickers_couple/couple_warm_hug.png', title: 'Pelukan Hangat Berdua (Warm Loving Hug)', cat: 'couple' },
+    { id: 'cpl_2', file: 'assets/stickers_couple/couple_cheek_squish.png', title: 'Cubitan Pipi Manis (Cheek Squish)', cat: 'couple' },
+    { id: 'cpl_3', file: 'assets/stickers_couple/couple_sleeping_cloud.png', title: 'Tidur Berdua di Awan (Sleeping Together)', cat: 'couple' },
+    { id: 'cpl_4', file: 'assets/stickers_couple/couple_share_boba.png', title: 'Bagi Boba Berdua (Share Boba)', cat: 'couple' },
+    { id: 'cpl_5', file: 'assets/stickers_couple/couple_forehead_kiss.png', title: 'Cium Kening Mesra (Forehead Kiss)', cat: 'couple' },
+    { id: 'cpl_6', file: 'assets/stickers_couple/couple_piggyback.png', title: 'Gendong Punggung Manis (Piggyback Ride)', cat: 'couple' },
+    { id: 'cpl_7', file: 'assets/stickers_couple/couple_umbrella_rain.png', title: 'Payung Daun Berdua (Leaf Umbrella)', cat: 'couple' },
+    { id: 'cpl_8', file: 'assets/stickers_couple/couple_eating_pizza.png', title: 'Makan Pizza Keju Bareng (Pizza Date)', cat: 'couple' },
+    { id: 'cpl_9', file: 'assets/stickers_couple/couple_game_switch.png', title: 'Mabar Nintendo Switch (Game Time)', cat: 'couple' },
+    { id: 'cpl_10', file: 'assets/stickers_couple/couple_head_pat.png', title: 'Elusan Kepala Lembut (Head Pat)', cat: 'couple' },
+    { id: 'cpl_11', file: 'assets/stickers_couple/couple_holding_hands.png', title: 'Gandengan Tangan Bahagia (Holding Hands)', cat: 'couple' },
+    { id: 'cpl_12', file: 'assets/stickers_couple/couple_blanket_cuddle.png', title: 'Selimutan Hangat Cokelat (Blanket Cuddle)', cat: 'couple' }
   ];
 
   const DUDU_ART_STICKERS = [
-    { id: 'dudu_1', file: 'assets/mockup_art/chat_stk_peek.png', title: 'Dudu Mengintip (Shy Peek)', cat: 'dudu' },
-    { id: 'dudu_2', file: 'assets/mockup_art/chat_stk_heart.png', title: 'Dudu Kasih Hati (Big Heart)', cat: 'dudu' }
+    { id: 'dudu_1', file: 'assets/stickers_dudu/dudu_giving_rose.png', title: 'Dudu Kasih Mawar Merah (Giving Rose)', cat: 'dudu' },
+    { id: 'dudu_2', file: 'assets/stickers_dudu/dudu_big_heart.png', title: 'Dudu Peluk Hati Merah (Big Red Heart)', cat: 'dudu' },
+    { id: 'dudu_3', file: 'assets/stickers_dudu/dudu_shy_peek.png', title: 'Dudu Mengintip Malu (Shy Peek)', cat: 'dudu' },
+    { id: 'dudu_4', file: 'assets/stickers_dudu/dudu_hungry_burger.png', title: 'Dudu Mau Burger Lezat (Hungry Burger)', cat: 'dudu' },
+    { id: 'dudu_5', file: 'assets/stickers_dudu/dudu_thumbs_up.png', title: 'Dudu Jempol Mantap (Thumbs Up)', cat: 'dudu' },
+    { id: 'dudu_6', file: 'assets/stickers_dudu/dudu_sleepy_yawn.png', title: 'Dudu Mengantuk Menguap (Sleepy Yawn)', cat: 'dudu' },
+    { id: 'dudu_7', file: 'assets/stickers_dudu/dudu_crying_sniff.png', title: 'Dudu Menangis Meler (Crying Sniffle)', cat: 'dudu' },
+    { id: 'dudu_8', file: 'assets/stickers_dudu/dudu_cool_sunglasses.png', title: 'Dudu Kacamata Keren (Cool Shades)', cat: 'dudu' },
+    { id: 'dudu_9', file: 'assets/stickers_dudu/dudu_studying_laptop.png', title: 'Dudu Belajar Kerja Laptop (Hard Working)', cat: 'dudu' },
+    { id: 'dudu_10', file: 'assets/stickers_dudu/dudu_panic_sweat.png', title: 'Dudu Panik Kaget (Panic Shock)', cat: 'dudu' },
+    { id: 'dudu_11', file: 'assets/stickers_dudu/dudu_boba_cheers.png', title: 'Dudu Bersulang Boba (Boba Cheers)', cat: 'dudu' },
+    { id: 'dudu_12', file: 'assets/stickers_dudu/dudu_cheer_pompoms.png', title: 'Dudu Sorak Semangat (Cheer Pompom)', cat: 'dudu' },
+    { id: 'dudu_13', file: 'assets/stickers_dudu/dudu_belly_pat.png', title: 'Dudu Kenyang Tepuk Perut (Full Tummy)', cat: 'dudu' },
+    { id: 'dudu_14', file: 'assets/stickers_dudu/dudu_confused_scratch.png', title: 'Dudu Bingung Garuk Kepala (Question)', cat: 'dudu' },
+    { id: 'dudu_15', file: 'assets/stickers_dudu/dudu_guitar_serenade.png', title: 'Dudu Main Gitar Lagu Cinta (Serenade)', cat: 'dudu' }
   ];
 
 const DUDU_GIF_STICKERS = [

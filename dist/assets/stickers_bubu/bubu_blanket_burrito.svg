@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      <!-- Wrapped Blanket Roll -->
+      <ellipse cx="256" cy="330" rx="140" ry="110" fill="#FFB6C1" stroke="#2B2421" stroke-width="8"/>
+      <path d="M 120 310 C 160 380, 350 380, 390 310 C 350 240, 160 240, 120 310 Z" fill="#FFA3B1" stroke="#2B2421" stroke-width="6"/>
+      <!-- Blanket Stitching / Details -->
+      <circle cx="180" cy="330" r="8" fill="#FFFFFF" opacity="0.8"/>
+      <circle cx="230" cy="370" r="8" fill="#FFFFFF" opacity="0.8"/>
+      <circle cx="310" cy="340" r="8" fill="#FFFFFF" opacity="0.8"/>
+      <!-- Bubu Head Peeking Out -->
+      
+    <!-- Bubu Ears -->
+    <circle cx="167.8" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <circle cx="344.2" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <!-- Bubu Head Contour -->
+    <path d="M 157 195
+             C 139 145.5, 188.5 105, 256 105
+             C 323.5 105, 373 145.5, 355 195
+             C 373 244.5, 341.5 280.5, 256 280.5
+             C 170.5 280.5, 139 244.5, 157 195 Z"
+          fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2" stroke-linejoin="round"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="187.6" cy="217.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
+    <ellipse cx="324.4" cy="217.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
+  
+      
+    <!-- Left Happy Eye Curve -->
+    <path d="M 191.2 187.8 Q 205.6 173.4 220 187.8"
+          fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Right Happy Eye Curve -->
+    <path d="M 292 187.8 Q 306.4 173.4 320.8 187.8"
+          fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
+    <!-- Nose & Sweet Smile -->
+    <ellipse cx="256" cy="199.5" rx="5.4" ry="3.6" fill="#2B2421"/>
+    <path d="M 246.1 206.7 C 250.6 213.9, 256 213.9, 256 206.7 C 256 213.9, 261.4 213.9, 265.9 206.7"
+          fill="none" stroke="#2B2421" stroke-width="4.95" stroke-linecap="round"/>
+  
+      <!-- Little Paws Peeking over edge -->
+      <ellipse cx="220" cy="275" rx="16" ry="13" fill="#FFFFFF" stroke="#2B2421" stroke-width="6"/>
+      <ellipse cx="292" cy="275" rx="16" ry="13" fill="#FFFFFF" stroke="#2B2421" stroke-width="6"/>
+    
+</g>
+</svg>

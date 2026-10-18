@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+
+  <defs>
+    <radialGradient id="bubuBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF9E99" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="duduBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8E85" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#FFA8A3" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFA8A3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="heartPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF758C"/>
+      <stop offset="100%" stop-color="#FF5277"/>
+    </linearGradient>
+    <linearGradient id="heartRedGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF4B4B"/>
+      <stop offset="100%" stop-color="#D92027"/>
+    </linearGradient>
+    <linearGradient id="bobaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D1A0"/>
+      <stop offset="100%" stop-color="#C59B6D"/>
+    </linearGradient>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2F1FF"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#362213" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+<g filter="url(#softShadow)">
+
+      
+    <!-- Feet -->
+    <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <!-- Chubby Brown Body -->
+    <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
+    <!-- Light Cream Belly -->
+    <ellipse cx="256" cy="356" rx="60" ry="50" fill="#F5E3D0"/>
+  
+      
+    <!-- Dudu Ears -->
+    <circle cx="158" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="158" cy="130" r="22" fill="#8C5935"/>
+    <circle cx="354" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="354" cy="130" r="22" fill="#8C5935"/>
+    <!-- Dudu Head Contour -->
+    <path d="M 146 205
+             C 126 150, 181 105, 256 105
+             C 331 105, 386 150, 366 205
+             C 386 260, 351 300, 256 300
+             C 161 300, 126 260, 146 205 Z"
+          fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Snout Muzzle -->
+    <ellipse cx="256" cy="227" rx="50" ry="36" fill="#F5E3D0" stroke="#3E2723" stroke-width="5"/>
+    <!-- Blushing Cheeks -->
+    <ellipse cx="178" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+    <ellipse cx="334" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+  
+      
+    <!-- Left Eye -->
+    <circle cx="198" cy="191" r="14" fill="#3E2723"/>
+    <circle cx="195" cy="187" r="5" fill="#FFFFFF"/>
+    <circle cx="202" cy="194" r="2.5" fill="#FFFFFF"/>
+    <!-- Right Eye -->
+    <circle cx="314" cy="191" r="14" fill="#3E2723"/>
+    <circle cx="311" cy="187" r="5" fill="#FFFFFF"/>
+    <circle cx="318" cy="194" r="2.5" fill="#FFFFFF"/>
+    <!-- Nose & Mouth on Snout -->
+    <path d="M 245 214 Q 256 208 267 214 Q 256 226 245 214 Z"
+          fill="#3E2723"/>
+    <path d="M 245 231 C 250 238, 256 238, 256 231 C 256 238, 262 238, 267 231"
+          fill="none" stroke="#3E2723" stroke-width="5" stroke-linecap="round"/>
+  
+      <!-- Giant Red Heart -->
+      <path d="M 256 270 C 256 225, 185 190, 185 250 C 185 305, 256 360, 256 370 C 256 360, 327 305, 327 250 C 327 190, 256 225, 256 270 Z"
+            fill="url(#heartRedGrad)" stroke="#3E2723" stroke-width="7.5" stroke-linejoin="round"/>
+      <path d="M 205 240 C 205 220, 228 215, 235 225" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+      <!-- Hugging Arms -->
+      <path d="M 160 300 C 175 320, 205 325, 222 305" fill="#BA8358" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
+      <path d="M 352 300 C 337 320, 307 325, 290 305" fill="#BA8358" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
+    
+</g>
+</svg>

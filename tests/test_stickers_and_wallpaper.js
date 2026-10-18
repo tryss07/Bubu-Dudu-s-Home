@@ -161,10 +161,10 @@ async function runStickersAndWallpaperTest() {
   const bubuStkButtons = page.locator('.chat-mockup-stk-btn');
   const bubuStkCount = await bubuStkButtons.count();
   console.log('Only Bubu sticker buttons rendered count:', bubuStkCount);
-  if (bubuStkCount !== 17) {
-    throw new Error(`Expected 17 Only Bubu stickers, got ${bubuStkCount}`);
+  if (bubuStkCount !== 15) {
+    throw new Error(`Expected 15 Only Bubu stickers, got ${bubuStkCount}`);
   }
-  console.log('✅ All 17 Only Bubu stickers loaded cleanly');
+  console.log('✅ All 15 Only Bubu custom stickers loaded cleanly');
 
   // Click first Bubu sticker
   await bubuStkButtons.first().click();
@@ -189,10 +189,10 @@ async function runStickersAndWallpaperTest() {
   const duduWebpCount = await page.locator('.chat-sticker-select-btn').count();
   const duduMockCount = await page.locator('.chat-mockup-stk-btn').count();
   console.log(`Only Dudu stickers: ${duduWebpCount} WebP + ${duduMockCount} art = ${duduWebpCount + duduMockCount}`);
-  if (duduWebpCount + duduMockCount !== 70) {
-    throw new Error(`Expected 70 Only Dudu stickers, got ${duduWebpCount + duduMockCount}`);
+  if (duduWebpCount + duduMockCount !== 83) {
+    throw new Error(`Expected 83 Only Dudu stickers, got ${duduWebpCount + duduMockCount}`);
   }
-  console.log('✅ All 70 Only Dudu stickers loaded cleanly');
+  console.log('✅ All 83 Only Dudu stickers loaded cleanly');
 
   // 10. Test Tab "🐻🐼 Bubu & Dudu" (Together)
   await tabCouple.click();
@@ -201,10 +201,10 @@ async function runStickersAndWallpaperTest() {
   const coupleWebpCount = await page.locator('.chat-sticker-select-btn').count();
   const coupleMockCount = await page.locator('.chat-mockup-stk-btn').count();
   console.log(`Bubu & Dudu Together: ${coupleWebpCount} WebP + ${coupleMockCount} art = ${coupleWebpCount + coupleMockCount}`);
-  if (coupleWebpCount + coupleMockCount !== 34) {
-    throw new Error(`Expected 34 Bubu & Dudu Together stickers, got ${coupleWebpCount + coupleMockCount}`);
+  if (coupleWebpCount + coupleMockCount !== 39) {
+    throw new Error(`Expected 39 Bubu & Dudu Together stickers, got ${coupleWebpCount + coupleMockCount}`);
   }
-  console.log('✅ All 34 Bubu & Dudu Together stickers loaded cleanly');
+  console.log('✅ All 39 Bubu & Dudu Together stickers loaded cleanly');
 
   await browser.close();
   console.log('🎉 Stickers & Wallpaper Playwright Test completed successfully!');
