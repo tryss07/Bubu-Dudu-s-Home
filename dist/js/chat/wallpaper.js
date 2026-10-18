@@ -3,90 +3,114 @@
   const PRESETS = [
     {
       id: 'default',
-      name: 'Pola Doodle Klasik',
+      name_en: 'Classic Doodle Pattern 🐾',
+      name_id: 'Pola Coretan Klasik 🐾',
+      name: 'Pola Coretan Klasik 🐾',
       category: 'doodle',
-      style: 'background-color: #FAF5EE; background-image: url("assets/chat_doodle_bg.svg"); background-repeat: repeat; background-size: 200px 200px;',
-      preview: 'background-color: #FAF5EE; background-image: url("assets/chat_doodle_bg.svg"); background-size: 55px 55px;'
+      style: 'background-color: #FAF5EE; background-image: url(assets/chat_doodle_bg.svg); background-repeat: repeat; background-size: 200px 200px;',
+      preview: 'background-color: #FAF5EE; background-image: url(assets/chat_doodle_bg.svg); background-size: 55px 55px;'
     },
     {
       id: 'dudu-bubu-room',
-      name: 'Kamar Dudu & Bubu 🐻🐼',
+      name_en: 'Cozy Bedroom 🐻🐼',
+      name_id: 'Kamar Hangat Dudu & Bubu 🐻🐼',
+      name: 'Kamar Hangat Dudu & Bubu 🐻🐼',
       category: 'dudu_bubu',
       imgSrc: 'assets/wallpapers/wallpaper_dudu_bubu_room.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_dudu_bubu_room.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_dudu_bubu_room.jpg"); background-size: cover; background-position: center;'
-    },
-    {
-      id: 'dudu-room',
-      name: 'Kamar Santai Dudu 🐻',
-      category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_dudu_room.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_dudu_room.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_dudu_room.jpg"); background-size: cover; background-position: center;'
-    },
-    {
-      id: 'bubu-room',
-      name: 'Kamar Cantik Bubu 🐼',
-      category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_bubu_room.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_bubu_room.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_bubu_room.jpg"); background-size: cover; background-position: center;'
-    },
-    {
-      id: 'couple-stage',
-      name: 'Panggung Berdua 🐻🐼',
-      category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_couple_stage.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_couple_stage.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_couple_stage.jpg"); background-size: cover; background-position: center;'
+      style: 'background-image: url(assets/wallpapers/wallpaper_dudu_bubu_room.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_dudu_bubu_room.jpg); background-size: cover; background-position: center bottom;'
     },
     {
       id: 'couple-stargazing',
-      name: 'Bintang Malam ✨',
+      name_en: 'Starry Night Together ✨',
+      name_id: 'Malam Berbintang Berdua ✨',
+      name: 'Malam Berbintang Berdua ✨',
       category: 'dudu_bubu',
       imgSrc: 'assets/wallpapers/wallpaper_stargazing.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_stargazing.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_stargazing.jpg"); background-size: cover; background-position: center;'
+      style: 'background-image: url(assets/wallpapers/wallpaper_stargazing.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_stargazing.jpg); background-size: cover; background-position: center bottom;'
     },
     {
       id: 'couple-adventure',
-      name: 'Petualangan Manis 🌸',
+      name_en: 'Spring Picnic Date 🌸',
+      name_id: 'Kencan Piknik Musim Semi 🌸',
+      name: 'Kencan Piknik Musim Semi 🌸',
       category: 'dudu_bubu',
       imgSrc: 'assets/wallpapers/wallpaper_adventure.jpg',
-      style: 'background-image: url("assets/wallpapers/wallpaper_adventure.jpg"); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url("assets/wallpapers/wallpaper_adventure.jpg"); background-size: cover; background-position: center;'
+      style: 'background-image: url(assets/wallpapers/wallpaper_adventure.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_adventure.jpg); background-size: cover; background-position: center bottom;'
+    },
+    {
+      id: 'sweet-dreams',
+      name_en: 'Sweet Dreams on Cloud ☁️',
+      name_id: 'Mimpi Indah di Awan ☁️',
+      name: 'Mimpi Indah di Awan ☁️',
+      category: 'dudu_bubu',
+      imgSrc: 'assets/wallpapers/wallpaper_sweet_dreams.jpg',
+      style: 'background-image: url(assets/wallpapers/wallpaper_sweet_dreams.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_sweet_dreams.jpg); background-size: cover; background-position: center bottom;'
+    },
+    {
+      id: 'couple-stage',
+      name_en: 'Sweet Bakery Cafe 🍰',
+      name_id: 'Kafe Manis Dudu Bubu 🍰',
+      name: 'Kafe Manis Dudu Bubu 🍰',
+      category: 'dudu_bubu',
+      imgSrc: 'assets/wallpapers/wallpaper_couple_stage.jpg',
+      style: 'background-image: url(assets/wallpapers/wallpaper_couple_stage.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_couple_stage.jpg); background-size: cover; background-position: center 65%;'
+    },
+    {
+      id: 'bubu-room',
+      name_en: 'Cute Hearts & Doodles 💖',
+      name_id: 'Pola Hati & Coretan Manis 💖',
+      name: 'Pola Hati & Coretan Manis 💖',
+      category: 'dudu_bubu',
+      imgSrc: 'assets/wallpapers/wallpaper_bubu_room.jpg',
+      style: 'background-image: url(assets/wallpapers/wallpaper_bubu_room.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
+      preview: 'background-image: url(assets/wallpapers/wallpaper_bubu_room.jpg); background-size: cover; background-position: center;'
     },
     {
       id: 'peach-sunset',
-      name: 'Peach Sunset 🌅',
+      name_en: 'Peach Sunset 🌅',
+      name_id: 'Matahari Terbenam Peach 🌅',
+      name: 'Matahari Terbenam Peach 🌅',
       category: 'aesthetic',
       style: 'background: linear-gradient(135deg, rgba(255, 241, 229, 0.95) 0%, rgba(253, 176, 176, 0.8) 50%, rgba(254, 215, 226, 0.9) 100%);',
       preview: 'background: linear-gradient(135deg, #fff1e5 0%, #fdb0b0 50%, #fed7e2 100%);'
     },
     {
       id: 'sweet-hearts',
-      name: 'Sweet Hearts 💖',
+      name_en: 'Sweet Hearts 💖',
+      name_id: 'Hati Manis 💖',
+      name: 'Hati Manis 💖',
       category: 'aesthetic',
       style: "background-color: #FFF5F0; background-image: url(\"data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='%23f2a6a6' fill-opacity='0.22'/%3E%3C/svg%3E\"); background-size: 28px 28px;",
       preview: 'background: #fff8f4; background-image: radial-gradient(#f2a6a6 2px, transparent 2px); background-size: 10px 10px;'
     },
     {
       id: 'lavender-dream',
-      name: 'Lavender Dream 💜',
+      name_en: 'Lavender Dream 💜',
+      name_id: 'Mimpi Lavender 💜',
+      name: 'Mimpi Lavender 💜',
       category: 'aesthetic',
       style: 'background: linear-gradient(135deg, #F5EEFD 0%, #E9D5FF 50%, #FCE7F3 100%);',
       preview: 'background: linear-gradient(135deg, #F5EEFD 0%, #E9D5FF 50%, #FCE7F3 100%);'
     },
     {
       id: 'warm-honey',
-      name: 'Warm Honey 🍯',
+      name_en: 'Warm Honey 🍯',
+      name_id: 'Madu Hangat 🍯',
+      name: 'Madu Hangat 🍯',
       category: 'aesthetic',
       style: 'background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 50%, #FED7AA 100%);',
       preview: 'background: linear-gradient(135deg, #FFFBEB 0%, #FDE68A 50%, #FED7AA 100%);'
     },
     {
       id: 'night-twilight',
-      name: 'Night Twilight 🌙',
+      name_en: 'Night Twilight 🌙',
+      name_id: 'Senja Malam 🌙',
+      name: 'Senja Malam 🌙',
       category: 'aesthetic',
       style: 'background: linear-gradient(160deg, #241620 0%, #150E18 100%); background-image: radial-gradient(rgba(255, 230, 200, 0.25) 1px, transparent 1px); background-size: 22px 22px;',
       preview: 'background: linear-gradient(160deg, #2e1f24 0%, #20161a 100%);'
@@ -261,14 +285,16 @@
     const duduPresets = PRESETS.filter(p => p.category === 'dudu_bubu' || p.category === 'doodle');
     const aestheticPresets = PRESETS.filter(p => p.category === 'aesthetic');
 
+    const lang = window.DuduI18n?.getLanguage?.() || 'id';
     const renderCards = (presets) => presets.map(preset => {
       const isSelected = currentWallpaper?.type === 'preset' && currentWallpaper?.id === preset.id;
+      const displayName = (lang === 'en' ? preset.name_en : preset.name_id) || preset.name;
       return `
         <button type="button" class="preset-wallpaper-card button-press flex flex-col items-center gap-1.5 p-2 rounded-2xl border-2 transition-all cursor-pointer ${isSelected ? 'border-[#8D5B4C] ring-2 ring-[#8D5B4C]/30 bg-[#8D5B4C]/5' : 'border-[#E8DACB]/60 dark:border-stone-700 hover:border-[#8D5B4C]/60 bg-white dark:bg-stone-800'}" data-preset-id="${preset.id}">
           <div class="w-full h-16 rounded-xl border border-black/10 dark:border-white/10 shadow-xs relative overflow-hidden" style="${preset.preview}">
             ${isSelected ? '<span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center text-[10px]">✓</span>' : ''}
           </div>
-          <span class="text-[11px] font-bold text-primary dark:text-stone-200 truncate max-w-full">${preset.name}</span>
+          <span class="text-[11px] font-bold text-primary dark:text-stone-200 truncate max-w-full">${displayName}</span>
         </button>
       `;
     }).join('');
@@ -377,6 +403,10 @@
     const modal = document.getElementById('modal-chat-wallpaper');
     modal?.addEventListener('click', (e) => {
       if (e.target === modal) closeWallpaperModal();
+    });
+
+    window.addEventListener('dudu-language-changed', () => {
+      renderWallpaperOptions();
     });
   }
 

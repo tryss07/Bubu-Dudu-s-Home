@@ -2156,54 +2156,54 @@
   ]);
 
   const BUBU_STICKERS = [
-    { id: 'bubu_1', file: 'assets/stickers_bubu/bubu_love_heart.png', title: 'Bubu Peluk Hati Cinta (Love Heart)', cat: 'bubu' },
-    { id: 'bubu_2', file: 'assets/stickers_bubu/bubu_wave_hello.png', title: 'Bubu Halo Sayang (Wave Hello)', cat: 'bubu' },
-    { id: 'bubu_3', file: 'assets/stickers_bubu/bubu_boba_tea.png', title: 'Bubu Minum Boba (Boba Milk Tea)', cat: 'bubu' },
-    { id: 'bubu_4', file: 'assets/stickers_bubu/bubu_eating_bamboo.png', title: 'Bubu Makan Bambu (Sweet Bamboo)', cat: 'bubu' },
-    { id: 'bubu_5', file: 'assets/stickers_bubu/bubu_sleep_cloud.png', title: 'Bubu Bobo Cantik di Awan (Sleep Cloud)', cat: 'bubu' },
-    { id: 'bubu_6', file: 'assets/stickers_bubu/bubu_flying_kiss.png', title: 'Bubu Cium Jauh (Flying Kiss)', cat: 'bubu' },
-    { id: 'bubu_7', file: 'assets/stickers_bubu/bubu_pout_ngambek.png', title: 'Bubu Ngambek Imut (Cute Pout)', cat: 'bubu' },
-    { id: 'bubu_8', file: 'assets/stickers_bubu/bubu_happy_dance.png', title: 'Bubu Goyang Ceria (Happy Dance)', cat: 'bubu' },
-    { id: 'bubu_9', file: 'assets/stickers_bubu/bubu_crying_baby.png', title: 'Bubu Menangis Terharu (Sparkle Tears)', cat: 'bubu' },
-    { id: 'bubu_10', file: 'assets/stickers_bubu/bubu_blanket_burrito.png', title: 'Bubu Selimut Burrito (Cozy Burrito)', cat: 'bubu' },
-    { id: 'bubu_11', file: 'assets/stickers_bubu/bubu_shy_peek.png', title: 'Bubu Mengintip Malu (Shy Peek)', cat: 'bubu' },
-    { id: 'bubu_12', file: 'assets/stickers_bubu/bubu_sparkle_excited.png', title: 'Bubu Bintang Berbinar (Starry Excited)', cat: 'bubu' },
-    { id: 'bubu_13', file: 'assets/stickers_bubu/bubu_eat_strawberry.png', title: 'Bubu Makan Stroberi (Strawberry)', cat: 'bubu' },
-    { id: 'bubu_14', file: 'assets/stickers_bubu/bubu_flower_crown.png', title: 'Bubu Mahkota Bunga (Flower Crown)', cat: 'bubu' },
-    { id: 'bubu_15', file: 'assets/stickers_bubu/bubu_cheering_pompoms.png', title: 'Bubu Semangat Pom-Pom (Cheering)', cat: 'bubu' }
+    { id: 'bubu_1', file: 'assets/stickers_bubu/bubu_love_heart.png', title_en: 'Bubu Love Heart', title_id: 'Bubu Peluk Hati Cinta', title: 'Bubu Love Heart', cat: 'bubu' },
+    { id: 'bubu_2', file: 'assets/stickers_bubu/bubu_wave_hello.png', title_en: 'Bubu Wave Hello', title_id: 'Bubu Halo Sayang', title: 'Bubu Wave Hello', cat: 'bubu' },
+    { id: 'bubu_3', file: 'assets/stickers_bubu/bubu_boba_tea.png', title_en: 'Bubu Boba Milk Tea', title_id: 'Bubu Minum Boba', title: 'Bubu Boba Milk Tea', cat: 'bubu' },
+    { id: 'bubu_4', file: 'assets/stickers_bubu/bubu_eating_bamboo.png', title_en: 'Bubu Sweet Bamboo', title_id: 'Bubu Makan Bambu', title: 'Bubu Sweet Bamboo', cat: 'bubu' },
+    { id: 'bubu_5', file: 'assets/stickers_bubu/bubu_sleep_cloud.png', title_en: 'Bubu Sleep on Cloud', title_id: 'Bubu Bobo di Awan', title: 'Bubu Sleep on Cloud', cat: 'bubu' },
+    { id: 'bubu_6', file: 'assets/stickers_bubu/bubu_flying_kiss.png', title_en: 'Bubu Flying Kiss', title_id: 'Bubu Cium Jauh', title: 'Bubu Flying Kiss', cat: 'bubu' },
+    { id: 'bubu_7', file: 'assets/stickers_bubu/bubu_pout_ngambek.png', title_en: 'Bubu Cute Pout', title_id: 'Bubu Ngambek Imut', title: 'Bubu Cute Pout', cat: 'bubu' },
+    { id: 'bubu_8', file: 'assets/stickers_bubu/bubu_happy_dance.png', title_en: 'Bubu Happy Dance', title_id: 'Bubu Goyang Ceria', title: 'Bubu Happy Dance', cat: 'bubu' },
+    { id: 'bubu_9', file: 'assets/stickers_bubu/bubu_crying_baby.png', title_en: 'Bubu Sparkle Tears', title_id: 'Bubu Tangis Bahagia', title: 'Bubu Sparkle Tears', cat: 'bubu' },
+    { id: 'bubu_10', file: 'assets/stickers_bubu/bubu_blanket_burrito.png', title_en: 'Bubu Cozy Burrito', title_id: 'Bubu Selimut Hangat', title: 'Bubu Cozy Burrito', cat: 'bubu' },
+    { id: 'bubu_11', file: 'assets/stickers_bubu/bubu_shy_peek.png', title_en: 'Bubu Shy Peek', title_id: 'Bubu Mengintip Malu', title: 'Bubu Shy Peek', cat: 'bubu' },
+    { id: 'bubu_12', file: 'assets/stickers_bubu/bubu_sparkle_excited.png', title_en: 'Bubu Starry Excited', title_id: 'Bubu Bintang Berbinar', title: 'Bubu Starry Excited', cat: 'bubu' },
+    { id: 'bubu_13', file: 'assets/stickers_bubu/bubu_eat_strawberry.png', title_en: 'Bubu Sweet Strawberry', title_id: 'Bubu Makan Stroberi', title: 'Bubu Sweet Strawberry', cat: 'bubu' },
+    { id: 'bubu_14', file: 'assets/stickers_bubu/bubu_flower_crown.png', title_en: 'Bubu Flower Crown', title_id: 'Bubu Mahkota Bunga', title: 'Bubu Flower Crown', cat: 'bubu' },
+    { id: 'bubu_15', file: 'assets/stickers_bubu/bubu_cheering_pompoms.png', title_en: 'Bubu Cheering Pom-Poms', title_id: 'Bubu Sorak Semangat', title: 'Bubu Cheering Pom-Poms', cat: 'bubu' }
   ];
 
   const COUPLE_ART_STICKERS = [
-    { id: 'cpl_1', file: 'assets/stickers_couple/couple_warm_hug.png', title: 'Pelukan Hangat Berdua (Warm Loving Hug)', cat: 'couple' },
-    { id: 'cpl_2', file: 'assets/stickers_couple/couple_cheek_squish.png', title: 'Cubitan Pipi Manis (Cheek Squish)', cat: 'couple' },
-    { id: 'cpl_3', file: 'assets/stickers_couple/couple_sleeping_cloud.png', title: 'Tidur Berdua di Awan (Sleeping Together)', cat: 'couple' },
-    { id: 'cpl_4', file: 'assets/stickers_couple/couple_share_boba.png', title: 'Bagi Boba Berdua (Share Boba)', cat: 'couple' },
-    { id: 'cpl_5', file: 'assets/stickers_couple/couple_forehead_kiss.png', title: 'Cium Kening Mesra (Forehead Kiss)', cat: 'couple' },
-    { id: 'cpl_6', file: 'assets/stickers_couple/couple_piggyback.png', title: 'Gendong Punggung Manis (Piggyback Ride)', cat: 'couple' },
-    { id: 'cpl_7', file: 'assets/stickers_couple/couple_umbrella_rain.png', title: 'Payung Daun Berdua (Leaf Umbrella)', cat: 'couple' },
-    { id: 'cpl_8', file: 'assets/stickers_couple/couple_eating_pizza.png', title: 'Makan Pizza Keju Bareng (Pizza Date)', cat: 'couple' },
-    { id: 'cpl_9', file: 'assets/stickers_couple/couple_game_switch.png', title: 'Mabar Nintendo Switch (Game Time)', cat: 'couple' },
-    { id: 'cpl_10', file: 'assets/stickers_couple/couple_head_pat.png', title: 'Elusan Kepala Lembut (Head Pat)', cat: 'couple' },
-    { id: 'cpl_11', file: 'assets/stickers_couple/couple_holding_hands.png', title: 'Gandengan Tangan Bahagia (Holding Hands)', cat: 'couple' },
-    { id: 'cpl_12', file: 'assets/stickers_couple/couple_blanket_cuddle.png', title: 'Selimutan Hangat Cokelat (Blanket Cuddle)', cat: 'couple' }
+    { id: 'cpl_1', file: 'assets/stickers_couple/couple_warm_hug.png', title_en: 'Warm Loving Hug', title_id: 'Pelukan Hangat Berdua', title: 'Warm Loving Hug', cat: 'couple' },
+    { id: 'cpl_2', file: 'assets/stickers_couple/couple_cheek_squish.png', title_en: 'Sweet Cheek Squish', title_id: 'Cubitan Pipi Manis', title: 'Sweet Cheek Squish', cat: 'couple' },
+    { id: 'cpl_3', file: 'assets/stickers_couple/couple_sleeping_cloud.png', title_en: 'Sleeping on Cloud', title_id: 'Tidur Berdua di Awan', title: 'Sleeping on Cloud', cat: 'couple' },
+    { id: 'cpl_4', file: 'assets/stickers_couple/couple_share_boba.png', title_en: 'Sharing Boba Tea', title_id: 'Bagi Boba Berdua', title: 'Sharing Boba Tea', cat: 'couple' },
+    { id: 'cpl_5', file: 'assets/stickers_couple/couple_forehead_kiss.png', title_en: 'Tender Forehead Kiss', title_id: 'Cium Kening Mesra', title: 'Tender Forehead Kiss', cat: 'couple' },
+    { id: 'cpl_6', file: 'assets/stickers_couple/couple_piggyback.png', title_en: 'Sweet Piggyback Ride', title_id: 'Gendong Punggung Manis', title: 'Sweet Piggyback Ride', cat: 'couple' },
+    { id: 'cpl_7', file: 'assets/stickers_couple/couple_umbrella_rain.png', title_en: 'Sharing Leaf Umbrella', title_id: 'Payung Daun Berdua', title: 'Sharing Leaf Umbrella', cat: 'couple' },
+    { id: 'cpl_8', file: 'assets/stickers_couple/couple_eating_pizza.png', title_en: 'Cozy Pizza Date', title_id: 'Makan Pizza Bersama', title: 'Cozy Pizza Date', cat: 'couple' },
+    { id: 'cpl_9', file: 'assets/stickers_couple/couple_game_switch.png', title_en: 'Nintendo Switch Gaming', title_id: 'Main Game Berdua', title: 'Nintendo Switch Gaming', cat: 'couple' },
+    { id: 'cpl_10', file: 'assets/stickers_couple/couple_head_pat.png', title_en: 'Gentle Head Pat', title_id: 'Elusan Kepala Lembut', title: 'Gentle Head Pat', cat: 'couple' },
+    { id: 'cpl_11', file: 'assets/stickers_couple/couple_holding_hands.png', title_en: 'Holding Hands Happily', title_id: 'Gandengan Tangan Bahagia', title: 'Holding Hands Happily', cat: 'couple' },
+    { id: 'cpl_12', file: 'assets/stickers_couple/couple_blanket_cuddle.png', title_en: 'Warm Blanket Cuddle', title_id: 'Selimutan Hangat Berdua', title: 'Warm Blanket Cuddle', cat: 'couple' }
   ];
 
   const DUDU_ART_STICKERS = [
-    { id: 'dudu_1', file: 'assets/stickers_dudu/dudu_giving_rose.png', title: 'Dudu Kasih Mawar Merah (Giving Rose)', cat: 'dudu' },
-    { id: 'dudu_2', file: 'assets/stickers_dudu/dudu_big_heart.png', title: 'Dudu Peluk Hati Merah (Big Red Heart)', cat: 'dudu' },
-    { id: 'dudu_3', file: 'assets/stickers_dudu/dudu_shy_peek.png', title: 'Dudu Mengintip Malu (Shy Peek)', cat: 'dudu' },
-    { id: 'dudu_4', file: 'assets/stickers_dudu/dudu_hungry_burger.png', title: 'Dudu Mau Burger Lezat (Hungry Burger)', cat: 'dudu' },
-    { id: 'dudu_5', file: 'assets/stickers_dudu/dudu_thumbs_up.png', title: 'Dudu Jempol Mantap (Thumbs Up)', cat: 'dudu' },
-    { id: 'dudu_6', file: 'assets/stickers_dudu/dudu_sleepy_yawn.png', title: 'Dudu Mengantuk Menguap (Sleepy Yawn)', cat: 'dudu' },
-    { id: 'dudu_7', file: 'assets/stickers_dudu/dudu_crying_sniff.png', title: 'Dudu Menangis Meler (Crying Sniffle)', cat: 'dudu' },
-    { id: 'dudu_8', file: 'assets/stickers_dudu/dudu_cool_sunglasses.png', title: 'Dudu Kacamata Keren (Cool Shades)', cat: 'dudu' },
-    { id: 'dudu_9', file: 'assets/stickers_dudu/dudu_studying_laptop.png', title: 'Dudu Belajar Kerja Laptop (Hard Working)', cat: 'dudu' },
-    { id: 'dudu_10', file: 'assets/stickers_dudu/dudu_panic_sweat.png', title: 'Dudu Panik Kaget (Panic Shock)', cat: 'dudu' },
-    { id: 'dudu_11', file: 'assets/stickers_dudu/dudu_boba_cheers.png', title: 'Dudu Bersulang Boba (Boba Cheers)', cat: 'dudu' },
-    { id: 'dudu_12', file: 'assets/stickers_dudu/dudu_cheer_pompoms.png', title: 'Dudu Sorak Semangat (Cheer Pompom)', cat: 'dudu' },
-    { id: 'dudu_13', file: 'assets/stickers_dudu/dudu_belly_pat.png', title: 'Dudu Kenyang Tepuk Perut (Full Tummy)', cat: 'dudu' },
-    { id: 'dudu_14', file: 'assets/stickers_dudu/dudu_confused_scratch.png', title: 'Dudu Bingung Garuk Kepala (Question)', cat: 'dudu' },
-    { id: 'dudu_15', file: 'assets/stickers_dudu/dudu_guitar_serenade.png', title: 'Dudu Main Gitar Lagu Cinta (Serenade)', cat: 'dudu' }
+    { id: 'dudu_1', file: 'assets/stickers_dudu/dudu_giving_rose.png', title_en: 'Dudu Giving Red Rose', title_id: 'Dudu Kasih Mawar Merah', title: 'Dudu Giving Red Rose', cat: 'dudu' },
+    { id: 'dudu_2', file: 'assets/stickers_dudu/dudu_big_heart.png', title_en: 'Dudu Big Red Heart', title_id: 'Dudu Peluk Hati Merah', title: 'Dudu Big Red Heart', cat: 'dudu' },
+    { id: 'dudu_3', file: 'assets/stickers_dudu/dudu_shy_peek.png', title_en: 'Dudu Shy Wall Peek', title_id: 'Dudu Mengintip Malu', title: 'Dudu Shy Wall Peek', cat: 'dudu' },
+    { id: 'dudu_4', file: 'assets/stickers_dudu/dudu_hungry_burger.png', title_en: 'Dudu Hungry Burger', title_id: 'Dudu Ingin Burger', title: 'Dudu Hungry Burger', cat: 'dudu' },
+    { id: 'dudu_5', file: 'assets/stickers_dudu/dudu_thumbs_up.png', title_en: 'Dudu Big Thumbs Up', title_id: 'Dudu Jempol Mantap', title: 'Dudu Big Thumbs Up', cat: 'dudu' },
+    { id: 'dudu_6', file: 'assets/stickers_dudu/dudu_sleepy_yawn.png', title_en: 'Dudu Sleepy Yawn', title_id: 'Dudu Mengantuk Menguap', title: 'Dudu Sleepy Yawn', cat: 'dudu' },
+    { id: 'dudu_7', file: 'assets/stickers_dudu/dudu_crying_sniff.png', title_en: 'Dudu Crying Sniffle', title_id: 'Dudu Menangis Terharu', title: 'Dudu Crying Sniffle', cat: 'dudu' },
+    { id: 'dudu_8', file: 'assets/stickers_dudu/dudu_cool_sunglasses.png', title_en: 'Dudu Cool Sunglasses', title_id: 'Dudu Kacamata Keren', title: 'Dudu Cool Sunglasses', cat: 'dudu' },
+    { id: 'dudu_9', file: 'assets/stickers_dudu/dudu_studying_laptop.png', title_en: 'Dudu Hardworking Laptop', title_id: 'Dudu Bekerja Laptop', title: 'Dudu Hardworking Laptop', cat: 'dudu' },
+    { id: 'dudu_10', file: 'assets/stickers_dudu/dudu_panic_sweat.png', title_en: 'Dudu Panic Sweat', title_id: 'Dudu Panik Kaget', title: 'Dudu Panic Sweat', cat: 'dudu' },
+    { id: 'dudu_11', file: 'assets/stickers_dudu/dudu_boba_cheers.png', title_en: 'Dudu Boba Cheers', title_id: 'Dudu Bersulang Boba', title: 'Dudu Boba Cheers', cat: 'dudu' },
+    { id: 'dudu_12', file: 'assets/stickers_dudu/dudu_cheer_pompoms.png', title_en: 'Dudu Cheering Pom-Poms', title_id: 'Dudu Sorak Semangat', title: 'Dudu Cheering Pom-Poms', cat: 'dudu' },
+    { id: 'dudu_13', file: 'assets/stickers_dudu/dudu_belly_pat.png', title_en: 'Dudu Full Tummy Pat', title_id: 'Dudu Kenyang Tepuk Perut', title: 'Dudu Full Tummy Pat', cat: 'dudu' },
+    { id: 'dudu_14', file: 'assets/stickers_dudu/dudu_confused_scratch.png', title_en: 'Dudu Confused Scratch', title_id: 'Dudu Bingung Garuk Kepala', title: 'Dudu Confused Scratch', cat: 'dudu' },
+    { id: 'dudu_15', file: 'assets/stickers_dudu/dudu_guitar_serenade.png', title_en: 'Dudu Guitar Love Serenade', title_id: 'Dudu Main Gitar Lagu Cinta', title: 'Dudu Guitar Love Serenade', cat: 'dudu' }
   ];
 
 const DUDU_GIF_STICKERS = [
@@ -2321,23 +2321,31 @@ const DUDU_GIF_STICKERS = [
     const grid = document.getElementById('mockup-stickers-grid') || document.getElementById('chat-sticker-tray-grid');
     if (!grid) return;
 
+    const lang = (window.DuduI18n && window.DuduI18n.getLanguage) ? window.DuduI18n.getLanguage() : 'id';
+    const isEn = lang === 'en';
+    const getStkTitle = (s) => (isEn ? s.title_en : s.title_id) || s.title || '';
+
     let itemsHtml = '';
 
     if (category === 'gif') {
+      const allGifsLabel = isEn ? 'All GIFs (95)' : 'Semua GIF (95)';
+      const duduGifsLabel = isEn ? '🐻 Only Dudu (68)' : '🐻 Dudu Saja (68)';
+      const coupleGifsLabel = isEn ? '🐻🐼 Together (27)' : '🐻🐼 Berdua (27)';
+
       const gifSubPillsHtml = `
         <div class="col-span-full flex items-center justify-center gap-1.5 pb-2 border-b border-[#E8DACB]/40 dark:border-stone-700/60 mb-1">
-          <button type="button" data-gif-sub="all" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'all' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">Semua GIF (95)</button>
-          <button type="button" data-gif-sub="dudu" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'dudu' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">🐻 Only Dudu (68)</button>
-          <button type="button" data-gif-sub="couple" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'couple' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">🐻🐼 Berdua (27)</button>
+          <button type="button" data-gif-sub="all" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'all' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${allGifsLabel}</button>
+          <button type="button" data-gif-sub="dudu" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'dudu' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${duduGifsLabel}</button>
+          <button type="button" data-gif-sub="couple" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'couple' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${coupleGifsLabel}</button>
         </div>
       `;
 
       const filteredGifs = DUDU_GIF_STICKERS.filter(s => gifSub === 'all' || s.cat === gifSub);
       itemsHtml = gifSubPillsHtml + filteredGifs.map(s => `
-        <button type="button" data-gif-file="${s.file}" class="chat-gif-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group shadow-2xs" title="${escapeHtml(s.title)}">
+        <button type="button" data-gif-file="${s.file}" class="chat-gif-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group shadow-2xs" title="${escapeHtml(getStkTitle(s))}">
           <span class="absolute top-1 right-1 px-1 py-0.2 rounded-md bg-[#8D5B4C] text-[8px] font-bold text-white tracking-wider pointer-events-none">GIF</span>
           <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+            <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
           </div>
         </button>
       `).join('');
@@ -2345,10 +2353,10 @@ const DUDU_GIF_STICKERS = [
       // 1. Only Bubu stickers
       if (category === 'all' || category === 'bubu') {
         itemsHtml += BUBU_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(s.title)}">
+          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
             <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#D48B70]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐼</span>
             <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
             </div>
           </button>
         `).join('');
@@ -2357,10 +2365,10 @@ const DUDU_GIF_STICKERS = [
       // 2. Bubu Dudu Together art stickers
       if (category === 'all' || category === 'couple') {
         itemsHtml += COUPLE_ART_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(s.title)}">
+          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
             <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#8D5B4C]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐻🐼</span>
             <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
             </div>
           </button>
         `).join('');
@@ -2369,10 +2377,10 @@ const DUDU_GIF_STICKERS = [
       // 3. Only Dudu art stickers
       if (category === 'all' || category === 'dudu') {
         itemsHtml += DUDU_ART_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(s.title)}">
+          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
             <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#5C4033]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐻</span>
             <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
             </div>
           </button>
         `).join('');
@@ -2386,9 +2394,9 @@ const DUDU_GIF_STICKERS = [
         });
 
         itemsHtml += filteredStandard.map(s => `
-          <button type="button" data-sticker-id="${s.id}" class="chat-sticker-select-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs" title="${escapeHtml(s.title)}">
+          <button type="button" data-sticker-id="${s.id}" class="chat-sticker-select-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs" title="${escapeHtml(getStkTitle(s))}">
             <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="Dudu Stickers/${s.file}" alt="${escapeHtml(s.title)}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+              <img src="Dudu Stickers/${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
             </div>
           </button>
         `).join('');
@@ -2453,7 +2461,14 @@ const DUDU_GIF_STICKERS = [
     });
   }
 
-    async function sendDirectImageSticker(imgUrl) {
+  window.addEventListener('dudu-language-changed', () => {
+    const tray = document.getElementById('chat-sticker-tray');
+    if (tray && !tray.classList.contains('hidden')) {
+      setupStickerTray(activeStickerCategory, activeGifSubCategory);
+    }
+  });
+
+  async function sendDirectImageSticker(imgUrl) {
     if (!activeSessionId) {
       if (window.showToast) window.showToast('Please create a topic first!');
       return;

@@ -40,79 +40,73 @@
 
       <!-- Bubu (Left) Walking -->
       
-    <!-- Feet -->
+    <!-- Feet with dark bottom curves -->
     <ellipse cx="144.4" cy="409.75" rx="26.599999999999998" ry="19" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.125"/>
     <ellipse cx="235.6" cy="409.75" rx="26.599999999999998" ry="19" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.125"/>
-    <!-- Chubby White Body -->
+    <!-- Chubby Pure White Body -->
     <ellipse cx="190" cy="338.5" rx="99.75" ry="83.6" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.6"/>
   
       
-    <!-- Bubu Ears -->
-    <circle cx="96.9" cy="133.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
-    <circle cx="283.1" cy="133.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
-    <!-- Bubu Head Contour -->
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="98.80000000000001" cy="133.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
+    <circle cx="281.2" cy="133.75" r="36.1" fill="#2B2421" stroke="#2B2421" stroke-width="3.8"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
     <path d="M 85.5 205
              C 66.5 152.75, 118.75 110, 190 110
              C 261.25 110, 313.5 152.75, 294.5 205
              C 313.5 257.25, 280.25 295.25, 190 295.25
              C 99.75 295.25, 66.5 257.25, 85.5 205 Z"
           fill="#FFFFFF" stroke="#2B2421" stroke-width="7.6" stroke-linejoin="round"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="117.8" cy="228.75" rx="28.5" ry="17.099999999999998" fill="url(#bubuBlush)"/>
-    <ellipse cx="262.2" cy="228.75" rx="28.5" ry="17.099999999999998" fill="url(#bubuBlush)"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="117.8" cy="225.9" rx="26.599999999999998" ry="17.099999999999998" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="262.2" cy="225.9" rx="26.599999999999998" ry="17.099999999999998" fill="#FFA8A3" opacity="0.85"/>
   
       
-    <!-- Left Happy Eye Curve -->
-    <path d="M 121.60000000000001 197.4 Q 136.8 182.2 152 197.4"
+    <!-- Both Eyes Happy Curved Lines -->
+    <path d="M 127.30000000000001 201.2 Q 140.6 187.9 153.9 201.2"
           fill="none" stroke="#2B2421" stroke-width="7.125" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M 228 197.4 Q 243.2 182.2 258.4 197.4"
+    <path d="M 226.1 201.2 Q 239.4 187.9 252.7 201.2"
           fill="none" stroke="#2B2421" stroke-width="7.125" stroke-linecap="round"/>
-    <!-- Nose & Sweet Smile -->
-    <ellipse cx="190" cy="209.75" rx="5.699999999999999" ry="3.8" fill="#2B2421"/>
-    <path d="M 179.55 217.35 C 184.3 224.95, 190 224.95, 190 217.35 C 190 224.95, 195.7 224.95, 200.45 217.35"
+    <!-- Sweet Smile -->
+    <path d="M 174.8 216.4 Q 182.4 225.9 190 218.3 Q 197.6 225.9 205.2 216.4"
           fill="none" stroke="#2B2421" stroke-width="5.225" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M 190 292.4 L 167.2 282.9 L 171 303.8 Z M 190 292.4 L 212.8 282.9 L 209 303.8 Z" fill="#2B2421"/>
+    <circle cx="190" cy="293.35" r="5.699999999999999" fill="#2B2421"/>
   
       <!-- Dudu (Right) Walking -->
       
     <!-- Feet -->
     <ellipse cx="276.4" cy="409.75" rx="26.599999999999998" ry="19" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
     <ellipse cx="367.6" cy="409.75" rx="26.599999999999998" ry="19" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
-    <!-- Chubby Brown Body -->
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
     <ellipse cx="322" cy="338.5" rx="99.75" ry="83.6" fill="#BA8358" stroke="#3E2723" stroke-width="7.6"/>
-    <!-- Light Cream Belly -->
-    <ellipse cx="322" cy="344.2" rx="57" ry="47.5" fill="#F5E3D0"/>
   
       
-    <!-- Dudu Ears -->
-    <circle cx="228.9" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
-    <circle cx="228.9" cy="133.75" r="20.9" fill="#8C5935"/>
-    <circle cx="415.1" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
-    <circle cx="415.1" cy="133.75" r="20.9" fill="#8C5935"/>
-    <!-- Dudu Head Contour -->
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="230.8" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <circle cx="230.8" cy="133.75" r="19" fill="#4A2E1B"/>
+    <circle cx="413.2" cy="133.75" r="36.1" fill="#BA8358" stroke="#3E2723" stroke-width="7.125"/>
+    <circle cx="413.2" cy="133.75" r="19" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
     <path d="M 217.5 205
              C 198.5 152.75, 250.75 110, 322 110
              C 393.25 110, 445.5 152.75, 426.5 205
              C 445.5 257.25, 412.25 295.25, 322 295.25
              C 231.75 295.25, 198.5 257.25, 217.5 205 Z"
           fill="#BA8358" stroke="#3E2723" stroke-width="7.6" stroke-linejoin="round"/>
-    <!-- Snout Muzzle -->
-    <ellipse cx="322" cy="225.9" rx="47.5" ry="34.199999999999996" fill="#F5E3D0" stroke="#3E2723" stroke-width="4.75"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="247.9" cy="225.9" rx="26.599999999999998" ry="15.2" fill="url(#duduBlush)"/>
-    <ellipse cx="396.1" cy="225.9" rx="26.599999999999998" ry="15.2" fill="url(#duduBlush)"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="249.8" cy="225.9" rx="26.599999999999998" ry="17.099999999999998" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="394.2" cy="225.9" rx="26.599999999999998" ry="17.099999999999998" fill="#F6A77E" opacity="0.85"/>
   
       
-    <!-- Left Happy Eye Curve -->
-    <path d="M 253.60000000000002 193.6 Q 268.8 178.4 284 193.6"
+    <!-- Happy Curved Eyes -->
+    <path d="M 259.3 201.2 Q 272.6 187.9 285.9 201.2"
           fill="none" stroke="#3E2723" stroke-width="7.125" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M 360 193.6 Q 375.2 178.4 390.4 193.6"
+    <path d="M 358.1 201.2 Q 371.4 187.9 384.7 201.2"
           fill="none" stroke="#3E2723" stroke-width="7.125" stroke-linecap="round"/>
-    <!-- Nose & Open Mouth with Tongue -->
-    <path d="M 311.55 213.55 Q 322 207.85 332.45 213.55 Q 322 224.95 311.55 213.55 Z"
-          fill="#3E2723"/>
-    <path d="M 310.6 229.7 Q 322 244.9 333.4 229.7 Z"
+    <!-- Open Mouth with Tongue -->
+    <path d="M 310.6 220.2 Q 322 237.3 333.4 220.2 Z"
           fill="#FF758C" stroke="#3E2723" stroke-width="4.2749999999999995"/>
   
       <!-- Paws Interlocked Holding Hands in Center -->

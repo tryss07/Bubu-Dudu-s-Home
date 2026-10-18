@@ -16,74 +16,60 @@
   const WARDROBE_CATALOG = {
     dudu: {
       hat: [
-        { val: 'none', label: 'Tanpa Topi', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
-        { val: 'dudu_hat_sleep_beanie', label: 'Topi Tidur Bergaris', shortLabel: 'Topi Tidur', icon: '🧢', img: 'assets/mockup_art/wardrobe/items/dudu_hat_sleep_beanie.png', theme: 'sleep' },
-        { val: 'dudu_hat_bucket', label: 'Topi Rimba Safari', shortLabel: 'Topi Rimba', icon: '🤠', img: 'assets/mockup_art/wardrobe/items/dudu_hat_bucket.png', theme: 'summer' },
-        { val: 'dudu_hat_newsboy', label: 'Topi Newsboy Tweed', shortLabel: 'Newsboy', icon: '🎩', img: 'assets/mockup_art/wardrobe/items/dudu_hat_newsboy.png', theme: 'vintage' },
-        { val: 'dudu_hat_beret', label: 'Topi Beret Cokelat', shortLabel: 'Beret', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/dudu_hat_beret.png', theme: 'chic' },
-        { val: 'dudu_hat_pompom', label: 'Kupluk Rajut Pom-Pom', shortLabel: 'Pom-Pom', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/dudu_hat_pompom.png', theme: 'cozy' }
+        { val: 'none', label: 'Tanpa Topi', label_en: 'No Hat', label_id: 'Tanpa Topi', shortLabel: 'Polos', shortLabel_en: 'None', shortLabel_id: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_hat_newsboy', label: 'Topi Newsboy Tweed', label_en: 'Tweed Newsboy Cap', label_id: 'Topi Newsboy Tweed', shortLabel: 'Newsboy', shortLabel_en: 'Newsboy', shortLabel_id: 'Newsboy', icon: '🎩', img: 'assets/mockup_art/wardrobe/items/dudu_hat_newsboy.png', theme: 'vintage' },
+        { val: 'dudu_hat_pompom', label: 'Kupluk Rajut Pom-Pom', label_en: 'Pompom Knit Beanie', label_id: 'Kupluk Rajut Pom-Pom', shortLabel: 'Pom-Pom', shortLabel_en: 'Pom-Pom', shortLabel_id: 'Pom-Pom', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/dudu_hat_pompom.png', theme: 'cozy' },
+        { val: 'dudu_hat_plaid_beret', label: 'Topi Beret Kotak Tweed', label_en: 'Plaid Tweed Beret', label_id: 'Topi Beret Kotak Tweed', shortLabel: 'Beret Kotak', shortLabel_en: 'Plaid Beret', shortLabel_id: 'Beret Kotak', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/dudu_hat_plaid_beret.png', theme: 'chic' },
+        { val: 'dudu_hat_beret', label: 'Topi Beret Cokelat Polos', label_en: 'Classic Brown Beret', label_id: 'Topi Beret Cokelat Polos', shortLabel: 'Beret', shortLabel_en: 'Beret', shortLabel_id: 'Beret', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/dudu_hat_beret.png', theme: 'chic' },
+        { val: 'dudu_hat_earmuffs', label: 'Earmuffs Bulu Hangat', label_en: 'Warm Fluffy Earmuffs', label_id: 'Earmuffs Bulu Hangat', shortLabel: 'Earmuffs', shortLabel_en: 'Earmuffs', shortLabel_id: 'Earmuffs', icon: '🎧', img: 'assets/mockup_art/wardrobe/items/dudu_hat_earmuffs.png', theme: 'winter' }
       ],
       outfit: [
-        { val: 'none', label: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
-        { val: 'dudu_outfit_overalls', label: 'Baju Kodok Denim', shortLabel: 'Overalls', icon: '👖', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_overalls.png', theme: 'casual' },
-        { val: 'dudu_outfit_pajamas', label: 'Piyama Tidur Garis', shortLabel: 'Piyama Garis', icon: '🛌', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_pajamas.png', theme: 'sleep' },
-        { val: 'dudu_outfit_nightshirt', label: 'Baju Tidur Bulan Bintang', shortLabel: 'Nightshirt', icon: '🌙', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_nightshirt.png', theme: 'sleep' },
-        { val: 'dudu_outfit_hawaiian', label: 'Kemeja Pantai Tropis', shortLabel: 'Hawaiian', icon: '🌺', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_hawaiian.png', theme: 'summer' },
-        { val: 'dudu_outfit_palmtree', label: 'Kaos Kelapa & Celana Pendek', shortLabel: 'Kaos Kelapa', icon: '🌴', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_palmtree.png', theme: 'summer' },
-        { val: 'dudu_outfit_tuxedo', label: 'Jas Tuxedo Formal', shortLabel: 'Tuxedo', icon: '🤵', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_tuxedo.png', theme: 'chic' },
-        { val: 'dudu_outfit_cardigan', label: 'Kardigan Rajut Hangat', shortLabel: 'Kardigan', icon: '🧣', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_cardigan.png', theme: 'cozy' },
-        { val: 'dudu_outfit_corduroy', label: 'Jaket Corduroy Musim Dingin', shortLabel: 'Jaket Corduroy', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_corduroy.png', theme: 'winter' }
+        { val: 'none', label: 'Tanpa Baju (Mentahan)', label_en: 'No Outfit (Raw Base)', label_id: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', shortLabel_en: 'Raw', shortLabel_id: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_outfit_overalls', label: 'Baju Kodok Denim Biru', label_en: 'Denim Dungarees', label_id: 'Baju Kodok Denim Biru', shortLabel: 'Overalls', shortLabel_en: 'Overalls', shortLabel_id: 'Overalls', icon: '👖', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_overalls.png', theme: 'casual' },
+        { val: 'dudu_outfit_cable_sweater', label: 'Sweater Rajut Nordic', label_en: 'Nordic Cable Sweater', label_id: 'Sweater Rajut Nordic', shortLabel: 'Sweater', shortLabel_en: 'Sweater', shortLabel_id: 'Sweater', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_cable_sweater.png', theme: 'cozy' },
+        { val: 'dudu_outfit_trench', label: 'Mantel Trench Klasik Elegan', label_en: 'Classic Trench Coat', label_id: 'Mantel Trench Klasik Elegan', shortLabel: 'Trench', shortLabel_en: 'Trench', shortLabel_id: 'Trench', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_trench.png', theme: 'chic' },
+        { val: 'dudu_outfit_varsity', label: 'Jaket Varsity Cokelat Sporty', label_en: 'Varsity Baseball Jacket', label_id: 'Jaket Varsity Cokelat Sporty', shortLabel: 'Varsity', shortLabel_en: 'Varsity', shortLabel_id: 'Varsity', icon: '⚾', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_varsity.png', theme: 'casual' },
+        { val: 'dudu_outfit_shorts', label: 'Celana Corduroy Vintage', label_en: 'Vintage Corduroy Shorts', label_id: 'Celana Corduroy Vintage', shortLabel: 'Shorts', shortLabel_en: 'Shorts', shortLabel_id: 'Shorts', icon: '🩳', img: 'assets/mockup_art/wardrobe/items/dudu_outfit_shorts.png', theme: 'summer' }
       ],
       accs: [
-        { val: 'none', label: 'Tanpa Aksesoris', shortLabel: 'Polos', icon: '🐻', img: '', theme: 'natural' },
-        { val: 'dudu_accs_eyemask', label: 'Penutup Mata Beruang', shortLabel: 'Eye Mask', icon: '💤', img: 'assets/mockup_art/wardrobe/items/dudu_accs_eyemask.png', theme: 'sleep' },
-        { val: 'dudu_accs_round_glasses', label: 'Kacamata Bulat Klasik', shortLabel: 'Kacamata', icon: '👓', img: 'assets/mockup_art/wardrobe/items/dudu_accs_round_glasses.png', theme: 'chic' },
-        { val: 'dudu_accs_sunglasses', label: 'Kacamata Hitam Keren', shortLabel: 'Sunglasses', icon: '🕶️', img: 'assets/mockup_art/wardrobe/items/dudu_accs_sunglasses.png', theme: 'chic' },
-        { val: 'dudu_accs_retro_sunglasses', label: 'Kacamata Retro Cokelat', shortLabel: 'Retro Shades', icon: '🕶️', img: 'assets/mockup_art/wardrobe/items/dudu_accs_retro_sunglasses.png', theme: 'summer' }
+        { val: 'none', label: 'Tanpa Aksesoris', label_en: 'No Accessories', label_id: 'Tanpa Aksesoris', shortLabel: 'Polos', shortLabel_en: 'None', shortLabel_id: 'Polos', icon: '🐻', img: '', theme: 'natural' },
+        { val: 'dudu_accs_sunglasses', label: 'Kacamata Hitam Keren', label_en: 'Cool Dark Sunglasses', label_id: 'Kacamata Hitam Keren', shortLabel: 'Sunglasses', shortLabel_en: 'Sunglasses', shortLabel_id: 'Sunglasses', icon: '🕶️', img: 'assets/mockup_art/wardrobe/items/dudu_accs_sunglasses.png', theme: 'chic' },
+        { val: 'dudu_accs_satchel', label: 'Tas Selempang Bulat Kulit', label_en: 'Round Leather Satchel', label_id: 'Tas Selempang Bulat Kulit', shortLabel: 'Satchel', shortLabel_en: 'Satchel', shortLabel_id: 'Satchel', icon: '👜', img: 'assets/mockup_art/wardrobe/items/dudu_accs_satchel.png', theme: 'vintage' },
+        { val: 'dudu_accs_crossbody', label: 'Tas Bahu Kulit Cokelat', label_en: 'Crossbody Messenger Bag', label_id: 'Tas Bahu Kulit Cokelat', shortLabel: 'Crossbody', shortLabel_en: 'Crossbody', shortLabel_id: 'Crossbody', icon: '👝', img: 'assets/mockup_art/wardrobe/items/dudu_accs_crossbody.png', theme: 'chic' }
       ],
       shoes: [
-        { val: 'none', label: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
-        { val: 'dudu_shoes_bear_slippers', label: 'Sandal Bulu Beruang', shortLabel: 'Sandal Beruang', icon: '🥿', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_bear_slippers.png', theme: 'sleep' },
-        { val: 'dudu_shoes_sandals', label: 'Sandal Kulit Buckle', shortLabel: 'Sandal Buckle', icon: '🩴', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_sandals.png', theme: 'summer' },
-        { val: 'dudu_shoes_winter_boots', label: 'Sepatu Boot Musim Dingin', shortLabel: 'Winter Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_winter_boots.png', theme: 'winter' },
-        { val: 'dudu_shoes_oxfords', label: 'Sepatu Pantofel Oxford', shortLabel: 'Oxfords', icon: '👞', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_oxfords.png', theme: 'chic' },
-        { val: 'dudu_shoes_sneakers', label: 'Sepatu Kets Sneakers', shortLabel: 'Sneakers', icon: '👟', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_sneakers.png', theme: 'casual' }
+        { val: 'none', label: 'Tanpa Alas Kaki', label_en: 'Barefoot', label_id: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', shortLabel_en: 'Barefoot', shortLabel_id: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
+        { val: 'dudu_shoes_sneakers', label: 'Sepatu Kets Sneakers Cokelat', label_en: 'Brown Lace Sneakers', label_id: 'Sepatu Kets Sneakers Cokelat', shortLabel: 'Sneakers', shortLabel_en: 'Sneakers', shortLabel_id: 'Sneakers', icon: '👟', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_sneakers.png', theme: 'casual' },
+        { val: 'dudu_shoes_winter_boots', label: 'Sepatu Boot Musim Dingin', label_en: 'Warm Winter Boots', label_id: 'Sepatu Boot Musim Dingin', shortLabel: 'Winter Boots', shortLabel_en: 'Boots', shortLabel_id: 'Winter Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/dudu_shoes_winter_boots.png', theme: 'winter' }
       ]
     },
     bubu: {
       hat: [
-        { val: 'none', label: 'Tanpa Topi', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
-        { val: 'bubu_hat_nightcap', label: 'Topi Tidur Pita Manis', shortLabel: 'Nightcap', icon: '🎀', img: 'assets/mockup_art/wardrobe/items/bubu_hat_nightcap.png', theme: 'sleep' },
-        { val: 'bubu_hat_straw_hat', label: 'Topi Jerami Pantai Pita', shortLabel: 'Topi Jerami', icon: '👒', img: 'assets/mockup_art/wardrobe/items/bubu_hat_straw_hat.png', theme: 'summer' },
-        { val: 'bubu_hat_artist_beret', label: 'Topi Beret Seniman', shortLabel: 'Beret Seni', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/bubu_hat_artist_beret.png', theme: 'chic' },
-        { val: 'bubu_hat_earflap', label: 'Topi Bulu Telinga Panda', shortLabel: 'Trapper Hat', icon: '🐼', img: 'assets/mockup_art/wardrobe/items/bubu_hat_earflap.png', theme: 'cozy' },
-        { val: 'bubu_accs_hair_bow', label: 'Pita Rambut Cokelat Manis', shortLabel: 'Pita Rambut', icon: '🎀', img: 'assets/mockup_art/wardrobe/items/bubu_accs_hair_bow.png', theme: 'chic' }
+        { val: 'none', label: 'Tanpa Topi', label_en: 'No Hat', label_id: 'Tanpa Topi', shortLabel: 'Polos', shortLabel_en: 'None', shortLabel_id: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_hat_artist_beret', label: 'Topi Beret Bunga Manis', label_en: 'Floral Artist Beret', label_id: 'Topi Beret Bunga Manis', shortLabel: 'Beret Seni', shortLabel_en: 'Beret', shortLabel_id: 'Beret Seni', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/bubu_hat_artist_beret.png', theme: 'chic' },
+        { val: 'bubu_hat_earmuffs', label: 'Earmuffs Bulu Pom-Pom', label_en: 'Fluffy Pompom Earmuffs', label_id: 'Earmuffs Bulu Pom-Pom', shortLabel: 'Earmuffs', shortLabel_en: 'Earmuffs', shortLabel_id: 'Earmuffs', icon: '🎧', img: 'assets/mockup_art/wardrobe/items/bubu_hat_earmuffs.png', theme: 'winter' },
+        { val: 'bubu_hat_straw_hat', label: 'Topi Jerami Pita Cokelat', label_en: 'Straw Sun Hat with Bow', label_id: 'Topi Jerami Pita Cokelat', shortLabel: 'Topi Jerami', shortLabel_en: 'Straw Hat', shortLabel_id: 'Topi Jerami', icon: '👒', img: 'assets/mockup_art/wardrobe/items/bubu_hat_straw_hat.png', theme: 'summer' }
       ],
       outfit: [
-        { val: 'none', label: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
-        { val: 'bubu_outfit_ruffle_dress', label: 'Gaun Princess Ruffle Pink', shortLabel: 'Ruffle Dress', icon: '👗', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_ruffle_dress.png', theme: 'chic' },
-        { val: 'bubu_outfit_strawberry_pj', label: 'Piyama Motif Stroberi', shortLabel: 'Piyama Stroberi', icon: '🍓', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_strawberry_pj.png', theme: 'sleep' },
-        { val: 'bubu_outfit_floral_dress', label: 'Dress Bunga Musim Panas', shortLabel: 'Floral Dress', icon: '🌸', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_floral_dress.png', theme: 'summer' },
-        { val: 'bubu_outfit_tennis_skirt', label: 'Setelan Rok Tenis Stroberi', shortLabel: 'Tennis Skirt', icon: '🎾', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_tennis_skirt.png', theme: 'casual' },
-        { val: 'bubu_outfit_vintage_dress', label: 'Dress Vintage Peter Pan', shortLabel: 'Vintage Dress', icon: '🌼', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_vintage_dress.png', theme: 'vintage' },
-        { val: 'bubu_outfit_apron_dress', label: 'Gaun Celemek Cafe Maid', shortLabel: 'Apron Dress', icon: '☕', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_apron_dress.png', theme: 'chic' },
-        { val: 'bubu_outfit_trench', label: 'Mantel Trench Klasik Elegan', shortLabel: 'Trench Coat', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_trench.png', theme: 'chic' },
-        { val: 'bubu_outfit_sweater_skirt', label: 'Sweater Rajut & Rok Pink', shortLabel: 'Sweater & Rok', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_sweater_skirt.png', theme: 'cozy' }
+        { val: 'none', label: 'Tanpa Baju (Mentahan)', label_en: 'No Outfit (Raw Base)', label_id: 'Tanpa Baju (Mentahan)', shortLabel: 'Polos', shortLabel_en: 'Raw', shortLabel_id: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_outfit_floral_dress', label: 'Dress Bunga Musim Panas', label_en: 'Floral Summer Dress', label_id: 'Dress Bunga Musim Panas', shortLabel: 'Floral Dress', shortLabel_en: 'Floral', shortLabel_id: 'Floral Dress', icon: '🌸', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_floral_dress.png', theme: 'summer' },
+        { val: 'bubu_outfit_maid_dress', label: 'Gaun Celemek Maid Pink', label_en: 'Pink Maid Apron Dress', label_id: 'Gaun Celemek Maid Pink', shortLabel: 'Maid Dress', shortLabel_en: 'Maid Dress', shortLabel_id: 'Maid Dress', icon: '🎀', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_maid_dress.png', theme: 'chic' },
+        { val: 'bubu_outfit_trench', label: 'Mantel Trench Klasik Elegan', label_en: 'Classic Trench Coat', label_id: 'Mantel Trench Klasik Elegan', shortLabel: 'Trench', shortLabel_en: 'Trench', shortLabel_id: 'Trench', icon: '🧥', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_trench.png', theme: 'chic' },
+        { val: 'bubu_outfit_sweater_skirt', label: 'Sweater Rajut & Rok Lipit', label_en: 'Knit Sweater & Pleated Skirt', label_id: 'Sweater Rajut & Rok Lipit', shortLabel: 'Sweater & Rok', shortLabel_en: 'Sweater', shortLabel_id: 'Sweater & Rok', icon: '🧶', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_sweater_skirt.png', theme: 'cozy' },
+        { val: 'bubu_outfit_overalls', label: 'Baju Kodok Denim Biru', label_en: 'Denim Dungarees', label_id: 'Baju Kodok Denim Biru', shortLabel: 'Overalls', shortLabel_en: 'Overalls', shortLabel_id: 'Overalls', icon: '👖', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_overalls.png', theme: 'casual' },
+        { val: 'bubu_outfit_artist_apron', label: 'Celemek Lukis Artistik', label_en: 'Paint Splatter Apron Pinafore', label_id: 'Celemek Lukis Artistik', shortLabel: 'Artist Apron', shortLabel_en: 'Apron', shortLabel_id: 'Artist Apron', icon: '🎨', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_artist_apron.png', theme: 'chic' },
+        { val: 'bubu_outfit_cardigan', label: 'Kardigan Rajut Merah Muda', label_en: 'Pink Cable Cardigan', label_id: 'Kardigan Rajut Merah Muda', shortLabel: 'Kardigan', shortLabel_en: 'Cardigan', shortLabel_id: 'Kardigan', icon: '🧣', img: 'assets/mockup_art/wardrobe/items/bubu_outfit_cardigan.png', theme: 'cozy' }
       ],
       accs: [
-        { val: 'none', label: 'Tanpa Aksesoris', shortLabel: 'Polos', icon: '🐼', img: '', theme: 'natural' },
-        { val: 'bubu_accs_panda_mask', label: 'Penutup Mata Panda Lucu', shortLabel: 'Panda Mask', icon: '💤', img: 'assets/mockup_art/wardrobe/items/bubu_accs_panda_mask.png', theme: 'sleep' },
-        { val: 'bubu_accs_heart_glasses', label: 'Kacamata Hati Merah Muda', shortLabel: 'Kacamata Hati', icon: '💖', img: 'assets/mockup_art/wardrobe/items/bubu_accs_heart_glasses.png', theme: 'chic' },
-        { val: 'bubu_accs_round_glasses', label: 'Kacamata Bulat Manis', shortLabel: 'Kacamata Bulat', icon: '👓', img: 'assets/mockup_art/wardrobe/items/bubu_accs_round_glasses.png', theme: 'chic' },
-        { val: 'bubu_accs_straw_bag', label: 'Tas Anyaman Jerami Beruang', shortLabel: 'Tas Jerami', icon: '👜', img: 'assets/mockup_art/wardrobe/items/bubu_accs_straw_bag.png', theme: 'summer' },
-        { val: 'bubu_accs_bear_satchel', label: 'Tas Selempang Beruang Kecil', shortLabel: 'Tas Selempang', icon: '👝', img: 'assets/mockup_art/wardrobe/items/bubu_accs_bear_satchel.png', theme: 'cozy' }
+        { val: 'none', label: 'Tanpa Aksesoris', label_en: 'No Accessories', label_id: 'Tanpa Aksesoris', shortLabel: 'Polos', shortLabel_en: 'None', shortLabel_id: 'Polos', icon: '🐼', img: '', theme: 'natural' },
+        { val: 'bubu_accs_heart_glasses', label: 'Kacamata Hati Merah Muda', label_en: 'Pink Heart Sunglasses', label_id: 'Kacamata Hati Merah Muda', shortLabel: 'Kacamata Hati', shortLabel_en: 'Heart Shades', shortLabel_id: 'Kacamata Hati', icon: '💖', img: 'assets/mockup_art/wardrobe/items/bubu_accs_heart_glasses.png', theme: 'chic' },
+        { val: 'bubu_accs_bear_satchel', label: 'Tas Selempang Beruang Lucu', label_en: 'Cute Bear Sling Bag', label_id: 'Tas Selempang Beruang Lucu', shortLabel: 'Tas Beruang', shortLabel_en: 'Bear Bag', shortLabel_id: 'Tas Beruang', icon: '👝', img: 'assets/mockup_art/wardrobe/items/bubu_accs_bear_satchel.png', theme: 'cozy' },
+        { val: 'bubu_accs_heart_bag', label: 'Tas Selempang Hati Merah Muda', label_en: 'Pink Heart Crossbody Bag', label_id: 'Tas Selempang Hati Merah Muda', shortLabel: 'Tas Hati', shortLabel_en: 'Heart Bag', shortLabel_id: 'Tas Hati', icon: '👜', img: 'assets/mockup_art/wardrobe/items/bubu_accs_heart_bag.png', theme: 'chic' }
       ],
       shoes: [
-        { val: 'none', label: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
-        { val: 'bubu_shoes_bunny_slippers', label: 'Sandal Bulu Kelinci', shortLabel: 'Sandal Kelinci', icon: '🐰', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_bunny_slippers.png', theme: 'sleep' },
-        { val: 'bubu_shoes_pink_sandals', label: 'Sandal Jepit Buckle Pink', shortLabel: 'Sandal Pink', icon: '🩴', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_pink_sandals.png', theme: 'summer' },
-        { val: 'bubu_shoes_mary_janes', label: 'Sepatu Tali Mary Jane', shortLabel: 'Mary Janes', icon: '🥿', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_mary_janes.png', theme: 'chic' },
-        { val: 'bubu_shoes_ankle_boots', label: 'Sepatu Boot Tali Cokelat', shortLabel: 'Ankle Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_ankle_boots.png', theme: 'vintage' }
+        { val: 'none', label: 'Tanpa Alas Kaki', label_en: 'Barefoot', label_id: 'Tanpa Alas Kaki', shortLabel: 'Nyeker', shortLabel_en: 'Barefoot', shortLabel_id: 'Nyeker', icon: '🐾', img: '', theme: 'natural' },
+        { val: 'bubu_shoes_mary_janes', label: 'Sepatu Tali Mary Jane', label_en: 'Brown Strap Mary Janes', label_id: 'Sepatu Tali Mary Jane', shortLabel: 'Mary Janes', shortLabel_en: 'Mary Janes', shortLabel_id: 'Mary Janes', icon: '🥿', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_mary_janes.png', theme: 'chic' },
+        { val: 'bubu_shoes_winter_boots', label: 'Sepatu Boot Musim Dingin', label_en: 'Warm Winter Boots', label_id: 'Sepatu Boot Musim Dingin', shortLabel: 'Winter Boots', shortLabel_en: 'Boots', shortLabel_id: 'Winter Boots', icon: '🥾', img: 'assets/mockup_art/wardrobe/items/bubu_shoes_winter_boots.png', theme: 'winter' }
       ]
     }
   };
@@ -245,7 +231,7 @@
     ],
     wardrobe: {
       dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_ruffle_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_bunny_slippers' }
+      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_maid_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
     },
     miniGameHighScore: 420
   };
@@ -316,12 +302,18 @@
   }
 
   function getNextAnniversaryMilestone(anniversaryDateStr) {
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
     const [y, m, d] = (anniversaryDateStr || '2025-11-04').split('-').map(Number);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const start = new Date(y, m - 1, d);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthsEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthsId = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const fullMonthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const fullMonthsId = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    const months = isEn ? monthsEn : monthsId;
+    const fullMonths = isEn ? fullMonthsEn : fullMonthsId;
 
     // Next yearly anniversary
     let nextYear = today.getFullYear();
@@ -334,11 +326,11 @@
     const diffAnniv = Math.round((nextAnniv - today) / (1000 * 60 * 60 * 24));
     if (diffAnniv >= 0 && diffAnniv <= 100) {
       return {
-        title: `${yearsCount} Year Anniversary! 🎂🎉`,
+        title: isEn ? `${yearsCount} Year Anniversary! 🎂🎉` : `Ulang Tahun Hubungan ke-${yearsCount}! 🎂🎉`,
         subtitle: diffAnniv === 0
-          ? `Today is our ${yearsCount} Year Anniversary! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️`
-          : `Only ${diffAnniv} days left! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️`,
-        shortLabel: `Next: ${yearsCount} Year (${months[m - 1]} ${d})`
+          ? (isEn ? `Today is our ${yearsCount} Year Anniversary! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️` : `Hari ini adalah ulang tahun jadian ke-${yearsCount}! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️`)
+          : (isEn ? `Only ${diffAnniv} days left! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️` : `Tinggal ${diffAnniv} hari lagi! (${d} ${fullMonths[m - 1]} ${nextYear}) 🐻❤️`),
+        shortLabel: isEn ? `Next: ${yearsCount} Year (${months[m - 1]} ${d})` : `Berikutnya: Tahun ke-${yearsCount} (${d} ${months[m - 1]})`
       };
     }
 
@@ -346,9 +338,9 @@
     const nextBlock = (Math.floor(daysSoFar / 100) + 1) * 100;
     const daysLeft = nextBlock - daysSoFar;
     return {
-      title: `${nextBlock} Days! 🎉`,
-      subtitle: `Only ${daysLeft} days left! 🐻❤️`,
-      shortLabel: `Next: ${nextBlock} Days (${daysLeft}d left)`
+      title: isEn ? `${nextBlock} Days! 🎉` : `${nextBlock} Hari! 🎉`,
+      subtitle: isEn ? `Only ${daysLeft} days left! 🐻❤️` : `Tinggal ${daysLeft} hari lagi! 🐻❤️`,
+      shortLabel: isEn ? `Next: ${nextBlock} Days (${daysLeft}d left)` : `Berikutnya: ${nextBlock} Hari (sisa ${daysLeft}h)`
     };
   }
 
@@ -1262,22 +1254,25 @@
 
   // --- 1. OUR SPACE (HOME SCREEN - timeline.jpg) ---
   function renderOurSpaceHome() {
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
     const days = getDaysTogether();
     const daysEl = document.getElementById('home-days-count');
-    if (daysEl) daysEl.textContent = `${days} days ♡`;
+    if (daysEl) daysEl.textContent = isEn ? `${days} days ♡` : `${days} hari ♡`;
 
     const subEl = document.getElementById('home-anniversary-sub');
     if (subEl) {
       const [y, m, d] = (appData.anniversaryDate || '2025-11-04').split('-').map(Number);
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      subEl.textContent = `Since ${d} ${months[m - 1]} ${y}`;
+      const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const monthsId = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const months = isEn ? monthsEn : monthsId;
+      subEl.textContent = isEn ? `Since ${d} ${months[m - 1]} ${y}` : `Sejak ${d} ${months[m - 1]} ${y}`;
     }
 
     // Update Home Calendar Portal subtitle dynamically
     const portalCalNext = document.getElementById('home-portal-calendar-next');
     if (portalCalNext) {
       const milestone = getNextAnniversaryMilestone(appData.anniversaryDate);
-      portalCalNext.textContent = milestone.shortLabel || 'Next: 1 Year (Nov 4)';
+      portalCalNext.textContent = milestone.shortLabel || (isEn ? 'Next: 1 Year (Nov 4)' : 'Berikutnya: Tahun ke-1 (4 Nov)');
     }
 
     updateLoveBatteryUI();
@@ -1381,34 +1376,46 @@
 
   function getLoveNotificationContent(val) {
     const current = Math.max(0, Math.min(100, Number(val) || 100));
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
+
     if (current >= 100) {
       return {
-        title: 'Love Battery: 100% Full! 💖',
-        message: 'Cinta Bubu & Dudu penuh melimpah ruah! Kasih sayang kita tak terbatas hari ini 🥰',
+        title: isEn ? 'Love Battery: 100% Full! 💖' : 'Baterai Cinta: 100% Penuh! 💖',
+        message: isEn
+          ? 'Bubu & Dudu love is overflowing! Endless affection today 🥰'
+          : 'Cinta Bubu & Dudu penuh melimpah ruah! Kasih sayang kita tak terbatas hari ini 🥰',
         icon: '💖'
       };
     } else if (current >= 75) {
       return {
-        title: `Love Battery: ${current}% 🥰`,
-        message: 'Hati lagi berbunga-bunga dan senang banget dekat kamu! Semangat terus ya sayang ♡',
+        title: isEn ? `Love Battery: ${current}% 🥰` : `Baterai Cinta: ${current}% 🥰`,
+        message: isEn
+          ? 'Hearts are fluttering and so joyful near you! Sending all my love ♡'
+          : 'Hati lagi berbunga-bunga dan senang banget dekat kamu! Semangat terus ya sayang ♡',
         icon: '🥰'
       };
     } else if (current >= 50) {
       return {
-        title: `Love Battery: ${current}% 🤗`,
-        message: 'Energi cinta stabil, tapi tetap butuh recharge pelukan hangat ekstra dari ayang!',
+        title: isEn ? `Love Battery: ${current}% 🤗` : `Baterai Cinta: ${current}% 🤗`,
+        message: isEn
+          ? 'Love energy is steady, but an extra warm cuddle is always welcome!'
+          : 'Energi cinta stabil, tapi tetap butuh recharge pelukan hangat ekstra dari ayang!',
         icon: '🤗'
       };
     } else if (current >= 25) {
       return {
-        title: `Love Battery: ${current}% 🥺`,
-        message: 'Baterai cinta mulai low! Butuh disayang, dipuk-puk, dan ditemenin ngobrol manis ♡',
+        title: isEn ? `Love Battery: ${current}% 🥺` : `Baterai Cinta: ${current}% 🥺`,
+        message: isEn
+          ? 'Love battery is running low! Needs sweet affection and comforting chats ♡'
+          : 'Baterai cinta mulai rendah! Butuh disayang, dipuk-puk, dan ditemanin ngobrol manis ♡',
         icon: '🥺'
       };
     } else {
       return {
-        title: `Love Battery: ${current}% Darurat! 🔋`,
-        message: 'Baterai cinta kritis! Segera peluk erat dan manjakan ayang sekarang juga!',
+        title: isEn ? `Love Battery: ${current}% Alert! 🔋` : `Baterai Cinta: ${current}% Darurat! 🔋`,
+        message: isEn
+          ? 'Critical love battery! Please give warm hugs and pamper your partner right now!'
+          : 'Baterai cinta kritis! Segera peluk erat dan manjakan ayang sekarang juga!',
         icon: '🔋'
       };
     }
@@ -1416,34 +1423,46 @@
 
   function getBadmoodNotificationContent(val) {
     const current = Math.max(0, Math.min(100, Number(val) || 0));
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
+
     if (current <= 0) {
       return {
-        title: 'Badmood: 0% (Super Happy!) ✨',
-        message: 'Mood lagi ceria dan berbunga-bunga! Tidak ada badmood sama sekali hari ini 🥰🌸',
+        title: isEn ? 'Badmood: 0% (Super Happy!) ✨' : 'Suasana Hati: 0% (Sangat Ceria!) ✨',
+        message: isEn
+          ? 'Mood is joyful and blooming! Zero badmood today 🥰🌸'
+          : 'Mood lagi ceria dan berbunga-bunga! Tidak ada rasa kesal sama sekali hari ini 🥰🌸',
         icon: '✨'
       };
     } else if (current <= 25) {
       return {
-        title: `Badmood: ${current}% (Sedikit Bete) ☁️`,
-        message: 'Ada sedikit rasa bete nih, kalau disemangatin manis atau dicium pasti langsung senyum! 🥺',
+        title: isEn ? `Badmood: ${current}% (Slight Pout) ☁️` : `Suasana Hati: ${current}% (Sedikit Bete) ☁️`,
+        message: isEn
+          ? 'A tiny bit grumpy, but sweet kisses and smiles will fix it instantly! 🥺'
+          : 'Ada sedikit rasa bete nih, kalau disemangatin manis atau dicium pasti langsung senyum! 🥺',
         icon: '☁️'
       };
     } else if (current <= 50) {
       return {
-        title: `Badmood: ${current}% (Mood Mendung) 🌧️`,
-        message: 'Mood agak mendung dan sensitif. Butuh dipuk-puk, didengerin curhatnya, plus es krim! 🍨',
+        title: isEn ? `Badmood: ${current}% (Cloudy Mood) 🌧️` : `Suasana Hati: ${current}% (Mood Mendung) 🌧️`,
+        message: isEn
+          ? 'A bit cloudy and sensitive. Needs pampering, listening, plus sweet ice cream! 🍨'
+          : 'Mood agak mendung dan sensitif. Butuh dipuk-puk, didengerin curhatnya, plus es krim! 🍨',
         icon: '🌧️'
       };
     } else if (current <= 75) {
       return {
-        title: `Badmood: ${current}% (Ngambek Berat) 🌩️`,
-        message: 'Lagi ngambek! Tolong jangan bikin kesel dulu ya, wajib dibujuk dengan sabar dan beliin boba 🧋😤',
+        title: isEn ? `Badmood: ${current}% (Deep Pout) 🌩️` : `Suasana Hati: ${current}% (Ngambek Berat) 🌩️`,
+        message: isEn
+          ? 'Pouting heavily! Please be gentle, patient, and bring favorite boba tea 🧋😤'
+          : 'Lagi ngambek! Tolong jangan bikin kesel dulu ya, wajib dibujuk dengan sabar dan beliin boba 🧋😤',
         icon: '🌩️'
       };
     } else {
       return {
-        title: `Badmood: ${current}% (DARURAT LEVEL 5!) ⚡`,
-        message: 'BAHAYA NGAMBEK MAKSIMAL! Segera peluk erat, minta maaf, dan bawakan makanan kesukaan! 🌋💔',
+        title: isEn ? `Badmood: ${current}% (LEVEL 5 ALERT!) ⚡` : `Suasana Hati: ${current}% (DARURAT LEVEL 5!) ⚡`,
+        message: isEn
+          ? 'MAXIMUM BADMOOD DANGER! Give tight cuddles, heartfelt apologies, and yummy treats! 🌋💔'
+          : 'BAHAYA NGAMBEK MAKSIMAL! Segera peluk erat, minta maaf, dan bawakan makanan kesukaan! 🌋💔',
         icon: '⚡'
       };
     }
@@ -2330,53 +2349,94 @@
 
   const LEGACY_VAL_MAP = {
     beanie: 'dudu_hat_pompom',
-    cable: 'dudu_outfit_cardigan',
-    duffle: 'dudu_outfit_corduroy',
-    scarf: 'dudu_accs_round_glasses',
-    earflap: 'bubu_hat_earflap',
+    cable: 'dudu_outfit_cable_sweater',
+    duffle: 'dudu_outfit_varsity',
+    scarf: 'dudu_accs_sunglasses',
+    earflap: 'bubu_hat_earmuffs',
     cream: 'bubu_outfit_sweater_skirt',
     winter: 'bubu_outfit_trench',
-    pompom: 'bubu_accs_hair_bow',
-    earmuffs: 'dudu_hat_sleep_beanie',
-    cardigan: 'dudu_outfit_cardigan',
+    pompom: 'bubu_hat_artist_beret',
+    earmuffs: 'dudu_hat_earmuffs',
+    cardigan: 'dudu_outfit_cable_sweater',
     puffer: 'bubu_outfit_trench',
-    mitten: 'dudu_shoes_bear_slippers',
+    mitten: 'dudu_shoes_sneakers',
     beret: 'dudu_hat_beret',
-    hoodie: 'bubu_outfit_tennis_skirt',
+    hoodie: 'bubu_outfit_overalls',
     trench: 'bubu_outfit_trench',
-    satchel: 'bubu_accs_bear_satchel'
+    satchel: 'bubu_accs_bear_satchel',
+    // Older item ids mapped to new clean extracted sticker pieces
+    dudu_outfit_pajamas: 'dudu_outfit_cable_sweater',
+    dudu_outfit_nightshirt: 'dudu_outfit_overalls',
+    dudu_outfit_hawaiian: 'dudu_outfit_shorts',
+    dudu_outfit_palmtree: 'dudu_outfit_shorts',
+    dudu_outfit_tuxedo: 'dudu_outfit_trench',
+    dudu_outfit_corduroy: 'dudu_outfit_varsity',
+    dudu_hat_sleep_beanie: 'dudu_hat_pompom',
+    dudu_hat_bucket: 'dudu_hat_newsboy',
+    dudu_accs_eyemask: 'dudu_accs_sunglasses',
+    dudu_accs_round_glasses: 'dudu_accs_sunglasses',
+    dudu_accs_retro_sunglasses: 'dudu_accs_sunglasses',
+    dudu_shoes_bear_slippers: 'dudu_shoes_sneakers',
+    dudu_shoes_sandals: 'dudu_shoes_sneakers',
+    dudu_shoes_oxfords: 'dudu_shoes_winter_boots',
+    bubu_hat_nightcap: 'bubu_hat_artist_beret',
+    bubu_hat_earflap: 'bubu_hat_earmuffs',
+    bubu_accs_hair_bow: 'bubu_hat_artist_beret',
+    bubu_outfit_ruffle_dress: 'bubu_outfit_maid_dress',
+    bubu_outfit_strawberry_pj: 'bubu_outfit_cardigan',
+    bubu_outfit_tennis_skirt: 'bubu_outfit_overalls',
+    bubu_outfit_vintage_dress: 'bubu_outfit_floral_dress',
+    bubu_outfit_apron_dress: 'bubu_outfit_artist_apron',
+    bubu_accs_panda_mask: 'bubu_accs_heart_glasses',
+    bubu_accs_round_glasses: 'bubu_accs_heart_glasses',
+    bubu_accs_straw_bag: 'bubu_accs_bear_satchel',
+    bubu_shoes_bunny_slippers: 'bubu_shoes_mary_janes',
+    bubu_shoes_pink_sandals: 'bubu_shoes_mary_janes',
+    bubu_shoes_ankle_boots: 'bubu_shoes_winter_boots'
   };
 
   const COUPLE_OUTFIT_PRESETS = [
     {
       name: 'Bears Asli Mentahan 🐻🐼',
+      name_en: 'Raw Naked Bears 🐻🐼',
+      name_id: 'Bears Asli Mentahan 🐻🐼',
       dudu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' },
       bubu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' }
     },
     {
-      name: 'Piyama Malam Manis 🌙💤',
-      dudu: { hat: 'dudu_hat_sleep_beanie', outfit: 'dudu_outfit_pajamas', accs: 'dudu_accs_eyemask', shoes: 'dudu_shoes_bear_slippers' },
-      bubu: { hat: 'bubu_hat_nightcap', outfit: 'bubu_outfit_strawberry_pj', accs: 'bubu_accs_panda_mask', shoes: 'bubu_shoes_bunny_slippers' }
+      name: 'Setelan Denim Serasi 👖✨',
+      name_en: 'Matching Denim Overalls Duo 👖✨',
+      name_id: 'Setelan Denim Serasi 👖✨',
+      dudu: { hat: 'dudu_hat_plaid_beret', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_overalls', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
     },
     {
-      name: 'Kencan Romantis Mewah 🌹✨',
-      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_tuxedo', accs: 'dudu_accs_round_glasses', shoes: 'dudu_shoes_oxfords' },
-      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_ruffle_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
+      name: 'Mantel Trench Elegan 🧥🍂',
+      name_en: 'Chic Matching Trench Coats 🧥🍂',
+      name_id: 'Mantel Trench Elegan 🧥🍂',
+      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_trench', accs: 'dudu_accs_satchel', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_trench', accs: 'bubu_accs_heart_bag', shoes: 'bubu_shoes_winter_boots' }
     },
     {
-      name: 'Liburan Pantai Tropis 🏖️🌴',
-      dudu: { hat: 'dudu_hat_bucket', outfit: 'dudu_outfit_hawaiian', accs: 'dudu_accs_retro_sunglasses', shoes: 'dudu_shoes_sandals' },
-      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_floral_dress', accs: 'bubu_accs_straw_bag', shoes: 'bubu_shoes_pink_sandals' }
+      name: 'Musim Dingin Rajut Hangat ❄️🧣',
+      name_en: 'Cozy Winter Knit Duo ❄️🧣',
+      name_id: 'Musim Dingin Rajut Hangat ❄️🧣',
+      dudu: { hat: 'dudu_hat_pompom', outfit: 'dudu_outfit_cable_sweater', accs: 'dudu_accs_crossbody', shoes: 'dudu_shoes_winter_boots' },
+      bubu: { hat: 'bubu_hat_earmuffs', outfit: 'bubu_outfit_sweater_skirt', accs: 'bubu_accs_heart_bag', shoes: 'bubu_shoes_winter_boots' }
     },
     {
-      name: 'Santai di Kafe Kopi ☕🍂',
-      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_accs_hair_bow', outfit: 'bubu_outfit_apron_dress', accs: 'bubu_accs_bear_satchel', shoes: 'bubu_shoes_ankle_boots' }
+      name: 'Kencan Manis Kafe & Maid ☕🌸',
+      name_en: 'Sweet Cafe & Maid Date ☕🌸',
+      name_id: 'Kencan Manis Kafe & Maid ☕🌸',
+      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_varsity', accs: 'dudu_accs_satchel', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_maid_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
     },
     {
-      name: 'Musim Dingin Hangat ❄️🧣',
-      dudu: { hat: 'dudu_hat_pompom', outfit: 'dudu_outfit_cardigan', accs: 'dudu_accs_round_glasses', shoes: 'dudu_shoes_winter_boots' },
-      bubu: { hat: 'bubu_hat_earflap', outfit: 'bubu_outfit_sweater_skirt', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
+      name: 'Piknik Musim Panas 🌸👒',
+      name_en: 'Summer Picnic Flowers 🌸👒',
+      name_id: 'Piknik Musim Panas 🌸👒',
+      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_shorts', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
+      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_floral_dress', accs: 'bubu_accs_bear_satchel', shoes: 'bubu_shoes_mary_janes' }
     }
   ];
 
@@ -2412,16 +2472,38 @@
       val = LEGACY_VAL_MAP[val];
     }
     const catList = WARDROBE_CATALOG[charKey]?.[resolvedSlot] || WARDROBE_CATALOG.dudu[resolvedSlot] || [];
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
     if (!val || val === 'none') {
-      return { val: 'none', label: 'Polos Mentahan', shortLabel: 'Polos', icon: charKey === 'bubu' ? '🐼' : '🐻', img: '', theme: 'natural' };
+      return {
+        val: 'none',
+        label: isEn ? 'Raw Naked' : 'Polos Mentahan',
+        shortLabel: isEn ? 'Naked' : 'Polos',
+        icon: charKey === 'bubu' ? '🐼' : '🐻',
+        img: '',
+        theme: 'natural'
+      };
     }
-    const match = catList.find(o => o.val === val);
-    if (match) return match;
-    const otherChar = charKey === 'bubu' ? 'dudu' : 'bubu';
-    const altMatch = WARDROBE_CATALOG[otherChar]?.[resolvedSlot]?.find(o => o.val === val);
-    if (altMatch) return altMatch;
+    let match = catList.find(o => o.val === val);
+    if (!match) {
+      const otherChar = charKey === 'bubu' ? 'dudu' : 'bubu';
+      match = WARDROBE_CATALOG[otherChar]?.[resolvedSlot]?.find(o => o.val === val);
+    }
+    if (match) {
+      return {
+        ...match,
+        label: (isEn && match.label_en) ? match.label_en : (match.label_id || match.label),
+        shortLabel: (isEn && match.shortLabel_en) ? match.shortLabel_en : (match.shortLabel_id || match.shortLabel)
+      };
+    }
 
-    return catList[0] || { val: 'none', label: 'Polos Mentahan', shortLabel: 'Polos', icon: '✨', img: '', theme: 'natural' };
+    return catList[0] || {
+      val: 'none',
+      label: isEn ? 'Raw Naked' : 'Polos Mentahan',
+      shortLabel: isEn ? 'Naked' : 'Polos',
+      icon: '✨',
+      img: '',
+      theme: 'natural'
+    };
   }
 
   function computeCoupleMatchBanner() {
@@ -2446,25 +2528,27 @@
     const winterCount = themes.filter(t => t === 'winter').length;
     const naturalCount = themes.filter(t => t === 'natural').length;
 
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
+
     if (naturalCount >= 6) {
-      return 'Bears Asli Mentahan! (Raw Cute Bears 🐻🐼✨)';
+      return isEn ? 'Natural Cute Bears 🐻🐼✨' : 'Bears Asli Mentahan 🐻🐼✨';
     }
     if (sleepCount >= 4) {
-      return 'Piyama Tidur Berdua! (Sweet Sleepy Match 🌙💤✨)';
+      return isEn ? 'Sweet Sleepy Pajama Match 🌙💤✨' : 'Piyama Tidur Berdua 🌙💤✨';
     }
     if (chicCount >= 4) {
-      return 'Kencan Mewah Berdua! (Chic Date Match 🌹✨)';
+      return isEn ? 'Chic Romantic Date Match 🌹✨' : 'Kencan Mewah Berdua 🌹✨';
     }
     if (summerCount >= 4) {
-      return 'Liburan Tropis Serasi! (Summer Holiday Match 🏖️🌴✨)';
+      return isEn ? 'Summer Holiday Match 🏖️🌴✨' : 'Liburan Tropis Serasi 🏖️🌴✨';
     }
     if (winterCount >= 4) {
-      return 'Hangat di Musim Dingin! (Cozy Winter Match ❄️✨)';
+      return isEn ? 'Cozy Winter Match ❄️✨' : 'Hangat di Musim Dingin ❄️✨';
     }
     if (exactMatches >= 2 || themeMatches >= 2) {
-      return 'Pasangan Serasi! (Perfect Couple Match 💖✨)';
+      return isEn ? 'Perfect Couple Match 💖✨' : 'Pasangan Serasi 💖✨';
     }
-    return 'Mix & Match Menggemaskan! (Cozy Playful Match 🧸💕)';
+    return isEn ? 'Cozy Playful Match 🧸💕' : 'Paduan Busana Menggemaskan 🧸💕';
   }
 
   function applyLayerStyle(imgEl, slot, itemVal, char, mode) {
@@ -2479,61 +2563,73 @@
     imgEl.src = meta.img;
     imgEl.style.display = 'block';
 
-    let w = 30.5;
-    let l = 34.75;
-    let t = 56.5;
+    let w = 25.1;
+    let l = 37.45;
+    let t = 58.0;
 
     if (char === 'dudu') {
       if (slot === 'hat') {
-        if (meta.val === 'dudu_hat_bucket') { w = 34; l = 33; t = 30; }
-        else if (meta.val === 'dudu_hat_sleep_beanie') { w = 31; l = 34.5; t = 28; }
-        else if (meta.val === 'dudu_hat_pompom') { w = 31; l = 34.5; t = 29; }
-        else { w = 30; l = 35; t = 32; }
+        if (meta.val === 'dudu_hat_newsboy') { w = 35.0; l = 35.0; t = 27.0; }
+        else if (meta.val === 'dudu_hat_pompom') { w = 33.3; l = 33.5; t = 22.0; }
+        else if (meta.val === 'dudu_hat_plaid_beret') { w = 31.0; l = 31.5; t = 28.5; }
+        else if (meta.val === 'dudu_hat_beret') { w = 36.0; l = 35.5; t = 28.0; }
+        else if (meta.val === 'dudu_hat_earmuffs') { w = 43.3; l = 28.5; t = 27.5; }
+        else { w = 35.0; l = 32.5; t = 27.0; }
       } else if (slot === 'accs') {
-        if (meta.val === 'dudu_accs_eyemask') { w = 32; l = 34; t = 45; }
-        else { w = 27; l = 36.5; t = 47.5; }
+        if (meta.val === 'dudu_accs_sunglasses') { w = 27.6; l = 36.2; t = 46.5; }
+        else if (meta.val === 'dudu_accs_satchel') { w = 17.2; l = 31.0; t = 56.0; }
+        else if (meta.val === 'dudu_accs_crossbody') { w = 17.7; l = 53.5; t = 56.0; }
+        else { w = 27.6; l = 36.2; t = 46.5; }
       } else if (slot === 'outfit') {
-        if (meta.val === 'dudu_outfit_overalls') { w = 30; l = 35; t = 56.5; }
-        else if (meta.val === 'dudu_outfit_pajamas') { w = 31; l = 34.5; t = 55.5; }
-        else if (meta.val === 'dudu_outfit_nightshirt') { w = 31.5; l = 34.25; t = 55.5; }
-        else if (meta.val === 'dudu_outfit_tuxedo') { w = 31; l = 34.5; t = 55.5; }
-        else if (meta.val === 'dudu_outfit_cardigan') { w = 31; l = 34.5; t = 55.5; }
-        else { w = 30.5; l = 34.75; t = 56; }
+        if (meta.val === 'dudu_outfit_overalls') { w = 25.1; l = 37.45; t = 58.0; }
+        else if (meta.val === 'dudu_outfit_cable_sweater') { w = 36.2; l = 31.9; t = 57.5; }
+        else if (meta.val === 'dudu_outfit_trench') { w = 36.2; l = 31.9; t = 57.5; }
+        else if (meta.val === 'dudu_outfit_varsity') { w = 35.4; l = 32.3; t = 57.5; }
+        else if (meta.val === 'dudu_outfit_shorts') { w = 29.6; l = 35.2; t = 69.5; }
+        else { w = 25.1; l = 37.45; t = 58.0; }
       } else if (slot === 'shoes') {
-        w = 25; l = 37.5; t = 81.5;
+        if (meta.val === 'dudu_shoes_sneakers') { w = 22.5; l = 38.7; t = 84.5; }
+        else if (meta.val === 'dudu_shoes_winter_boots') { w = 26.0; l = 37.0; t = 83.5; }
+        else { w = 22.5; l = 38.7; t = 84.5; }
       }
     } else {
       // Bubu
       if (slot === 'hat') {
-        if (meta.val === 'bubu_hat_straw_hat' || meta.val === 'bubu_hat_straw_hat_2') { w = 34; l = 33; t = 28.5; }
-        else if (meta.val === 'bubu_hat_nightcap') { w = 33; l = 33.5; t = 26; }
-        else if (meta.val === 'bubu_hat_earflap') { w = 29; l = 35.5; t = 29.5; }
-        else if (meta.val === 'bubu_accs_hair_bow') { w = 16; l = 49; t = 33; }
-        else { w = 29; l = 35.5; t = 30; }
+        if (meta.val === 'bubu_hat_artist_beret') { w = 31.0; l = 31.5; t = 28.5; }
+        else if (meta.val === 'bubu_hat_earmuffs') { w = 43.3; l = 28.5; t = 27.5; }
+        else if (meta.val === 'bubu_hat_straw_hat') { w = 41.2; l = 29.5; t = 25.0; }
+        else { w = 31.0; l = 31.5; t = 28.5; }
       } else if (slot === 'accs') {
-        if (meta.val === 'bubu_accs_panda_mask') { w = 32; l = 34; t = 45; }
-        else if (meta.val === 'bubu_accs_straw_bag') { w = 22; l = 24; t = 58; }
-        else if (meta.val === 'bubu_accs_bear_satchel') { w = 20; l = 54; t = 58; }
-        else { w = 28; l = 36; t = 47; }
+        if (meta.val === 'bubu_accs_heart_glasses') { w = 28.2; l = 35.9; t = 46.5; }
+        else if (meta.val === 'bubu_accs_bear_satchel') { w = 17.1; l = 31.0; t = 56.0; }
+        else if (meta.val === 'bubu_accs_heart_bag') { w = 17.6; l = 53.5; t = 56.0; }
+        else { w = 28.2; l = 35.9; t = 46.5; }
       } else if (slot === 'outfit') {
-        if (meta.val === 'bubu_outfit_ruffle_dress') { w = 31; l = 34.5; t = 56.5; }
-        else if (meta.val === 'bubu_outfit_trench') { w = 31.5; l = 34.25; t = 55.5; }
-        else { w = 30.5; l = 34.75; t = 56; }
+        if (meta.val === 'bubu_outfit_floral_dress') { w = 36.1; l = 31.95; t = 58.0; }
+        else if (meta.val === 'bubu_outfit_maid_dress') { w = 36.2; l = 31.9; t = 57.5; }
+        else if (meta.val === 'bubu_outfit_trench') { w = 36.2; l = 31.9; t = 57.0; }
+        else if (meta.val === 'bubu_outfit_sweater_skirt') { w = 35.2; l = 32.4; t = 57.0; }
+        else if (meta.val === 'bubu_outfit_overalls') { w = 25.0; l = 37.5; t = 58.0; }
+        else if (meta.val === 'bubu_outfit_artist_apron') { w = 33.1; l = 33.45; t = 58.0; }
+        else if (meta.val === 'bubu_outfit_cardigan') { w = 38.5; l = 30.75; t = 57.5; }
+        else { w = 36.1; l = 31.95; t = 58.0; }
       } else if (slot === 'shoes') {
-        w = 26; l = 37; t = 81.5;
+        if (meta.val === 'bubu_shoes_mary_janes') { w = 22.5; l = 38.7; t = 84.5; }
+        else if (meta.val === 'bubu_shoes_winter_boots') { w = 26.0; l = 37.0; t = 83.5; }
+        else { w = 22.5; l = 38.7; t = 84.5; }
       }
     }
 
     if (mode === 'couple') {
-      const coupleW = w / 2;
-      const coupleL = (char === 'dudu') ? (l / 2) : (50 + (l / 2));
-      imgEl.style.width = `${coupleW.toFixed(1)}%`;
-      imgEl.style.left = `${coupleL.toFixed(1)}%`;
-      imgEl.style.top = `${t.toFixed(1)}%`;
+      const coupleW = w * 0.497;
+      const coupleL = (char === 'dudu' ? 25 : 75) + (l - 50) * 0.497;
+      imgEl.style.width = `${coupleW.toFixed(2)}%`;
+      imgEl.style.left = `${coupleL.toFixed(2)}%`;
+      imgEl.style.top = `${t.toFixed(2)}%`;
     } else {
-      imgEl.style.width = `${w}%`;
-      imgEl.style.left = `${l}%`;
-      imgEl.style.top = `${t}%`;
+      imgEl.style.width = `${w.toFixed(2)}%`;
+      imgEl.style.left = `${l.toFixed(2)}%`;
+      imgEl.style.top = `${t.toFixed(2)}%`;
     }
   }
 
@@ -2818,8 +2914,10 @@
       card.classList.toggle('border-[#8D5B4C]', isSelectedSlot);
       card.classList.toggle('shadow-sm', isSelectedSlot);
 
+      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
       if (activeOpt.val !== 'none') {
-        equippedLabels.push(`${activeOpt.icon} ${activeOpt.shortLabel || activeOpt.label}`);
+        const lbl = isEn ? (activeOpt.shortLabel_en || activeOpt.shortLabel || activeOpt.label) : (activeOpt.shortLabel || activeOpt.label);
+        equippedLabels.push(`${activeOpt.icon} ${lbl}`);
       }
 
       const imgEl = card.querySelector('.wardrobe-card-img');
@@ -2827,7 +2925,7 @@
       const labelSpan = card.querySelector('.wardrobe-card-label');
       const idxSpan = card.querySelector('.wardrobe-card-idx');
 
-      if (labelSpan) labelSpan.textContent = activeOpt.shortLabel || activeOpt.label;
+      if (labelSpan) labelSpan.textContent = isEn ? (activeOpt.shortLabel_en || activeOpt.shortLabel || activeOpt.label) : (activeOpt.shortLabel || activeOpt.label);
       if (idxSpan) idxSpan.textContent = `${activeIdx + 1}/${catalog.length}`;
 
       if (activeOpt.img && imgEl) {
@@ -2846,16 +2944,18 @@
     // Populate direct item picker pills/chips for activeWardrobeSlot
     const slotPicker = document.getElementById('wardrobe-slot-picker');
     if (slotPicker) {
+      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
       const catalog = WARDROBE_CATALOG[char]?.[activeWardrobeSlot] || [];
       const curVal = currentOutfit[activeWardrobeSlot] || currentOutfit[activeWardrobeSlot === 'outfit' ? 'sweater' : activeWardrobeSlot === 'shoes' ? 'coat' : activeWardrobeSlot];
 
       slotPicker.innerHTML = catalog.map(opt => {
         const active = opt.val === curVal;
         const isNone = opt.val === 'none';
+        const labelText = isNone ? (isEn ? '❌ Undress / Bare' : '❌ Lepas / Polos') : (isEn ? (opt.label_en || opt.label) : opt.label);
         return `
           <button type="button" data-pick-val="${opt.val}" class="wardrobe-slot-chip px-2.5 py-1.5 rounded-2xl text-[11px] font-bold shrink-0 flex items-center gap-2 cursor-pointer button-press transition-all border ${active ? 'bg-[#8D5B4C] text-white shadow-xs border-[#78493C]' : 'bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border-[#E8DACB] dark:border-stone-600 hover:border-[#8D5B4C]'}">
             ${opt.img ? `<img src="${opt.img}" class="w-7 h-7 object-contain drop-shadow-xs" alt="${opt.shortLabel}" />` : `<span class="text-lg">${opt.icon}</span>`}
-            <span class="truncate max-w-[120px]">${isNone ? '❌ Lepas / Polos' : opt.label}</span>
+            <span class="truncate max-w-[120px]">${labelText}</span>
           </button>
         `;
       }).join('');
@@ -2871,9 +2971,10 @@
             syncWardrobeToServer();
             window.duduAudio?.playPop?.(780);
             if (opt.val === 'none') {
-              showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} melepas pakaian!`);
+              showFeedbackToast(isEn ? `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} undressed!` : `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} melepas pakaian!`);
             } else {
-              showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${opt.label}! ${opt.icon}`);
+              const optLabel = isEn ? (opt.label_en || opt.label) : opt.label;
+              showFeedbackToast(isEn ? `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} equipped ${optLabel}! ${opt.icon}` : `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${optLabel}! ${opt.icon}`);
             }
           }
         };
@@ -2882,8 +2983,9 @@
 
     const summaryEl = document.getElementById('wardrobe-equipped-summary');
     if (summaryEl) {
+      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
       const charLabel = isDudu ? 'Dudu 🐻' : 'Bubu 🐼';
-      summaryEl.textContent = `${charLabel}: ${equippedLabels.length > 0 ? equippedLabels.join(' • ') : 'Polos Mentahan 🐾'}`;
+      summaryEl.textContent = `${charLabel}: ${equippedLabels.length > 0 ? equippedLabels.join(' • ') : (isEn ? 'Bare Natural 🐾' : 'Polos Mentahan 🐾')}`;
     }
   }
 
@@ -3641,6 +3743,16 @@
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
+
+  window.addEventListener('dudu-language-changed', () => {
+    if (typeof renderOurSpaceHome === 'function') renderOurSpaceHome();
+    if (typeof renderWardrobeRoom === 'function') renderWardrobeRoom();
+    if (typeof updateWardrobeTabs === 'function') updateWardrobeTabs();
+    if (typeof renderLoveNotes === 'function') renderLoveNotes();
+    if (typeof renderOurCalendar === 'function') renderOurCalendar();
+    if (typeof renderBucketList === 'function') renderBucketList();
+    if (typeof renderMemoryJar === 'function') renderMemoryJar();
+  });
 
   // Expose to window for interactions
   window.DuduMockup = {

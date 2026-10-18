@@ -42,29 +42,25 @@
     <!-- Feet -->
     <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
     <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <!-- Chubby Brown Body -->
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
     <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
-    <!-- Light Cream Belly -->
-    <ellipse cx="256" cy="356" rx="60" ry="50" fill="#F5E3D0"/>
   
       
-    <!-- Dudu Ears -->
-    <circle cx="158" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <circle cx="158" cy="130" r="22" fill="#8C5935"/>
-    <circle cx="354" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <circle cx="354" cy="130" r="22" fill="#8C5935"/>
-    <!-- Dudu Head Contour -->
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="160" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="160" cy="130" r="20" fill="#4A2E1B"/>
+    <circle cx="352" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="352" cy="130" r="20" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
     <path d="M 146 205
              C 126 150, 181 105, 256 105
              C 331 105, 386 150, 366 205
              C 386 260, 351 300, 256 300
              C 161 300, 126 260, 146 205 Z"
           fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
-    <!-- Snout Muzzle -->
-    <ellipse cx="256" cy="227" rx="50" ry="36" fill="#F5E3D0" stroke="#3E2723" stroke-width="5"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="178" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
-    <ellipse cx="334" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
   
       <!-- Tilted Asymmetric Eyes -->
       <circle cx="198" cy="188" r="14" fill="#3E2723"/>

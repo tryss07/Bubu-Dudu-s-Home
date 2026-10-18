@@ -39,26 +39,26 @@
 <g filter="url(#softShadow)">
 
       
-    <!-- Feet -->
+    <!-- Feet with dark bottom curves -->
     <ellipse cx="208" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
     <ellipse cx="304" cy="425" rx="28" ry="20" fill="#FFFFFF" stroke="#2B2421" stroke-width="7.5"/>
-    <!-- Chubby White Body -->
+    <!-- Chubby Pure White Body -->
     <ellipse cx="256" cy="350" rx="105" ry="88" fill="#FFFFFF" stroke="#2B2421" stroke-width="8"/>
   
       
-    <!-- Bubu Ears -->
-    <circle cx="158" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
-    <circle cx="354" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
-    <!-- Bubu Head Contour -->
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="160" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <circle cx="352" cy="130" r="38" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
     <path d="M 146 205
              C 126 150, 181 105, 256 105
              C 331 105, 386 150, 366 205
              C 386 260, 351 300, 256 300
              C 161 300, 126 260, 146 205 Z"
           fill="#FFFFFF" stroke="#2B2421" stroke-width="8" stroke-linejoin="round"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="180" cy="230" rx="30" ry="18" fill="url(#bubuBlush)"/>
-    <ellipse cx="332" cy="230" rx="30" ry="18" fill="url(#bubuBlush)"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#FFA8A3" opacity="0.85"/>
   
       <!-- Star Eyes -->
       <g fill="#FFD166" stroke="#2B2421" stroke-width="5">

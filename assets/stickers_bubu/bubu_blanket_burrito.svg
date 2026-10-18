@@ -47,31 +47,32 @@
       <circle cx="310" cy="340" r="8" fill="#FFFFFF" opacity="0.8"/>
       <!-- Bubu Head Peeking Out -->
       
-    <!-- Bubu Ears -->
-    <circle cx="167.8" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
-    <circle cx="344.2" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
-    <!-- Bubu Head Contour -->
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="169.6" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <circle cx="342.4" cy="127.5" r="34.2" fill="#2B2421" stroke="#2B2421" stroke-width="3.6"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
     <path d="M 157 195
              C 139 145.5, 188.5 105, 256 105
              C 323.5 105, 373 145.5, 355 195
              C 373 244.5, 341.5 280.5, 256 280.5
              C 170.5 280.5, 139 244.5, 157 195 Z"
           fill="#FFFFFF" stroke="#2B2421" stroke-width="7.2" stroke-linejoin="round"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="187.6" cy="217.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
-    <ellipse cx="324.4" cy="217.5" rx="27" ry="16.2" fill="url(#bubuBlush)"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="187.6" cy="214.8" rx="25.2" ry="16.2" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="324.4" cy="214.8" rx="25.2" ry="16.2" fill="#FFA8A3" opacity="0.85"/>
   
       
-    <!-- Left Happy Eye Curve -->
-    <path d="M 191.2 187.8 Q 205.6 173.4 220 187.8"
+    <!-- Both Eyes Happy Curved Lines -->
+    <path d="M 196.6 191.4 Q 209.2 178.8 221.8 191.4"
           fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M 292 187.8 Q 306.4 173.4 320.8 187.8"
+    <path d="M 290.2 191.4 Q 302.8 178.8 315.4 191.4"
           fill="none" stroke="#2B2421" stroke-width="6.75" stroke-linecap="round"/>
-    <!-- Nose & Sweet Smile -->
-    <ellipse cx="256" cy="199.5" rx="5.4" ry="3.6" fill="#2B2421"/>
-    <path d="M 246.1 206.7 C 250.6 213.9, 256 213.9, 256 206.7 C 256 213.9, 261.4 213.9, 265.9 206.7"
+    <!-- Sweet Smile -->
+    <path d="M 241.6 205.8 Q 248.8 214.8 256 207.6 Q 263.2 214.8 270.4 205.8"
           fill="none" stroke="#2B2421" stroke-width="4.95" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M 256 277.8 L 234.4 268.8 L 238 288.6 Z M 256 277.8 L 277.6 268.8 L 274 288.6 Z" fill="#2B2421"/>
+    <circle cx="256" cy="278.7" r="5.4" fill="#2B2421"/>
   
       <!-- Little Paws Peeking over edge -->
       <ellipse cx="220" cy="275" rx="16" ry="13" fill="#FFFFFF" stroke="#2B2421" stroke-width="6"/>

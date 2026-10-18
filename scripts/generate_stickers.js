@@ -59,139 +59,125 @@ function wrapSvg(body) {
 }
 
 // -------------------------------------------------------------
-// Bubu Components (White Panda)
+// Bubu Components (Pure White Panda by Huang Xiao B)
 // -------------------------------------------------------------
 function bubuHead(cx, cy, scale = 1) {
   return `
-    <!-- Bubu Ears -->
-    <circle cx="${cx - 98 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#2B2421" stroke="#2B2421" stroke-width="${4 * scale}"/>
-    <circle cx="${cx + 98 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#2B2421" stroke="#2B2421" stroke-width="${4 * scale}"/>
-    <!-- Bubu Head Contour -->
+    <!-- Bubu Ears (Solid Round Panda Ears) -->
+    <circle cx="${cx - 96 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#2B2421" stroke="#2B2421" stroke-width="${4 * scale}"/>
+    <circle cx="${cx + 96 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#2B2421" stroke="#2B2421" stroke-width="${4 * scale}"/>
+    <!-- Bubu Head Contour (Chubby Cute Face) -->
     <path d="M ${cx - 110 * scale} ${cy}
              C ${cx - 130 * scale} ${cy - 55 * scale}, ${cx - 75 * scale} ${cy - 100 * scale}, ${cx} ${cy - 100 * scale}
              C ${cx + 75 * scale} ${cy - 100 * scale}, ${cx + 130 * scale} ${cy - 55 * scale}, ${cx + 110 * scale} ${cy}
              C ${cx + 130 * scale} ${cy + 55 * scale}, ${cx + 95 * scale} ${cy + 95 * scale}, ${cx} ${cy + 95 * scale}
              C ${cx - 95 * scale} ${cy + 95 * scale}, ${cx - 130 * scale} ${cy + 55 * scale}, ${cx - 110 * scale} ${cy} Z"
           fill="#FFFFFF" stroke="#2B2421" stroke-width="${8 * scale}" stroke-linejoin="round"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="${cx - 76 * scale}" cy="${cy + 25 * scale}" rx="${30 * scale}" ry="${18 * scale}" fill="url(#bubuBlush)"/>
-    <ellipse cx="${cx + 76 * scale}" cy="${cy + 25 * scale}" rx="${30 * scale}" ry="${18 * scale}" fill="url(#bubuBlush)"/>
+    <!-- Blushing Pink Cheeks -->
+    <ellipse cx="${cx - 76 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${18 * scale}" fill="#FFA8A3" opacity="0.85"/>
+    <ellipse cx="${cx + 76 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${18 * scale}" fill="#FFA8A3" opacity="0.85"/>
   `;
 }
 
 function bubuEyesNormal(cx, cy, scale = 1) {
   return `
-    <!-- Left Eye Patch -->
-    <ellipse cx="${cx - 56 * scale}" cy="${cy - 10 * scale}" rx="${21 * scale}" ry="${25 * scale}" fill="#2B2421" transform="rotate(-7 ${cx - 56 * scale} ${cy - 10 * scale})"/>
-    <circle cx="${cx - 59 * scale}" cy="${cy - 14 * scale}" r="${7 * scale}" fill="#FFFFFF"/>
-    <circle cx="${cx - 51 * scale}" cy="${cy - 5 * scale}" r="${3 * scale}" fill="#FFFFFF"/>
-    <!-- Right Eye Patch -->
-    <ellipse cx="${cx + 56 * scale}" cy="${cy - 10 * scale}" rx="${21 * scale}" ry="${25 * scale}" fill="#2B2421" transform="rotate(7 ${cx + 56 * scale} ${cy - 10 * scale})"/>
-    <circle cx="${cx + 53 * scale}" cy="${cy - 14 * scale}" r="${7 * scale}" fill="#FFFFFF"/>
-    <circle cx="${cx + 61 * scale}" cy="${cy - 5 * scale}" r="${3 * scale}" fill="#FFFFFF"/>
-    <!-- Nose & Cat Mouth -->
-    <ellipse cx="${cx}" cy="${cy + 5 * scale}" rx="${6 * scale}" ry="${4 * scale}" fill="#2B2421"/>
-    <path d="M ${cx - 11 * scale} ${cy + 13 * scale} C ${cx - 6 * scale} ${cy + 20 * scale}, ${cx} ${cy + 20 * scale}, ${cx} ${cy + 13 * scale} C ${cx} ${cy + 20 * scale}, ${cx + 6 * scale} ${cy + 20 * scale}, ${cx + 11 * scale} ${cy + 13 * scale}"
+    <!-- Bubu Solid Chocolate Eyes (Pure Huang Xiao B Style, No Patches) -->
+    <circle cx="${cx - 52 * scale}" cy="${cy - 4 * scale}" r="${13 * scale}" fill="#2B2421"/>
+    <circle cx="${cx + 52 * scale}" cy="${cy - 4 * scale}" r="${13 * scale}" fill="#2B2421"/>
+    <!-- Iconic Cute ω Mouth -->
+    <path d="M ${cx - 16 * scale} ${cy + 12 * scale} Q ${cx - 8 * scale} ${cy + 22 * scale} ${cx} ${cy + 14 * scale} Q ${cx + 8 * scale} ${cy + 22 * scale} ${cx + 16 * scale} ${cy + 12 * scale}"
           fill="none" stroke="#2B2421" stroke-width="${5.5 * scale}" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M ${cx} ${cy + 92 * scale} L ${cx - 24 * scale} ${cy + 82 * scale} L ${cx - 20 * scale} ${cy + 104 * scale} Z M ${cx} ${cy + 92 * scale} L ${cx + 24 * scale} ${cy + 82 * scale} L ${cx + 20 * scale} ${cy + 104 * scale} Z" fill="#2B2421"/>
+    <circle cx="${cx}" cy="${cy + 93 * scale}" r="${6 * scale}" fill="#2B2421"/>
   `;
 }
 
 function bubuEyesWink(cx, cy, scale = 1) {
   return `
-    <!-- Left Eye Patch (Happy open) -->
-    <ellipse cx="${cx - 56 * scale}" cy="${cy - 10 * scale}" rx="${21 * scale}" ry="${25 * scale}" fill="#2B2421" transform="rotate(-7 ${cx - 56 * scale} ${cy - 10 * scale})"/>
-    <circle cx="${cx - 59 * scale}" cy="${cy - 14 * scale}" r="${7 * scale}" fill="#FFFFFF"/>
-    <circle cx="${cx - 51 * scale}" cy="${cy - 5 * scale}" r="${3 * scale}" fill="#FFFFFF"/>
-    <!-- Right Eye Patch (Winking Curve) -->
-    <path d="M ${cx + 38 * scale} ${cy - 8 * scale} Q ${cx + 56 * scale} ${cy - 22 * scale} ${cx + 74 * scale} ${cy - 8 * scale}"
+    <!-- Left Eye Solid Dot -->
+    <circle cx="${cx - 52 * scale}" cy="${cy - 4 * scale}" r="${13 * scale}" fill="#2B2421"/>
+    <!-- Right Eye Playful Wink Curve -->
+    <path d="M ${cx + 38 * scale} ${cy - 4 * scale} Q ${cx + 52 * scale} ${cy - 18 * scale} ${cx + 66 * scale} ${cy - 4 * scale}"
           fill="none" stroke="#2B2421" stroke-width="${7 * scale}" stroke-linecap="round"/>
-    <!-- Nose & Playful Mouth -->
-    <ellipse cx="${cx}" cy="${cy + 5 * scale}" rx="${6 * scale}" ry="${4 * scale}" fill="#2B2421"/>
-    <path d="M ${cx - 10 * scale} ${cy + 13 * scale} Q ${cx} ${cy + 26 * scale} ${cx + 12 * scale} ${cy + 14 * scale}"
+    <!-- Playful Mouth -->
+    <path d="M ${cx - 14 * scale} ${cy + 14 * scale} Q ${cx} ${cy + 28 * scale} ${cx + 14 * scale} ${cy + 14 * scale}"
           fill="#FF758C" stroke="#2B2421" stroke-width="${5 * scale}" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M ${cx} ${cy + 92 * scale} L ${cx - 24 * scale} ${cy + 82 * scale} L ${cx - 20 * scale} ${cy + 104 * scale} Z M ${cx} ${cy + 92 * scale} L ${cx + 24 * scale} ${cy + 82 * scale} L ${cx + 20 * scale} ${cy + 104 * scale} Z" fill="#2B2421"/>
+    <circle cx="${cx}" cy="${cy + 93 * scale}" r="${6 * scale}" fill="#2B2421"/>
   `;
 }
 
 function bubuEyesHappyClosed(cx, cy, scale = 1) {
   return `
-    <!-- Left Happy Eye Curve -->
-    <path d="M ${cx - 72 * scale} ${cy - 8 * scale} Q ${cx - 56 * scale} ${cy - 24 * scale} ${cx - 40 * scale} ${cy - 8 * scale}"
+    <!-- Both Eyes Happy Curved Lines -->
+    <path d="M ${cx - 66 * scale} ${cy - 4 * scale} Q ${cx - 52 * scale} ${cy - 18 * scale} ${cx - 38 * scale} ${cy - 4 * scale}"
           fill="none" stroke="#2B2421" stroke-width="${7.5 * scale}" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M ${cx + 40 * scale} ${cy - 8 * scale} Q ${cx + 56 * scale} ${cy - 24 * scale} ${cx + 72 * scale} ${cy - 8 * scale}"
+    <path d="M ${cx + 38 * scale} ${cy - 4 * scale} Q ${cx + 52 * scale} ${cy - 18 * scale} ${cx + 66 * scale} ${cy - 4 * scale}"
           fill="none" stroke="#2B2421" stroke-width="${7.5 * scale}" stroke-linecap="round"/>
-    <!-- Nose & Sweet Smile -->
-    <ellipse cx="${cx}" cy="${cy + 5 * scale}" rx="${6 * scale}" ry="${4 * scale}" fill="#2B2421"/>
-    <path d="M ${cx - 11 * scale} ${cy + 13 * scale} C ${cx - 6 * scale} ${cy + 21 * scale}, ${cx} ${cy + 21 * scale}, ${cx} ${cy + 13 * scale} C ${cx} ${cy + 21 * scale}, ${cx + 6 * scale} ${cy + 21 * scale}, ${cx + 11 * scale} ${cy + 13 * scale}"
+    <!-- Sweet Smile -->
+    <path d="M ${cx - 16 * scale} ${cy + 12 * scale} Q ${cx - 8 * scale} ${cy + 22 * scale} ${cx} ${cy + 14 * scale} Q ${cx + 8 * scale} ${cy + 22 * scale} ${cx + 16 * scale} ${cy + 12 * scale}"
           fill="none" stroke="#2B2421" stroke-width="${5.5 * scale}" stroke-linecap="round"/>
+    <!-- Bubu Neck Bowtie Ribbon -->
+    <path d="M ${cx} ${cy + 92 * scale} L ${cx - 24 * scale} ${cy + 82 * scale} L ${cx - 20 * scale} ${cy + 104 * scale} Z M ${cx} ${cy + 92 * scale} L ${cx + 24 * scale} ${cy + 82 * scale} L ${cx + 20 * scale} ${cy + 104 * scale} Z" fill="#2B2421"/>
+    <circle cx="${cx}" cy="${cy + 93 * scale}" r="${6 * scale}" fill="#2B2421"/>
   `;
 }
 
 function bubuBody(cx, cy, scale = 1) {
   return `
-    <!-- Feet -->
+    <!-- Feet with dark bottom curves -->
     <ellipse cx="${cx - 48 * scale}" cy="${cy + 105 * scale}" rx="${28 * scale}" ry="${20 * scale}" fill="#FFFFFF" stroke="#2B2421" stroke-width="${7.5 * scale}"/>
     <ellipse cx="${cx + 48 * scale}" cy="${cy + 105 * scale}" rx="${28 * scale}" ry="${20 * scale}" fill="#FFFFFF" stroke="#2B2421" stroke-width="${7.5 * scale}"/>
-    <!-- Chubby White Body -->
+    <!-- Chubby Pure White Body -->
     <ellipse cx="${cx}" cy="${cy + 30 * scale}" rx="${105 * scale}" ry="${88 * scale}" fill="#FFFFFF" stroke="#2B2421" stroke-width="${8 * scale}"/>
   `;
 }
 
 // -------------------------------------------------------------
-// Dudu Components (Honey Brown Bear)
+// Dudu Components (Honey Brown Bear by Huang Xiao B)
 // -------------------------------------------------------------
 function duduHead(cx, cy, scale = 1) {
   return `
-    <!-- Dudu Ears -->
-    <circle cx="${cx - 98 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
-    <circle cx="${cx - 98 * scale}" cy="${cy - 75 * scale}" r="${22 * scale}" fill="#8C5935"/>
-    <circle cx="${cx + 98 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
-    <circle cx="${cx + 98 * scale}" cy="${cy - 75 * scale}" r="${22 * scale}" fill="#8C5935"/>
-    <!-- Dudu Head Contour -->
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="${cx - 96 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
+    <circle cx="${cx - 96 * scale}" cy="${cy - 75 * scale}" r="${20 * scale}" fill="#4A2E1B"/>
+    <circle cx="${cx + 96 * scale}" cy="${cy - 75 * scale}" r="${38 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
+    <circle cx="${cx + 96 * scale}" cy="${cy - 75 * scale}" r="${20 * scale}" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
     <path d="M ${cx - 110 * scale} ${cy}
              C ${cx - 130 * scale} ${cy - 55 * scale}, ${cx - 75 * scale} ${cy - 100 * scale}, ${cx} ${cy - 100 * scale}
              C ${cx + 75 * scale} ${cy - 100 * scale}, ${cx + 130 * scale} ${cy - 55 * scale}, ${cx + 110 * scale} ${cy}
              C ${cx + 130 * scale} ${cy + 55 * scale}, ${cx + 95 * scale} ${cy + 95 * scale}, ${cx} ${cy + 95 * scale}
              C ${cx - 95 * scale} ${cy + 95 * scale}, ${cx - 130 * scale} ${cy + 55 * scale}, ${cx - 110 * scale} ${cy} Z"
           fill="#BA8358" stroke="#3E2723" stroke-width="${8 * scale}" stroke-linejoin="round"/>
-    <!-- Snout Muzzle -->
-    <ellipse cx="${cx}" cy="${cy + 22 * scale}" rx="${50 * scale}" ry="${36 * scale}" fill="#F5E3D0" stroke="#3E2723" stroke-width="${5 * scale}"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="${cx - 78 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${16 * scale}" fill="url(#duduBlush)"/>
-    <ellipse cx="${cx + 78 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${16 * scale}" fill="url(#duduBlush)"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="${cx - 76 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${18 * scale}" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="${cx + 76 * scale}" cy="${cy + 22 * scale}" rx="${28 * scale}" ry="${18 * scale}" fill="#F6A77E" opacity="0.85"/>
   `;
 }
 
 function duduEyesNormal(cx, cy, scale = 1) {
   return `
-    <!-- Left Eye -->
-    <circle cx="${cx - 58 * scale}" cy="${cy - 14 * scale}" r="${14 * scale}" fill="#3E2723"/>
-    <circle cx="${cx - 61 * scale}" cy="${cy - 18 * scale}" r="${5 * scale}" fill="#FFFFFF"/>
-    <circle cx="${cx - 54 * scale}" cy="${cy - 11 * scale}" r="${2.5 * scale}" fill="#FFFFFF"/>
-    <!-- Right Eye -->
-    <circle cx="${cx + 58 * scale}" cy="${cy - 14 * scale}" r="${14 * scale}" fill="#3E2723"/>
-    <circle cx="${cx + 55 * scale}" cy="${cy - 18 * scale}" r="${5 * scale}" fill="#FFFFFF"/>
-    <circle cx="${cx + 62 * scale}" cy="${cy - 11 * scale}" r="${2.5 * scale}" fill="#FFFFFF"/>
-    <!-- Nose & Mouth on Snout -->
-    <path d="M ${cx - 11 * scale} ${cy + 9 * scale} Q ${cx} ${cy + 3 * scale} ${cx + 11 * scale} ${cy + 9 * scale} Q ${cx} ${cy + 21 * scale} ${cx - 11 * scale} ${cy + 9 * scale} Z"
-          fill="#3E2723"/>
-    <path d="M ${cx - 11 * scale} ${cy + 26 * scale} C ${cx - 6 * scale} ${cy + 33 * scale}, ${cx} ${cy + 33 * scale}, ${cx} ${cy + 26 * scale} C ${cx} ${cy + 33 * scale}, ${cx + 6 * scale} ${cy + 33 * scale}, ${cx + 11 * scale} ${cy + 26 * scale}"
-          fill="none" stroke="#3E2723" stroke-width="${5 * scale}" stroke-linecap="round"/>
+    <!-- Dudu Solid Dark Chocolate Eyes (Pure Huang Xiao B Style, No Highlights) -->
+    <circle cx="${cx - 52 * scale}" cy="${cy - 4 * scale}" r="${13 * scale}" fill="#3E2723"/>
+    <circle cx="${cx + 52 * scale}" cy="${cy - 4 * scale}" r="${13 * scale}" fill="#3E2723"/>
+    <!-- Iconic Cute ω Mouth Directly on Brown Fur -->
+    <path d="M ${cx - 16 * scale} ${cy + 12 * scale} Q ${cx - 8 * scale} ${cy + 22 * scale} ${cx} ${cy + 14 * scale} Q ${cx + 8 * scale} ${cy + 22 * scale} ${cx + 16 * scale} ${cy + 12 * scale}"
+          fill="none" stroke="#3E2723" stroke-width="${5.5 * scale}" stroke-linecap="round"/>
   `;
 }
 
 function duduEyesHappy(cx, cy, scale = 1) {
   return `
-    <!-- Left Happy Eye Curve -->
-    <path d="M ${cx - 72 * scale} ${cy - 12 * scale} Q ${cx - 56 * scale} ${cy - 28 * scale} ${cx - 40 * scale} ${cy - 12 * scale}"
+    <!-- Happy Curved Eyes -->
+    <path d="M ${cx - 66 * scale} ${cy - 4 * scale} Q ${cx - 52 * scale} ${cy - 18 * scale} ${cx - 38 * scale} ${cy - 4 * scale}"
           fill="none" stroke="#3E2723" stroke-width="${7.5 * scale}" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M ${cx + 40 * scale} ${cy - 12 * scale} Q ${cx + 56 * scale} ${cy - 28 * scale} ${cx + 72 * scale} ${cy - 12 * scale}"
+    <path d="M ${cx + 38 * scale} ${cy - 4 * scale} Q ${cx + 52 * scale} ${cy - 18 * scale} ${cx + 66 * scale} ${cy - 4 * scale}"
           fill="none" stroke="#3E2723" stroke-width="${7.5 * scale}" stroke-linecap="round"/>
-    <!-- Nose & Open Mouth with Tongue -->
-    <path d="M ${cx - 11 * scale} ${cy + 9 * scale} Q ${cx} ${cy + 3 * scale} ${cx + 11 * scale} ${cy + 9 * scale} Q ${cx} ${cy + 21 * scale} ${cx - 11 * scale} ${cy + 9 * scale} Z"
-          fill="#3E2723"/>
-    <path d="M ${cx - 12 * scale} ${cy + 26 * scale} Q ${cx} ${cy + 42 * scale} ${cx + 12 * scale} ${cy + 26 * scale} Z"
+    <!-- Open Mouth with Tongue -->
+    <path d="M ${cx - 12 * scale} ${cy + 16 * scale} Q ${cx} ${cy + 34 * scale} ${cx + 12 * scale} ${cy + 16 * scale} Z"
           fill="#FF758C" stroke="#3E2723" stroke-width="${4.5 * scale}"/>
   `;
 }
@@ -201,10 +187,8 @@ function duduBody(cx, cy, scale = 1) {
     <!-- Feet -->
     <ellipse cx="${cx - 48 * scale}" cy="${cy + 105 * scale}" rx="${28 * scale}" ry="${20 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
     <ellipse cx="${cx + 48 * scale}" cy="${cy + 105 * scale}" rx="${28 * scale}" ry="${20 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${7.5 * scale}"/>
-    <!-- Chubby Brown Body -->
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
     <ellipse cx="${cx}" cy="${cy + 30 * scale}" rx="${105 * scale}" ry="${88 * scale}" fill="#BA8358" stroke="#3E2723" stroke-width="${8 * scale}"/>
-    <!-- Light Cream Belly -->
-    <ellipse cx="${cx}" cy="${cy + 36 * scale}" rx="${60 * scale}" ry="${50 * scale}" fill="#F5E3D0"/>
   `;
 }
 

@@ -42,41 +42,34 @@
     <!-- Feet -->
     <ellipse cx="208" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
     <ellipse cx="304" cy="425" rx="28" ry="20" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <!-- Chubby Brown Body -->
+    <!-- Solid Honey Brown Body (NO Cream Belly Patch!) -->
     <ellipse cx="256" cy="350" rx="105" ry="88" fill="#BA8358" stroke="#3E2723" stroke-width="8"/>
-    <!-- Light Cream Belly -->
-    <ellipse cx="256" cy="356" rx="60" ry="50" fill="#F5E3D0"/>
   
       
-    <!-- Dudu Ears -->
-    <circle cx="158" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <circle cx="158" cy="130" r="22" fill="#8C5935"/>
-    <circle cx="354" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
-    <circle cx="354" cy="130" r="22" fill="#8C5935"/>
-    <!-- Dudu Head Contour -->
+    <!-- Dudu Ears (Round with Darker Inner Circle) -->
+    <circle cx="160" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="160" cy="130" r="20" fill="#4A2E1B"/>
+    <circle cx="352" cy="130" r="38" fill="#BA8358" stroke="#3E2723" stroke-width="7.5"/>
+    <circle cx="352" cy="130" r="20" fill="#4A2E1B"/>
+    <!-- Dudu Head Contour (Solid Brown Fur, No Muzzle) -->
     <path d="M 146 205
              C 126 150, 181 105, 256 105
              C 331 105, 386 150, 366 205
              C 386 260, 351 300, 256 300
              C 161 300, 126 260, 146 205 Z"
           fill="#BA8358" stroke="#3E2723" stroke-width="8" stroke-linejoin="round"/>
-    <!-- Snout Muzzle -->
-    <ellipse cx="256" cy="227" rx="50" ry="36" fill="#F5E3D0" stroke="#3E2723" stroke-width="5"/>
-    <!-- Blushing Cheeks -->
-    <ellipse cx="178" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
-    <ellipse cx="334" cy="227" rx="28" ry="16" fill="url(#duduBlush)"/>
+    <!-- Warm Peach Blush Cheeks -->
+    <ellipse cx="180" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
+    <ellipse cx="332" cy="227" rx="28" ry="18" fill="#F6A77E" opacity="0.85"/>
   
       
-    <!-- Left Happy Eye Curve -->
-    <path d="M 184 193 Q 200 177 216 193"
+    <!-- Happy Curved Eyes -->
+    <path d="M 190 201 Q 204 187 218 201"
           fill="none" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
-    <!-- Right Happy Eye Curve -->
-    <path d="M 296 193 Q 312 177 328 193"
+    <path d="M 294 201 Q 308 187 322 201"
           fill="none" stroke="#3E2723" stroke-width="7.5" stroke-linecap="round"/>
-    <!-- Nose & Open Mouth with Tongue -->
-    <path d="M 245 214 Q 256 208 267 214 Q 256 226 245 214 Z"
-          fill="#3E2723"/>
-    <path d="M 244 231 Q 256 247 268 231 Z"
+    <!-- Open Mouth with Tongue -->
+    <path d="M 244 221 Q 256 239 268 221 Z"
           fill="#FF758C" stroke="#3E2723" stroke-width="4.5"/>
   
       <!-- Long Stem Red Rose -->

@@ -25,3 +25,5 @@ Thumbs.db
 scratch/
 .playwright-cli/
 tests/screenshots/
+tests/*.png
+

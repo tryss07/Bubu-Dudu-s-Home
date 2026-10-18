@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+    <defs>
+      <linearGradient id="twilightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FDF2F8"/>
+        <stop offset="30%" stop-color="#EDE9FE"/>
+        <stop offset="70%" stop-color="#DDD6FE"/>
+        <stop offset="100%" stop-color="#C4B5FD"/>
+      </linearGradient>
+      <linearGradient id="dreamCloud" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF"/>
+        <stop offset="100%" stop-color="#F3E8FF"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Twilight Background -->
+    <rect width="1080" height="1920" fill="url(#twilightGrad)"/>
+
+    <!-- Floating Star Pillows -->
+    <g fill="#FDE047" stroke="#CA8A04" stroke-width="4">
+      <polygon points="200,320 210,350 240,355 218,375 224,405 200,390 176,405 182,375 160,355 190,350" transform="rotate(-15 200 360)"/>
+      <polygon points="850,450 860,480 890,485 868,505 874,535 850,520 826,535 832,505 810,485 840,480" transform="rotate(20 850 490)"/>
+      <polygon points="150,850 158,874 182,878 164,894 169,918 150,906 131,918 136,894 118,878 142,874" transform="rotate(10 150 880)"/>
+    </g>
+
+    <!-- Crescent Moon Cushion -->
+    <path d="M 540 380 C 460 380, 400 450, 420 540 C 430 460, 500 420, 560 430 Z" fill="#FEF08A" stroke="#CA8A04" stroke-width="5" transform="scale(1.8) translate(-160, -100)"/>
+
+    <!-- Giant Puffy Center Cloud -->
+    <g transform="translate(140, 1150) scale(1.6)">
+      <path d="M 50 180 
+               C 10 180, -20 140, 5 100 
+               C -10 60, 40 20, 80 35 
+               C 105 -10, 175 -15, 205 25 
+               C 240 -5, 305 5, 325 50 
+               C 370 60, 390 120, 360 160 
+               C 385 200, 335 240, 290 225 
+               C 250 250, 170 250, 130 225 
+               C 90 245, 45 225, 50 180 Z"
+            fill="url(#dreamCloud)" stroke="#8B5CF6" stroke-width="7" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Sleeping Curled Dudu & Bubu -->
+    
+    <g transform="translate(430, 1320) scale(2.3)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <circle cx="55" cy="-45" r="22" fill="#2B2421" stroke="#2B2421" stroke-width="4"/>
+      <!-- Body -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#FFFFFF" stroke="#2B2421" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#FFFFFF" stroke="#2B2421" stroke-width="4.5"/>
+      <!-- Head -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#FFFFFF" stroke="#2B2421" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#FFA8A3" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Patches, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#2B2421"/>
+      <circle cx="32" cy="-5" r="9" fill="#2B2421"/>
+      <!-- Iconic Cute ω Mouth Directly on Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#2B2421" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Signature Dark Chocolate Bowtie Collar Ribbon -->
+      <path d="M 0 54 L -14 47 L -12 61 Z M 0 54 L 14 47 L 12 61 Z" fill="#2B2421"/>
+      <circle cx="0" cy="54" r="4" fill="#2B2421"/>
+    </g>
+  
+    
+    <g transform="translate(650, 1320) scale(2.3)">
+      <!-- Ears -->
+      <circle cx="-55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="-55" cy="-45" r="12" fill="#4A2E1B"/>
+      <circle cx="55" cy="-45" r="22" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <circle cx="55" cy="-45" r="12" fill="#4A2E1B"/>
+      <!-- Body (Solid Honey Brown, NO Belly Patch) -->
+      <ellipse cx="0" cy="55" rx="65" ry="50" fill="#BA8358" stroke="#3E2723" stroke-width="5"/>
+      <!-- Feet -->
+      <ellipse cx="-30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <ellipse cx="30" cy="95" rx="18" ry="12" fill="#BA8358" stroke="#3E2723" stroke-width="4.5"/>
+      <!-- Head (Chubby Honey Brown Face, NO Muzzle Patch) -->
+      <ellipse cx="0" cy="0" rx="70" ry="58" fill="#BA8358" stroke="#3E2723" stroke-width="5.5"/>
+      <!-- Cheeks -->
+      <ellipse cx="-45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <ellipse cx="45" cy="15" rx="18" ry="10" fill="#F6A77E" opacity="0.85"/>
+      <!-- Eyes (Pure Huang Xiao B Solid Chocolate Dots, No Highlights) -->
+      <circle cx="-32" cy="-5" r="9" fill="#3E2723"/>
+      <circle cx="32" cy="-5" r="9" fill="#3E2723"/>
+      <!-- Iconic Cute ω Mouth Directly on Honey Brown Fur -->
+      <path d="M -9 8 Q -4.5 13 0 9 Q 4.5 13 9 8" fill="none" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  
+
+    <!-- Starry Night Duvet / Blanket -->
+    <path d="M 330 1380 C 440 1340, 640 1340, 750 1380 C 720 1520, 360 1520, 330 1380 Z" fill="#818CF8" stroke="#312E81" stroke-width="7"/>
+    <circle cx="450" cy="1440" r="8" fill="#FDE047"/>
+    <circle cx="540" cy="1420" r="10" fill="#FDE047"/>
+    <circle cx="630" cy="1440" r="8" fill="#FDE047"/>
+
+    <!-- Floating Zzz -->
+    <g fill="#A78BFA" font-family="'Nunito', sans-serif" font-weight="900">
+      <text x="690" y="1180" font-size="45">z</text>
+      <text x="740" y="1120" font-size="60">Z</text>
+      <text x="800" y="1050" font-size="80">Z</text>
+    </g>
+  </svg>
