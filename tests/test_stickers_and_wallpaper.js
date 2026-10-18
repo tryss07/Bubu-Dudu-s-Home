@@ -105,20 +105,39 @@ async function runStickersAndWallpaperTest() {
 
   console.log('Category buttons count: all, bubu, couple, dudu, gif all present');
 
-  // 7. Test Tab "✨ GIF Animasi"
+  // 7. Test Tab "✨ Sticker GIF"
   await tabGif.click();
   await page.waitForTimeout(400);
 
   const gifButtons = page.locator('.chat-gif-stk-btn');
   const gifCount = await gifButtons.count();
   console.log('GIF sticker buttons rendered count:', gifCount);
-  if (gifCount !== 35) {
-    throw new Error(`Expected 35 GIF sticker buttons, got ${gifCount}`);
+  if (gifCount !== 95) {
+    throw new Error(`Expected 95 GIF sticker buttons, got ${gifCount}`);
   }
-  console.log('✅ All 35 animated GIF stickers loaded in GIF tab');
+  console.log('✅ All 95 animated GIF stickers loaded in GIF tab');
+
+  // Test GIF sub-filters
+  const gifPillDudu = page.locator('.gif-sub-pill[data-gif-sub="dudu"]');
+  await gifPillDudu.click();
+  await page.waitForTimeout(300);
+  const duduGifCount = await page.locator('.chat-gif-stk-btn').count();
+  console.log('Dudu GIF sub-filter count:', duduGifCount);
+  if (duduGifCount !== 68) {
+    throw new Error(`Expected 68 Dudu GIFs, got ${duduGifCount}`);
+  }
+
+  const gifPillCouple = page.locator('.gif-sub-pill[data-gif-sub="couple"]');
+  await gifPillCouple.click();
+  await page.waitForTimeout(300);
+  const coupleGifCount = await page.locator('.chat-gif-stk-btn').count();
+  console.log('Couple GIF sub-filter count:', coupleGifCount);
+  if (coupleGifCount !== 27) {
+    throw new Error(`Expected 27 Couple GIFs, got ${coupleGifCount}`);
+  }
 
   // Click first GIF sticker to send to chat
-  await gifButtons.first().click();
+  await page.locator('.chat-gif-stk-btn').first().click();
   await page.waitForTimeout(600);
 
   // Verify sticker message rendered in chat
@@ -133,45 +152,59 @@ async function runStickersAndWallpaperTest() {
   }
   console.log('✅ Animated GIF sticker sent and rendered with transparent floating bubble');
 
-  // 8. Reopen sticker drawer and test "🐼 Bubu" WebP sticker
+  // 8. Reopen sticker drawer and test "🐼 Only Bubu" stickers
   await btnStickerToggle.click();
   await page.waitForTimeout(300);
   await tabBubu.click();
   await page.waitForTimeout(400);
 
-  const bubuStkButtons = page.locator('.chat-sticker-select-btn');
+  const bubuStkButtons = page.locator('.chat-mockup-stk-btn');
   const bubuStkCount = await bubuStkButtons.count();
-  console.log('Bubu WebP sticker buttons rendered count:', bubuStkCount);
-  if (bubuStkCount < 10) {
-    throw new Error(`Expected at least 10 Bubu stickers, got ${bubuStkCount}`);
+  console.log('Only Bubu sticker buttons rendered count:', bubuStkCount);
+  if (bubuStkCount !== 17) {
+    throw new Error(`Expected 17 Only Bubu stickers, got ${bubuStkCount}`);
   }
+  console.log('✅ All 17 Only Bubu stickers loaded cleanly');
 
   // Click first Bubu sticker
   await bubuStkButtons.first().click();
   await page.waitForTimeout(600);
 
-  const lastWebpMsg = chatMessages.last();
-  const lastWebpImg = lastWebpMsg.locator('img[alt="Sticker"]');
-  await lastWebpImg.waitFor({ state: 'visible', timeout: 3000 });
-  const lastWebpSrc = await lastWebpImg.getAttribute('src');
-  console.log('Last sent WebP sticker src:', lastWebpSrc);
-  if (!lastWebpSrc.includes('Dudu Stickers/')) {
-    throw new Error('Sent WebP sticker does not point to Dudu Stickers/');
+  const lastBubuMsg = chatMessages.last();
+  const lastBubuImg = lastBubuMsg.locator('img[alt="Sticker Animasi"]');
+  await lastBubuImg.waitFor({ state: 'visible', timeout: 3000 });
+  const lastBubuSrc = await lastBubuImg.getAttribute('src');
+  console.log('Last sent Bubu sticker src:', lastBubuSrc);
+  if (!lastBubuSrc.includes('assets/stickers_bubu/')) {
+    throw new Error('Sent Bubu sticker does not point to assets/stickers_bubu/');
   }
-  console.log('✅ Animated WebP sticker sent and rendered cleanly');
+  console.log('✅ Only Bubu sticker sent and rendered cleanly');
 
-  // 9. Reopen and test Tab "Semua (95+)"
+  // 9. Reopen and test Tab "🐻 Only Dudu"
   await btnStickerToggle.click();
   await page.waitForTimeout(300);
-  await tabAll.click();
+  await tabDudu.click();
   await page.waitForTimeout(400);
 
-  const totalStkButtons = await page.locator('.chat-sticker-select-btn').count();
-  console.log('Total WebP stickers in "Semua" tab:', totalStkButtons);
-  if (totalStkButtons !== 95) {
-    throw new Error(`Expected all 95 stickers in "Semua" tab, got ${totalStkButtons}`);
+  const duduWebpCount = await page.locator('.chat-sticker-select-btn').count();
+  const duduMockCount = await page.locator('.chat-mockup-stk-btn').count();
+  console.log(`Only Dudu stickers: ${duduWebpCount} WebP + ${duduMockCount} art = ${duduWebpCount + duduMockCount}`);
+  if (duduWebpCount + duduMockCount !== 70) {
+    throw new Error(`Expected 70 Only Dudu stickers, got ${duduWebpCount + duduMockCount}`);
   }
-  console.log('✅ All 95 animated WebP stickers displayed without truncation');
+  console.log('✅ All 70 Only Dudu stickers loaded cleanly');
+
+  // 10. Test Tab "🐻🐼 Bubu & Dudu" (Together)
+  await tabCouple.click();
+  await page.waitForTimeout(400);
+
+  const coupleWebpCount = await page.locator('.chat-sticker-select-btn').count();
+  const coupleMockCount = await page.locator('.chat-mockup-stk-btn').count();
+  console.log(`Bubu & Dudu Together: ${coupleWebpCount} WebP + ${coupleMockCount} art = ${coupleWebpCount + coupleMockCount}`);
+  if (coupleWebpCount + coupleMockCount !== 34) {
+    throw new Error(`Expected 34 Bubu & Dudu Together stickers, got ${coupleWebpCount + coupleMockCount}`);
+  }
+  console.log('✅ All 34 Bubu & Dudu Together stickers loaded cleanly');
 
   await browser.close();
   console.log('🎉 Stickers & Wallpaper Playwright Test completed successfully!');

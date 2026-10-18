@@ -2479,47 +2479,48 @@
     imgEl.src = meta.img;
     imgEl.style.display = 'block';
 
-    let w = 39;
-    let l = 30.5;
-    let t = 62.5;
+    let w = 30.5;
+    let l = 34.75;
+    let t = 56.5;
 
     if (char === 'dudu') {
       if (slot === 'hat') {
-        if (meta.val === 'dudu_hat_bucket') { w = 44; l = 28; t = 34; }
-        else if (meta.val === 'dudu_hat_sleep_beanie') { w = 39; l = 31; t = 31; }
-        else { w = 38; l = 31; t = 36.5; }
+        if (meta.val === 'dudu_hat_bucket') { w = 34; l = 33; t = 30; }
+        else if (meta.val === 'dudu_hat_sleep_beanie') { w = 31; l = 34.5; t = 28; }
+        else if (meta.val === 'dudu_hat_pompom') { w = 31; l = 34.5; t = 29; }
+        else { w = 30; l = 35; t = 32; }
       } else if (slot === 'accs') {
-        if (meta.val === 'dudu_accs_eyemask') { w = 42; l = 29; t = 48.5; }
-        else { w = 34; l = 33; t = 51.5; }
+        if (meta.val === 'dudu_accs_eyemask') { w = 32; l = 34; t = 45; }
+        else { w = 27; l = 36.5; t = 47.5; }
       } else if (slot === 'outfit') {
-        if (meta.val === 'dudu_outfit_overalls') { w = 39; l = 30.5; t = 62.8; }
-        else if (meta.val === 'dudu_outfit_pajamas') { w = 40; l = 30; t = 61.5; }
-        else if (meta.val === 'dudu_outfit_nightshirt') { w = 41; l = 29.5; t = 61; }
-        else if (meta.val === 'dudu_outfit_tuxedo') { w = 42; l = 29; t = 61; }
-        else if (meta.val === 'dudu_outfit_cardigan') { w = 42; l = 29; t = 61; }
-        else { w = 40; l = 30; t = 62; }
+        if (meta.val === 'dudu_outfit_overalls') { w = 30; l = 35; t = 56.5; }
+        else if (meta.val === 'dudu_outfit_pajamas') { w = 31; l = 34.5; t = 55.5; }
+        else if (meta.val === 'dudu_outfit_nightshirt') { w = 31.5; l = 34.25; t = 55.5; }
+        else if (meta.val === 'dudu_outfit_tuxedo') { w = 31; l = 34.5; t = 55.5; }
+        else if (meta.val === 'dudu_outfit_cardigan') { w = 31; l = 34.5; t = 55.5; }
+        else { w = 30.5; l = 34.75; t = 56; }
       } else if (slot === 'shoes') {
-        w = 34; l = 33; t = 83.5;
+        w = 25; l = 37.5; t = 81.5;
       }
     } else {
       // Bubu
       if (slot === 'hat') {
-        if (meta.val === 'bubu_hat_straw_hat' || meta.val === 'bubu_hat_straw_hat_2') { w = 44; l = 28; t = 32.5; }
-        else if (meta.val === 'bubu_hat_nightcap') { w = 42; l = 29; t = 29.5; }
-        else if (meta.val === 'bubu_hat_earflap') { w = 33; l = 33.5; t = 33; }
-        else if (meta.val === 'bubu_accs_hair_bow') { w = 20; l = 48; t = 36; }
-        else { w = 36; l = 32; t = 34.5; }
+        if (meta.val === 'bubu_hat_straw_hat' || meta.val === 'bubu_hat_straw_hat_2') { w = 34; l = 33; t = 28.5; }
+        else if (meta.val === 'bubu_hat_nightcap') { w = 33; l = 33.5; t = 26; }
+        else if (meta.val === 'bubu_hat_earflap') { w = 29; l = 35.5; t = 29.5; }
+        else if (meta.val === 'bubu_accs_hair_bow') { w = 16; l = 49; t = 33; }
+        else { w = 29; l = 35.5; t = 30; }
       } else if (slot === 'accs') {
-        if (meta.val === 'bubu_accs_panda_mask') { w = 42; l = 29; t = 48; }
-        else if (meta.val === 'bubu_accs_straw_bag') { w = 28; l = 17; t = 63; }
-        else if (meta.val === 'bubu_accs_bear_satchel') { w = 25; l = 56; t = 63; }
-        else { w = 36; l = 32; t = 50.5; }
+        if (meta.val === 'bubu_accs_panda_mask') { w = 32; l = 34; t = 45; }
+        else if (meta.val === 'bubu_accs_straw_bag') { w = 22; l = 24; t = 58; }
+        else if (meta.val === 'bubu_accs_bear_satchel') { w = 20; l = 54; t = 58; }
+        else { w = 28; l = 36; t = 47; }
       } else if (slot === 'outfit') {
-        if (meta.val === 'bubu_outfit_ruffle_dress') { w = 40; l = 30; t = 63; }
-        else if (meta.val === 'bubu_outfit_trench') { w = 41; l = 29.5; t = 61.5; }
-        else { w = 39; l = 30.5; t = 62; }
+        if (meta.val === 'bubu_outfit_ruffle_dress') { w = 31; l = 34.5; t = 56.5; }
+        else if (meta.val === 'bubu_outfit_trench') { w = 31.5; l = 34.25; t = 55.5; }
+        else { w = 30.5; l = 34.75; t = 56; }
       } else if (slot === 'shoes') {
-        w = 35; l = 32.5; t = 83.5;
+        w = 26; l = 37; t = 81.5;
       }
     }
 
