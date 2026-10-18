@@ -2263,17 +2263,32 @@
       sendTextMessage();
     });
 
-    // Enter sends message directly
+    // Enter creates newline; Ctrl+Enter or Cmd+Enter sends message
     const textInput = document.getElementById('chat-text-input');
+    const adjustTextareaHeight = () => {
+      if (!textInput) return;
+      textInput.style.height = 'auto';
+      const scrollH = textInput.scrollHeight;
+      const targetH = Math.min(Math.max(scrollH, 20), 112);
+      textInput.style.height = targetH + 'px';
+      syncNavHeight();
+    };
+
     textInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendTextMessage();
+      if (e.key === 'Enter') {
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          sendTextMessage();
+        } else {
+          // Allow Enter to create space downward (newline)
+          setTimeout(adjustTextareaHeight, 0);
+        }
       }
     });
 
-    // Auto-resizing textarea, typing broadcast, and WhatsApp-style button feedback
+    // Auto-resizing textarea, typing broadcast, and button feedback
     textInput?.addEventListener('input', () => {
+      adjustTextareaHeight();
       const hasContent = textInput.value.trim().length > 0;
       if (hasContent) {
         if (!isTypingActive) {

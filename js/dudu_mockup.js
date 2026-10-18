@@ -44,6 +44,7 @@
     userRole: 'dudu', // 'dudu' (Kevin) or 'bubu' (Nana)
     anniversaryDate: defaultAnniversaryIso,
     loveBattery: 100,
+    badmoodLevel: 0,
     statuses: {
       dudu: 'Thinking of you! 💭',
       bubu: 'Eating snacks! 🐼'
@@ -556,6 +557,7 @@
       if (data.coupleSpace) {
         if (data.coupleSpace.anniversaryDate) appData.anniversaryDate = data.coupleSpace.anniversaryDate;
         if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = data.coupleSpace.loveBattery;
+        if (data.coupleSpace.badmoodLevel !== undefined) appData.badmoodLevel = Number(data.coupleSpace.badmoodLevel);
         if (data.coupleSpace.statuses) {
           if (data.coupleSpace.statuses.dudu) appData.statuses.dudu = data.coupleSpace.statuses.dudu;
           if (data.coupleSpace.statuses.bubu) appData.statuses.bubu = data.coupleSpace.statuses.bubu;
@@ -902,6 +904,10 @@
         appData.loveBattery = data.loveBattery;
         changed = true;
       }
+      if (data.badmoodLevel !== undefined && data.badmoodLevel !== appData.badmoodLevel) {
+        appData.badmoodLevel = Number(data.badmoodLevel);
+        changed = true;
+      }
       if (data.statuses) {
         if (data.statuses.dudu && data.statuses.dudu !== appData.statuses.dudu) {
           appData.statuses.dudu = data.statuses.dudu;
@@ -958,11 +964,24 @@
   }
 
   // --- TAB ROUTING & BOTTOM DOCK OVERFLOW ---
+  function updateBottomNavHeightVar() {
+    const bottomNav = document.getElementById('bottom-nav-bar');
+    if (bottomNav) {
+      const rect = bottomNav.getBoundingClientRect();
+      const h = rect.height || bottomNav.offsetHeight;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--bottom-nav-height', `${Math.round(h)}px`);
+      }
+    }
+  }
+
   function updateBottomNavOverflow() {
     const moreBtn = document.getElementById('btn-bottom-nav-more');
     const morePopup = document.getElementById('bottom-nav-more-popup');
     const secondaryItems = document.querySelectorAll('.bottom-nav-secondary');
     if (!moreBtn) return;
+
+    updateBottomNavHeightVar();
 
     const isNarrow = window.innerWidth < 560;
     secondaryItems.forEach(el => {
@@ -999,6 +1018,7 @@
     moreBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!morePopup) return;
+      updateBottomNavHeightVar();
       const isOpen = !morePopup.classList.contains('hidden');
       if (isOpen) {
         morePopup.classList.add('hidden');
@@ -1008,6 +1028,13 @@
         moreIcon?.classList.add('rotate-180');
         window.duduAudio?.playPop?.(480);
       }
+    });
+
+    morePopup?.querySelectorAll('.mockup-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        morePopup.classList.add('hidden');
+        moreIcon?.classList.remove('rotate-180');
+      });
     });
 
     document.addEventListener('click', (e) => {
@@ -1141,6 +1168,7 @@
       window.DuduChatUI?.updateNavChatBadge?.();
     }
     updateNotificationBellBadge();
+    updateBottomNavHeightVar();
 
     if (updateHash && window.location.hash !== `#${tabName}`) {
       window.location.hash = `#${tabName}`;
@@ -1169,24 +1197,54 @@
     }
 
     updateLoveBatteryUI();
+    updateBadmoodUI();
 
     const duduStatusEl = document.getElementById('home-status-dudu');
     const bubuStatusEl = document.getElementById('home-status-bubu');
     if (duduStatusEl) duduStatusEl.textContent = appData.statuses.dudu;
     if (bubuStatusEl) bubuStatusEl.textContent = appData.statuses.bubu;
 
+    // Bar 1: Love Battery Button
     const batteryBtn = document.getElementById('btn-boost-battery');
     if (batteryBtn) {
       batteryBtn.onclick = () => {
-        const wasFull = appData.loveBattery >= 100;
-        appData.loveBattery = Math.min(100, appData.loveBattery + 10);
-        saveState();
-        updateLoveBatteryUI();
-        window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
-        sendSaveRest('/api/couple-space', { loveBattery: appData.loveBattery });
+        if (appData.loveBattery < 100) {
+          appData.loveBattery = Math.min(100, (Number(appData.loveBattery) || 0) + 10);
+          saveState();
+          updateLoveBatteryUI();
+          window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
+          sendSaveRest('/api/couple-space', { loveBattery: appData.loveBattery });
+        }
         triggerHeartBurst();
-        showFeedbackToast(wasFull ? 'Love battery full! Overflowing with love 💖' : 'Love battery charged! 💖 +10%');
+        const notif = getLoveNotificationContent(appData.loveBattery);
+        showInAppNotification(notif.title, notif.message, notif.icon);
         window.duduAudio?.playPop?.(650);
+      };
+    }
+
+    const adjustBatteryBtn = document.getElementById('btn-open-battery-adjust');
+    if (adjustBatteryBtn) {
+      adjustBatteryBtn.onclick = (e) => {
+        e.stopPropagation();
+        openLoveBatteryModal();
+      };
+    }
+
+    // Bar 2: Badmood Meter Button
+    const badmoodBtn = document.getElementById('btn-boost-badmood');
+    if (badmoodBtn) {
+      badmoodBtn.onclick = () => {
+        const notif = getBadmoodNotificationContent(appData.badmoodLevel);
+        showInAppNotification(notif.title, notif.message, notif.icon);
+        window.duduAudio?.playPop?.(520);
+      };
+    }
+
+    const adjustBadmoodBtn = document.getElementById('btn-open-badmood-adjust');
+    if (adjustBadmoodBtn) {
+      adjustBadmoodBtn.onclick = (e) => {
+        e.stopPropagation();
+        openBadmoodModal();
       };
     }
 
@@ -1201,10 +1259,221 @@
     }
   }
 
+  // --- IN-APP FLOATING NOTIFICATION SYSTEM ---
+  let inAppNotifTimer = null;
+  function showInAppNotification(title, message, icon = '💖') {
+    const banner = document.getElementById('in-app-notification-banner');
+    const titleEl = document.getElementById('in-app-notif-title');
+    const bodyEl = document.getElementById('in-app-notif-body');
+    const iconEl = document.getElementById('in-app-notif-icon-box');
+
+    if (titleEl) titleEl.textContent = title;
+    if (bodyEl) bodyEl.textContent = message;
+    if (iconEl) iconEl.textContent = icon;
+
+    if (banner) {
+      banner.classList.remove('hidden');
+      void banner.offsetWidth; // force reflow
+      banner.classList.add('notif-banner-visible');
+
+      if (inAppNotifTimer) clearTimeout(inAppNotifTimer);
+      inAppNotifTimer = setTimeout(() => {
+        banner.classList.remove('notif-banner-visible');
+        setTimeout(() => banner.classList.add('hidden'), 350);
+      }, 3500);
+
+      banner.onclick = () => {
+        if (inAppNotifTimer) clearTimeout(inAppNotifTimer);
+        banner.classList.remove('notif-banner-visible');
+        setTimeout(() => banner.classList.add('hidden'), 350);
+      };
+    }
+
+    showFeedbackToast(`${icon} ${title}`);
+    if (window.DuduChatUI?.notifyUser) {
+      window.DuduChatUI.notifyUser(title, message);
+    }
+  }
+
+  function getLoveNotificationContent(val) {
+    const current = Math.max(0, Math.min(100, Number(val) || 100));
+    if (current >= 100) {
+      return {
+        title: 'Love Battery: 100% Full! 💖',
+        message: 'Cinta Bubu & Dudu penuh melimpah ruah! Kasih sayang kita tak terbatas hari ini 🥰',
+        icon: '💖'
+      };
+    } else if (current >= 75) {
+      return {
+        title: `Love Battery: ${current}% 🥰`,
+        message: 'Hati lagi berbunga-bunga dan senang banget dekat kamu! Semangat terus ya sayang ♡',
+        icon: '🥰'
+      };
+    } else if (current >= 50) {
+      return {
+        title: `Love Battery: ${current}% 🤗`,
+        message: 'Energi cinta stabil, tapi tetap butuh recharge pelukan hangat ekstra dari ayang!',
+        icon: '🤗'
+      };
+    } else if (current >= 25) {
+      return {
+        title: `Love Battery: ${current}% 🥺`,
+        message: 'Baterai cinta mulai low! Butuh disayang, dipuk-puk, dan ditemenin ngobrol manis ♡',
+        icon: '🥺'
+      };
+    } else {
+      return {
+        title: `Love Battery: ${current}% Darurat! 🔋`,
+        message: 'Baterai cinta kritis! Segera peluk erat dan manjakan ayang sekarang juga!',
+        icon: '🔋'
+      };
+    }
+  }
+
+  function getBadmoodNotificationContent(val) {
+    const current = Math.max(0, Math.min(100, Number(val) || 0));
+    if (current <= 0) {
+      return {
+        title: 'Badmood: 0% (Super Happy!) ✨',
+        message: 'Mood lagi ceria dan berbunga-bunga! Tidak ada badmood sama sekali hari ini 🥰🌸',
+        icon: '✨'
+      };
+    } else if (current <= 25) {
+      return {
+        title: `Badmood: ${current}% (Sedikit Bete) ☁️`,
+        message: 'Ada sedikit rasa bete nih, kalau disemangatin manis atau dicium pasti langsung senyum! 🥺',
+        icon: '☁️'
+      };
+    } else if (current <= 50) {
+      return {
+        title: `Badmood: ${current}% (Mood Mendung) 🌧️`,
+        message: 'Mood agak mendung dan sensitif. Butuh dipuk-puk, didengerin curhatnya, plus es krim! 🍨',
+        icon: '🌧️'
+      };
+    } else if (current <= 75) {
+      return {
+        title: `Badmood: ${current}% (Ngambek Berat) 🌩️`,
+        message: 'Lagi ngambek! Tolong jangan bikin kesel dulu ya, wajib dibujuk dengan sabar dan beliin boba 🧋😤',
+        icon: '🌩️'
+      };
+    } else {
+      return {
+        title: `Badmood: ${current}% (DARURAT LEVEL 5!) ⚡`,
+        message: 'BAHAYA NGAMBEK MAKSIMAL! Segera peluk erat, minta maaf, dan bawakan makanan kesukaan! 🌋💔',
+        icon: '⚡'
+      };
+    }
+  }
+
+  function openLoveBatteryModal() {
+    const slider = document.getElementById('input-love-battery-slider');
+    const valText = document.getElementById('slider-battery-val');
+    const bar = document.getElementById('slider-battery-bar');
+    const current = Math.max(0, Math.min(100, Number(appData.loveBattery) || 100));
+
+    const updateSliderDisplay = (val) => {
+      if (valText) valText.textContent = `${val}%`;
+      if (bar) bar.style.width = `${val}%`;
+    };
+
+    if (slider) {
+      slider.value = current;
+      updateSliderDisplay(current);
+      slider.oninput = () => updateSliderDisplay(slider.value);
+    }
+
+    document.querySelectorAll('.btn-battery-preset').forEach(btn => {
+      btn.onclick = () => {
+        const v = Number(btn.getAttribute('data-val'));
+        if (slider) slider.value = v;
+        updateSliderDisplay(v);
+        window.duduAudio?.playPop?.(520);
+      };
+    });
+
+    const closeBtn = document.getElementById('btn-close-battery-modal');
+    if (closeBtn) closeBtn.onclick = () => closeSheet('modal-adjust-battery');
+
+    const saveBtn = document.getElementById('btn-save-battery-slider');
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        const newVal = Number(slider?.value ?? appData.loveBattery ?? 100);
+        appData.loveBattery = Math.max(0, Math.min(100, newVal));
+        saveState();
+        updateLoveBatteryUI();
+        window.DuduChatSocket?.sendUpdateCoupleSpace?.({ loveBattery: appData.loveBattery });
+        sendSaveRest('/api/couple-space', { loveBattery: appData.loveBattery });
+        triggerHeartBurst();
+        closeSheet('modal-adjust-battery');
+        const notif = getLoveNotificationContent(appData.loveBattery);
+        showInAppNotification(notif.title, notif.message, notif.icon);
+        window.duduAudio?.playPop?.(650);
+      };
+    }
+
+    openSheet('modal-adjust-battery');
+  }
+
+  function openBadmoodModal() {
+    const slider = document.getElementById('input-badmood-slider');
+    const valText = document.getElementById('slider-badmood-val');
+    const bar = document.getElementById('slider-badmood-bar');
+    const current = Math.max(0, Math.min(100, Number(appData.badmoodLevel) || 0));
+
+    const updateSliderDisplay = (val) => {
+      if (valText) valText.textContent = `${val}%`;
+      if (bar) bar.style.width = `${val}%`;
+    };
+
+    if (slider) {
+      slider.value = current;
+      updateSliderDisplay(current);
+      slider.oninput = () => updateSliderDisplay(slider.value);
+    }
+
+    document.querySelectorAll('.btn-badmood-preset').forEach(btn => {
+      btn.onclick = () => {
+        const v = Number(btn.getAttribute('data-val'));
+        if (slider) slider.value = v;
+        updateSliderDisplay(v);
+        window.duduAudio?.playPop?.(520);
+      };
+    });
+
+    const closeBtn = document.getElementById('btn-close-badmood-modal');
+    if (closeBtn) closeBtn.onclick = () => closeSheet('modal-adjust-badmood');
+
+    const saveBtn = document.getElementById('btn-save-badmood-slider');
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        const newVal = Number(slider?.value ?? appData.badmoodLevel ?? 0);
+        appData.badmoodLevel = Math.max(0, Math.min(100, newVal));
+        saveState();
+        updateBadmoodUI();
+        window.DuduChatSocket?.sendUpdateCoupleSpace?.({ badmoodLevel: appData.badmoodLevel });
+        sendSaveRest('/api/couple-space', { badmoodLevel: appData.badmoodLevel });
+        closeSheet('modal-adjust-badmood');
+        const notif = getBadmoodNotificationContent(appData.badmoodLevel);
+        showInAppNotification(notif.title, notif.message, notif.icon);
+        window.duduAudio?.playPop?.(650);
+      };
+    }
+
+    openSheet('modal-adjust-badmood');
+  }
+
   function updateLoveBatteryUI() {
-    const val = appData.loveBattery;
+    const val = Math.max(0, Math.min(100, Number(appData.loveBattery) || 100));
     const txt = document.getElementById('home-battery-text');
     const fill = document.getElementById('home-battery-fill');
+    if (txt) txt.textContent = `${val}%`;
+    if (fill) fill.style.width = `${val}%`;
+  }
+
+  function updateBadmoodUI() {
+    const val = Math.max(0, Math.min(100, Number(appData.badmoodLevel) || 0));
+    const txt = document.getElementById('home-badmood-text');
+    const fill = document.getElementById('home-badmood-fill');
     if (txt) txt.textContent = `${val}%`;
     if (fill) fill.style.width = `${val}%`;
   }
@@ -1232,6 +1501,44 @@
 
   // --- 2. LOVE NOTES (love notes.jpg) ---
   let activeNotesFilter = 'all';
+  const expandedNoteIds = new Set();
+
+  function formatNoteBodyHtml(noteId, bodyText, fontClass = 'font-handwriting text-lg text-primary dark:text-stone-100') {
+    const isExpanded = expandedNoteIds.has(noteId);
+    const raw = String(bodyText || '');
+    const isLong = raw.length > 130 || raw.includes('\n\n') || (raw.match(/\n/g) || []).length >= 3;
+
+    if (!isLong) {
+      return `
+        <p class="${fontClass} leading-snug whitespace-pre-wrap">
+          "${escapeHtml(raw)}"
+        </p>
+      `;
+    }
+
+    if (!isExpanded) {
+      const preview = raw.slice(0, 115).trim() + '...';
+      return `
+        <p class="${fontClass} leading-snug whitespace-pre-wrap">
+          "${escapeHtml(preview)}"
+        </p>
+        <button type="button" class="btn-toggle-note-expand text-[11px] font-heading font-bold text-[#8D5B4C] hover:text-[#5A3825] dark:text-amber-200 mt-1 inline-flex items-center gap-0.5 cursor-pointer button-press" data-id="${noteId}">
+          <span>Show more</span>
+          <span class="material-symbols-outlined text-[13px]">expand_more</span>
+        </button>
+      `;
+    }
+
+    return `
+      <p class="${fontClass} leading-snug whitespace-pre-wrap">
+        "${escapeHtml(raw)}"
+      </p>
+      <button type="button" class="btn-toggle-note-expand text-[11px] font-heading font-bold text-[#8D5B4C] hover:text-[#5A3825] dark:text-amber-200 mt-1 inline-flex items-center gap-0.5 cursor-pointer button-press" data-id="${noteId}">
+        <span>Show less</span>
+        <span class="material-symbols-outlined text-[13px]">expand_less</span>
+      </button>
+    `;
+  }
 
   function renderLoveNotes() {
     const listEl = document.getElementById('notes-cards-list');
@@ -1273,9 +1580,7 @@
                   <span class="wax-seal w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shadow-md">♥</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-handwriting text-lg text-primary dark:text-stone-100 leading-snug">
-                    "${escapeHtml(note.body)}"
-                  </p>
+                  ${formatNoteBodyHtml(note.id, note.body, 'font-handwriting text-lg text-primary dark:text-stone-100')}
                 </div>
               </div>
               <div class="flex items-center justify-between pt-1 border-t border-[#DFCBB7]/40 dark:border-stone-700 text-[11px] text-on-surface-variant">
@@ -1296,9 +1601,7 @@
         } else if (note.style === 'craft') {
           card.innerHTML = `
             <div class="bg-[#EBD2B4] dark:bg-stone-700 text-[#4A3222] dark:text-stone-100 rounded-3xl p-4.5 plush-shadow border border-[#D8BC9B] dark:border-stone-600 relative flex flex-col gap-2.5">
-              <p class="font-handwriting text-lg leading-snug font-medium">
-                "${escapeHtml(note.body)}"
-              </p>
+              ${formatNoteBodyHtml(note.id, note.body, 'font-handwriting text-lg leading-snug font-medium')}
               <div class="flex items-center justify-between text-[11px] font-bold opacity-90">
                 <span class="flex items-center gap-1.5">
                   <span>From ${escapeHtml(note.sender)}</span>
@@ -1318,9 +1621,7 @@
           card.innerHTML = `
             <div class="bg-[#FAF4ED] dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 relative flex flex-col gap-2">
               <div class="bg-[#FFFDF9] dark:bg-stone-700/60 rounded-2xl p-3 border border-[#E5D7C7] dark:border-stone-600 shadow-sm">
-                <p class="font-handwriting text-lg text-primary dark:text-stone-100 text-center leading-snug">
-                  "${escapeHtml(note.body)}"
-                </p>
+                ${formatNoteBodyHtml(note.id, note.body, 'font-handwriting text-lg text-primary dark:text-stone-100 text-center')}
               </div>
               <div class="flex items-center justify-between text-[11px] text-on-surface-variant font-bold px-1">
                 <span class="flex items-center gap-1.5">
@@ -1338,6 +1639,13 @@
             </div>
           `;
         }
+
+        card.querySelector('.btn-toggle-note-expand')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (expandedNoteIds.has(note.id)) expandedNoteIds.delete(note.id);
+          else expandedNoteIds.add(note.id);
+          renderLoveNotes();
+        });
 
         card.querySelector('.btn-fav-note')?.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1413,18 +1721,28 @@
 
         card.innerHTML = `
           <div class="washi-tape ${p.tape || 'washi-tape-grid'} -top-2.5 left-1/2 -translate-x-1/2"></div>
-          <button type="button" class="btn-delete-polaroid absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 dark:bg-stone-800/90 text-stone-400 hover:text-rose-500 flex items-center justify-center opacity-80 hover:opacity-100 transition-all cursor-pointer shadow-xs button-press" data-id="${p.id}" title="Delete photo">
-            <span class="material-symbols-outlined text-[14px]">delete</span>
-          </button>
+          <div class="absolute top-2 right-2 z-10 flex items-center gap-1">
+            <button type="button" class="btn-edit-polaroid-grid w-6 h-6 rounded-full bg-white/90 dark:bg-stone-800/90 text-stone-500 hover:text-[#8D5B4C] flex items-center justify-center opacity-85 hover:opacity-100 transition-all cursor-pointer shadow-xs button-press" data-id="${p.id}" title="Edit caption">
+              <span class="material-symbols-outlined text-[13px]">edit</span>
+            </button>
+            <button type="button" class="btn-delete-polaroid w-6 h-6 rounded-full bg-white/90 dark:bg-stone-800/90 text-stone-400 hover:text-rose-500 flex items-center justify-center opacity-85 hover:opacity-100 transition-all cursor-pointer shadow-xs button-press" data-id="${p.id}" title="Delete photo">
+              <span class="material-symbols-outlined text-[13px]">delete</span>
+            </button>
+          </div>
           <div class="aspect-4/3 w-full rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-700 flex items-center justify-center">
             <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover">
           </div>
-          <div class="text-center pt-1">
-            <span class="font-handwriting text-base text-primary dark:text-stone-100 font-bold tracking-wide">
+          <div class="text-center pt-1 px-1">
+            <span class="font-handwriting text-base text-primary dark:text-stone-100 font-bold tracking-wide line-clamp-1">
               ${escapeHtml(p.title)} • ${escapeHtml(p.date)}
             </span>
           </div>
         `;
+
+        card.querySelector('.btn-edit-polaroid-grid')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showPolaroidPreviewModal(p, true);
+        });
 
         card.querySelector('.btn-delete-polaroid')?.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1664,9 +1982,6 @@
         const latestEvent = dayEvents[dayEvents.length - 1];
         stickerIcon = `<span class="text-[10px] block -mt-1">${escapeHtml(latestEvent.icon || '❤️')}</span>`;
         highlightClass = 'bg-[#FCDFD0] dark:bg-stone-700 border-[#E5A88B] dark:border-stone-500 text-[#5C3D2E] dark:text-stone-100 font-bold';
-      } else if (calMonth === 9 && calYear === 2026) {
-        if ([1, 15, 22].includes(day)) stickerIcon = '<span class="text-[9px]">🐾</span>';
-        if ([2, 23].includes(day)) stickerIcon = '<span class="text-[9px]">🤎</span>';
       }
 
       if (highlightClass) cell.className += ` ${highlightClass}`;
@@ -1756,6 +2071,8 @@
 
     const inputEl = document.getElementById('input-cal-event-title');
     if (inputEl) inputEl.value = '';
+    const customIconEl = document.getElementById('input-cal-custom-icon');
+    if (customIconEl) customIconEl.value = '';
 
     openSheet('modal-calendar-day');
   }
@@ -1785,10 +2102,32 @@
           <span class="text-base">${escapeHtml(e.icon || '❤️')}</span>
           <span class="text-xs font-bold text-primary dark:text-stone-100 truncate">${escapeHtml(e.title)}</span>
         </div>
-        <button type="button" class="btn-del-cal-event p-1 text-stone-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer button-press transition-colors" data-id="${e.id}" title="Delete event">
-          <span class="material-symbols-outlined text-sm">delete</span>
-        </button>
+        <div class="flex items-center gap-1 shrink-0">
+          <button type="button" class="btn-edit-cal-event p-1 text-stone-400 hover:text-[#8D5B4C] rounded-lg hover:bg-stone-100 dark:hover:bg-stone-600 cursor-pointer button-press transition-colors" data-id="${e.id}" title="Edit event">
+            <span class="material-symbols-outlined text-sm">edit</span>
+          </button>
+          <button type="button" class="btn-del-cal-event p-1 text-stone-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 cursor-pointer button-press transition-colors" data-id="${e.id}" title="Delete event">
+            <span class="material-symbols-outlined text-sm">delete</span>
+          </button>
+        </div>
       `;
+
+      itemEl.querySelector('.btn-edit-cal-event')?.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const newTitle = prompt('Edit Moment Title:', e.title);
+        if (newTitle !== null && newTitle.trim()) {
+          const newIcon = prompt('Edit Emoji (or leave blank to keep):', e.icon || '❤️');
+          e.title = newTitle.trim();
+          if (newIcon && newIcon.trim()) e.icon = newIcon.trim();
+          saveState();
+          renderOurCalendar();
+          renderOurSpaceHome();
+          renderCalendarDayModalEvents();
+          window.DuduChatSocket?.sendSaveCalendarEvent?.(e);
+          sendSaveRest('/api/calendar', e);
+          showFeedbackToast('Event updated! 🗓️✨');
+        }
+      });
 
       itemEl.querySelector('.btn-del-cal-event').onclick = (ev) => {
         ev.stopPropagation();
@@ -2350,6 +2689,62 @@
     }
 
     // 2. Add Polaroid Modal
+    let activeCustomPolaroidImage = null;
+    const btnUploadPol = document.getElementById('btn-upload-polaroid-file');
+    const filePolInput = document.getElementById('input-polaroid-file');
+    const previewBox = document.getElementById('polaroid-custom-preview-box');
+    const previewImg = document.getElementById('polaroid-custom-preview-img');
+    const btnRemoveCustom = document.getElementById('btn-remove-polaroid-custom');
+
+    const clearCustomPolaroid = () => {
+      activeCustomPolaroidImage = null;
+      if (filePolInput) filePolInput.value = '';
+      if (previewBox) previewBox.classList.add('hidden');
+      if (previewImg) previewImg.src = '';
+    };
+
+    if (btnUploadPol && filePolInput) {
+      btnUploadPol.onclick = () => filePolInput.click();
+      filePolInput.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (loadEv) => {
+          const rawDataUrl = loadEv.target.result;
+          const img = new Image();
+          img.onload = () => {
+            const maxDim = 800;
+            let w = img.width;
+            let h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            activeCustomPolaroidImage = canvas.toDataURL('image/jpeg', 0.82);
+            if (previewImg) previewImg.src = activeCustomPolaroidImage;
+            if (previewBox) previewBox.classList.remove('hidden');
+            showFeedbackToast('Custom photo selected! 📸');
+          };
+          img.src = rawDataUrl;
+        };
+        reader.readAsDataURL(file);
+      };
+    }
+
+    if (btnRemoveCustom) {
+      btnRemoveCustom.onclick = () => clearCustomPolaroid();
+    }
+
     const btnAddPol = document.getElementById('btn-add-polaroid');
     if (btnAddPol) {
       btnAddPol.onclick = () => {
@@ -2357,11 +2752,17 @@
         const dateInput = document.getElementById('input-polaroid-date');
         if (titleInput) titleInput.value = '';
         if (dateInput) dateInput.value = '';
+        clearCustomPolaroid();
         openSheet('modal-add-polaroid');
       };
     }
     const closeAddPol = document.getElementById('btn-close-add-polaroid');
-    if (closeAddPol) closeAddPol.onclick = () => closeSheet('modal-add-polaroid');
+    if (closeAddPol) {
+      closeAddPol.onclick = () => {
+        clearCustomPolaroid();
+        closeSheet('modal-add-polaroid');
+      };
+    }
 
     const submitPolBtn = document.getElementById('btn-submit-polaroid');
     if (submitPolBtn) {
@@ -2369,7 +2770,7 @@
         const title = document.getElementById('input-polaroid-title')?.value?.trim() || 'Cozy Date';
         const date = document.getElementById('input-polaroid-date')?.value?.trim() || 'Today';
         const artSelect = document.getElementById('select-polaroid-art');
-        const image = artSelect?.value || 'assets/mockup_art/polaroid_picnic.png';
+        const image = activeCustomPolaroidImage || artSelect?.value || 'assets/mockup_art/polaroid_picnic.png';
 
         const newPol = {
           id: 'pol_' + Date.now(),
@@ -2385,6 +2786,7 @@
         renderMemoryJar();
         window.DuduChatSocket?.sendSavePolaroid?.(newPol);
         sendSaveRest('/api/memories/polaroids', newPol);
+        clearCustomPolaroid();
         closeSheet('modal-add-polaroid');
         showFeedbackToast('Polaroid added to jar! 📸');
         window.duduAudio?.playPop?.(750);
@@ -2501,8 +2903,9 @@
           return;
         }
 
+        const customIcon = document.getElementById('input-cal-custom-icon')?.value?.trim();
         const iconEl = document.querySelector('input[name="cal-icon"]:checked');
-        const icon = iconEl ? iconEl.value : '❤️';
+        const icon = customIcon || (iconEl ? iconEl.value : '❤️');
 
         const newEvent = {
           id: 'cal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
@@ -2521,6 +2924,8 @@
         window.DuduChatSocket?.sendSaveCalendarEvent?.(newEvent);
         sendSaveRest('/api/calendar', newEvent);
         if (input) input.value = '';
+        const customIconEl = document.getElementById('input-cal-custom-icon');
+        if (customIconEl) customIconEl.value = '';
         showFeedbackToast('Event added to calendar! 🗓️✨');
         window.duduAudio?.playPop?.(750);
       };
@@ -2584,6 +2989,59 @@
         closeSheet('modal-view-polaroid');
         showFeedbackToast('Photo removed from jar 🗑️');
         window.duduAudio?.playPop?.(400);
+      };
+    }
+
+    const editCaptionTrigger = document.getElementById('btn-edit-polaroid-caption');
+    const editViewPol = document.getElementById('btn-edit-view-polaroid');
+    const cancelEditPol = document.getElementById('btn-cancel-polaroid-caption');
+    const saveEditPol = document.getElementById('btn-save-polaroid-caption');
+    const displayBox = document.getElementById('polaroid-caption-display');
+    const editBox = document.getElementById('polaroid-caption-edit-box');
+    const captionInput = document.getElementById('input-edit-polaroid-caption');
+
+    const enterEditMode = () => {
+      if (!activeViewingPolaroid) return;
+      if (displayBox) displayBox.classList.add('hidden');
+      if (editBox) editBox.classList.remove('hidden');
+      if (captionInput) {
+        captionInput.value = activeViewingPolaroid.title || '';
+        captionInput.focus();
+        captionInput.select();
+      }
+      window.duduAudio?.playPop?.(480);
+    };
+
+    const exitEditMode = () => {
+      if (displayBox) displayBox.classList.remove('hidden');
+      if (editBox) editBox.classList.add('hidden');
+    };
+
+    if (editCaptionTrigger) editCaptionTrigger.onclick = enterEditMode;
+    if (editViewPol) editViewPol.onclick = enterEditMode;
+    if (cancelEditPol) cancelEditPol.onclick = exitEditMode;
+
+    if (saveEditPol) {
+      saveEditPol.onclick = () => {
+        if (!activeViewingPolaroid) return;
+        const newCaption = captionInput?.value?.trim();
+        if (!newCaption) {
+          showFeedbackToast('Please enter a caption! 📸');
+          return;
+        }
+        activeViewingPolaroid.title = newCaption;
+        const polInList = appData.polaroids.find(p => p.id === activeViewingPolaroid.id);
+        if (polInList) polInList.title = newCaption;
+        saveState();
+        renderMemoryJar();
+        window.DuduChatSocket?.sendSavePolaroid?.(activeViewingPolaroid);
+        sendSaveRest('/api/memories/polaroids', activeViewingPolaroid);
+
+        const titleEl = document.getElementById('modal-polaroid-title');
+        if (titleEl) titleEl.textContent = newCaption;
+        exitEditMode();
+        showFeedbackToast('Polaroid caption updated! 📸✨');
+        window.duduAudio?.playPop?.(640);
       };
     }
 
@@ -2661,6 +3119,7 @@
       'modal-view-love-note',
       'modal-view-polaroid',
       'modal-edit-status',
+      'modal-adjust-battery',
       'modal-edit-anniversary',
       'modal-chat-settings'
     ];
@@ -2735,9 +3194,13 @@
   }
 
   function openStatusEditModal() {
-    const current = appData.userRole === 'dudu' ? appData.statuses.dudu : appData.statuses.bubu;
+    const isDudu = appData.userRole === 'dudu';
+    const current = isDudu ? appData.statuses.dudu : appData.statuses.bubu;
     const inputEl = document.getElementById('input-partner-status');
-    if (inputEl) inputEl.value = current || '';
+    if (inputEl) {
+      inputEl.value = current || '';
+      inputEl.placeholder = isDudu ? "What's Dudu doing? 💭" : "What's Bubu doing? 🐼";
+    }
     openSheet('modal-edit-status');
   }
 
@@ -2749,7 +3212,7 @@
     openSheet('modal-edit-anniversary');
   }
 
-  function showPolaroidPreviewModal(p) {
+  function showPolaroidPreviewModal(p, startInEdit = false) {
     activeViewingPolaroid = p;
     const imgEl = document.getElementById('modal-polaroid-img');
     const titleEl = document.getElementById('modal-polaroid-title');
@@ -2757,6 +3220,26 @@
     if (imgEl) imgEl.src = p.image;
     if (titleEl) titleEl.textContent = p.title;
     if (dateEl) dateEl.textContent = p.date;
+
+    const displayBox = document.getElementById('polaroid-caption-display');
+    const editBox = document.getElementById('polaroid-caption-edit-box');
+    const captionInput = document.getElementById('input-edit-polaroid-caption');
+
+    if (startInEdit) {
+      if (displayBox) displayBox.classList.add('hidden');
+      if (editBox) editBox.classList.remove('hidden');
+      if (captionInput) {
+        captionInput.value = p.title || '';
+        setTimeout(() => {
+          captionInput.focus();
+          captionInput.select();
+        }, 150);
+      }
+    } else {
+      if (displayBox) displayBox.classList.remove('hidden');
+      if (editBox) editBox.classList.add('hidden');
+    }
+
     openSheet('modal-view-polaroid');
   }
 
@@ -2802,7 +3285,9 @@
     setUserRole,
     toggleUserRole,
     getDaysTogether,
-    updateNotificationBellBadge
+    updateNotificationBellBadge,
+    renderLoveNotes,
+    renderOurCalendar
   };
   window.duduMockup = window.DuduMockup;
   window.showFeedbackToast = showFeedbackToast;
