@@ -273,12 +273,77 @@
   }
 
   // Identity & Key Persistence
+  let cachedCryptoKey = null;
+
+  async function getCryptoKey() {
+    if (cachedCryptoKey) return cachedCryptoKey;
+    const passphrase = getStoredPassphrase();
+    cachedCryptoKey = await deriveKey(passphrase);
+    return cachedCryptoKey;
+  }
+
   function getStoredPassphrase() {
     return localStorage.getItem(STORAGE_KEY_PASSPHRASE) || localStorage.getItem('dudu_chat_passphrase') || 'dudu-and-bubu-forever';
   }
 
   function setStoredPassphrase(passphrase) {
+    cachedCryptoKey = null;
     localStorage.setItem(STORAGE_KEY_PASSPHRASE, passphrase.trim());
+  }
+
+  /**
+   * Transparent Zero-Knowledge Payload Encryptor
+   * Encrypts arbitrary object into { id, iv, ciphertext, isEncrypted: true }.
+   * Preserves top-level id for database indexing & deletion.
+   */
+  async function encryptPayload(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    if (obj.iv && obj.ciphertext) return obj; // Already encrypted
+    try {
+      const key = await getCryptoKey();
+      const packet = await encrypt(obj, key);
+      return {
+        id: obj.id,
+        iv: packet.iv,
+        ciphertext: packet.ciphertext,
+        isEncrypted: true
+      };
+    } catch (e) {
+      console.warn('[Crypto] Failed to encrypt payload, using raw:', e.message);
+      return obj;
+    }
+  }
+
+  /**
+   * Transparent Zero-Knowledge Payload Decryptor
+   * Decrypts { iv, ciphertext } back into original object.
+   * If packet is already unencrypted (legacy), returns it as-is.
+   */
+  async function decryptPayload(packet) {
+    if (!packet || typeof packet !== 'object') return packet;
+    if (!packet.iv || !packet.ciphertext) return packet; // Legacy or plaintext
+    try {
+      const key = await getCryptoKey();
+      const decrypted = await decrypt(packet, key);
+      if (decrypted && typeof decrypted === 'object') {
+        if (!decrypted.id && packet.id) decrypted.id = packet.id;
+        return decrypted;
+      }
+      return packet;
+    } catch (e) {
+      console.warn('[Crypto] Failed to decrypt payload, returning packet:', e.message);
+      return packet;
+    }
+  }
+
+  async function encryptList(list) {
+    if (!Array.isArray(list)) return [];
+    return Promise.all(list.map(item => encryptPayload(item)));
+  }
+
+  async function decryptList(list) {
+    if (!Array.isArray(list)) return [];
+    return Promise.all(list.map(item => decryptPayload(item)));
   }
 
   function getStoredIdentity() {
@@ -328,8 +393,13 @@
 
   window.DuduChatCrypto = {
     deriveKey,
+    getCryptoKey,
     encrypt,
     decrypt,
+    encryptPayload,
+    decryptPayload,
+    encryptList,
+    decryptList,
     encryptChunk,
     decryptChunk,
     getStoredPassphrase,
@@ -340,3 +410,4 @@
     base64ToUint8Array
   };
 })();
+

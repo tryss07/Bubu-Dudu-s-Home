@@ -45,12 +45,12 @@ if (!fs.existsSync(BLOBS_DIR)) {
 }
 
 const RELAY_AUTH_TOKEN = (process.env.RELAY_AUTH_TOKEN || '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a').trim();
+const TUNNEL_SECRET = (process.env.TUNNEL_SECRET || '').trim();
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -89,12 +89,19 @@ function isAuthorized(req, url) {
 
 // 1. Create HTTP Server for Health Checks, Static App Preview, Blob Storage & WebSocket Upgrade
 const server = http.createServer((req, res) => {
+  // Cloudflare Tunnel Secret Guard
+  if (TUNNEL_SECRET && req.headers['x-tunnel-secret'] !== TUNNEL_SECRET) {
+    res.writeHead(403, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Forbidden: Invalid tunnel secret' }));
+    return;
+  }
+
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
   // CORS Headers for zero-knowledge blob transfer & REST API
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Chunk-Index, X-Total-Chunks, X-Relay-Token, X-Dudu-Auth, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Chunk-Index, X-Total-Chunks, X-Relay-Token, X-Dudu-Auth, X-Tunnel-Secret, Authorization');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -102,26 +109,12 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Health check endpoint (always accessible for monitoring & local test readiness)
+  // Health check endpoint (minimal for monitoring, zero data leak)
   if (url.pathname === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       status: 'ok',
-      service: 'dudu-duo-chat-relay',
-      activeClients: wss.clients.size,
       uptimeSeconds: Math.floor(process.uptime()),
-      db: db.getStats(),
-      timestamp: new Date().toISOString()
-    }));
-    return;
-  }
-
-  if (url.pathname === '/api/stats') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: 'ok',
-      ...db.getStats(),
-      activeClients: wss.clients.size,
       timestamp: new Date().toISOString()
     }));
     return;
@@ -136,32 +129,34 @@ const server = http.createServer((req, res) => {
       decodedPath = url.pathname;
     }
 
+    const ext = path.extname(decodedPath).toLowerCase();
+    const isHidden = decodedPath.split('/').some(p => p.startsWith('.'));
     const safePath = path.normalize(path.join(PROJECT_ROOT, decodedPath));
-    if (safePath.startsWith(PROJECT_ROOT) && !safePath.startsWith(__dirname) && fs.existsSync(safePath)) {
-      const stat = fs.statSync(safePath);
-      if (stat.isFile()) {
-        const ext = path.extname(safePath).toLowerCase();
-        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-        res.writeHead(200, { 'Content-Type': contentType });
-        if (req.method === 'HEAD') {
-          res.end();
-        } else {
-          fs.createReadStream(safePath).pipe(res);
+    const rel = path.relative(PROJECT_ROOT, safePath);
+
+    // Prevent hidden files, server/ source files, and unapproved extensions (.md, .json, .db, etc.)
+    if (!isHidden && MIME_TYPES[ext] && !rel.startsWith('..') && !rel.startsWith('server') && !safePath.startsWith(__dirname) && fs.existsSync(safePath)) {
+      try {
+        const stat = fs.statSync(safePath);
+        if (stat.isFile()) {
+          res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] });
+          if (req.method === 'HEAD') {
+            res.end();
+          } else {
+            fs.createReadStream(safePath).pipe(res);
+          }
+          return;
         }
-        return;
-      }
+      } catch (_) {}
     }
 
     // Fallback: If root '/' requested on standalone VPS relay (where static index.html is absent),
-    // serve clean relay status info instead of falling through to 401 Unauthorized log warning
+    // serve clean relay status info without leaking DB stats
     if (url.pathname === '/') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         status: 'ok',
-        service: 'dudu-duo-chat-relay',
-        activeClients: wss.clients.size,
         uptimeSeconds: Math.floor(process.uptime()),
-        db: db.getStats(),
         timestamp: new Date().toISOString()
       }));
       return;
@@ -172,6 +167,10 @@ const server = http.createServer((req, res) => {
       res.end();
       return;
     }
+
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+    return;
   }
 
   // Enforce Layer 1 Security Token on all API endpoints
@@ -180,6 +179,19 @@ const server = http.createServer((req, res) => {
     console.warn(`[Security] Unauthorized HTTP ${req.method} ${url.pathname} rejected from ${clientIp}`);
     res.writeHead(401, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Unauthorized: Valid RELAY_AUTH_TOKEN required' }));
+    return;
+  }
+
+  // Authenticated server and DB statistics
+  if (url.pathname === '/api/stats') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      ...db.getStats(),
+      activeClients: wss.clients.size,
+      uptimeSeconds: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString()
+    }));
     return;
   }
 
@@ -528,6 +540,13 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocketServer({ noServer: true });
 
 server.on('upgrade', (request, socket, head) => {
+  // Cloudflare Tunnel Secret Guard
+  if (TUNNEL_SECRET && request.headers['x-tunnel-secret'] !== TUNNEL_SECRET) {
+    socket.write('HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nForbidden: Invalid tunnel secret\n');
+    socket.destroy();
+    return;
+  }
+
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   // Accept /chat-socket, /ws, or root WebSocket connections
   if (url.pathname === '/chat-socket' || url.pathname === '/ws' || url.pathname === '/') {

@@ -512,20 +512,34 @@
     } catch (_) {}
   }
 
-  function sendSaveRest(endpoint, body) {
+  async function sendSaveRest(endpoint, body) {
     try {
       const base = window.DuduChatSocket?.getHttpBaseUrl?.() || 'https://chat.nexora-v1.my.id';
       const token = window.DuduChatSocket?.getAuthToken?.() || '415abdb5c1ff97e7de8c9f2c43be8ed4efba6f49ad912f301323212c27dacf5a';
       const url = `${base}${endpoint}?token=${encodeURIComponent(token)}`;
+      const wireBody = (window.DuduChatCrypto?.encryptPayload && !body.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(body)
+        : body;
       fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-relay-token': token
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(wireBody)
       }).catch(() => {});
     } catch (_) {}
+  }
+
+  function autoMigrateLegacyItems(list, sendFn, restEndpoint) {
+    if (!Array.isArray(list)) return;
+    list.forEach(async (item) => {
+      if (item && item.isLegacyPlaintext) {
+        delete item.isLegacyPlaintext;
+        sendFn?.(item);
+        sendSaveRest(restEndpoint, item);
+      }
+    });
   }
 
   async function hydrateDataFromRemoteServer() {
@@ -547,6 +561,7 @@
       }
       if (Array.isArray(data.polaroids) && data.polaroids.length > 0) {
         appData.polaroids = data.polaroids;
+        autoMigrateLegacyItems(appData.polaroids, window.DuduChatSocket?.sendSavePolaroid, '/api/memories/polaroids');
         rerender = true;
       }
       if (Array.isArray(data.milestones) && data.milestones.length > 0) {
@@ -848,6 +863,7 @@
     window.DuduChatSocket.onMemoriesSync?.((data) => {
       if (data && Array.isArray(data.polaroids)) {
         appData.polaroids = data.polaroids;
+        autoMigrateLegacyItems(appData.polaroids, window.DuduChatSocket?.sendSavePolaroid, '/api/memories/polaroids');
       }
       if (data && Array.isArray(data.milestones)) {
         appData.milestones = data.milestones;

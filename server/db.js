@@ -259,7 +259,9 @@ try {
       title TEXT NOT NULL,
       date TEXT NOT NULL,
       desc TEXT,
-      created_at INTEGER NOT NULL
+      created_at INTEGER NOT NULL,
+      iv TEXT,
+      ciphertext TEXT
     );
 
     CREATE TABLE IF NOT EXISTS couple_space (
@@ -268,6 +270,13 @@ try {
       updated_at INTEGER NOT NULL
     );
   `);
+
+  // Auto-migrate tables for Zero-Knowledge E2EE fields (iv, ciphertext)
+  const tablesToMigrate = ['calendar_events', 'planner_items', 'love_notes', 'polaroids', 'milestones', 'topics', 'tummy_logs'];
+  tablesToMigrate.forEach(table => {
+    try { db.exec(`ALTER TABLE ${table} ADD COLUMN iv TEXT;`); } catch (_) {}
+    try { db.exec(`ALTER TABLE ${table} ADD COLUMN ciphertext TEXT;`); } catch (_) {}
+  });
 
   const seeded = db.prepare("SELECT val FROM meta WHERE key = 'seeded_topics'").get();
   if (!seeded) {
@@ -621,19 +630,34 @@ function getAllTopics() {
   if (!useFallback && db) {
     try {
       const rows = db.prepare(`
-        SELECT id, title, emoji, is_pinned as isPinned, is_archived as isArchived, created_at as createdAt, last_activity as lastActivity
+        SELECT id, title, emoji, is_pinned as isPinned, is_archived as isArchived,
+               created_at as createdAt, last_activity as lastActivity, iv, ciphertext
         FROM topics
         ORDER BY is_pinned DESC, last_activity DESC
       `).all();
-      return rows.map(r => ({
-        id: r.id,
-        title: r.title,
-        emoji: r.emoji,
-        isPinned: r.isPinned === 1,
-        isArchived: r.isArchived === 1,
-        createdAt: r.createdAt,
-        lastActivity: r.lastActivity
-      }));
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return {
+            id: r.id,
+            iv: r.iv,
+            ciphertext: r.ciphertext,
+            isPinned: r.isPinned === 1,
+            isArchived: r.isArchived === 1,
+            createdAt: r.createdAt,
+            lastActivity: r.lastActivity,
+            isEncrypted: true
+          };
+        }
+        return {
+          id: r.id,
+          title: r.title,
+          emoji: r.emoji,
+          isPinned: r.isPinned === 1,
+          isArchived: r.isArchived === 1,
+          createdAt: r.createdAt,
+          lastActivity: r.lastActivity
+        };
+      });
     } catch (e) {
       console.error('[Database] getAllTopics error:', e.message);
       return [];
@@ -644,22 +668,27 @@ function getAllTopics() {
 }
 
 function saveTopic(topic) {
-  if (!topic || !topic.id || !topic.title) return false;
+  if (!topic || !topic.id) return false;
+  const isEncrypted = Boolean(topic.ciphertext && topic.iv);
+  if (!isEncrypted && !topic.title) return false;
+
   const id = String(topic.id);
-  const title = String(topic.title);
+  const title = String(topic.title || '[Encrypted]');
   const emoji = String(topic.emoji || '💬');
   const isPinned = topic.isPinned ? 1 : 0;
   const isArchived = topic.isArchived ? 1 : 0;
   const createdAt = Number(topic.createdAt || Date.now());
   const lastActivity = Number(topic.lastActivity || Date.now());
+  const iv = isEncrypted ? String(topic.iv) : null;
+  const ciphertext = isEncrypted ? String(topic.ciphertext) : null;
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO topics (id, title, emoji, is_pinned, is_archived, created_at, last_activity)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO topics (id, title, emoji, is_pinned, is_archived, created_at, last_activity, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, title, emoji, isPinned, isArchived, createdAt, lastActivity);
+      stmt.run(id, title, emoji, isPinned, isArchived, createdAt, lastActivity, iv, ciphertext);
       return true;
     } catch (e) {
       console.error('[Database] saveTopic error:', e.message);
@@ -667,7 +696,9 @@ function saveTopic(topic) {
     }
   } else {
     const idx = fallbackTopics.findIndex(t => t.id === id);
-    const item = { id, title, emoji, isPinned: !!isPinned, isArchived: !!isArchived, createdAt, lastActivity };
+    const item = isEncrypted
+      ? { id, iv, ciphertext, isPinned: !!isPinned, isArchived: !!isArchived, createdAt, lastActivity, isEncrypted: true }
+      : { id, title, emoji, isPinned: !!isPinned, isArchived: !!isArchived, createdAt, lastActivity };
     if (idx >= 0) fallbackTopics[idx] = item;
     else fallbackTopics.push(item);
     persistFallbackState();
@@ -861,11 +892,17 @@ function getAllCalendarEvents() {
   if (!useFallback && db) {
     try {
       const rows = db.prepare(`
-        SELECT id, date, month, year, title, icon, created_at as createdAt
+        SELECT id, date, month, year, title, icon, created_at as createdAt, iv, ciphertext
         FROM calendar_events
         ORDER BY year ASC, month ASC, date ASC, created_at ASC
       `).all();
-      return rows;
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return { id: r.id, iv: r.iv, ciphertext: r.ciphertext, createdAt: r.createdAt, isEncrypted: true };
+        }
+        const { iv, ciphertext, ...plain } = r;
+        return plain;
+      });
     } catch (e) {
       console.error('[Database] getAllCalendarEvents error:', e.message);
       return [];
@@ -876,24 +913,31 @@ function getAllCalendarEvents() {
 }
 
 function saveCalendarEvent(ev) {
-  if (!ev || !ev.title) return null;
+  if (!ev) return null;
+  const isEncrypted = Boolean(ev.ciphertext && ev.iv);
+  if (!isEncrypted && !ev.title) return null;
+
   const id = String(ev.id || ('cal_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)));
   const date = Number(ev.date || 1);
   const month = Number(ev.month !== undefined ? ev.month : 9);
   const year = Number(ev.year || new Date().getFullYear());
-  const title = String(ev.title);
+  const title = String(ev.title || '[Encrypted]');
   const icon = String(ev.icon || '❤️');
   const createdAt = Number(ev.createdAt || Date.now());
+  const iv = isEncrypted ? String(ev.iv) : null;
+  const ciphertext = isEncrypted ? String(ev.ciphertext) : null;
 
-  const eventObj = { id, date, month, year, title, icon, createdAt };
+  const eventObj = isEncrypted
+    ? { id, iv, ciphertext, createdAt, isEncrypted: true }
+    : { id, date, month, year, title, icon, createdAt };
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO calendar_events (id, date, month, year, title, icon, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO calendar_events (id, date, month, year, title, icon, created_at, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, date, month, year, title, icon, createdAt);
+      stmt.run(id, date, month, year, title, icon, createdAt, iv, ciphertext);
       return eventObj;
     } catch (e) {
       console.error('[Database] saveCalendarEvent error:', e.message);
@@ -941,11 +985,17 @@ function getAllPlannerItems() {
     try {
       const rows = db.prepare(`
         SELECT id, title, desc, planned_date as plannedDate, status_badge as statusBadge,
-               category, completed, image, created_at as createdAt
+               category, completed, image, created_at as createdAt, iv, ciphertext
         FROM planner_items
         ORDER BY created_at DESC
       `).all();
-      return rows.map(r => ({ ...r, completed: Boolean(r.completed) }));
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return { id: r.id, iv: r.iv, ciphertext: r.ciphertext, createdAt: r.createdAt, isEncrypted: true };
+        }
+        const { iv, ciphertext, ...plain } = r;
+        return { ...plain, completed: Boolean(plain.completed) };
+      });
     } catch (e) {
       console.error('[Database] getAllPlannerItems error:', e.message);
       return [];
@@ -956,9 +1006,12 @@ function getAllPlannerItems() {
 }
 
 function savePlannerItem(item) {
-  if (!item || !item.title) return null;
+  if (!item) return null;
+  const isEncrypted = Boolean(item.ciphertext && item.iv);
+  if (!isEncrypted && !item.title) return null;
+
   const id = String(item.id || ('bl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)));
-  const title = String(item.title);
+  const title = String(item.title || '[Encrypted]');
   const desc = String(item.desc || '');
   const plannedDate = String(item.plannedDate || '');
   const statusBadge = String(item.statusBadge || 'Ready');
@@ -966,16 +1019,20 @@ function savePlannerItem(item) {
   const completed = item.completed ? 1 : 0;
   const image = String(item.image || '');
   const createdAt = Number(item.createdAt || Date.now());
+  const iv = isEncrypted ? String(item.iv) : null;
+  const ciphertext = isEncrypted ? String(item.ciphertext) : null;
 
-  const savedObj = { id, title, desc, plannedDate, statusBadge, category, completed: Boolean(completed), image, createdAt };
+  const savedObj = isEncrypted
+    ? { id, iv, ciphertext, createdAt, isEncrypted: true }
+    : { id, title, desc, plannedDate, statusBadge, category, completed: Boolean(completed), image, createdAt };
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO planner_items (id, title, desc, planned_date, status_badge, category, completed, image, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO planner_items (id, title, desc, planned_date, status_badge, category, completed, image, created_at, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, title, desc, plannedDate, statusBadge, category, completed, image, createdAt);
+      stmt.run(id, title, desc, plannedDate, statusBadge, category, completed, image, createdAt, iv, ciphertext);
       return savedObj;
     } catch (e) {
       console.error('[Database] savePlannerItem error:', e.message);
@@ -1023,11 +1080,18 @@ function getAllNotes() {
     try {
       const rows = db.prepare(`
         SELECT id, style, body, sender, sender_role as senderRole, time, date,
-               is_favorite as isFavorite, is_read as isRead, created_at as createdAt
+               is_favorite as isFavorite, is_read as isRead, created_at as createdAt,
+               iv, ciphertext
         FROM love_notes
         ORDER BY created_at DESC
       `).all();
-      return rows.map(r => ({ ...r, isFavorite: Boolean(r.isFavorite), isRead: Boolean(r.isRead) }));
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return { id: r.id, iv: r.iv, ciphertext: r.ciphertext, createdAt: r.createdAt, isEncrypted: true };
+        }
+        const { iv, ciphertext, ...plain } = r;
+        return { ...plain, isFavorite: Boolean(plain.isFavorite), isRead: Boolean(plain.isRead) };
+      });
     } catch (e) {
       console.error('[Database] getAllNotes error:', e.message);
       return [];
@@ -1038,10 +1102,13 @@ function getAllNotes() {
 }
 
 function saveNote(note) {
-  if (!note || !note.body) return null;
+  if (!note) return null;
+  const isEncrypted = Boolean(note.ciphertext && note.iv);
+  if (!isEncrypted && !note.body) return null;
+
   const id = String(note.id || ('note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)));
   const style = String(note.style || 'envelope');
-  const body = String(note.body);
+  const body = String(note.body || '[Encrypted]');
   const sender = String(note.sender || 'Honey');
   const senderRole = String(note.senderRole || 'dudu');
   const time = String(note.time || 'Just now');
@@ -1049,16 +1116,20 @@ function saveNote(note) {
   const isFavorite = note.isFavorite ? 1 : 0;
   const isRead = note.isRead ? 1 : 0;
   const createdAt = Number(note.createdAt || Date.now());
+  const iv = isEncrypted ? String(note.iv) : null;
+  const ciphertext = isEncrypted ? String(note.ciphertext) : null;
 
-  const noteObj = { id, style, body, sender, senderRole, time, date, isFavorite: Boolean(isFavorite), isRead: Boolean(isRead), createdAt };
+  const noteObj = isEncrypted
+    ? { id, iv, ciphertext, createdAt, isEncrypted: true }
+    : { id, style, body, sender, senderRole, time, date, isFavorite: Boolean(isFavorite), isRead: Boolean(isRead), createdAt };
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO love_notes (id, style, body, sender, sender_role, time, date, is_favorite, is_read, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO love_notes (id, style, body, sender, sender_role, time, date, is_favorite, is_read, created_at, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, style, body, sender, senderRole, time, date, isFavorite, isRead, createdAt);
+      stmt.run(id, style, body, sender, senderRole, time, date, isFavorite, isRead, createdAt, iv, ciphertext);
       return noteObj;
     } catch (e) {
       console.error('[Database] saveNote error:', e.message);
@@ -1105,11 +1176,17 @@ function getAllPolaroids() {
   if (!useFallback && db) {
     try {
       const rows = db.prepare(`
-        SELECT id, title, date, image, tape, rotate, created_at as createdAt
+        SELECT id, title, date, image, tape, rotate, created_at as createdAt, iv, ciphertext
         FROM polaroids
         ORDER BY created_at DESC
       `).all();
-      return rows;
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return { id: r.id, iv: r.iv, ciphertext: r.ciphertext, createdAt: r.createdAt, isEncrypted: true };
+        }
+        const { iv, ciphertext, ...plain } = r;
+        return { ...plain, isLegacyPlaintext: true };
+      });
     } catch (e) {
       console.error('[Database] getAllPolaroids error:', e.message);
       return [];
@@ -1121,23 +1198,29 @@ function getAllPolaroids() {
 
 function savePolaroid(p) {
   if (!p) return null;
+  const isEncrypted = Boolean(p.ciphertext && p.iv);
+
   const id = String(p.id || ('pol_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)));
-  const title = String(p.title || 'Cozy Date');
+  const title = String(p.title || (isEncrypted ? '[Encrypted]' : 'Cozy Date'));
   const date = String(p.date || 'Today');
-  const image = String(p.image || 'assets/mockup_art/polaroid_picnic.png');
+  const image = String(p.image || '');
   const tape = String(p.tape || 'washi-tape-grid');
   const rotate = Number(p.rotate || 0);
   const createdAt = Number(p.createdAt || Date.now());
+  const iv = isEncrypted ? String(p.iv) : null;
+  const ciphertext = isEncrypted ? String(p.ciphertext) : null;
 
-  const polObj = { id, title, date, image, tape, rotate, createdAt };
+  const polObj = isEncrypted
+    ? { id, iv, ciphertext, createdAt, isEncrypted: true }
+    : { id, title, date, image, tape, rotate, createdAt };
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO polaroids (id, title, date, image, tape, rotate, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO polaroids (id, title, date, image, tape, rotate, created_at, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, title, date, image, tape, rotate, createdAt);
+      stmt.run(id, title, date, image, tape, rotate, createdAt, iv, ciphertext);
       return polObj;
     } catch (e) {
       console.error('[Database] savePolaroid error:', e.message);
@@ -1179,11 +1262,17 @@ function getAllMilestones() {
   if (!useFallback && db) {
     try {
       const rows = db.prepare(`
-        SELECT id, title, date, desc, created_at as createdAt
+        SELECT id, title, date, desc, created_at as createdAt, iv, ciphertext
         FROM milestones
         ORDER BY created_at ASC
       `).all();
-      return rows;
+      return rows.map(r => {
+        if (r.iv && r.ciphertext) {
+          return { id: r.id, iv: r.iv, ciphertext: r.ciphertext, createdAt: r.createdAt, isEncrypted: true };
+        }
+        const { iv, ciphertext, ...plain } = r;
+        return plain;
+      });
     } catch (e) {
       console.error('[Database] getAllMilestones error:', e.message);
       return [];
@@ -1194,22 +1283,29 @@ function getAllMilestones() {
 }
 
 function saveMilestone(m) {
-  if (!m || !m.title) return null;
+  if (!m) return null;
+  const isEncrypted = Boolean(m.ciphertext && m.iv);
+  if (!isEncrypted && !m.title) return null;
+
   const id = String(m.id || ('ms_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)));
-  const title = String(m.title);
+  const title = String(m.title || '[Encrypted]');
   const date = String(m.date || 'Today');
   const desc = String(m.desc || '');
   const createdAt = Number(m.createdAt || Date.now());
+  const iv = isEncrypted ? String(m.iv) : null;
+  const ciphertext = isEncrypted ? String(m.ciphertext) : null;
 
-  const msObj = { id, title, date, desc, createdAt };
+  const msObj = isEncrypted
+    ? { id, iv, ciphertext, createdAt, isEncrypted: true }
+    : { id, title, date, desc, createdAt };
 
   if (!useFallback && db) {
     try {
       const stmt = db.prepare(`
-        INSERT OR REPLACE INTO milestones (id, title, date, desc, created_at)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT OR REPLACE INTO milestones (id, title, date, desc, created_at, iv, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(id, title, date, desc, createdAt);
+      stmt.run(id, title, date, desc, createdAt, iv, ciphertext);
       return msObj;
     } catch (e) {
       console.error('[Database] saveMilestone error:', e.message);
@@ -1267,7 +1363,14 @@ function getCoupleSpace() {
       let bubuW = { ...DEFAULT_WARDROBE.bubu, ...(fallbackCoupleSpace?.wardrobe?.bubu || {}) };
       try { if (map['wardrobe_dudu']) duduW = { ...duduW, ...JSON.parse(map['wardrobe_dudu']) }; } catch (_) {}
       try { if (map['wardrobe_bubu']) bubuW = { ...bubuW, ...JSON.parse(map['wardrobe_bubu']) }; } catch (_) {}
+
+      let encryptedPayload = null;
+      if (map['encrypted_payload']) {
+        try { encryptedPayload = JSON.parse(map['encrypted_payload']); } catch (_) {}
+      }
+
       return {
+        ...(encryptedPayload || {}),
         anniversaryDate: map['anniversary_date'] || '2025-11-04',
         loveBattery: map['love_battery'] ? Number(map['love_battery']) : 100,
         statuses: {
@@ -1301,6 +1404,9 @@ function saveCoupleSpace(data) {
   if (!useFallback && db) {
     try {
       const stmt = db.prepare('INSERT OR REPLACE INTO couple_space (key, val, updated_at) VALUES (?, ?, ?)');
+      if (data.ciphertext && data.iv) {
+        stmt.run('encrypted_payload', JSON.stringify({ iv: data.iv, ciphertext: data.ciphertext, isEncrypted: true }), now);
+      }
       if (data.anniversaryDate) stmt.run('anniversary_date', String(data.anniversaryDate), now);
       if (data.loveBattery !== undefined) stmt.run('love_battery', String(data.loveBattery), now);
       if (data.statusDudu !== undefined) stmt.run('status_dudu', String(data.statusDudu), now);

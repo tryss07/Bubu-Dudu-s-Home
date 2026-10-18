@@ -19,6 +19,22 @@
   let heartbeatTimer = null;
   let manualDisconnect = false;
 
+  async function maybeDecrypt(item) {
+    if (!item || typeof item !== 'object') return item;
+    if (window.DuduChatCrypto?.decryptPayload && item.iv && item.ciphertext) {
+      return await window.DuduChatCrypto.decryptPayload(item);
+    }
+    return item;
+  }
+
+  async function maybeDecryptList(list) {
+    if (!Array.isArray(list)) return [];
+    if (window.DuduChatCrypto?.decryptList) {
+      return await window.DuduChatCrypto.decryptList(list);
+    }
+    return Promise.all(list.map(item => maybeDecrypt(item)));
+  }
+
   const listeners = {
     status: new Set(),
     message: new Set(),
@@ -130,7 +146,7 @@
       sendPresenceAnnounce('online');
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = async (event) => {
       try {
         const payload = JSON.parse(event.data);
         if (payload.type === 'pong') {
@@ -194,8 +210,9 @@
         }
 
         if (payload.type === 'topic_created' && payload.topic) {
+          const decTopic = await maybeDecrypt(payload.topic);
           listeners.topicCreated.forEach(fn => {
-            try { fn(payload.topic); } catch (e) { console.error(e); }
+            try { fn(decTopic); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -208,8 +225,9 @@
         }
 
         if (payload.type === 'topic_sync' && Array.isArray(payload.topics)) {
+          const decTopics = await maybeDecryptList(payload.topics);
           listeners.topicSync.forEach(fn => {
-            try { fn(payload.topics); } catch (e) { console.error(e); }
+            try { fn(decTopics); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -237,14 +255,16 @@
 
         // Calendar
         if (payload.type === 'calendar_sync' && Array.isArray(payload.events)) {
+          const decEvents = await maybeDecryptList(payload.events);
           listeners.calendarSync.forEach(fn => {
-            try { fn(payload.events); } catch (e) { console.error(e); }
+            try { fn(decEvents); } catch (e) { console.error(e); }
           });
           return;
         }
         if (payload.type === 'calendar_event_saved' && payload.event) {
+          const decEvent = await maybeDecrypt(payload.event);
           listeners.calendarEventSaved.forEach(fn => {
-            try { fn(payload.event); } catch (e) { console.error(e); }
+            try { fn(decEvent); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -257,14 +277,16 @@
 
         // Planner
         if (payload.type === 'planner_sync' && Array.isArray(payload.items)) {
+          const decItems = await maybeDecryptList(payload.items);
           listeners.plannerSync.forEach(fn => {
-            try { fn(payload.items); } catch (e) { console.error(e); }
+            try { fn(decItems); } catch (e) { console.error(e); }
           });
           return;
         }
         if (payload.type === 'planner_item_saved' && payload.item) {
+          const decItem = await maybeDecrypt(payload.item);
           listeners.plannerItemSaved.forEach(fn => {
-            try { fn(payload.item); } catch (e) { console.error(e); }
+            try { fn(decItem); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -277,14 +299,16 @@
 
         // Notes
         if (payload.type === 'notes_sync' && Array.isArray(payload.notes)) {
+          const decNotes = await maybeDecryptList(payload.notes);
           listeners.notesSync.forEach(fn => {
-            try { fn(payload.notes); } catch (e) { console.error(e); }
+            try { fn(decNotes); } catch (e) { console.error(e); }
           });
           return;
         }
         if (payload.type === 'note_saved' && payload.note) {
+          const decNote = await maybeDecrypt(payload.note);
           listeners.noteSaved.forEach(fn => {
-            try { fn(payload.note); } catch (e) { console.error(e); }
+            try { fn(decNote); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -297,14 +321,17 @@
 
         // Memories
         if (payload.type === 'memories_sync') {
+          const decPolaroids = await maybeDecryptList(payload.polaroids || []);
+          const decMilestones = await maybeDecryptList(payload.milestones || []);
           listeners.memoriesSync.forEach(fn => {
-            try { fn(payload); } catch (e) { console.error(e); }
+            try { fn({ polaroids: decPolaroids, milestones: decMilestones }); } catch (e) { console.error(e); }
           });
           return;
         }
         if (payload.type === 'polaroid_saved' && payload.polaroid) {
+          const decPolaroid = await maybeDecrypt(payload.polaroid);
           listeners.polaroidSaved.forEach(fn => {
-            try { fn(payload.polaroid); } catch (e) { console.error(e); }
+            try { fn(decPolaroid); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -315,8 +342,9 @@
           return;
         }
         if (payload.type === 'milestone_saved' && payload.milestone) {
+          const decMilestone = await maybeDecrypt(payload.milestone);
           listeners.milestoneSaved.forEach(fn => {
-            try { fn(payload.milestone); } catch (e) { console.error(e); }
+            try { fn(decMilestone); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -329,14 +357,16 @@
 
         // Couple Space
         if (payload.type === 'couple_space_sync' && payload.data) {
+          const decData = await maybeDecrypt(payload.data);
           listeners.coupleSpaceSync.forEach(fn => {
-            try { fn(payload.data); } catch (e) { console.error(e); }
+            try { fn(decData); } catch (e) { console.error(e); }
           });
           return;
         }
         if (payload.type === 'couple_space_updated' && payload.data) {
+          const decData = await maybeDecrypt(payload.data);
           listeners.coupleSpaceUpdated.forEach(fn => {
-            try { fn(payload.data); } catch (e) { console.error(e); }
+            try { fn(decData); } catch (e) { console.error(e); }
           });
           return;
         }
@@ -580,14 +610,22 @@
         fetch(`${baseUrl}/api/wardrobe${query}`, { headers }).then(r => r.ok ? r.json() : null)
       ]);
 
-      if (calRes.status === 'fulfilled' && calRes.value?.events) result.calendar = calRes.value.events;
-      if (planRes.status === 'fulfilled' && planRes.value?.items) result.planner = planRes.value.items;
-      if (notesRes.status === 'fulfilled' && notesRes.value?.notes) result.notes = notesRes.value.notes;
-      if (memRes.status === 'fulfilled' && memRes.value) {
-        if (Array.isArray(memRes.value.polaroids)) result.polaroids = memRes.value.polaroids;
-        if (Array.isArray(memRes.value.milestones)) result.milestones = memRes.value.milestones;
+      if (calRes.status === 'fulfilled' && calRes.value?.events) {
+        result.calendar = await maybeDecryptList(calRes.value.events);
       }
-      if (spaceRes.status === 'fulfilled' && spaceRes.value?.data) result.coupleSpace = spaceRes.value.data;
+      if (planRes.status === 'fulfilled' && planRes.value?.items) {
+        result.planner = await maybeDecryptList(planRes.value.items);
+      }
+      if (notesRes.status === 'fulfilled' && notesRes.value?.notes) {
+        result.notes = await maybeDecryptList(notesRes.value.notes);
+      }
+      if (memRes.status === 'fulfilled' && memRes.value) {
+        if (Array.isArray(memRes.value.polaroids)) result.polaroids = await maybeDecryptList(memRes.value.polaroids);
+        if (Array.isArray(memRes.value.milestones)) result.milestones = await maybeDecryptList(memRes.value.milestones);
+      }
+      if (spaceRes.status === 'fulfilled' && spaceRes.value?.data) {
+        result.coupleSpace = await maybeDecrypt(spaceRes.value.data);
+      }
       if (wardRes.status === 'fulfilled' && wardRes.value?.data) result.wardrobe = wardRes.value.data;
     } catch (err) {
       console.warn('[Socket] fetchAllFeaturesRest error:', err);
@@ -595,9 +633,12 @@
     return result;
   }
 
-  function sendCreateTopic(topic) {
+  async function sendCreateTopic(topic) {
     if (ws && ws.readyState === WebSocket.OPEN && topic) {
-      ws.send(JSON.stringify({ type: 'create_topic', topic }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !topic.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(topic)
+        : topic;
+      ws.send(JSON.stringify({ type: 'create_topic', topic: wire }));
     }
   }
 
@@ -642,10 +683,13 @@
   }
 
   // --- Calendar Senders ---
-  function sendSaveCalendarEvent(event) {
+  async function sendSaveCalendarEvent(event) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'save_calendar_event', event }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !event.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(event)
+        : event;
+      ws.send(JSON.stringify({ type: 'save_calendar_event', event: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send save_calendar_event:', e);
@@ -665,10 +709,13 @@
   }
 
   // --- Planner Senders ---
-  function sendSavePlannerItem(item) {
+  async function sendSavePlannerItem(item) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'save_planner_item', item }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !item.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(item)
+        : item;
+      ws.send(JSON.stringify({ type: 'save_planner_item', item: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send save_planner_item:', e);
@@ -688,10 +735,13 @@
   }
 
   // --- Notes Senders ---
-  function sendSaveNote(note) {
+  async function sendSaveNote(note) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'save_note', note }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !note.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(note)
+        : note;
+      ws.send(JSON.stringify({ type: 'save_note', note: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send save_note:', e);
@@ -711,10 +761,13 @@
   }
 
   // --- Memories Senders ---
-  function sendSavePolaroid(polaroid) {
+  async function sendSavePolaroid(polaroid) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'save_polaroid', polaroid }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !polaroid.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(polaroid)
+        : polaroid;
+      ws.send(JSON.stringify({ type: 'save_polaroid', polaroid: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send save_polaroid:', e);
@@ -733,10 +786,13 @@
     }
   }
 
-  function sendSaveMilestone(milestone) {
+  async function sendSaveMilestone(milestone) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'save_milestone', milestone }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !milestone.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(milestone)
+        : milestone;
+      ws.send(JSON.stringify({ type: 'save_milestone', milestone: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send save_milestone:', e);
@@ -756,10 +812,13 @@
   }
 
   // --- Couple Space Sender ---
-  function sendUpdateCoupleSpace(data) {
+  async function sendUpdateCoupleSpace(data) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      ws.send(JSON.stringify({ type: 'update_couple_space', data }));
+      const wire = (window.DuduChatCrypto?.encryptPayload && !data.ciphertext)
+        ? await window.DuduChatCrypto.encryptPayload(data)
+        : data;
+      ws.send(JSON.stringify({ type: 'update_couple_space', data: wire }));
       return true;
     } catch (e) {
       console.error('[Socket] Failed to send update_couple_space:', e);
