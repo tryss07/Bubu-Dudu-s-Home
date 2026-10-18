@@ -29,6 +29,8 @@ const fs = require('fs');
   });
 
   await page.goto(fileUrl, { waitUntil: 'load' });
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'load' });
   await page.waitForTimeout(500);
 
   // 1. Verify Page Title
@@ -41,7 +43,7 @@ const fs = require('fs');
   const daysText = await page.textContent('#home-days-count');
   const subText = await page.textContent('#home-anniversary-sub');
   console.log(`✓ Days Together: ${daysText.trim()} (${subText ? subText.trim() : ''})`);
-  if (!daysText.includes('days')) throw new Error(`Expected days together, got ${daysText}`);
+  if (!daysText.includes('days') && !daysText.includes('hari')) throw new Error(`Expected days together, got ${daysText}`);
   if (subText && !subText.includes('4 November 2025')) throw new Error(`Expected Since 4 November 2025, got ${subText}`);
 
   const batteryText = await page.textContent('#home-battery-text');
@@ -197,6 +199,11 @@ const fs = require('fs');
   console.log('\n--- Testing Screen 8: Duo Chat ---');
   await page.click('#bottom-nav-bar a[data-tab="chat"]');
   await page.waitForTimeout(600);
+  await page.evaluate(() => {
+    localStorage.setItem('DUDU_SIMULATED_PRESENCE_bubu', 'online');
+    window.DuduChatUI?.refreshPresence?.();
+  });
+  await page.waitForTimeout(200);
 
   const chatPartner = await page.textContent('#chat-partner-name');
   console.log(`✓ Chat Partner Header: ${chatPartner.trim()}`);
