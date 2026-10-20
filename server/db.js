@@ -27,10 +27,7 @@ let fallbackPresence = {
 
 let fallbackTopics = [
   { id: 'daily_banter', title: 'Daily Banter', emoji: '💬', isPinned: true, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() },
-  { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 },
-  { id: 'watchlist', title: 'Watchlist', emoji: '🎬', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 7200000 },
-  { id: 'vent_space', title: 'Vent Space', emoji: '🧸', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 10800000 },
-  { id: 'deep_talks', title: 'Deep Talks', emoji: '🌙', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 14400000 }
+  { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 }
 ];
 
 let fallbackTummyLogs = [];

@@ -30,6 +30,251 @@
     unreadSessionIds = new Set();
   }
 
+  // --- Sticker Catalog Identifiers & Path Resolvers ---
+  const COUPLE_STICKER_IDS = new Set([
+    13, 14, 17, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 58, 61, 63, 64, 65, 66, 69, 70, 72, 75, 88, 89, 92, 93
+  ]);
+
+  const COUPLE_STICKER_FILES = new Set([
+    'STK-20260929-WA0001.webp', 'STK-20260929-WA0002.webp', 'STK-20260929-WA0063.webp',
+    'STK-20261001-WA0010.webp', 'STK-20261001-WA0015.webp', 'STK-20261001-WA0023.webp',
+    'STK-20261001-WA0028.webp', 'STK-20261001-WA0030.webp', 'STK-20261001-WA0039.webp',
+    'STK-20261001-WA0040.webp', 'STK-20261001-WA0041.webp', 'STK-20261001-WA0043.webp',
+    'STK-20261001-WA0044.webp', 'STK-20261001-WA0045.webp', 'STK-20261001-WA0047.webp',
+    'STK-20261001-WA0048.webp', 'STK-20261001-WA0049.webp', 'STK-20261001-WA0050.webp',
+    'STK-20261001-WA0052.webp', 'STK-20261001-WA0061.webp', 'STK-20261001-WA0063.webp',
+    'STK-20261003-WA0005.webp', 'STK-20261003-WA0034.webp', 'STK-20261003-WA0036.webp',
+    'STK-20261003-WA0037.webp', 'STK-20261003-WA0038.webp', 'STK-20261003-WA0043.webp',
+    'STK-20261004-WA0016.webp', 'STK-20261005-WA0021.webp', 'STK-20261005-WA0030.webp',
+    'STK-20261008-WA0019.webp', 'STK-20261008-WA0020.webp', 'STK-20261008-WA0056.webp',
+    'STK-20261008-WA0057.webp'
+  ]);
+
+  const BUBU_STICKERS = window.BUBU_STICKERS || [];
+  const COUPLE_ART_STICKERS = [];
+  const DUDU_ART_STICKERS = [];
+
+  function getStickerCategory(s) {
+    if (!s) return 'dudu';
+    if (s.cat) return s.cat;
+    const filename = typeof s.file === 'string'
+      ? s.file.split('/').pop().replace('.gif', '.webp')
+      : (typeof s === 'string' ? s.split('/').pop().replace('.gif', '.webp') : '');
+    if (filename) {
+      if (window.DUDU_STICKERS_CATALOG?.bubuSet?.has(filename)) return 'bubu';
+      if (window.DUDU_STICKERS_CATALOG?.coupleSet?.has(filename)) return 'couple';
+      if (window.DUDU_STICKERS_CATALOG?.duduSet?.has(filename)) return 'dudu';
+    }
+    if (typeof s.id === 'string' && s.id.startsWith('bubu')) return 'bubu';
+    if (typeof s.id === 'string' && s.id.startsWith('cpl')) return 'couple';
+    if (typeof s.id === 'number' && COUPLE_STICKER_IDS.has(s.id)) return 'couple';
+    if (s.file && COUPLE_STICKER_FILES.has(s.file)) return 'couple';
+    return 'dudu';
+  }
+
+  function getStickerFilePath(s) {
+    if (!s) return '';
+    const file = s.file || (typeof s === 'string' ? s : '');
+    if (file && (file.startsWith('assets/') || file.startsWith('http') || file.startsWith('data:'))) {
+      return file;
+    }
+    const base = file.split('/').pop().replace('.gif', '.webp');
+    const cat = getStickerCategory(s);
+    if (cat === 'bubu') return `assets/stickers_bubu/${base}`;
+    if (cat === 'couple') return `assets/stickers_couple/${base}`;
+    return `assets/stickers_dudu/${base}`;
+  }
+
+  // --- Sticker Favorites Manager ---
+  function getFavorites() {
+    try {
+      const raw = localStorage.getItem('dudu_favorite_stickers');
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    } catch (e) {
+      return new Set();
+    }
+  }
+
+  function saveFavorites(favSet) {
+    try {
+      localStorage.setItem('dudu_favorite_stickers', JSON.stringify([...favSet]));
+    } catch (e) {}
+    updateFavBadgeCount();
+  }
+
+  function isFavoriteSticker(filePath) {
+    if (!filePath) return false;
+    const base = filePath.split('/').pop().replace('.gif', '.webp');
+    const favs = getFavorites();
+    for (const f of favs) {
+      if (f.includes(base)) return true;
+    }
+    return false;
+  }
+
+  function toggleFavoriteSticker(filePath) {
+    if (!filePath) return false;
+    const base = filePath.split('/').pop().replace('.gif', '.webp');
+    const favs = getFavorites();
+    let wasFav = false;
+    let matchingKey = null;
+
+    for (const f of favs) {
+      if (f.includes(base)) {
+        wasFav = true;
+        matchingKey = f;
+        break;
+      }
+    }
+
+    const lang = window.DuduI18n?.getLanguage?.() || 'id';
+    const isEn = lang === 'en';
+
+    if (wasFav && matchingKey) {
+      favs.delete(matchingKey);
+      saveFavorites(favs);
+      window.duduAudio?.playPop?.(400);
+      if (window.showToast) window.showToast(isEn ? 'Removed from favorites' : 'Dihapus dari favorit');
+      return false;
+    } else {
+      favs.add(filePath);
+      saveFavorites(favs);
+      window.duduAudio?.playSparkle?.();
+      if (navigator.vibrate) try { navigator.vibrate(25); } catch (e) {}
+      if (window.showToast) window.showToast(isEn ? 'Added to favorites ⭐' : 'Ditambahkan ke favorit ⭐');
+      return true;
+    }
+  }
+
+  function updateFavBadgeCount() {
+    const count = getFavorites().size;
+    const favBtn = document.querySelector('.stk-cat-btn[data-cat="fav"]');
+    if (favBtn) {
+      favBtn.textContent = `⭐ Fav (${count})`;
+    }
+  }
+
+  // --- In-line Predictive Sticker Suggestions Handler ---
+  function handleInputSuggestions() {
+    const input = document.getElementById('chat-text-input');
+    if (!input) return;
+    const text = input.value;
+    const suggestionsBox = document.getElementById('chat-sticker-suggestions');
+    const track = document.getElementById('chat-suggestions-track');
+    const queryLabel = document.getElementById('chat-suggestion-query');
+    if (!suggestionsBox || !track) return;
+
+    // Trigger on "dudu [verb]" or "bubu [verb]"
+    const match = text.trim().match(/^(dudu|bubu)\s*(.*)$/i);
+    if (!match) {
+      suggestionsBox.classList.add('hidden');
+      return;
+    }
+
+    const actor = match[1].toLowerCase();
+    const query = match[2].trim().toLowerCase();
+
+    const catalog = window.DUDU_STICKERS_CATALOG;
+    if (!catalog || typeof catalog.getSuggestions !== 'function') {
+      suggestionsBox.classList.add('hidden');
+      return;
+    }
+
+    const suggestions = catalog.getSuggestions(actor, query);
+    if (!suggestions || suggestions.length === 0) {
+      suggestionsBox.classList.add('hidden');
+      return;
+    }
+
+    const lang = window.DuduI18n?.getLanguage?.() || 'id';
+    const isEn = lang === 'en';
+    const displayQuery = query ? `${actor} ${query}` : actor;
+    if (queryLabel) {
+      queryLabel.textContent = isEn ? `Stickers for "${displayQuery}"` : `Stiker untuk "${displayQuery}"`;
+    }
+
+    track.innerHTML = suggestions.map((s) => `
+      <button type="button" data-sticker-file="${s.filePath}" class="btn-suggestion-chip shrink-0 w-16 h-16 rounded-2xl bg-white/90 dark:bg-stone-800/90 hover:bg-[#FAF0E6] dark:hover:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center justify-center p-1.5 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-2xs group" title="${escapeHtml(s.title || 'Sticker')}">
+        <img src="${s.filePath}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-xs pointer-events-none">
+      </button>
+    `).join('');
+
+    suggestionsBox.classList.remove('hidden');
+  }
+
+  function isStickerMessage(msg) {
+    if (!msg) return false;
+    if (msg.type === 'sticker') return true;
+    if (msg.type === 'image' && typeof msg.content === 'string') {
+      return (
+        msg.content.includes('stickers_') ||
+        msg.content.includes('chat_stk') ||
+        msg.content.includes('mockup_art') ||
+        msg.content.includes('Dudu Stickers') ||
+        msg.content.endsWith('.gif') ||
+        msg.content.endsWith('.webp') ||
+        msg.content.endsWith('.svg')
+      );
+    }
+    return false;
+  }
+
+  function getStickerMediaSrc(msg) {
+    if (!msg) return '';
+    if (msg.type === 'sticker') {
+      const stickerId = parseInt(msg.content, 10);
+      const sticker = window.DuduTaxonomy?.getById?.(stickerId) || window.DUDU_STICKERS?.[stickerId - 1] || window.DUDU_STICKERS?.[0];
+      if (sticker) {
+        return getStickerFilePath(sticker);
+      }
+      return 'assets/stickers_dudu/STK-20260925-WA0187.webp';
+    }
+    if (msg.type === 'image' && typeof msg.content === 'string') {
+      let imgSrc = msg.content;
+      if (imgSrc.includes('assets/stickers_gif/')) {
+        const base = imgSrc.split('/').pop().replace('.gif', '.webp');
+        if (window.DUDU_STICKERS_CATALOG?.coupleSet?.has(base) || (typeof COUPLE_STICKER_FILES !== 'undefined' && COUPLE_STICKER_FILES.has(base))) {
+          imgSrc = `assets/stickers_couple/${base}`;
+        } else if (window.DUDU_STICKERS_CATALOG?.bubuSet?.has(base)) {
+          imgSrc = `assets/stickers_bubu/${base}`;
+        } else {
+          imgSrc = `assets/stickers_dudu/${base}`;
+        }
+      }
+      return imgSrc;
+    }
+    return '';
+  }
+
+  function getStickerMediaTitle(msg) {
+    if (!msg) return '';
+    const lang = (window.DuduI18n && window.DuduI18n.getLanguage) ? window.DuduI18n.getLanguage() : 'id';
+    const isEn = lang === 'en';
+    if (msg.type === 'sticker') {
+      const stickerId = parseInt(msg.content, 10);
+      const sticker = window.DuduTaxonomy?.getById?.(stickerId) || window.DUDU_STICKERS?.[stickerId - 1];
+      if (sticker) {
+        const title = (isEn ? sticker.title_en : sticker.title_id) || sticker.title;
+        if (title) return title;
+        return isEn ? 'Dudu & Bubu Sticker' : 'Stiker Dudu & Bubu';
+      }
+      return isEn ? 'Dudu & Bubu Sticker' : 'Stiker Dudu & Bubu';
+    }
+    if (typeof msg.content === 'string') {
+      const base = msg.content.split('/').pop().replace('.gif', '.webp');
+      if (window.DUDU_STICKERS_CATALOG?.bubuSet?.has(base)) {
+        return isEn ? 'Bubu Sticker' : 'Stiker Bubu';
+      }
+      if (window.DUDU_STICKERS_CATALOG?.coupleSet?.has(base)) {
+        return isEn ? 'Dudu & Bubu Together' : 'Stiker Berdua';
+      }
+      if (window.DUDU_STICKERS_CATALOG?.duduSet?.has(base)) {
+        return isEn ? 'Dudu Sticker' : 'Stiker Dudu';
+      }
+    }
+    return isEn ? 'Animated Sticker' : 'Stiker Animasi';
+  }
+
   function removeEmojis(text) {
     if (!text) return '';
     return String(text)
@@ -103,7 +348,10 @@
     if (!indicator || !textEl) return;
 
     if (data.isTyping) {
-      textEl.textContent = isSenderDudu ? 'dudu is typing...' : 'bubu is typing...';
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
+      textEl.textContent = isEn
+        ? (isSenderDudu ? 'dudu is typing...' : 'bubu is typing...')
+        : (isSenderDudu ? 'dudu sedang mengetik...' : 'bubu sedang mengetik...');
       indicator.classList.remove('hidden');
 
       clearTimeout(incomingTypingTimeout);
@@ -127,6 +375,7 @@
       requestNotificationPermission();
       setupSocketListeners();
       updateNavChatBadge();
+      updateFavBadgeCount();
       try {
         const myId = DuduChatCrypto.getStoredIdentity() || 'dudu';
         window.Capacitor?.Plugins?.DuduCompanion?.setIdentity?.({ identity: myId });
@@ -217,10 +466,43 @@
   }
 
   let lastKnownPresence = null;
+  try {
+    const savedPresence = localStorage.getItem('DUDU_LAST_PRESENCE_STATE');
+    if (savedPresence) lastKnownPresence = JSON.parse(savedPresence);
+  } catch (_) {}
+
+  // Clean up legacy simulated presence keys so state is purely live
+  try {
+    localStorage.removeItem('DUDU_SIMULATED_PRESENCE_dudu');
+    localStorage.removeItem('DUDU_SIMULATED_PRESENCE_bubu');
+  } catch (_) {}
+
+  function recordRoleOffline(role) {
+    const ident = (role || '').toLowerCase().includes('bubu') ? 'bubu' : 'dudu';
+    if (!lastKnownPresence) {
+      lastKnownPresence = {
+        dudu: { online: false, lastSeen: Date.now() },
+        bubu: { online: false, lastSeen: Date.now() }
+      };
+    }
+    lastKnownPresence[ident] = {
+      online: false,
+      lastSeen: Date.now()
+    };
+    try {
+      localStorage.setItem('DUDU_LAST_PRESENCE_STATE', JSON.stringify(lastKnownPresence));
+    } catch (_) {}
+    handlePresenceState();
+  }
 
   function handlePresenceState(presence) {
-    if (presence) lastKnownPresence = presence;
-    const currentPresence = presence || lastKnownPresence;
+    if (presence) {
+      lastKnownPresence = Object.assign({}, lastKnownPresence || {}, presence);
+      try {
+        localStorage.setItem('DUDU_LAST_PRESENCE_STATE', JSON.stringify(lastKnownPresence));
+      } catch (_) {}
+    }
+    const currentPresence = lastKnownPresence;
 
     const myIdentity = DuduChatCrypto.getStoredIdentity() || 'dudu';
     const myIdLower = myIdentity.toLowerCase();
@@ -229,17 +511,8 @@
     const partnerLabel = isMeDudu ? 'Bubu' : 'Dudu';
     const partnerState = currentPresence ? currentPresence[partnerKey] : null;
 
-    // Check simulated state in localStorage (allows toggling online/offline easily)
-    const simulatedState = localStorage.getItem('DUDU_SIMULATED_PRESENCE_' + partnerKey);
-    let isOnline = false;
-    if (simulatedState !== null) {
-      isOnline = simulatedState === 'online';
-    } else if (partnerState && partnerState.online !== undefined) {
-      isOnline = !!partnerState.online;
-    } else {
-      // Default to online matching mockup reference
-      isOnline = true;
-    }
+    // Live presence strictly indicates whether Bubu or Dudu is currently active on the app
+    const isOnline = partnerState && partnerState.online !== undefined ? !!partnerState.online : false;
 
     const dotEl = document.getElementById('chat-partner-presence-dot');
     const textEl = document.getElementById('chat-partner-presence-text');
@@ -249,12 +522,11 @@
       partnerNameEl.textContent = isMeDudu ? 'Bubu 🐼❤️' : 'Dudu 🐻❤️';
     }
 
-    if (dotEl) {
-      dotEl.style.display = 'none';
-      dotEl.className = 'hidden';
-    }
-
     if (isOnline) {
+      if (dotEl) {
+        dotEl.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0';
+        dotEl.style.display = 'inline-block';
+      }
       if (textEl) {
         textEl.textContent = 'online 💫';
         textEl.className = 'text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate';
@@ -266,11 +538,16 @@
       }
       lastPartnerOnlineState = 1;
     } else {
+      if (dotEl) {
+        dotEl.className = 'w-1.5 h-1.5 rounded-full bg-stone-300 dark:bg-stone-600 shrink-0';
+        dotEl.style.display = 'inline-block';
+      }
       if (textEl) {
         const lastSeenTs = partnerState && (partnerState.lastSeen || partnerState.last_seen);
-        const lastSeenStr = lastSeenTs ? formatLastSeen(lastSeenTs) : 'recently';
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        const lastSeenStr = lastSeenTs ? formatLastSeen(lastSeenTs) : (isEn ? 'recently' : 'baru-baru ini');
         textEl.textContent = `offline (${lastSeenStr})`;
-        textEl.className = 'text-[10px] text-stone-500 dark:text-stone-400 font-medium truncate';
+        textEl.className = 'text-[10px] text-stone-400 dark:text-stone-500 font-medium truncate';
       }
       lastPartnerOnlineState = 0;
     }
@@ -278,11 +555,39 @@
 
   function formatLastSeen(timestamp) {
     if (!timestamp) return '';
-    const now = Date.now();
-    const diffMs = now - timestamp;
-    if (diffMs < 60000) return 'last seen just now';
-    return `last seen ${formatTime(timestamp)}`;
+    const now = new Date();
+    const d = new Date(timestamp);
+    const diffMs = now.getTime() - d.getTime();
+    const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+
+    if (diffMs < 60000) {
+      return isEn ? 'last seen just now' : 'terakhir dilihat baru saja';
+    }
+
+    const timeStr = formatTime(timestamp);
+    const isToday = now.toDateString() === d.toDateString();
+    if (isToday) {
+      return isEn ? `last seen today at ${timeStr}` : `terakhir dilihat hari ini pukul ${timeStr}`;
+    }
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = yesterday.toDateString() === d.toDateString();
+    if (isYesterday) {
+      return isEn ? `last seen yesterday at ${timeStr}` : `terakhir dilihat kemarin pukul ${timeStr}`;
+    }
+
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return isEn ? `last seen ${day}/${month} at ${timeStr}` : `terakhir dilihat ${day}/${month} pukul ${timeStr}`;
   }
+
+  // Periodic refresh for offline last seen elapsed display
+  setInterval(() => {
+    if (lastPartnerOnlineState === 0 && lastKnownPresence) {
+      handlePresenceState();
+    }
+  }, 20000);
 
   // --- Session Management ---
 
@@ -460,7 +765,8 @@
       if (activeSess) {
         headerTitle.innerHTML = `<span class="mr-1">${activeSess.emoji}</span>${escapeHtml(activeSess.title)}`;
       } else {
-        headerTitle.innerHTML = `<span class="text-outline text-xs font-normal">No topic selected</span>`;
+        const noTopicText = window.DuduI18n?.getLanguage() === 'en' ? 'No topic selected' : 'Tidak ada topik dipilih';
+        headerTitle.innerHTML = `<span class="text-outline text-xs font-normal">${noTopicText}</span>`;
       }
     }
   }
@@ -624,6 +930,7 @@
   }
 
   function updateDeleteStepUI() {
+    const isEn = window.DuduI18n?.getLanguage() === 'en';
     const conf = DELETE_STEPS[deleteStep - 1];
     if (!conf) return;
 
@@ -632,10 +939,30 @@
     const iconEl = document.getElementById('delete-prompt-icon');
     const btnConfirm = document.getElementById('btn-confirm-delete-step');
 
-    if (titleEl) titleEl.textContent = conf.title;
-    if (descEl) descEl.innerHTML = conf.desc(pendingDeleteTitle);
+    if (titleEl) {
+      if (isEn) {
+        titleEl.textContent = conf.title;
+      } else {
+        titleEl.textContent = deleteStep === 1 ? 'Apakah kamu yakin?' : (deleteStep === 2 ? 'Apakah kamu benar-benar yakin?' : 'Apakah kamu yakin banget?');
+      }
+    }
+    if (descEl) {
+      if (isEn) {
+        descEl.innerHTML = conf.desc(pendingDeleteTitle);
+      } else {
+        if (deleteStep === 1) descEl.innerHTML = `Apakah kamu ingin menghapus "${escapeHtml(pendingDeleteTitle)}" beserta semua pesannya?`;
+        else if (deleteStep === 2) descEl.innerHTML = `Semua pesan di "${escapeHtml(pendingDeleteTitle)}" akan hilang permanen!`;
+        else descEl.innerHTML = 'Peringatan terakhir! Tidak bisa dibatalkan. Hapus permanen sekarang?';
+      }
+    }
     if (iconEl) iconEl.innerHTML = `<span class="material-symbols-outlined text-3xl text-rose-500">${conf.icon}</span>`;
-    if (btnConfirm) btnConfirm.textContent = conf.btnText;
+    if (btnConfirm) {
+      if (isEn) {
+        btnConfirm.textContent = conf.btnText;
+      } else {
+        btnConfirm.textContent = deleteStep === 1 ? "Ya, saya yakin" : (deleteStep === 2 ? "Saya benar-benar yakin" : "Ya, hapus selamanya");
+      }
+    }
 
     for (let i = 1; i <= 3; i++) {
       const dot = document.getElementById(`delete-step-dot-${i}`);
@@ -679,7 +1006,8 @@
     renderAllTopicsList(searchInput ? searchInput.value.trim() : '');
 
     if (window.showToast) {
-      window.showToast(`Done! "${deletedTitle}" deleted.`);
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
+      window.showToast(isEn ? `Done! "${deletedTitle}" deleted.` : `Selesai! "${deletedTitle}" dihapus.`);
     }
     window.duduAudio?.playSparkle?.();
   }
@@ -870,15 +1198,17 @@
       const isMeDudu = myIdLower.includes('dudu') || myIdLower.includes('kevin');
       const senderLower = (message.sender || '').toLowerCase();
       const isSenderDudu = senderLower.includes('dudu') || senderLower.includes('kevin');
-      const label = (isMeDudu === isSenderDudu) ? 'You' : (isSenderDudu ? 'Dudu' : 'Bubu');
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
+      const youLabel = isEn ? 'You' : 'Kamu';
+      const label = (isMeDudu === isSenderDudu) ? youLabel : (isSenderDudu ? 'Dudu' : 'Bubu');
 
-      replySender.textContent = `Replying to ${label}`;
+      replySender.textContent = isEn ? `Replying to ${label}` : `Membalas ${label}`;
       let preview = message.content || '';
-      if (message.type === 'sticker') preview = '🧸 Sticker';
+      if (message.type === 'sticker') preview = isEn ? '🧸 Sticker' : '🧸 Stiker';
       else if (message.type === 'image') {
-        if (typeof message.content === 'string' && message.content.endsWith('.gif')) preview = '✨ Sticker GIF';
-        else if (typeof message.content === 'string' && (message.content.includes('stickers_') || message.content.includes('chat_stk') || message.content.includes('mockup_art'))) preview = '🧸 Sticker';
-        else preview = '📷 Photo';
+        if (typeof message.content === 'string' && message.content.endsWith('.gif')) preview = isEn ? '✨ Sticker GIF' : '✨ Stiker GIF';
+        else if (typeof message.content === 'string' && (message.content.includes('stickers_') || message.content.includes('chat_stk') || message.content.includes('mockup_art'))) preview = isEn ? '🧸 Sticker' : '🧸 Stiker';
+        else preview = isEn ? '📷 Photo' : '📷 Foto';
       }
       else if (message.type === 'video') preview = '🎥 Video';
       replySnippet.textContent = preview.length > 50 ? preview.substring(0, 47) + '...' : preview;
@@ -900,11 +1230,72 @@
     if (!message) return;
     selectedActionMessage = message;
     const modal = document.getElementById('modal-message-actions');
-    const preview = document.getElementById('msg-action-preview-text');
-    if (preview) {
-      const text = getMessageCopyText(message);
-      preview.textContent = text.length > 80 ? text.substring(0, 77) + '...' : text;
+    const previewText = document.getElementById('msg-action-preview-text');
+    const stickerPreview = document.getElementById('msg-action-sticker-preview');
+    const stickerImg = document.getElementById('msg-action-sticker-img');
+    const stickerTitle = document.getElementById('msg-action-sticker-title');
+    const actionsSticker = document.getElementById('msg-actions-sticker');
+    const actionsNormal = document.getElementById('msg-actions-normal');
+    const modalTitle = document.getElementById('msg-actions-title');
+
+    const isSticker = isStickerMessage(message);
+
+    if (isSticker) {
+      if (stickerPreview) stickerPreview.classList.remove('hidden');
+      if (actionsSticker) {
+        actionsSticker.classList.remove('hidden');
+        actionsSticker.classList.add('grid');
+      }
+      if (previewText) previewText.classList.add('hidden');
+      if (actionsNormal) actionsNormal.classList.add('hidden');
+
+      if (stickerImg) {
+        const src = getStickerMediaSrc(message);
+        stickerImg.src = src;
+
+        const isFav = isFavoriteSticker(src);
+        const favIcon = document.getElementById('icon-stk-action-fav');
+        const favLabel = document.getElementById('label-stk-action-fav');
+        const lang = window.DuduI18n?.getLanguage?.() || 'id';
+        const isEn = lang === 'en';
+        if (favIcon) {
+          favIcon.textContent = isFav ? 'star' : 'star_outline';
+          favIcon.className = `material-symbols-outlined text-base ${isFav ? 'text-amber-500' : 'text-[#8D5B4C] dark:text-stone-300'}`;
+        }
+        if (favLabel) {
+          favLabel.textContent = isFav ? (isEn ? 'Favorited' : 'Disukai') : (isEn ? 'Favorite' : 'Favorit');
+        }
+      }
+      if (stickerTitle) {
+        stickerTitle.textContent = getStickerMediaTitle(message);
+      }
+      if (modalTitle) {
+        modalTitle.setAttribute('data-i18n', 'stk_options');
+        const lang = window.DuduI18n?.getLanguage?.() || 'id';
+        modalTitle.textContent = lang === 'en' ? 'Sticker Options' : 'Opsi Stiker';
+      }
+    } else {
+      if (stickerPreview) stickerPreview.classList.add('hidden');
+      if (actionsSticker) {
+        actionsSticker.classList.add('hidden');
+        actionsSticker.classList.remove('grid');
+      }
+      if (previewText) {
+        previewText.classList.remove('hidden');
+        const text = getMessageCopyText(message);
+        previewText.textContent = text.length > 80 ? text.substring(0, 77) + '...' : text;
+      }
+      if (actionsNormal) actionsNormal.classList.remove('hidden');
+
+      if (stickerImg) stickerImg.src = '';
+      if (stickerTitle) stickerTitle.textContent = '';
+      if (modalTitle) {
+        modalTitle.setAttribute('data-i18n', 'msg_options');
+        const lang = window.DuduI18n?.getLanguage?.() || 'id';
+        modalTitle.textContent = lang === 'en' ? 'Message Options' : 'Opsi Pesan';
+      }
     }
+
     if (modal) modal.classList.remove('hidden');
     window.duduAudio?.playPop?.(400);
   }
@@ -912,6 +1303,8 @@
   function closeMsgActionsModal() {
     const modal = document.getElementById('modal-message-actions');
     if (modal) modal.classList.add('hidden');
+    const stickerImg = document.getElementById('msg-action-sticker-img');
+    if (stickerImg) stickerImg.src = '';
     selectedActionMessage = null;
   }
 
@@ -1079,7 +1472,10 @@
       console.error('[ChatUI] Download error:', err);
       if (label) label.textContent = 'Failed (Retry)';
       if (btn) btn.disabled = false;
-      if (window.showToast) window.showToast('Download failed');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Download failed' : 'Gagal mengunduh');
+      }
     }
   }
 
@@ -1120,7 +1516,10 @@
 
     if (isSelectionMode) {
       if (bar) bar.classList.remove('hidden');
-      if (countEl) countEl.textContent = `${selectedMessageIds.size} selected`;
+      if (countEl) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        countEl.textContent = isEn ? `${selectedMessageIds.size} selected` : `${selectedMessageIds.size} dipilih`;
+      }
     } else {
       if (bar) bar.classList.add('hidden');
     }
@@ -1187,7 +1586,10 @@
       exitSelectionMode();
     }
     const targetSess = activeSessions.find(s => s.id === targetSessionId);
-    if (window.showToast) window.showToast(`Forwarded ${count} message(s) to "${targetSess?.title || 'Topic'}"!`);
+    if (window.showToast) {
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
+      window.showToast(isEn ? `Forwarded ${count} message(s) to "${targetSess?.title || 'Topic'}"!` : `Diteruskan ${count} pesan ke "${targetSess?.title || 'Topik'}"!`);
+    }
     window.duduAudio?.playSparkle?.();
   }
 
@@ -1226,7 +1628,10 @@
 
     if (showFeedback) {
       const targetSess = activeSessions.find(s => s.id === targetSessionId);
-      if (window.showToast) window.showToast(`Forwarded to "${targetSess?.title || 'Topic'}"!`);
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? `Forwarded to "${targetSess?.title || 'Topic'}"!` : `Diteruskan ke "${targetSess?.title || 'Topik'}"!`);
+      }
       window.duduAudio?.playSparkle?.();
     }
   }
@@ -1239,10 +1644,11 @@
     const modal = document.getElementById('modal-delete-message-confirm');
     const textEl = document.getElementById('delete-message-confirm-text');
     if (textEl) {
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
       if (pendingDeleteMessageIds.length === 1) {
-        textEl.textContent = 'Are you sure you want to delete this message? This cannot be undone.';
+        textEl.textContent = isEn ? 'Are you sure you want to delete this message? This cannot be undone.' : 'Apakah kamu yakin ingin menghapus pesan ini? Tindakan ini tidak dapat dibatalkan.';
       } else {
-        textEl.textContent = `Are you sure you want to delete ${pendingDeleteMessageIds.length} messages? This cannot be undone.`;
+        textEl.textContent = isEn ? `Are you sure you want to delete ${pendingDeleteMessageIds.length} messages? This cannot be undone.` : `Apakah kamu yakin ingin menghapus ${pendingDeleteMessageIds.length} pesan? Tindakan ini tidak dapat dibatalkan.`;
       }
     }
     if (modal) modal.classList.remove('hidden');
@@ -1295,7 +1701,10 @@
 
     window.duduAudio?.playPop?.(300);
     if (window.showToast) {
-      window.showToast(count === 1 ? 'Message deleted' : `Deleted ${count} messages`);
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
+      window.showToast(isEn
+        ? (count === 1 ? 'Message deleted' : `Deleted ${count} messages`)
+        : (count === 1 ? 'Pesan dihapus' : `${count} pesan dihapus`));
     }
   }
 
@@ -1365,15 +1774,23 @@
       const stickerId = parseInt(msg.content, 10);
       const sticker = window.DuduTaxonomy?.getById(stickerId) || window.DUDU_STICKERS?.[0];
       const stickerFile = sticker ? sticker.file : 'STK-20260925-WA0187.webp';
+      const isCouple = sticker && COUPLE_STICKER_IDS.has(sticker.id);
+      const stickerFolder = isCouple ? 'assets/stickers_couple' : 'assets/stickers_dudu';
       contentHtml = `
         <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
-          <img src="Dudu Stickers/${stickerFile}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm">
+          <img src="${stickerFolder}/${stickerFile}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
         </div>
       `;
     } else if (isGifOrStickerImg) {
+      let imgSrc = msg.content;
+      if (typeof imgSrc === 'string' && imgSrc.includes('assets/stickers_gif/')) {
+        const base = imgSrc.split('/').pop().replace('.gif', '.webp');
+        const isCpl = typeof COUPLE_STICKER_FILES !== 'undefined' && COUPLE_STICKER_FILES.has(base);
+        imgSrc = isCpl ? `assets/stickers_couple/${base}` : `assets/stickers_dudu/${base}`;
+      }
       contentHtml = `
         <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
-          <img src="${msg.content}" alt="Sticker Animasi" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm">
+          <img src="${imgSrc}" alt="Sticker Animasi" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
         </div>
       `;
     } else if (msg.type === 'image') {
@@ -1554,7 +1971,10 @@
     if (!text) return;
 
     if (!activeSessionId) {
-      if (window.showToast) window.showToast('Please create a topic first!');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Please create a topic first!' : 'Silakan buat topik terlebih dahulu!');
+      }
       return;
     }
 
@@ -1587,7 +2007,10 @@
 
   async function sendStickerMessage(stickerId) {
     if (!activeSessionId) {
-      if (window.showToast) window.showToast('Please create a topic first!');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Please create a topic first!' : 'Silakan buat topik terlebih dahulu!');
+      }
       return;
     }
 
@@ -1646,7 +2069,10 @@
   async function sendMediaMessage(file) {
     if (!file) return;
     if (!activeSessionId) {
-      if (window.showToast) window.showToast('Please create a topic first!');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Please create a topic first!' : 'Silakan buat topik terlebih dahulu!');
+      }
       return;
     }
 
@@ -1659,12 +2085,13 @@
 
     // Route large files (>256KB) or non-media attachments to chunked encrypted blob system
     if (file.size > 256 * 1024 || (!isVideo && !isImage)) {
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
       if (file.size > 200 * 1024 * 1024) {
-        if (window.showToast) window.showToast('File too large (max 200MB)');
+        if (window.showToast) window.showToast(isEn ? 'File too large (max 200MB)' : 'File terlalu besar (maks 200MB)');
         return;
       }
 
-      if (window.showToast) window.showToast(`Encrypting & uploading ${file.name || 'file'}...`);
+      if (window.showToast) window.showToast(isEn ? `Encrypting & uploading ${file.name || 'file'}...` : `Mengenkripsi & mengunggah ${file.name || 'file'}...`);
 
       try {
         if (!activeCryptoKey) await updateCryptoKey();
@@ -1696,10 +2123,10 @@
 
         await handleOutboundMessage(message);
         window.duduAudio?.playPop?.(520);
-        if (window.showToast) window.showToast('Encrypted media sent!');
+        if (window.showToast) window.showToast(isEn ? 'Encrypted media sent!' : 'Media terenkripsi terkirim!');
       } catch (err) {
         console.error('[ChatUI] Blob upload error:', err);
-        if (window.showToast) window.showToast('Failed to upload file');
+        if (window.showToast) window.showToast(isEn ? 'Failed to upload file' : 'Gagal mengunggah file');
       }
       return;
     }
@@ -1727,7 +2154,10 @@
         reader.readAsDataURL(file);
       } catch (err) {
         console.error('[ChatUI] Video processing error:', err);
-        if (window.showToast) window.showToast('Could not process video');
+        if (window.showToast) {
+          const isEn = window.DuduI18n?.getLanguage() === 'en';
+          window.showToast(isEn ? 'Could not process video' : 'Tidak dapat memproses video');
+        }
       }
       return;
     }
@@ -1750,7 +2180,10 @@
       window.duduAudio?.playPop?.(520);
     } catch (err) {
       console.error('[ChatUI] Photo processing error:', err);
-      if (window.showToast) window.showToast('Could not process photo');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Could not process photo' : 'Tidak dapat memproses foto');
+      }
     }
   }
 
@@ -2092,7 +2525,8 @@
       await DuduChatStorage.saveSession(topic);
       await loadSessions();
       if (window.showToast) {
-        window.showToast(`New topic: ${topic.title || 'Topic'}`);
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? `New topic: ${topic.title || 'Topic'}` : `Topik baru: ${topic.title || 'Topik'}`);
       }
       window.duduAudio?.playSparkle?.();
     });
@@ -2182,169 +2616,22 @@
 
   // --- Sticker Tray Drawer ---
 
-  const COUPLE_STICKER_IDS = new Set([
-    37, 41, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 58, 60, 61, 63, 64, 65, 71, 75, 76, 88, 89, 94
-  ]);
-
-  const BUBU_STICKERS = [
-    { id: 'bubu_1', file: 'assets/stickers_bubu/bubu_love_heart.png', title_en: 'Bubu Love Heart', title_id: 'Bubu Peluk Hati Cinta', title: 'Bubu Love Heart', cat: 'bubu' },
-    { id: 'bubu_2', file: 'assets/stickers_bubu/bubu_wave_hello.png', title_en: 'Bubu Wave Hello', title_id: 'Bubu Halo Sayang', title: 'Bubu Wave Hello', cat: 'bubu' },
-    { id: 'bubu_3', file: 'assets/stickers_bubu/bubu_boba_tea.png', title_en: 'Bubu Boba Milk Tea', title_id: 'Bubu Minum Boba', title: 'Bubu Boba Milk Tea', cat: 'bubu' },
-    { id: 'bubu_4', file: 'assets/stickers_bubu/bubu_eating_bamboo.png', title_en: 'Bubu Sweet Bamboo', title_id: 'Bubu Makan Bambu', title: 'Bubu Sweet Bamboo', cat: 'bubu' },
-    { id: 'bubu_5', file: 'assets/stickers_bubu/bubu_sleep_cloud.png', title_en: 'Bubu Sleep on Cloud', title_id: 'Bubu Bobo di Awan', title: 'Bubu Sleep on Cloud', cat: 'bubu' },
-    { id: 'bubu_6', file: 'assets/stickers_bubu/bubu_flying_kiss.png', title_en: 'Bubu Flying Kiss', title_id: 'Bubu Cium Jauh', title: 'Bubu Flying Kiss', cat: 'bubu' },
-    { id: 'bubu_7', file: 'assets/stickers_bubu/bubu_pout_ngambek.png', title_en: 'Bubu Cute Pout', title_id: 'Bubu Ngambek Imut', title: 'Bubu Cute Pout', cat: 'bubu' },
-    { id: 'bubu_8', file: 'assets/stickers_bubu/bubu_happy_dance.png', title_en: 'Bubu Happy Dance', title_id: 'Bubu Goyang Ceria', title: 'Bubu Happy Dance', cat: 'bubu' },
-    { id: 'bubu_9', file: 'assets/stickers_bubu/bubu_crying_baby.png', title_en: 'Bubu Sparkle Tears', title_id: 'Bubu Tangis Bahagia', title: 'Bubu Sparkle Tears', cat: 'bubu' },
-    { id: 'bubu_10', file: 'assets/stickers_bubu/bubu_blanket_burrito.png', title_en: 'Bubu Cozy Burrito', title_id: 'Bubu Selimut Hangat', title: 'Bubu Cozy Burrito', cat: 'bubu' },
-    { id: 'bubu_11', file: 'assets/stickers_bubu/bubu_shy_peek.png', title_en: 'Bubu Shy Peek', title_id: 'Bubu Mengintip Malu', title: 'Bubu Shy Peek', cat: 'bubu' },
-    { id: 'bubu_12', file: 'assets/stickers_bubu/bubu_sparkle_excited.png', title_en: 'Bubu Starry Excited', title_id: 'Bubu Bintang Berbinar', title: 'Bubu Starry Excited', cat: 'bubu' },
-    { id: 'bubu_13', file: 'assets/stickers_bubu/bubu_eat_strawberry.png', title_en: 'Bubu Sweet Strawberry', title_id: 'Bubu Makan Stroberi', title: 'Bubu Sweet Strawberry', cat: 'bubu' },
-    { id: 'bubu_14', file: 'assets/stickers_bubu/bubu_flower_crown.png', title_en: 'Bubu Flower Crown', title_id: 'Bubu Mahkota Bunga', title: 'Bubu Flower Crown', cat: 'bubu' },
-    { id: 'bubu_15', file: 'assets/stickers_bubu/bubu_cheering_pompoms.png', title_en: 'Bubu Cheering Pom-Poms', title_id: 'Bubu Sorak Semangat', title: 'Bubu Cheering Pom-Poms', cat: 'bubu' }
-  ];
-
-  const COUPLE_ART_STICKERS = [
-    { id: 'cpl_1', file: 'assets/stickers_couple/couple_warm_hug.png', title_en: 'Warm Loving Hug', title_id: 'Pelukan Hangat Berdua', title: 'Warm Loving Hug', cat: 'couple' },
-    { id: 'cpl_2', file: 'assets/stickers_couple/couple_cheek_squish.png', title_en: 'Sweet Cheek Squish', title_id: 'Cubitan Pipi Manis', title: 'Sweet Cheek Squish', cat: 'couple' },
-    { id: 'cpl_3', file: 'assets/stickers_couple/couple_sleeping_cloud.png', title_en: 'Sleeping on Cloud', title_id: 'Tidur Berdua di Awan', title: 'Sleeping on Cloud', cat: 'couple' },
-    { id: 'cpl_4', file: 'assets/stickers_couple/couple_share_boba.png', title_en: 'Sharing Boba Tea', title_id: 'Bagi Boba Berdua', title: 'Sharing Boba Tea', cat: 'couple' },
-    { id: 'cpl_5', file: 'assets/stickers_couple/couple_forehead_kiss.png', title_en: 'Tender Forehead Kiss', title_id: 'Cium Kening Mesra', title: 'Tender Forehead Kiss', cat: 'couple' },
-    { id: 'cpl_6', file: 'assets/stickers_couple/couple_piggyback.png', title_en: 'Sweet Piggyback Ride', title_id: 'Gendong Punggung Manis', title: 'Sweet Piggyback Ride', cat: 'couple' },
-    { id: 'cpl_7', file: 'assets/stickers_couple/couple_umbrella_rain.png', title_en: 'Sharing Leaf Umbrella', title_id: 'Payung Daun Berdua', title: 'Sharing Leaf Umbrella', cat: 'couple' },
-    { id: 'cpl_8', file: 'assets/stickers_couple/couple_eating_pizza.png', title_en: 'Cozy Pizza Date', title_id: 'Makan Pizza Bersama', title: 'Cozy Pizza Date', cat: 'couple' },
-    { id: 'cpl_9', file: 'assets/stickers_couple/couple_game_switch.png', title_en: 'Nintendo Switch Gaming', title_id: 'Main Game Berdua', title: 'Nintendo Switch Gaming', cat: 'couple' },
-    { id: 'cpl_10', file: 'assets/stickers_couple/couple_head_pat.png', title_en: 'Gentle Head Pat', title_id: 'Elusan Kepala Lembut', title: 'Gentle Head Pat', cat: 'couple' },
-    { id: 'cpl_11', file: 'assets/stickers_couple/couple_holding_hands.png', title_en: 'Holding Hands Happily', title_id: 'Gandengan Tangan Bahagia', title: 'Holding Hands Happily', cat: 'couple' },
-    { id: 'cpl_12', file: 'assets/stickers_couple/couple_blanket_cuddle.png', title_en: 'Warm Blanket Cuddle', title_id: 'Selimutan Hangat Berdua', title: 'Warm Blanket Cuddle', cat: 'couple' }
-  ];
-
-  const DUDU_ART_STICKERS = [
-    { id: 'dudu_1', file: 'assets/stickers_dudu/dudu_giving_rose.png', title_en: 'Dudu Giving Red Rose', title_id: 'Dudu Kasih Mawar Merah', title: 'Dudu Giving Red Rose', cat: 'dudu' },
-    { id: 'dudu_2', file: 'assets/stickers_dudu/dudu_big_heart.png', title_en: 'Dudu Big Red Heart', title_id: 'Dudu Peluk Hati Merah', title: 'Dudu Big Red Heart', cat: 'dudu' },
-    { id: 'dudu_3', file: 'assets/stickers_dudu/dudu_shy_peek.png', title_en: 'Dudu Shy Wall Peek', title_id: 'Dudu Mengintip Malu', title: 'Dudu Shy Wall Peek', cat: 'dudu' },
-    { id: 'dudu_4', file: 'assets/stickers_dudu/dudu_hungry_burger.png', title_en: 'Dudu Hungry Burger', title_id: 'Dudu Ingin Burger', title: 'Dudu Hungry Burger', cat: 'dudu' },
-    { id: 'dudu_5', file: 'assets/stickers_dudu/dudu_thumbs_up.png', title_en: 'Dudu Big Thumbs Up', title_id: 'Dudu Jempol Mantap', title: 'Dudu Big Thumbs Up', cat: 'dudu' },
-    { id: 'dudu_6', file: 'assets/stickers_dudu/dudu_sleepy_yawn.png', title_en: 'Dudu Sleepy Yawn', title_id: 'Dudu Mengantuk Menguap', title: 'Dudu Sleepy Yawn', cat: 'dudu' },
-    { id: 'dudu_7', file: 'assets/stickers_dudu/dudu_crying_sniff.png', title_en: 'Dudu Crying Sniffle', title_id: 'Dudu Menangis Terharu', title: 'Dudu Crying Sniffle', cat: 'dudu' },
-    { id: 'dudu_8', file: 'assets/stickers_dudu/dudu_cool_sunglasses.png', title_en: 'Dudu Cool Sunglasses', title_id: 'Dudu Kacamata Keren', title: 'Dudu Cool Sunglasses', cat: 'dudu' },
-    { id: 'dudu_9', file: 'assets/stickers_dudu/dudu_studying_laptop.png', title_en: 'Dudu Hardworking Laptop', title_id: 'Dudu Bekerja Laptop', title: 'Dudu Hardworking Laptop', cat: 'dudu' },
-    { id: 'dudu_10', file: 'assets/stickers_dudu/dudu_panic_sweat.png', title_en: 'Dudu Panic Sweat', title_id: 'Dudu Panik Kaget', title: 'Dudu Panic Sweat', cat: 'dudu' },
-    { id: 'dudu_11', file: 'assets/stickers_dudu/dudu_boba_cheers.png', title_en: 'Dudu Boba Cheers', title_id: 'Dudu Bersulang Boba', title: 'Dudu Boba Cheers', cat: 'dudu' },
-    { id: 'dudu_12', file: 'assets/stickers_dudu/dudu_cheer_pompoms.png', title_en: 'Dudu Cheering Pom-Poms', title_id: 'Dudu Sorak Semangat', title: 'Dudu Cheering Pom-Poms', cat: 'dudu' },
-    { id: 'dudu_13', file: 'assets/stickers_dudu/dudu_belly_pat.png', title_en: 'Dudu Full Tummy Pat', title_id: 'Dudu Kenyang Tepuk Perut', title: 'Dudu Full Tummy Pat', cat: 'dudu' },
-    { id: 'dudu_14', file: 'assets/stickers_dudu/dudu_confused_scratch.png', title_en: 'Dudu Confused Scratch', title_id: 'Dudu Bingung Garuk Kepala', title: 'Dudu Confused Scratch', cat: 'dudu' },
-    { id: 'dudu_15', file: 'assets/stickers_dudu/dudu_guitar_serenade.png', title_en: 'Dudu Guitar Love Serenade', title_id: 'Dudu Main Gitar Lagu Cinta', title: 'Dudu Guitar Love Serenade', cat: 'dudu' }
-  ];
-
-const DUDU_GIF_STICKERS = [
-    { id: 0, file: 'assets/stickers_gif/STK-20260925-WA0187.gif', title: 'Dudu Cute Wiggle Dance', cat: 'dudu' },
-    { id: 1, file: 'assets/stickers_gif/STK-20260925-WA0188.gif', title: 'Dudu Suspicious Side-Eye', cat: 'dudu' },
-    { id: 2, file: 'assets/stickers_gif/STK-20260925-WA0208.gif', title: 'Dudu Butterfly Chilling', cat: 'dudu' },
-    { id: 3, file: 'assets/stickers_gif/STK-20260926-WA0047.gif', title: 'Dudu Shy Wall Peek', cat: 'dudu' },
-    { id: 4, file: 'assets/stickers_gif/STK-20260926-WA0050.gif', title: 'Dudu Sick Tummy In Bed', cat: 'dudu' },
-    { id: 5, file: 'assets/stickers_gif/STK-20260926-WA0056.gif', title: 'Dudu Hip-Shake Wiggle Dance', cat: 'dudu' },
-    { id: 6, file: 'assets/stickers_gif/STK-20260926-WA0103.gif', title: 'Dudu Nibbling Crunchy Nuts', cat: 'dudu' },
-    { id: 7, file: 'assets/stickers_gif/STK-20260926-WA0128.gif', title: 'Dudu Blushing Emotional Tears', cat: 'dudu' },
-    { id: 8, file: 'assets/stickers_gif/STK-20260926-WA0176.gif', title: 'Dudu Angrily Chugging Milk Tea', cat: 'dudu' },
-    { id: 9, file: 'assets/stickers_gif/STK-20260927-WA0005.gif', title: 'Dudu Giving Red Rose', cat: 'dudu' },
-    { id: 10, file: 'assets/stickers_gif/STK-20260927-WA0006.gif', title: 'Dudu Soft Floating Gaze', cat: 'dudu' },
-    { id: 11, file: 'assets/stickers_gif/STK-20260927-WA0015.gif', title: 'Dudu Empty Piggy Bank', cat: 'dudu' },
-    { id: 12, file: 'assets/stickers_gif/STK-20260929-WA0000.gif', title: 'Dudu Twiddling Thumbs Guilty', cat: 'dudu' },
-    { id: 13, file: 'assets/stickers_gif/STK-20260929-WA0001.gif', title: 'Dudu Hug Baby Dont Cry', cat: 'dudu' },
-    { id: 14, file: 'assets/stickers_gif/STK-20260929-WA0002.gif', title: 'Dudu Head Pat Comfort', cat: 'dudu' },
-    { id: 15, file: 'assets/stickers_gif/STK-20260929-WA0003.gif', title: 'Dudu Flat Potato Rest', cat: 'dudu' },
-    { id: 16, file: 'assets/stickers_gif/STK-20260929-WA0035.gif', title: 'Dudu Warm Snuggle Squeeze', cat: 'dudu' },
-    { id: 17, file: 'assets/stickers_gif/STK-20260929-WA0063.gif', title: 'Dudu Back Massage Service', cat: 'dudu' },
-    { id: 18, file: 'assets/stickers_gif/STK-20260930-WA0024.gif', title: 'Dudu Belly Up Nap', cat: 'dudu' },
-    { id: 19, file: 'assets/stickers_gif/STK-20260930-WA0037.gif', title: 'Dudu Ready for Date', cat: 'dudu' },
-    { id: 20, file: 'assets/stickers_gif/STK-20260930-WA0048.gif', title: 'Dudu Raincoat Puddle Nap', cat: 'dudu' },
-    { id: 21, file: 'assets/stickers_gif/STK-20260930-WA0057.gif', title: 'Dudu Intense Gamer', cat: 'dudu' },
-    { id: 22, file: 'assets/stickers_gif/STK-20260930-WA0071.gif', title: 'Dudu Bee Honey Drink', cat: 'dudu' },
-    { id: 23, file: 'assets/stickers_gif/STK-20260930-WA0075.gif', title: 'Dudu Heartbroken Tears', cat: 'dudu' },
-    { id: 24, file: 'assets/stickers_gif/STK-20260930-WA0076.gif', title: 'Dudu Sweet Shaved Ice', cat: 'dudu' },
-    { id: 25, file: 'assets/stickers_gif/STK-20260930-WA0081.gif', title: 'Dudu Inside Cozy Box', cat: 'dudu' },
-    { id: 26, file: 'assets/stickers_gif/STK-20260930-WA0091.gif', title: 'Dudu Pool of Tears Spill', cat: 'dudu' },
-    { id: 27, file: 'assets/stickers_gif/STK-20260930-WA0100.gif', title: 'Dudu Pouting Tears Wu-Wu', cat: 'dudu' },
-    { id: 28, file: 'assets/stickers_gif/STK-20260930-WA0101.gif', title: 'Dudu Joyful Floating Hearts', cat: 'dudu' },
-    { id: 29, file: 'assets/stickers_gif/STK-20260930-WA0102.gif', title: 'Dudu Remorseful Hanky Sniffle', cat: 'dudu' },
-    { id: 30, file: 'assets/stickers_gif/STK-20260930-WA0107.gif', title: 'Dudu Giant Fluffy Rice Bowl', cat: 'dudu' },
-    { id: 31, file: 'assets/stickers_gif/STK-20260930-WA0108.gif', title: 'Dudu Superhero Cape', cat: 'dudu' },
-    { id: 32, file: 'assets/stickers_gif/STK-20260930-WA0109.gif', title: 'Dudu Bumblebee Lemon Tea', cat: 'dudu' },
-    { id: 33, file: 'assets/stickers_gif/STK-20260930-WA0111.gif', title: 'Dudu Sleeping Eye Mask', cat: 'dudu' },
-    { id: 34, file: 'assets/stickers_gif/STK-20260930-WA0112.gif', title: 'Dudu Sweet Finger Heart', cat: 'dudu' },
-    { id: 35, file: 'assets/stickers_gif/STK-20260930-WA0116.gif', title: 'Dudu Snoozing On Cushion', cat: 'dudu' },
-    { id: 36, file: 'assets/stickers_gif/STK-20260930-WA0148.gif', title: 'Dudu Satisfied Tummy Burp', cat: 'dudu' },
-    { id: 37, file: 'assets/stickers_gif/STK-20261001-WA0010.gif', title: 'Bubu Piggyback Ride On Dudu', cat: 'couple' },
-    { id: 38, file: 'assets/stickers_gif/STK-20261001-WA0015.gif', title: 'Dudu Boxing Gloves Battle', cat: 'dudu' },
-    { id: 39, file: 'assets/stickers_gif/STK-20261001-WA0020.gif', title: 'Dudu Strict Violation Notebook', cat: 'dudu' },
-    { id: 40, file: 'assets/stickers_gif/STK-20261001-WA0022.gif', title: 'Dudu Looking Back Cute', cat: 'dudu' },
-    { id: 41, file: 'assets/stickers_gif/STK-20261001-WA0023.gif', title: 'Dudu Tender Bed Snuggle', cat: 'couple' },
-    { id: 42, file: 'assets/stickers_gif/STK-20261001-WA0028.gif', title: 'Dudu Giant Rose Bouquet', cat: 'dudu' },
-    { id: 43, file: 'assets/stickers_gif/STK-20261001-WA0030.gif', title: 'Sweet Cheek Pet With Hearts', cat: 'couple' },
-    { id: 44, file: 'assets/stickers_gif/STK-20261001-WA0039.gif', title: 'Bubu Massaging Tired Dudu', cat: 'couple' },
-    { id: 45, file: 'assets/stickers_gif/STK-20261001-WA0040.gif', title: 'Dudu & Bubu Eating Meal Together', cat: 'couple' },
-    { id: 46, file: 'assets/stickers_gif/STK-20261001-WA0041.gif', title: 'Romantic Head Nuzzle Hug', cat: 'couple' },
-    { id: 47, file: 'assets/stickers_gif/STK-20261001-WA0043.gif', title: 'Sweet Tight Hug', cat: 'couple' },
-    { id: 48, file: 'assets/stickers_gif/STK-20261001-WA0044.gif', title: 'Cheeks Rubbing Together', cat: 'couple' },
-    { id: 49, file: 'assets/stickers_gif/STK-20261001-WA0045.gif', title: 'Sweet Forehead Kiss', cat: 'couple' },
-    { id: 50, file: 'assets/stickers_gif/STK-20261001-WA0047.gif', title: 'Playful Wrestling Match', cat: 'couple' },
-    { id: 51, file: 'assets/stickers_gif/STK-20261001-WA0048.gif', title: 'Funny Hair Curlers Salon', cat: 'couple' },
-    { id: 52, file: 'assets/stickers_gif/STK-20261001-WA0049.gif', title: 'Affectionate Back Hug Cuddle', cat: 'couple' },
-    { id: 53, file: 'assets/stickers_gif/STK-20261001-WA0050.gif', title: 'Resting Head On Shoulder', cat: 'couple' },
-    { id: 54, file: 'assets/stickers_gif/STK-20261001-WA0052.gif', title: 'Dudu Gentle Back Rub', cat: 'couple' },
-    { id: 55, file: 'assets/stickers_gif/STK-20261001-WA0059.gif', title: 'Dudu Blanket Peek-a-boo', cat: 'dudu' },
-    { id: 56, file: 'assets/stickers_gif/STK-20261001-WA0061.gif', title: 'Movie Date Popcorn & Laptop', cat: 'couple' },
-    { id: 57, file: 'assets/stickers_gif/STK-20261001-WA0062.gif', title: 'Sweet Dream Flower Sleep', cat: 'dudu' },
-    { id: 58, file: 'assets/stickers_gif/STK-20261001-WA0063.gif', title: 'Dudu Tender Paw Massage', cat: 'couple' },
-    { id: 59, file: 'assets/stickers_gif/STK-20261001-WA0065.gif', title: 'Dudu Pity Tear Drops', cat: 'dudu' },
-    { id: 60, file: 'assets/stickers_gif/STK-20261002-WA0057.gif', title: 'Cheek Squish Pinch Petting', cat: 'couple' },
-    { id: 61, file: 'assets/stickers_gif/STK-20261003-WA0005.gif', title: 'Big Hug Hug Dont Cry', cat: 'couple' },
-    { id: 62, file: 'assets/stickers_gif/STK-20261003-WA0033.gif', title: 'Dudu Patient Pillow Wait', cat: 'dudu' },
-    { id: 63, file: 'assets/stickers_gif/STK-20261003-WA0034.gif', title: 'Caught Playing Phone Scolding', cat: 'couple' },
-    { id: 64, file: 'assets/stickers_gif/STK-20261003-WA0036.gif', title: 'Tiger Hat Head Pat', cat: 'couple' },
-    { id: 65, file: 'assets/stickers_gif/STK-20261003-WA0037.gif', title: 'Bubu Lifting Up Dudu', cat: 'couple' },
-    { id: 66, file: 'assets/stickers_gif/STK-20261003-WA0038.gif', title: 'Dudu Begging For Kisses', cat: 'dudu' },
-    { id: 67, file: 'assets/stickers_gif/STK-20261003-WA0040.gif', title: 'Dudu Clean Bowl Feast', cat: 'dudu' },
-    { id: 68, file: 'assets/stickers_gif/STK-20261003-WA0041.gif', title: 'Winter Stroll Duck Pouch', cat: 'dudu' },
-    { id: 69, file: 'assets/stickers_gif/STK-20261003-WA0043.gif', title: 'Boba Sip Relax Lazy', cat: 'dudu' },
-    { id: 70, file: 'assets/stickers_gif/STK-20261004-WA0016.gif', title: 'Dudu Reading Storybook', cat: 'dudu' },
-    { id: 71, file: 'assets/stickers_gif/STK-20261004-WA0019.gif', title: 'Wake Up Slap Shake Sense', cat: 'couple' },
-    { id: 72, file: 'assets/stickers_gif/STK-20261005-WA0021.gif', title: 'Dudu Offering Pocket Bear', cat: 'dudu' },
-    { id: 73, file: 'assets/stickers_gif/STK-20261005-WA0024.gif', title: 'Giant Monster Burger Craving', cat: 'dudu' },
-    { id: 74, file: 'assets/stickers_gif/STK-20261005-WA0028.gif', title: 'Dudu Love Finger Gun Biu-Biu', cat: 'dudu' },
-    { id: 75, file: 'assets/stickers_gif/STK-20261005-WA0030.gif', title: 'Sweet Soft Cheek Caress', cat: 'couple' },
-    { id: 76, file: 'assets/stickers_gif/STK-20261005-WA0033.gif', title: 'Squishy Cheek Stretch', cat: 'couple' },
-    { id: 77, file: 'assets/stickers_gif/STK-20261005-WA0038.gif', title: 'Dudu Holding Blue Fish Slacking', cat: 'dudu' },
-    { id: 78, file: 'assets/stickers_gif/STK-20261005-WA0043.gif', title: 'Dudu Resting Head On Desk', cat: 'dudu' },
-    { id: 79, file: 'assets/stickers_gif/STK-20261005-WA0044.gif', title: 'Dudu Water Gun Battle', cat: 'dudu' },
-    { id: 80, file: 'assets/stickers_gif/STK-20261005-WA0078.gif', title: 'Dudu Shocked Warning Alert', cat: 'dudu' },
-    { id: 81, file: 'assets/stickers_gif/STK-20261005-WA0079.gif', title: 'Dudu Fries & Soda Guilty Snack', cat: 'dudu' },
-    { id: 82, file: 'assets/stickers_gif/STK-20261005-WA0080.gif', title: 'Dudu Smiling Texting Screen', cat: 'dudu' },
-    { id: 83, file: 'assets/stickers_gif/STK-20261006-WA0005.gif', title: 'Dudu Romantic Finger Heart', cat: 'dudu' },
-    { id: 84, file: 'assets/stickers_gif/STK-20261007-WA0001.gif', title: 'Dudu Chalkboard I Love You', cat: 'dudu' },
-    { id: 85, file: 'assets/stickers_gif/STK-20261007-WA0013.gif', title: 'Dudu Exhausted Slump', cat: 'dudu' },
-    { id: 86, file: 'assets/stickers_gif/STK-20261008-WA0014.gif', title: 'Dudu Extreme Close-Up Boop', cat: 'dudu' },
-    { id: 87, file: 'assets/stickers_gif/STK-20261008-WA0018.gif', title: 'Dudu Drooling Craving Food', cat: 'dudu' },
-    { id: 88, file: 'assets/stickers_gif/STK-20261008-WA0019.gif', title: 'Sweet Nuzzle Snout Boop', cat: 'couple' },
-    { id: 89, file: 'assets/stickers_gif/STK-20261008-WA0020.gif', title: 'Sweet Couple Sleeping Cloud', cat: 'couple' },
-    { id: 90, file: 'assets/stickers_gif/STK-20261008-WA0040.gif', title: 'Dudu Cozy Sofa Working Laptop', cat: 'dudu' },
-    { id: 91, file: 'assets/stickers_gif/STK-20261008-WA0055.gif', title: 'Dudu Warm Milk Baby Topknot', cat: 'dudu' },
-    { id: 92, file: 'assets/stickers_gif/STK-20261008-WA0056.gif', title: 'Dudu Reflecting Under Blanket', cat: 'dudu' },
-    { id: 93, file: 'assets/stickers_gif/STK-20261008-WA0057.gif', title: 'Dudu Tucked in Starry Duvet', cat: 'dudu' },
-    { id: 94, file: 'assets/stickers_gif/STK-20261009-WA0015.gif', title: 'Cute Cheerful Cheek Pinch', cat: 'couple' }
-  ];
-
-  function getStickerCategory(s) {
-    if (s.cat) return s.cat;
-    if (typeof s.id === 'number' && COUPLE_STICKER_IDS.has(s.id)) return 'couple';
-    if (typeof s.id === 'string' && s.id.startsWith('bubu')) return 'bubu';
-    if (typeof s.id === 'string' && s.id.startsWith('cpl')) return 'couple';
-    return 'dudu';
-  }
+  // Animated stickers list mapped to optimized WebP assets in assets/
+  const DUDU_GIF_STICKERS = (window.DUDU_STICKERS || []).map(s => ({
+    id: s.id,
+    file: getStickerFilePath(s),
+    title: s.title,
+    title_en: s.title,
+    title_id: s.title,
+    cat: getStickerCategory(s)
+  }));
 
   let activeStickerCategory = 'all';
   let activeGifSubCategory = 'all';
+  let trayLongPressTriggeredTime = 0;
+  let trayIsLongPress = false;
+  let suggestionsLongPressTriggeredTime = 0;
+  let suggestionsIsLongPress = false;
 
   function setupStickerTray(category = 'all', gifSub = 'all') {
     activeStickerCategory = category;
@@ -2352,118 +2639,155 @@ const DUDU_GIF_STICKERS = [
     const grid = document.getElementById('mockup-stickers-grid') || document.getElementById('chat-sticker-tray-grid');
     if (!grid) return;
 
+    updateFavBadgeCount();
+
     const lang = (window.DuduI18n && window.DuduI18n.getLanguage) ? window.DuduI18n.getLanguage() : 'id';
     const isEn = lang === 'en';
-    const getStkTitle = (s) => (isEn ? s.title_en : s.title_id) || s.title || '';
+
+    const catalog = window.DUDU_STICKERS_CATALOG || { dudu: [], bubu: [], couple: [] };
+    const duduFiles = catalog.dudu || [];
+    const bubuFiles = catalog.bubu || [];
+    const coupleFiles = catalog.couple || [];
+
+    function renderStkBtn(file, cat, idx) {
+      const filePath = `assets/stickers_${cat}/${file}`;
+      const badgeIcon = cat === 'bubu' ? '🐼' : (cat === 'couple' ? '🐻🐼' : '🐻');
+      const badgeBg = cat === 'bubu' ? 'bg-[#D48B70]/80' : (cat === 'couple' ? 'bg-[#8D5B4C]/80' : 'bg-[#5C4033]/80');
+      const title = cat === 'bubu'
+        ? (isEn ? `Bubu Sticker #${idx + 1}` : `Stiker Bubu #${idx + 1}`)
+        : (cat === 'couple'
+            ? (isEn ? `Dudu & Bubu #${idx + 1}` : `Stiker Berdua #${idx + 1}`)
+            : (isEn ? `Dudu Sticker #${idx + 1}` : `Stiker Dudu #${idx + 1}`));
+      const isFav = isFavoriteSticker(filePath);
+      const favStarHtml = isFav ? '<span class="fav-star-indicator absolute top-1 right-1 text-amber-500 text-[10px] pointer-events-none drop-shadow-xs">⭐</span>' : '';
+
+      return `
+        <button type="button" 
+          data-sticker-file="${filePath}" 
+          data-gif-file="${filePath}" 
+          data-mockup-file="${filePath}" 
+          data-cat="${cat}" 
+          class="chat-sticker-select-btn chat-gif-stk-btn chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" 
+          title="${escapeHtml(title)}">
+          <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md ${badgeBg} text-[8px] font-bold text-white tracking-wider pointer-events-none">${badgeIcon}</span>
+          ${favStarHtml}
+          <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
+            <img src="${filePath}" alt="Sticker" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
+          </div>
+        </button>
+      `;
+    }
 
     let itemsHtml = '';
 
-    if (category === 'gif') {
-      const allGifsLabel = isEn ? 'All GIFs (95)' : 'Semua GIF (95)';
-      const duduGifsLabel = isEn ? '🐻 Only Dudu (68)' : '🐻 Dudu Saja (68)';
-      const coupleGifsLabel = isEn ? '🐻🐼 Together (27)' : '🐻🐼 Berdua (27)';
+    if (category === 'fav') {
+      const favList = [...getFavorites()];
+      if (favList.length === 0) {
+        itemsHtml = `
+          <div id="fav-stickers-empty-notice" class="col-span-full py-8 px-4 flex flex-col items-center justify-center text-center select-none animate-fadeIn">
+            <div class="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-stone-700/80 border-2 border-dashed border-amber-300 dark:border-stone-600 flex items-center justify-center mb-3 shadow-inner text-amber-500">
+              <span class="material-symbols-outlined text-3xl">star</span>
+            </div>
+            <h4 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 mb-1">
+              ${isEn ? 'No Favorite Stickers Yet' : 'Belum Ada Stiker Favorit'}
+            </h4>
+            <p class="text-xs text-stone-500 dark:text-stone-400 max-w-[280px] leading-relaxed">
+              ${isEn ? 'Hold down any sticker in the tray or tap Favorite when viewing a sticker in chat! ♡' : 'Tahan stiker di laci atau tekan Favorit saat melihat stiker di chat! ♡'}
+            </p>
+          </div>
+        `;
+      } else {
+        itemsHtml = favList.map((file, idx) => {
+          const cat = getStickerCategory({ file });
+          const base = file.split('/').pop();
+          return renderStkBtn(base, cat, idx);
+        }).join('');
+      }
+    } else if (category === 'gif') {
+      const totalAnimated = catalog.counts?.total || (duduFiles.length + bubuFiles.length + coupleFiles.length);
+      const allGifsLabel = isEn ? `All Animated (${totalAnimated})` : `Semua Animasi (${totalAnimated})`;
+      const duduGifsLabel = isEn ? `🐻 Only Dudu (${duduFiles.length})` : `🐻 Hanya Dudu (${duduFiles.length})`;
+      const bubuGifsLabel = isEn ? `🐼 Only Bubu (${bubuFiles.length})` : `🐼 Hanya Bubu (${bubuFiles.length})`;
+      const coupleGifsLabel = isEn ? `🐻🐼 Together (${coupleFiles.length})` : `🐻🐼 Berdua (${coupleFiles.length})`;
 
       const gifSubPillsHtml = `
-        <div class="col-span-full flex items-center justify-center gap-1.5 pb-2 border-b border-[#E8DACB]/40 dark:border-stone-700/60 mb-1">
+        <div class="col-span-full flex flex-wrap items-center justify-center gap-1.5 pb-2 border-b border-[#E8DACB]/40 dark:border-stone-700/60 mb-1">
           <button type="button" data-gif-sub="all" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'all' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${allGifsLabel}</button>
           <button type="button" data-gif-sub="dudu" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'dudu' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${duduGifsLabel}</button>
+          <button type="button" data-gif-sub="bubu" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'bubu' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${bubuGifsLabel}</button>
           <button type="button" data-gif-sub="couple" class="gif-sub-pill px-2.5 py-0.5 rounded-full text-[10px] font-bold ${gifSub === 'couple' ? 'bg-[#8D5B4C] text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'} button-press cursor-pointer">${coupleGifsLabel}</button>
         </div>
       `;
 
-      const filteredGifs = DUDU_GIF_STICKERS.filter(s => gifSub === 'all' || s.cat === gifSub);
-      itemsHtml = gifSubPillsHtml + filteredGifs.map(s => `
-        <button type="button" data-gif-file="${s.file}" class="chat-gif-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group shadow-2xs" title="${escapeHtml(getStkTitle(s))}">
-          <span class="absolute top-1 right-1 px-1 py-0.2 rounded-md bg-[#8D5B4C] text-[8px] font-bold text-white tracking-wider pointer-events-none">GIF</span>
-          <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
+      let gifList = [];
+      if (gifSub === 'all' || gifSub === 'dudu') {
+        gifList.push(...duduFiles.map((f, i) => renderStkBtn(f, 'dudu', i)));
+      }
+      if (gifSub === 'all' || gifSub === 'bubu') {
+        gifList.push(...bubuFiles.map((f, i) => renderStkBtn(f, 'bubu', i)));
+      }
+      if (gifSub === 'all' || gifSub === 'couple') {
+        gifList.push(...coupleFiles.map((f, i) => renderStkBtn(f, 'couple', i)));
+      }
+      itemsHtml = gifSubPillsHtml + gifList.join('');
+    } else if (category === 'bubu') {
+      if (bubuFiles.length === 0) {
+        const emptyTitle = isEn ? 'No Bubu Stickers Available Yet' : 'Stiker Bubu Belum Tersedia';
+        const emptySub = isEn 
+          ? 'Folder assets/stickers_bubu/ is currently empty. Bubu stickers will be added soon! ♡' 
+          : 'Folder assets/stickers_bubu/ saat ini masih kosong. Stiker Bubu akan segera ditambahkan! ♡';
+        const emptyBadge = isEn ? 'Temporary Notice' : 'Pemberitahuan Sementara';
+
+        itemsHtml = `
+          <div id="bubu-stickers-empty-notice" class="col-span-full py-8 px-4 flex flex-col items-center justify-center text-center select-none animate-fadeIn">
+            <div class="w-16 h-16 rounded-3xl bg-[#FAF0E6] dark:bg-stone-700/80 border-2 border-dashed border-[#D48B70]/60 flex items-center justify-center mb-3 shadow-inner">
+              <span class="text-3xl animate-bounce">🐼</span>
+            </div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full bg-[#8D5B4C]/10 dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-300 text-[10px] font-bold uppercase tracking-wider mb-1.5">
+              ${emptyBadge}
+            </span>
+            <h4 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 mb-1">
+              ${emptyTitle}
+            </h4>
+            <p class="text-xs text-stone-500 dark:text-stone-400 max-w-[280px] leading-relaxed">
+              ${emptySub}
+            </p>
           </div>
-        </button>
-      `).join('');
+        `;
+      } else {
+        itemsHtml = bubuFiles.map((f, i) => renderStkBtn(f, 'bubu', i)).join('');
+      }
+    } else if (category === 'dudu') {
+      itemsHtml = duduFiles.map((f, i) => renderStkBtn(f, 'dudu', i)).join('');
+    } else if (category === 'couple') {
+      itemsHtml = coupleFiles.map((f, i) => renderStkBtn(f, 'couple', i)).join('');
     } else {
-      // 1. Only Bubu stickers
-      if (category === 'all' || category === 'bubu') {
-        itemsHtml += BUBU_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
-            <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#D48B70]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐼</span>
-            <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
-            </div>
-          </button>
-        `).join('');
-      }
-
-      // 2. Bubu Dudu Together art stickers
-      if (category === 'all' || category === 'couple') {
-        itemsHtml += COUPLE_ART_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
-            <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#8D5B4C]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐻🐼</span>
-            <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
-            </div>
-          </button>
-        `).join('');
-      }
-
-      // 3. Only Dudu art stickers
-      if (category === 'all' || category === 'dudu') {
-        itemsHtml += DUDU_ART_STICKERS.map(s => `
-          <button type="button" data-mockup-file="${s.file}" class="chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-[#FAF0E6] dark:bg-stone-700/90 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" title="${escapeHtml(getStkTitle(s))}">
-            <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md bg-[#5C4033]/80 text-[8px] font-bold text-white tracking-wider pointer-events-none">🐻</span>
-            <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
-            </div>
-          </button>
-        `).join('');
-      }
-
-      // 4. Standard Animated WebP stickers (68 Dudu, 27 Couple)
-      if (window.DUDU_STICKERS) {
-        const filteredStandard = window.DUDU_STICKERS.filter(s => {
-          if (category === 'all') return true;
-          return getStickerCategory(s) === category;
-        });
-
-        itemsHtml += filteredStandard.map(s => `
-          <button type="button" data-sticker-id="${s.id}" class="chat-sticker-select-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs" title="${escapeHtml(getStkTitle(s))}">
-            <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-              <img src="Dudu Stickers/${s.file}" alt="${escapeHtml(getStkTitle(s))}" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs">
-            </div>
-          </button>
-        `).join('');
-      }
+      // category === 'all'
+      itemsHtml = [
+        ...duduFiles.map((f, i) => renderStkBtn(f, 'dudu', i)),
+        ...bubuFiles.map((f, i) => renderStkBtn(f, 'bubu', i)),
+        ...coupleFiles.map((f, i) => renderStkBtn(f, 'couple', i))
+      ].join('');
     }
 
     grid.innerHTML = itemsHtml;
 
-    // Click handlers for mockup and Bubu stickers
-    grid.querySelectorAll('.chat-mockup-stk-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const file = btn.getAttribute('data-mockup-file');
+    // Attach click listeners to all sticker buttons in grid
+    grid.querySelectorAll('.chat-sticker-select-btn, .chat-gif-stk-btn, .chat-mockup-stk-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (trayIsLongPress || (Date.now() - trayLongPressTriggeredTime < 800)) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          return;
+        }
+        const file = btn.getAttribute('data-sticker-file') || btn.getAttribute('data-gif-file') || btn.getAttribute('data-mockup-file');
+        const sid = btn.getAttribute('data-sticker-id');
         if (file) {
           sendDirectImageSticker(file);
           closeStickerTray();
-        }
-      });
-    });
-
-    // Click handlers for standard stickers
-    grid.querySelectorAll('.chat-sticker-select-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const sid = btn.getAttribute('data-sticker-id');
-        if (sid) {
+        } else if (sid !== null && sid !== undefined) {
           sendStickerMessage(sid);
-          closeStickerTray();
-        }
-      });
-    });
-
-    // Click handlers for GIF stickers
-    grid.querySelectorAll('.chat-gif-stk-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const gifFile = btn.getAttribute('data-gif-file');
-        if (gifFile) {
-          sendDirectImageSticker(gifFile);
           closeStickerTray();
         }
       });
@@ -2501,7 +2825,10 @@ const DUDU_GIF_STICKERS = [
 
   async function sendDirectImageSticker(imgUrl) {
     if (!activeSessionId) {
-      if (window.showToast) window.showToast('Please create a topic first!');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? 'Please create a topic first!' : 'Silakan buat topik terlebih dahulu!');
+      }
       return;
     }
     const sender = DuduChatCrypto.getStoredIdentity() || 'dudu';
@@ -2576,6 +2903,7 @@ const DUDU_GIF_STICKERS = [
     // Auto-resizing textarea, typing broadcast, and button feedback
     textInput?.addEventListener('input', () => {
       adjustTextareaHeight();
+      handleInputSuggestions();
       const hasContent = textInput.value.trim().length > 0;
       if (hasContent) {
         if (!isTypingActive) {
@@ -2596,6 +2924,83 @@ const DUDU_GIF_STICKERS = [
       }
     });
 
+    // In-line Predictive Sticker Suggestions Triggers
+    document.getElementById('btn-close-suggestions')?.addEventListener('click', () => {
+      document.getElementById('chat-sticker-suggestions')?.classList.add('hidden');
+    });
+
+    // In-line Suggestions Click & Long-Press Handling
+    const suggestionsTrack = document.getElementById('chat-suggestions-track');
+    let suggestionsPressTimer = null;
+    let suggestionsHeldChip = null;
+    let suggestionsStartPos = { x: 0, y: 0 };
+
+    const cancelSuggestionsPress = () => {
+      if (suggestionsPressTimer) {
+        clearTimeout(suggestionsPressTimer);
+        suggestionsPressTimer = null;
+      }
+      suggestionsHeldChip = null;
+    };
+
+    suggestionsTrack?.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      const chip = e.target.closest('.btn-suggestion-chip');
+      if (!chip) return;
+      suggestionsHeldChip = chip;
+      suggestionsStartPos = { x: e.clientX, y: e.clientY };
+      suggestionsIsLongPress = false;
+
+      clearTimeout(suggestionsPressTimer);
+      suggestionsPressTimer = setTimeout(() => {
+        suggestionsIsLongPress = true;
+        suggestionsLongPressTriggeredTime = Date.now();
+        const file = chip.getAttribute('data-sticker-file');
+        if (file) {
+          toggleFavoriteSticker(file);
+          updateFavBadgeCount();
+        }
+        suggestionsHeldChip = null;
+      }, 450);
+    });
+
+    suggestionsTrack?.addEventListener('pointermove', (e) => {
+      if (!suggestionsHeldChip) return;
+      const dist = Math.hypot(e.clientX - suggestionsStartPos.x, e.clientY - suggestionsStartPos.y);
+      if (dist > 10) cancelSuggestionsPress();
+    });
+
+    suggestionsTrack?.addEventListener('pointerup', () => {
+      cancelSuggestionsPress();
+      if (suggestionsIsLongPress || (Date.now() - suggestionsLongPressTriggeredTime < 800)) {
+        setTimeout(() => { suggestionsIsLongPress = false; }, 400);
+      }
+    });
+
+    suggestionsTrack?.addEventListener('pointercancel', cancelSuggestionsPress);
+
+    // Capture-phase blocker on suggestions track so long-pressed chip never sends
+    suggestionsTrack?.addEventListener('click', (e) => {
+      if (suggestionsIsLongPress || (Date.now() - suggestionsLongPressTriggeredTime < 800)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+      const chip = e.target.closest('.btn-suggestion-chip');
+      if (!chip) return;
+      const file = chip.getAttribute('data-sticker-file');
+      if (file) {
+        sendDirectImageSticker(file);
+        if (textInput) {
+          textInput.value = '';
+          textInput.style.height = 'auto';
+        }
+        document.getElementById('chat-sticker-suggestions')?.classList.add('hidden');
+        window.duduAudio?.playSparkle?.();
+      }
+    }, true);
+
     // Toggle Sticker Tray (supporting both button IDs)
     document.getElementById('btn-toggle-stickers')?.addEventListener('click', toggleStickerTray);
     document.getElementById('btn-toggle-sticker-tray')?.addEventListener('click', toggleStickerTray);
@@ -2603,16 +3008,146 @@ const DUDU_GIF_STICKERS = [
     // Close Sticker Tray button
     document.getElementById('btn-close-sticker-tray')?.addEventListener('click', closeStickerTray);
 
+    // Long-press (Hold Down) Handler to Favorite/Unfavorite Stickers in Tray WITHOUT Sending
+    const trayGrid = document.getElementById('mockup-stickers-grid') || document.getElementById('chat-sticker-tray-grid');
+    let trayPressTimer = null;
+    let trayHeldBtn = null;
+    let trayStartPos = { x: 0, y: 0 };
+
+    const cancelTrayPress = () => {
+      if (trayPressTimer) {
+        clearTimeout(trayPressTimer);
+        trayPressTimer = null;
+      }
+      trayHeldBtn = null;
+    };
+
+    trayGrid?.addEventListener('contextmenu', (e) => {
+      if (e.target.closest('button[data-sticker-file]')) {
+        e.preventDefault();
+      }
+    });
+
+    const onTrayPressStart = (clientX, clientY, btn) => {
+      if (!btn) return;
+      trayHeldBtn = btn;
+      trayStartPos = { x: clientX, y: clientY };
+      trayIsLongPress = false;
+
+      clearTimeout(trayPressTimer);
+      trayPressTimer = setTimeout(() => {
+        trayIsLongPress = true;
+        trayLongPressTriggeredTime = Date.now();
+        if (navigator.vibrate) {
+          try { navigator.vibrate(40); } catch (_) {}
+        }
+        const file = btn.getAttribute('data-sticker-file');
+        if (file) {
+          toggleFavoriteSticker(file);
+          updateFavBadgeCount();
+          if (activeStickerCategory === 'fav') {
+            setupStickerTray('fav');
+          } else {
+            const star = btn.querySelector('.fav-star-indicator');
+            if (isFavoriteSticker(file)) {
+              if (!star) {
+                const s = document.createElement('span');
+                s.className = 'fav-star-indicator absolute top-1 right-1 text-amber-500 text-[10px] pointer-events-none drop-shadow-xs';
+                s.textContent = '⭐';
+                btn.appendChild(s);
+              }
+            } else if (star) {
+              star.remove();
+            }
+          }
+        }
+        trayHeldBtn = null;
+      }, 450);
+    };
+
+    trayGrid?.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      const btn = e.target.closest('button[data-sticker-file]');
+      onTrayPressStart(e.clientX, e.clientY, btn);
+    });
+
+    trayGrid?.addEventListener('pointermove', (e) => {
+      if (!trayHeldBtn) return;
+      const dist = Math.hypot(e.clientX - trayStartPos.x, e.clientY - trayStartPos.y);
+      if (dist > 10) cancelTrayPress();
+    });
+
+    trayGrid?.addEventListener('pointerup', (e) => {
+      cancelTrayPress();
+      if (trayIsLongPress || (Date.now() - trayLongPressTriggeredTime < 800)) {
+        if (e.cancelable) e.preventDefault();
+        setTimeout(() => { trayIsLongPress = false; }, 400);
+      }
+    });
+
+    trayGrid?.addEventListener('pointercancel', cancelTrayPress);
+
+    // Fallback mouse/touch bindings to ensure universal suppression across all environments
+    trayGrid?.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      const btn = e.target.closest('button[data-sticker-file]');
+      onTrayPressStart(e.clientX, e.clientY, btn);
+    });
+    trayGrid?.addEventListener('mousemove', (e) => {
+      if (!trayHeldBtn) return;
+      const dist = Math.hypot(e.clientX - trayStartPos.x, e.clientY - trayStartPos.y);
+      if (dist > 10) cancelTrayPress();
+    });
+    trayGrid?.addEventListener('mouseup', () => {
+      cancelTrayPress();
+      if (trayIsLongPress || (Date.now() - trayLongPressTriggeredTime < 800)) {
+        setTimeout(() => { trayIsLongPress = false; }, 400);
+      }
+    });
+    trayGrid?.addEventListener('mouseleave', cancelTrayPress);
+
+    trayGrid?.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const btn = touch.target.closest('button[data-sticker-file]');
+      onTrayPressStart(touch.clientX, touch.clientY, btn);
+    }, { passive: true });
+    trayGrid?.addEventListener('touchmove', (e) => {
+      if (!trayHeldBtn || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const dist = Math.hypot(touch.clientX - trayStartPos.x, touch.clientY - trayStartPos.y);
+      if (dist > 10) cancelTrayPress();
+    }, { passive: true });
+    trayGrid?.addEventListener('touchend', (e) => {
+      cancelTrayPress();
+      if (trayIsLongPress || (Date.now() - trayLongPressTriggeredTime < 800)) {
+        if (e.cancelable) e.preventDefault();
+        setTimeout(() => { trayIsLongPress = false; }, 400);
+      }
+    });
+
+    // CRITICAL: Intercept and swallow click event in capture phase so long-pressed sticker is NEVER sent!
+    trayGrid?.addEventListener('click', (e) => {
+      if (trayIsLongPress || (Date.now() - trayLongPressTriggeredTime < 800)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
+    }, true);
+
     // Call, Video Call, and Lock buttons matching chat.jpg
     document.getElementById('btn-chat-call')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(600);
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
       const partner = isSenderDudu(DuduChatCrypto.getStoredIdentity()) ? 'Bubu 🐼' : 'Dudu 🐻';
-      if (window.showToast) window.showToast(`📞 Calling ${partner}... Ring ring! ❤️`);
+      if (window.showToast) window.showToast(isEn ? `📞 Calling ${partner}... Ring ring! ❤️` : `📞 Memanggil ${partner}... Kring kring! ❤️`);
     });
     document.getElementById('btn-chat-videocall')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(700);
+      const isEn = window.DuduI18n?.getLanguage() === 'en';
       const partner = isSenderDudu(DuduChatCrypto.getStoredIdentity()) ? 'Bubu 🐼' : 'Dudu 🐻';
-      if (window.showToast) window.showToast(`📹 Starting cozy video peek with ${partner}! ✨`);
+      if (window.showToast) window.showToast(isEn ? `📹 Starting cozy video peek with ${partner}! ✨` : `📹 Memulai obrolan video dengan ${partner}! ✨`);
     });
     document.getElementById('btn-chat-e2ee-lock')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(500);
@@ -2620,7 +3155,8 @@ const DUDU_GIF_STICKERS = [
       if (settingsModal) {
         openChatSettingsModal();
       } else if (window.showToast) {
-        window.showToast('🔒 AES-GCM 256-bit End-to-End Encryption Active');
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? '🔒 AES-GCM 256-bit End-to-End Encryption Active' : '🔒 Enkripsi Ujung-ke-Ujung AES-GCM 256-bit Aktif');
       }
     });
 
@@ -2647,7 +3183,10 @@ const DUDU_GIF_STICKERS = [
     });
     document.getElementById('btn-chat-mic')?.addEventListener('click', () => {
       window.duduAudio?.playPop?.(500);
-      if (window.showToast) window.showToast('🎙️ Voice notes coming soon! Send a sweet text or sticker 🧸');
+      if (window.showToast) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? '🎙️ Voice notes coming soon! Send a sweet text or sticker 🧸' : '🎙️ Pesan suara segera hadir! Kirim pesan manis atau stiker 🧸');
+      }
     });
 
     // Reply Bar Cancel Trigger
@@ -2668,7 +3207,44 @@ const DUDU_GIF_STICKERS = [
       }
     });
 
+    document.getElementById('btn-stk-action-fav')?.addEventListener('click', () => {
+      if (selectedActionMessage) {
+        const src = getStickerMediaSrc(selectedActionMessage);
+        const nowFav = toggleFavoriteSticker(src);
+        const favIcon = document.getElementById('icon-stk-action-fav');
+        const favLabel = document.getElementById('label-stk-action-fav');
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        if (favIcon) {
+          favIcon.textContent = nowFav ? 'star' : 'star_outline';
+          favIcon.className = `material-symbols-outlined text-base ${nowFav ? 'text-amber-500' : 'text-[#8D5B4C] dark:text-stone-300'}`;
+        }
+        if (favLabel) {
+          favLabel.textContent = nowFav ? (isEn ? 'Favorited' : 'Disukai') : (isEn ? 'Favorite' : 'Favorit');
+        }
+        updateFavBadgeCount();
+        if (activeStickerCategory === 'fav') {
+          setupStickerTray('fav');
+        }
+      }
+    });
+
+    document.getElementById('btn-stk-action-reply')?.addEventListener('click', () => {
+      if (selectedActionMessage) {
+        const msg = selectedActionMessage;
+        closeMsgActionsModal();
+        startReply(msg);
+      }
+    });
+
     document.getElementById('btn-action-forward')?.addEventListener('click', () => {
+      if (selectedActionMessage) {
+        const msg = selectedActionMessage;
+        closeMsgActionsModal();
+        openForwardTopicModal(msg);
+      }
+    });
+
+    document.getElementById('btn-stk-action-forward')?.addEventListener('click', () => {
       if (selectedActionMessage) {
         const msg = selectedActionMessage;
         closeMsgActionsModal();
@@ -2683,11 +3259,22 @@ const DUDU_GIF_STICKERS = [
         const text = getMessageCopyText(msg);
         await copyToClipboard(text);
         window.duduAudio?.playPop?.(480);
-        if (window.showToast) window.showToast('Copied to clipboard');
+        if (window.showToast) {
+          const isEn = window.DuduI18n?.getLanguage() === 'en';
+          window.showToast(isEn ? 'Copied to clipboard' : 'Tersalin ke papan klip');
+        }
       }
     });
 
     document.getElementById('btn-action-delete')?.addEventListener('click', async () => {
+      if (selectedActionMessage) {
+        const msgId = selectedActionMessage.id;
+        closeMsgActionsModal();
+        await confirmDeleteMessage(msgId);
+      }
+    });
+
+    document.getElementById('btn-stk-action-delete')?.addEventListener('click', async () => {
       if (selectedActionMessage) {
         const msgId = selectedActionMessage.id;
         closeMsgActionsModal();
@@ -2737,7 +3324,10 @@ const DUDU_GIF_STICKERS = [
       exitSelectionMode();
       window.duduAudio?.playPop?.(480);
       if (window.showToast) {
-        window.showToast(msgs.length === 1 ? 'Copied message' : `Copied ${msgs.length} messages`);
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn
+          ? (msgs.length === 1 ? 'Copied message' : `Copied ${msgs.length} messages`)
+          : (msgs.length === 1 ? 'Pesan disalin' : `${msgs.length} pesan disalin`));
       }
     });
 
@@ -2907,7 +3497,10 @@ const DUDU_GIF_STICKERS = [
           const text = getMessageCopyText(msg);
           await copyToClipboard(text);
           window.duduAudio?.playPop?.(480);
-          if (window.showToast) window.showToast('Copied to clipboard');
+          if (window.showToast) {
+            const isEn = window.DuduI18n?.getLanguage() === 'en';
+            window.showToast(isEn ? 'Copied to clipboard' : 'Tersalin ke papan klip');
+          }
         }
         return;
       }
@@ -3155,7 +3748,8 @@ const DUDU_GIF_STICKERS = [
       await loadSessions();
 
       if (window.showToast) {
-        window.showToast(`Topic renamed to "${newTitle}" ♡`);
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn ? `Topic renamed to "${newTitle}" ♡` : `Topik diganti nama menjadi "${newTitle}" ♡`);
       }
       window.duduAudio?.playSparkle?.();
     });
@@ -3176,11 +3770,20 @@ const DUDU_GIF_STICKERS = [
       const serverInput = document.getElementById('input-chat-server-url');
 
       if (passInput) DuduChatCrypto.setStoredPassphrase(passInput.value);
-      if (identSelect) DuduChatCrypto.setStoredIdentity(identSelect.value);
+      if (identSelect) {
+        const oldIdent = DuduChatCrypto.getStoredIdentity();
+        const newIdent = identSelect.value;
+        if (oldIdent && oldIdent !== newIdent) {
+          DuduChatSocket.sendPresenceAnnounce('offline', oldIdent);
+        }
+        DuduChatCrypto.setStoredIdentity(newIdent);
+        DuduChatSocket.sendPresenceAnnounce('online', newIdent);
+      }
       if (serverInput && serverInput.value.trim()) DuduChatSocket.setServerUrl(serverInput.value.trim());
 
       await updateCryptoKey();
       document.getElementById('modal-chat-settings')?.classList.add('hidden');
+      handlePresenceState();
       await loadActiveMessages();
       window.duduAudio?.playSparkle();
     });
@@ -3194,25 +3797,6 @@ const DUDU_GIF_STICKERS = [
     document.getElementById('btn-use-remote')?.addEventListener('click', () => {
       const serverInput = document.getElementById('input-chat-server-url');
       if (serverInput) serverInput.value = DuduChatSocket.DEFAULT_REMOTE_URL;
-    });
-
-    // Chat partner presence toggle & simulator
-    document.getElementById('chat-partner-presence-container')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const myIdentity = DuduChatCrypto.getStoredIdentity() || 'dudu';
-      const myIdLower = myIdentity.toLowerCase();
-      const isMeDudu = myIdLower.includes('dudu') || myIdLower.includes('kevin');
-      const partnerKey = isMeDudu ? 'bubu' : 'dudu';
-
-      const currentSim = localStorage.getItem('DUDU_SIMULATED_PRESENCE_' + partnerKey);
-      const nextSim = (currentSim === 'offline') ? 'online' : 'offline';
-      localStorage.setItem('DUDU_SIMULATED_PRESENCE_' + partnerKey, nextSim);
-
-      handlePresenceState();
-      window.duduAudio?.playPop?.(nextSim === 'online' ? 650 : 350);
-      if (typeof window.showFeedbackToast === 'function') {
-        window.showFeedbackToast(`${isMeDudu ? 'Bubu' : 'Dudu'} is now ${nextSim} 🐾`);
-      }
     });
   }
 
@@ -3375,7 +3959,10 @@ const DUDU_GIF_STICKERS = [
       if (msg) {
         const text = getMessageCopyText(msg);
         await copyToClipboard(text);
-        if (window.showToast) window.showToast('Copied to clipboard');
+        if (window.showToast) {
+          const isEn = window.DuduI18n?.getLanguage() === 'en';
+          window.showToast(isEn ? 'Copied to clipboard' : 'Tersalin ke papan klip');
+        }
         return text;
       }
       return null;
@@ -3401,7 +3988,10 @@ const DUDU_GIF_STICKERS = [
       await copyToClipboard(textToCopy);
       exitSelectionMode();
       if (window.showToast) {
-        window.showToast(msgs.length === 1 ? 'Copied message' : `Copied ${msgs.length} messages`);
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
+        window.showToast(isEn
+          ? (msgs.length === 1 ? 'Copied message' : `Copied ${msgs.length} messages`)
+          : (msgs.length === 1 ? 'Pesan disalin' : `${msgs.length} pesan disalin`));
       }
       return textToCopy;
     },
@@ -3444,6 +4034,7 @@ const DUDU_GIF_STICKERS = [
     markSessionRead: markSessionRead,
     updateNavChatBadge: updateNavChatBadge,
     flushPendingMessages,
+    recordRoleOffline,
     refreshPresence: () => handlePresenceState(),
     reloadActiveMessages: async (preserveScroll = true) => {
       await loadActiveMessages(preserveScroll);

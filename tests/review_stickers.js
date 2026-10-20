@@ -29,35 +29,28 @@ async function runStickerReview() {
   await page.screenshot({ path: path.join(screenshotsDir, '01_sticker_tray_all.png') });
   console.log('📸 Captured: 01_sticker_tray_all.png');
 
-  // 2. Tab: 🐼 Only Bubu
+  // 2. Tab: 🐼 Only Bubu (Temporary Notice)
   const tabBubu = page.locator('.stk-cat-btn[data-cat="bubu"]');
   await tabBubu.click();
   await page.waitForTimeout(400);
-  const bubuCount = await page.locator('.chat-mockup-stk-btn').count();
-  console.log(`🐼 Only Bubu count: ${bubuCount} (Expected: 15)`);
-  if (bubuCount !== 15) throw new Error(`Expected 15 Bubu stickers, got ${bubuCount}`);
+  const bubuNotice = page.locator('#bubu-stickers-empty-notice');
+  await bubuNotice.waitFor({ state: 'visible', timeout: 3000 });
+  console.log('🐼 Only Bubu notice verified: Stiker Bubu Belum Tersedia');
   await page.screenshot({ path: path.join(screenshotsDir, '02_sticker_tray_bubu.png') });
   console.log('📸 Captured: 02_sticker_tray_bubu.png');
 
-  // Send first Bubu sticker
-  await page.locator('.chat-mockup-stk-btn').first().click();
-  await page.waitForTimeout(500);
-
   // 3. Tab: 🐻 Only Dudu
-  await btnStkToggle.click();
-  await page.waitForTimeout(300);
   const tabDudu = page.locator('.stk-cat-btn[data-cat="dudu"]');
   await tabDudu.click();
   await page.waitForTimeout(400);
   const duduWebp = await page.locator('.chat-sticker-select-btn').count();
-  const duduCustom = await page.locator('.chat-mockup-stk-btn').count();
-  console.log(`🐻 Only Dudu count: ${duduWebp} animated + ${duduCustom} custom = ${duduWebp + duduCustom} (Expected: 83)`);
-  if (duduWebp + duduCustom !== 83) throw new Error(`Expected 83 Dudu stickers, got ${duduWebp + duduCustom}`);
+  console.log(`🐻 Only Dudu count: ${duduWebp} animated WebP (Expected: 61)`);
+  if (duduWebp !== 61) throw new Error(`Expected 61 Dudu stickers, got ${duduWebp}`);
   await page.screenshot({ path: path.join(screenshotsDir, '03_sticker_tray_dudu.png') });
   console.log('📸 Captured: 03_sticker_tray_dudu.png');
 
-  // Send first custom Dudu sticker
-  await page.locator('.chat-mockup-stk-btn').first().click();
+  // Send first Dudu sticker
+  await page.locator('.chat-sticker-select-btn').first().click();
   await page.waitForTimeout(500);
 
   // 4. Tab: 🐻🐼 Bubu & Dudu (Together)
@@ -67,24 +60,23 @@ async function runStickerReview() {
   await tabCouple.click();
   await page.waitForTimeout(400);
   const coupleWebp = await page.locator('.chat-sticker-select-btn').count();
-  const coupleCustom = await page.locator('.chat-mockup-stk-btn').count();
-  console.log(`🐻🐼 Together count: ${coupleWebp} animated + ${coupleCustom} custom = ${coupleWebp + coupleCustom} (Expected: 39)`);
-  if (coupleWebp + coupleCustom !== 39) throw new Error(`Expected 39 Couple stickers, got ${coupleWebp + coupleCustom}`);
+  console.log(`🐻🐼 Together count: ${coupleWebp} animated WebP (Expected: 34)`);
+  if (coupleWebp !== 34) throw new Error(`Expected 34 Couple stickers, got ${coupleWebp}`);
   await page.screenshot({ path: path.join(screenshotsDir, '04_sticker_tray_couple.png') });
   console.log('📸 Captured: 04_sticker_tray_couple.png');
 
-  // Send first custom Couple sticker
-  await page.locator('.chat-mockup-stk-btn').first().click();
+  // Send first Couple sticker
+  await page.locator('.chat-sticker-select-btn').first().click();
   await page.waitForTimeout(500);
 
-  // 5. Tab: ✨ Sticker GIF
+  // 5. Tab: ✨ Sticker GIF / Animated
   await btnStkToggle.click();
   await page.waitForTimeout(300);
   const tabGif = page.locator('.stk-cat-btn[data-cat="gif"]');
   await tabGif.click();
   await page.waitForTimeout(400);
   const gifCount = await page.locator('.chat-gif-stk-btn').count();
-  console.log(`✨ GIF stickers count: ${gifCount} (Expected: 95)`);
+  console.log(`✨ Animated stickers count: ${gifCount} (Expected: 95)`);
   if (gifCount !== 95) throw new Error(`Expected 95 GIF stickers, got ${gifCount}`);
   await page.screenshot({ path: path.join(screenshotsDir, '05_sticker_tray_gif.png') });
   console.log('📸 Captured: 05_sticker_tray_gif.png');

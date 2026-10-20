@@ -6,6 +6,7 @@ server/node_modules/
 server/.env
 
 # Android build caches & artifacts
+dist/
 .gradle/
 android/.gradle/
 android/app/build/
@@ -16,6 +17,7 @@ android/build/
 # Server database & temporary blob storage
 server/data/chat.db*
 server/data/blobs/*
+server/db.sqlite*
 tests/test_data/
 
 # OS & Editor files
@@ -27,3 +29,6 @@ scratch/
 tests/screenshots/
 tests/*.png
 
+assets/stickers_bubu/
+assets/stickers_couple/
+assets/stickers_dudu/

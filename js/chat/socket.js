@@ -500,9 +500,6 @@
       } else {
         sendPresenceAnnounce('online');
       }
-    } else if (document.visibilityState === 'hidden') {
-      console.log('[Socket] App hidden. Announcing offline presence...');
-      sendPresenceAnnounce('offline');
     }
   });
 
@@ -533,9 +530,9 @@
     } catch (e) {}
   }
 
-  function sendPresenceAnnounce(status = 'online') {
+  function sendPresenceAnnounce(status = 'online', customIdentity = null) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      const identity = window.DuduChatCrypto ? window.DuduChatCrypto.getStoredIdentity() : 'dudu';
+      const identity = customIdentity || (window.DuduChatCrypto ? window.DuduChatCrypto.getStoredIdentity() : 'dudu');
       try {
         ws.send(JSON.stringify({
           type: 'presence_announce',

@@ -38,7 +38,13 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./db');
 
-const PROJECT_ROOT = path.resolve(__dirname, '..');
+const PROJECT_ROOT = fs.existsSync(path.resolve(__dirname, '..', 'assets'))
+  ? path.resolve(__dirname, '..')
+  : __dirname;
+
+const ASSETS_DIR = fs.existsSync(path.resolve(__dirname, 'assets'))
+  ? path.resolve(__dirname, 'assets')
+  : path.resolve(PROJECT_ROOT, 'assets');
 const BLOBS_DIR = process.env.BLOBS_DIR || path.resolve(__dirname, 'data', 'blobs');
 if (!fs.existsSync(BLOBS_DIR)) {
   fs.mkdirSync(BLOBS_DIR, { recursive: true });
@@ -131,19 +137,58 @@ const server = http.createServer((req, res) => {
 
     const ext = path.extname(decodedPath).toLowerCase();
     const isHidden = decodedPath.split('/').some(p => p.startsWith('.'));
-    const safePath = path.normalize(path.join(PROJECT_ROOT, decodedPath));
-    const rel = path.relative(PROJECT_ROOT, safePath);
+    
+    // Resolve file path: check ASSETS_DIR first if requesting /assets/, otherwise PROJECT_ROOT
+    let targetPath = null;
+    if (decodedPath.startsWith('/assets/')) {
+      const subPath = decodedPath.replace(/^\/assets\//, '');
+      const directPath = path.normalize(path.join(ASSETS_DIR, subPath));
+      if (fs.existsSync(directPath)) {
+        targetPath = directPath;
+      } else if (ext === '.webp') {
+        // Fallback: search across sticker folders if moved or aliased
+        const base = path.basename(directPath);
+        for (const folder of ['stickers_dudu', 'stickers_bubu', 'stickers_couple']) {
+          const alt = path.join(ASSETS_DIR, folder, base);
+          if (fs.existsSync(alt)) {
+            targetPath = alt;
+            break;
+          }
+        }
+      }
+    }
 
-    // Prevent hidden files, server/ source files, and unapproved extensions (.md, .json, .db, etc.)
-    if (!isHidden && MIME_TYPES[ext] && !rel.startsWith('..') && !rel.startsWith('server') && !safePath.startsWith(__dirname) && fs.existsSync(safePath)) {
+    if (!targetPath) {
+      targetPath = path.normalize(path.join(PROJECT_ROOT, decodedPath));
+    }
+
+    const filename = path.basename(targetPath).toLowerCase();
+    const isSensitive = filename === 'server.js' || 
+                        filename === 'db.js' || 
+                        filename === 'package.json' || 
+                        filename === 'package-lock.json' ||
+                        filename.endsWith('.env') || 
+                        filename.endsWith('.sqlite') || 
+                        filename.endsWith('.db') ||
+                        targetPath.includes(path.sep + 'data' + path.sep) ||
+                        targetPath.includes(path.sep + 'server' + path.sep);
+
+    if (!isHidden && !isSensitive && MIME_TYPES[ext] && fs.existsSync(targetPath)) {
       try {
-        const stat = fs.statSync(safePath);
+        const stat = fs.statSync(targetPath);
         if (stat.isFile()) {
-          res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] });
+          const headers = {
+            'Content-Type': MIME_TYPES[ext],
+            'Access-Control-Allow-Origin': '*'
+          };
+          if (ext === '.webp' || ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.mp3') {
+            headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+          }
+          res.writeHead(200, headers);
           if (req.method === 'HEAD') {
             res.end();
           } else {
-            fs.createReadStream(safePath).pipe(res);
+            fs.createReadStream(targetPath).pipe(res);
           }
           return;
         }

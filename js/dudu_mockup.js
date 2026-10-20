@@ -78,13 +78,13 @@
     userRole: 'dudu', // 'dudu' (Kevin) or 'bubu' (Nana)
     anniversaryDate: defaultAnniversaryIso,
     loveBattery: {
-      dudu: 100,
-      bubu: 100
+      dudu: 95,
+      bubu: 95
     },
     badmoodLevel: 0,
     statuses: {
-      dudu: 'Thinking of you! 💭',
-      bubu: 'Eating snacks! 🐼'
+      dudu: 'Syududu',
+      bubu: 'Syububu'
     },
     notes: [
       {
@@ -233,10 +233,10 @@
       { id: 'cal_3', date: 26, month: 9, year: 2026, title: 'Our 100th Day Celebration! 🤎', icon: '🐻🐼' }
     ],
     wardrobe: {
-      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_maid_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
+      dudu: { outfit_set: 'dudu_01_baby_clothes', hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' },
+      bubu: { outfit_set: 'bubu_02_winter_clothes', hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' }
     },
-    miniGameHighScore: 420
+    miniGameHighScore: 705
   };
 
   function normalizeLoveBattery(val) {
@@ -282,6 +282,13 @@
               if (!w.shoes && w.coat) w.shoes = w.coat;
             }
           });
+        }
+        if (parsed.statuses) {
+          if (parsed.statuses.dudu === 'Thinking of you! 💭') parsed.statuses.dudu = 'Syududu';
+          if (parsed.statuses.bubu === 'Eating snacks! 🐼') parsed.statuses.bubu = 'Syububu';
+        }
+        if (parsed.loveBattery && parsed.loveBattery.dudu === 100 && parsed.loveBattery.bubu === 100) {
+          parsed.loveBattery = { dudu: 95, bubu: 95 };
         }
         if (sessionRole && (sessionRole === 'dudu' || sessionRole === 'bubu')) {
           parsed.userRole = sessionRole;
@@ -824,6 +831,11 @@
 
     const applyTheme = (isDark) => {
       document.documentElement.classList.toggle('dark', isDark);
+      let metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', isDark ? '#1C1917' : '#FAF5EE');
+      try {
+        window.Capacitor?.Plugins?.DuduCompanion?.setStatusBarStyle?.({ isDark });
+      } catch (_) {}
       [themeBtn, chatThemeBtn].forEach(btn => {
         const iconSpan = btn?.querySelector('.material-symbols-outlined');
         if (iconSpan) {
@@ -847,7 +859,10 @@
         localStorage.setItem(THEME_STORAGE_KEY, nextDark ? 'dark' : 'light');
       } catch (_) {}
       window.duduAudio?.playPop?.(nextDark ? 420 : 620);
-      showFeedbackToast(nextDark ? 'Cozy night mode active 🌙' : 'Warm daylight mode active ☀️');
+      showFeedbackToast(
+        nextDark ? 'Cozy night mode active 🌙' : 'Warm daylight mode active ☀️',
+        nextDark ? 'Mode malam nyaman aktif 🌙' : 'Mode siang hangat aktif ☀️'
+      );
     };
 
     themeBtn?.addEventListener('click', toggleTheme);
@@ -884,7 +899,7 @@
     clearBtn?.addEventListener('click', () => {
       clearNotificationHistory();
       window.duduAudio?.playPop?.(380);
-      showFeedbackToast('Notification history cleared ♡');
+      showFeedbackToast('Notification history cleared ♡', 'Riwayat notifikasi dibersihkan ♡');
     });
 
     updateNotificationBellBadge();
@@ -940,7 +955,7 @@
       renderOurCalendar();
       renderOurSpaceHome();
       renderCalendarDayModalEvents();
-      showFeedbackToast(`New calendar event: ${event.title} 🗓️`);
+      showFeedbackToast(`New calendar event: ${event.title} 🗓️`, `Acara kalender baru: ${event.title} 🗓️`);
       window.duduAudio?.playPop?.(750);
     });
 
@@ -969,7 +984,7 @@
       else appData.bucketList.unshift(item);
       saveState();
       renderBucketList();
-      showFeedbackToast(`Partner updated date planner! 📝✨`);
+      showFeedbackToast(`Partner updated date planner! 📝✨`, `Pasangan memperbarui rencana kencan! 📝✨`);
       window.duduAudio?.playPop?.(600);
     });
 
@@ -998,7 +1013,7 @@
       saveState();
       renderLoveNotes();
       updateNotificationBellBadge();
-      showFeedbackToast(`New love note from ${note.sender}! 💌`);
+      showFeedbackToast(`New love note from ${note.sender}! 💌`, `Surat cinta baru dari ${note.sender}! 💌`);
       window.duduAudio?.playPop?.(880);
     });
 
@@ -1030,7 +1045,7 @@
       else appData.polaroids.unshift(polaroid);
       saveState();
       renderMemoryJar();
-      showFeedbackToast(`Partner added a memory to the jar! 📸🍯`);
+      showFeedbackToast(`Partner added a memory to the jar! 📸🍯`, `Pasangan menambahkan kenangan ke toples! 📸🍯`);
       window.duduAudio?.playPop?.(700);
     });
 
@@ -1125,7 +1140,10 @@
         renderWardrobeRoom();
         if (notifyFrom) {
           const partnerName = notifyFrom === 'dudu' ? 'Dudu 🐻' : notifyFrom === 'bubu' ? 'Bubu 🐼' : 'Partner';
-          showFeedbackToast(`${partnerName} updated the Couple Closet! 🧥✨`);
+          showFeedbackToast(
+            `${partnerName} updated the Couple Closet! 🧥✨`,
+            `${partnerName} memperbarui Lemari Pasangan! 🧥✨`
+          );
           window.duduAudio?.playPop?.(680);
         }
       }
@@ -1621,12 +1639,18 @@
       if (presetsBox) presetsBox.classList.add('hidden');
 
       if (saveBtn) {
+        const isEn = window.DuduI18n?.getLanguage() === 'en';
         saveBtn.disabled = true;
-        saveBtn.textContent = isDudu ? "Only Dudu can adjust this 🐻" : "Only Bubu can adjust this 🐼";
+        saveBtn.textContent = isEn
+          ? (isDudu ? "Only Dudu can adjust this 🐻" : "Only Bubu can adjust this 🐼")
+          : (isDudu ? "Hanya Dudu yang dapat mengatur ini 🐻" : "Hanya Bubu yang dapat mengatur ini 🐼");
         saveBtn.className = 'w-full py-2.5 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-400 font-heading font-bold text-xs cursor-not-allowed opacity-80';
       }
 
-      showFeedbackToast(isDudu ? "Viewing Dudu's battery (Only Dudu can adjust) 🐻" : "Viewing Bubu's battery (Only Bubu can adjust) 🐼");
+      showFeedbackToast(
+        isDudu ? "Viewing Dudu's battery (Only Dudu can adjust) 🐻" : "Viewing Bubu's battery (Only Bubu can adjust) 🐼",
+        isDudu ? "Melihat baterai Dudu (Hanya Dudu yang dapat mengatur) 🐻" : "Melihat baterai Bubu (Hanya Bubu yang dapat mengatur) 🐼"
+      );
     }
 
     if (bar) {
@@ -1888,7 +1912,10 @@
           renderLoveNotes();
           window.DuduChatSocket?.sendSaveNote?.(note);
           sendSaveRest('/api/notes', note);
-          showFeedbackToast(note.isFavorite ? 'Added to Favorites ♥' : 'Removed from Favorites');
+          showFeedbackToast(
+            note.isFavorite ? 'Added to Favorites ♥' : 'Removed from Favorites',
+            note.isFavorite ? 'Ditambahkan ke Favorit ♥' : 'Dihapus dari Favorit'
+          );
           window.duduAudio?.playPop?.(620);
         });
 
@@ -1900,7 +1927,7 @@
           updateNotificationBellBadge();
           window.DuduChatSocket?.sendDeleteNote?.(note.id);
           sendDeleteRest('/api/notes', note.id);
-          showFeedbackToast('Love note deleted 🗑️');
+          showFeedbackToast('Love note deleted 🗑️', 'Surat cinta dihapus 🗑️');
           window.duduAudio?.playPop?.(400);
         });
 
@@ -1943,14 +1970,14 @@
 
     if (appData.polaroids.length === 0) {
       polaroidGrid.innerHTML = `
-        <div class="col-span-2 p-6 text-center text-xs text-on-surface-variant">
+        <div class="col-span-full p-6 text-center text-xs text-on-surface-variant w-full" style="column-span: all; -webkit-column-span: all;">
           No polaroids in the jar yet. Tap the camera button above to add one! 📸
         </div>
       `;
     } else {
       appData.polaroids.forEach(p => {
         const card = document.createElement('div');
-        card.className = `polaroid-card rounded-2xl p-2.5 flex flex-col gap-1.5 cursor-pointer relative`;
+        card.className = `polaroid-card rounded-2xl p-2.5 flex flex-col gap-1.5 cursor-pointer relative break-inside-avoid mb-3.5 inline-block w-full align-top`;
         card.style.transform = `rotate(${p.rotate || 0}deg)`;
 
         card.innerHTML = `
@@ -1963,11 +1990,11 @@
               <span class="material-symbols-outlined text-[13px]">delete</span>
             </button>
           </div>
-          <div class="aspect-4/3 w-full rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-700 flex items-center justify-center">
-            <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover">
+          <div class="w-full rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-700 flex items-center justify-center">
+            <img src="${p.image}" alt="${escapeHtml(p.title)}" class="w-full h-auto max-h-80 object-cover rounded-xl block" loading="lazy">
           </div>
           <div class="text-center pt-1 px-1">
-            <span class="font-handwriting text-base text-primary dark:text-stone-100 font-bold tracking-wide line-clamp-1">
+            <span class="font-handwriting text-base text-primary dark:text-stone-100 font-bold tracking-wide line-clamp-1 block">
               ${escapeHtml(p.title)} • ${escapeHtml(p.date)}
             </span>
           </div>
@@ -1985,7 +2012,7 @@
           renderMemoryJar();
           window.DuduChatSocket?.sendDeletePolaroid?.(p.id);
           sendDeleteRest('/api/memories/polaroids', p.id);
-          showFeedbackToast('Photo removed from jar 🗑️');
+          showFeedbackToast('Photo removed from jar 🗑️', 'Foto dihapus dari toples 🗑️');
           window.duduAudio?.playPop?.(400);
         });
 
@@ -2000,7 +2027,10 @@
       viewAllBtn.onclick = () => {
         if (appData.polaroids.length > 0) {
           polaroidGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          showFeedbackToast(`Showing all ${appData.polaroids.length} memories in your jar 📸🍯`);
+          showFeedbackToast(
+            `Showing all ${appData.polaroids.length} memories in your jar 📸🍯`,
+            `Menampilkan semua ${appData.polaroids.length} kenangan di toples 📸🍯`
+          );
           window.duduAudio?.playPop?.(640);
         } else {
           openSheet('modal-add-polaroid');
@@ -2050,7 +2080,7 @@
         renderMemoryJar();
         window.DuduChatSocket?.sendDeleteMilestone?.(m.id);
         sendDeleteRest('/api/memories/milestones', m.id);
-        showFeedbackToast('Milestone removed 🗑️');
+        showFeedbackToast('Milestone removed 🗑️', 'Momen penting dihapus 🗑️');
         window.duduAudio?.playPop?.(400);
       });
 
@@ -2140,7 +2170,10 @@
           window.DuduChatSocket?.sendSavePlannerItem?.(item);
           sendSaveRest('/api/planner', item);
           window.duduAudio?.playPop?.(item.completed ? 800 : 400);
-          showFeedbackToast(item.completed ? 'Date completed! 🥰' : 'Marked active');
+          showFeedbackToast(
+            item.completed ? 'Date completed! 🥰' : 'Marked active',
+            item.completed ? 'Kencan selesai! 🥰' : 'Ditandai aktif'
+          );
         };
 
         card.querySelector('.btn-delete-bucket')?.addEventListener('click', (e) => {
@@ -2150,7 +2183,7 @@
           renderBucketList();
           window.DuduChatSocket?.sendDeletePlannerItem?.(item.id);
           sendDeleteRest('/api/planner', item.id);
-          showFeedbackToast('Date removed from wishlist 🗑️');
+          showFeedbackToast('Date removed from wishlist 🗑️', 'Kencan dihapus dari daftar impian 🗑️');
           window.duduAudio?.playPop?.(400);
         });
 
@@ -2359,7 +2392,7 @@
           renderCalendarDayModalEvents();
           window.DuduChatSocket?.sendSaveCalendarEvent?.(e);
           sendSaveRest('/api/calendar', e);
-          showFeedbackToast('Event updated! 🗓️✨');
+          showFeedbackToast('Event updated! 🗓️✨', 'Acara diperbarui! 🗓️✨');
         }
       });
 
@@ -2372,7 +2405,7 @@
         renderCalendarDayModalEvents();
         window.DuduChatSocket?.sendDeleteCalendarEvent?.(e.id);
         sendDeleteRest('/api/calendar', e.id);
-        showFeedbackToast('Event deleted! 🗑️');
+        showFeedbackToast('Event deleted! 🗑️', 'Acara dihapus! 🗑️');
         window.duduAudio?.playPop?.(400);
       };
 
@@ -2401,7 +2434,7 @@
         const pct = Math.max(0.05, Math.min(1, (e.clientX - rect.left) / rect.width));
         lofiEngine.setVolume(pct);
         window.duduAudio?.playPop?.(Math.round(350 + pct * 400));
-        showFeedbackToast(`Lofi volume: ${Math.round(pct * 100)}% 🎵`);
+        showFeedbackToast(`Lofi volume: ${Math.round(pct * 100)}% 🎵`, `Volume lofi: ${Math.round(pct * 100)}% 🎵`);
       };
     }
 
@@ -2526,63 +2559,317 @@
     bubu_shoes_ankle_boots: 'bubu_shoes_winter_boots'
   };
 
+  const CLOSET_SETS = {
+    dudu: [
+      {
+        id: 'dudu_01_baby_clothes',
+        pairId: 'baby',
+        name: 'Baju Bayi Lucu',
+        name_en: 'Cute Baby Clothes',
+        icon: '🍼',
+        desc: 'Popok bayi & dot manis',
+        desc_en: 'Baby diaper & pacifier',
+        file: 'closet/dudu/dudu_01_baby_clothes.jpg'
+      },
+      {
+        id: 'dudu_02_winter_clothes',
+        pairId: 'winter',
+        name: 'Musim Dingin Hangat',
+        name_en: 'Warm Winter Set',
+        icon: '❄️',
+        desc: 'Kupluk pom-pom & mantel tebal',
+        desc_en: 'Pompom beanie & winter coat',
+        file: 'closet/dudu/dudu_02_winter_clothes.jpg'
+      },
+      {
+        id: 'dudu_03_chore_clothes',
+        pairId: 'chore',
+        name: 'Beres-Beres Rumah',
+        name_en: 'Home Chore Outfit',
+        icon: '🧹',
+        desc: 'Celemek rajin & sapu',
+        desc_en: 'Cleaning apron & broom',
+        file: 'closet/dudu/dudu_03_chore_clothes.jpg'
+      },
+      {
+        id: 'dudu_04_work_clothes',
+        pairId: 'work',
+        name: 'Kemeja Kerja & Jas',
+        name_en: 'Work Suit & Tie',
+        icon: '💼',
+        desc: 'Jas kantor & dasi merah',
+        desc_en: 'Office suit & red tie',
+        file: 'closet/dudu/dudu_04_work_clothes.jpg'
+      },
+      {
+        id: 'dudu_05_sleep_pajamas',
+        pairId: 'sleep',
+        name: 'Piyama Tidur Nyenyak',
+        name_en: 'Cozy Sleep Pajamas',
+        icon: '🌙',
+        desc: 'Topi tidur & bantal awan',
+        desc_en: 'Nightcap & cloud pillow',
+        file: 'closet/dudu/dudu_05_sleep_pajamas.jpg'
+      },
+      {
+        id: 'dudu_06_couple_clothes',
+        pairId: 'couple',
+        name: 'Baju Kodok Berdua',
+        name_en: 'Couple Dungarees',
+        icon: '👖',
+        desc: 'Topi pet & baju kodok denim',
+        desc_en: 'Denim cap & dungaree overalls',
+        file: 'closet/dudu/dudu_06_couple_clothes.jpg'
+      },
+      {
+        id: 'dudu_07_love_clothes',
+        pairId: 'love',
+        name: 'Penuh Cinta & Hati',
+        name_en: 'Sweet Heart Set',
+        icon: '❤️',
+        desc: 'Bando hati & bantal cinta',
+        desc_en: 'Heart headband & heart pillow',
+        file: 'closet/dudu/dudu_07_love_clothes.jpg'
+      },
+      {
+        id: 'dudu_08_bubu_face_shirt',
+        pairId: 'partner_shirt',
+        name: 'Kaos Wajah Bubu',
+        name_en: 'Bubu Face T-Shirt',
+        icon: '🐼',
+        desc: 'Kaos bergambar wajah Bubu',
+        desc_en: 'Shirt featuring Bubu face',
+        file: 'closet/dudu/dudu_08_bubu_face_shirt.jpg'
+      },
+      {
+        id: 'dudu_09_pants_only',
+        pairId: 'pants_only',
+        name: 'Celana Pendek Santai',
+        name_en: 'Comfy Denim Shorts',
+        icon: '🩳',
+        desc: 'Goyang riang santai',
+        desc_en: 'Playful dance in shorts',
+        file: 'closet/dudu/dudu_09_pants_only.jpg'
+      },
+      {
+        id: 'dudu_10_tuxedo',
+        pairId: 'formal',
+        name: 'Tuksedo Pengantin Elegan',
+        name_en: 'Elegant Tuxedo & Flowers',
+        icon: '🤵',
+        desc: 'Jas tuksedo & buket bunga',
+        desc_en: 'Black tuxedo & flower bouquet',
+        file: 'closet/dudu/dudu_10_tuxedo.jpg'
+      }
+    ],
+    bubu: [
+      {
+        id: 'bubu_01_baby_clothes',
+        pairId: 'baby',
+        name: 'Baju Bayi Manis',
+        name_en: 'Sweet Baby Clothes',
+        icon: '🍼',
+        desc: 'Popok pink & kerincingan',
+        desc_en: 'Pink diaper & rattle toy',
+        file: 'closet/bubu/bubu_01_baby_clothes.jpg'
+      },
+      {
+        id: 'bubu_02_winter_clothes',
+        pairId: 'winter',
+        name: 'Mantel Musim Dingin Pink',
+        name_en: 'Pink Winter Coat',
+        icon: '❄️',
+        desc: 'Earmuffs bulu & mantel tebal',
+        desc_en: 'Fluffy earmuffs & winter coat',
+        file: 'closet/bubu/bubu_02_winter_clothes.jpg'
+      },
+      {
+        id: 'bubu_03_chore_clothes',
+        pairId: 'chore',
+        name: 'Beres-Beres & Lipat Baju',
+        name_en: 'Home Chore & Laundry',
+        icon: '🧺',
+        desc: 'Celemek manis melipat cucian',
+        desc_en: 'Cute apron folding fresh laundry',
+        file: 'closet/bubu/bubu_03_chore_clothes.jpg'
+      },
+      {
+        id: 'bubu_04_work_clothes',
+        pairId: 'work',
+        name: 'Blazer Kantor & Kopi',
+        name_en: 'Office Blazer & Coffee',
+        icon: '☕',
+        desc: 'Blazer pink & kopi hangat',
+        desc_en: 'Professional pink blazer & coffee',
+        file: 'closet/bubu/bubu_04_work_clothes.jpg'
+      },
+      {
+        id: 'bubu_05_sleep_pajamas',
+        pairId: 'sleep',
+        name: 'Piyama Tidur Pink',
+        name_en: 'Pink Sleep Pajamas',
+        icon: '🌙',
+        desc: 'Topi tidur pink & bantal awan',
+        desc_en: 'Pink nightcap & cloud pillow',
+        file: 'closet/bubu/bubu_05_sleep_pajamas.jpg'
+      },
+      {
+        id: 'bubu_06_couple_clothes',
+        pairId: 'couple',
+        name: 'Baju Kodok Berdua',
+        name_en: 'Couple Dungarees',
+        icon: '👖',
+        desc: 'Topi pet pink & baju kodok serasi',
+        desc_en: 'Pink denim cap & matching overalls',
+        file: 'closet/bubu/bubu_06_couple_clothes.jpg'
+      },
+      {
+        id: 'bubu_07_love_clothes',
+        pairId: 'love',
+        name: 'Penuh Cinta & Hati',
+        name_en: 'Sweet Heart Set',
+        icon: '❤️',
+        desc: 'Bando hati & bantal hati',
+        desc_en: 'Heart headband & heart pillow',
+        file: 'closet/bubu/bubu_07_love_clothes.jpg'
+      },
+      {
+        id: 'bubu_08_dudu_face_shirt',
+        pairId: 'partner_shirt',
+        name: 'Kaos Wajah Dudu',
+        name_en: 'Dudu Face T-Shirt',
+        icon: '🐻',
+        desc: 'Kaos bergambar wajah Dudu',
+        desc_en: 'Shirt featuring Dudu face',
+        file: 'closet/bubu/bubu_08_dudu_face_shirt.jpg'
+      },
+      {
+        id: 'bubu_09_pants_only',
+        pairId: 'pants_only',
+        name: 'Celana Pendek Pink',
+        name_en: 'Comfy Pink Shorts',
+        icon: '🩳',
+        desc: 'Goyang riang gemas berkilau',
+        desc_en: 'Sparkle dance in pink shorts',
+        file: 'closet/bubu/bubu_09_pants_only.jpg'
+      },
+      {
+        id: 'bubu_10_dress',
+        pairId: 'formal',
+        name: 'Gaun Pesta Mewah Ruffle',
+        name_en: 'Elegant Party Dress',
+        icon: '👗',
+        desc: 'Gaun ruffle pink anggun & pita',
+        desc_en: 'Pink ruffled gown with bow ribbon',
+        file: 'closet/bubu/bubu_10_dress.jpg'
+      }
+    ]
+  };
+
   const COUPLE_OUTFIT_PRESETS = [
     {
+      name: 'Baju Kodok Berdua 👖✨',
+      name_en: 'Couple Dungarees Duo 👖✨',
+      name_id: 'Baju Kodok Berdua 👖✨',
+      dudu: { outfit_set: 'dudu_06_couple_clothes' },
+      bubu: { outfit_set: 'bubu_06_couple_clothes' }
+    },
+    {
+      name: 'Penuh Cinta Berdua ❤️💕',
+      name_en: 'Sweet Heart Pajamas ❤️💕',
+      name_id: 'Penuh Cinta Berdua ❤️💕',
+      dudu: { outfit_set: 'dudu_07_love_clothes' },
+      bubu: { outfit_set: 'bubu_07_love_clothes' }
+    },
+    {
+      name: 'Musim Dingin Hangat ❄️🧣',
+      name_en: 'Cozy Winter Knit ❄️🧣',
+      name_id: 'Musim Dingin Hangat ❄️🧣',
+      dudu: { outfit_set: 'dudu_02_winter_clothes' },
+      bubu: { outfit_set: 'bubu_02_winter_clothes' }
+    },
+    {
+      name: 'Piyama Tidur Nyenyak 🌙💤',
+      name_en: 'Sweet Sleep Pajamas 🌙💤',
+      name_id: 'Piyama Tidur Nyenyak 🌙💤',
+      dudu: { outfit_set: 'dudu_05_sleep_pajamas' },
+      bubu: { outfit_set: 'bubu_05_sleep_pajamas' }
+    },
+    {
+      name: 'Kaos Wajah Ayang 🐻🐼',
+      name_en: 'Partner Face Shirts 🐻🐼',
+      name_id: 'Kaos Wajah Ayang 🐻🐼',
+      dudu: { outfit_set: 'dudu_08_bubu_face_shirt' },
+      bubu: { outfit_set: 'bubu_08_dudu_face_shirt' }
+    },
+    {
+      name: 'Pesta Mewah Elegan 🤵👗',
+      name_en: 'Tuxedo & Party Gown 🤵👗',
+      name_id: 'Pesta Mewah Elegan 🤵👗',
+      dudu: { outfit_set: 'dudu_10_tuxedo' },
+      bubu: { outfit_set: 'bubu_10_dress' }
+    },
+    {
+      name: 'Beres-Beres Rumah 🧹🧺',
+      name_en: 'Home Chore & Laundry 🧹🧺',
+      name_id: 'Beres-Beres Rumah 🧹🧺',
+      dudu: { outfit_set: 'dudu_03_chore_clothes' },
+      bubu: { outfit_set: 'bubu_03_chore_clothes' }
+    },
+    {
+      name: 'Kantoran & Kopi 💼☕',
+      name_en: 'Office Work Suit & Blazer 💼☕',
+      name_id: 'Kantoran & Kopi 💼☕',
+      dudu: { outfit_set: 'dudu_04_work_clothes' },
+      bubu: { outfit_set: 'bubu_04_work_clothes' }
+    },
+    {
+      name: 'Baju Bayi Menggemaskan 🍼👶',
+      name_en: 'Cute Baby Clothes 🍼👶',
+      name_id: 'Baju Bayi Menggemaskan 🍼👶',
+      dudu: { outfit_set: 'dudu_01_baby_clothes' },
+      bubu: { outfit_set: 'bubu_01_baby_clothes' }
+    },
+    {
+      name: 'Celana Pendek Santai 🩳✨',
+      name_en: 'Comfy Shorts Play 🩳✨',
+      name_id: 'Celana Pendek Santai 🩳✨',
+      dudu: { outfit_set: 'dudu_09_pants_only' },
+      bubu: { outfit_set: 'bubu_09_pants_only' }
+    },
+    {
       name: 'Bears Asli Mentahan 🐻🐼',
-      name_en: 'Raw Naked Bears 🐻🐼',
+      name_en: 'Raw Natural Bears 🐻🐼',
       name_id: 'Bears Asli Mentahan 🐻🐼',
-      dudu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' },
-      bubu: { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' }
-    },
-    {
-      name: 'Setelan Denim Serasi 👖✨',
-      name_en: 'Matching Denim Overalls Duo 👖✨',
-      name_id: 'Setelan Denim Serasi 👖✨',
-      dudu: { hat: 'dudu_hat_plaid_beret', outfit: 'dudu_outfit_overalls', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_overalls', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
-    },
-    {
-      name: 'Mantel Trench Elegan 🧥🍂',
-      name_en: 'Chic Matching Trench Coats 🧥🍂',
-      name_id: 'Mantel Trench Elegan 🧥🍂',
-      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_trench', accs: 'dudu_accs_satchel', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_trench', accs: 'bubu_accs_heart_bag', shoes: 'bubu_shoes_winter_boots' }
-    },
-    {
-      name: 'Musim Dingin Rajut Hangat ❄️🧣',
-      name_en: 'Cozy Winter Knit Duo ❄️🧣',
-      name_id: 'Musim Dingin Rajut Hangat ❄️🧣',
-      dudu: { hat: 'dudu_hat_pompom', outfit: 'dudu_outfit_cable_sweater', accs: 'dudu_accs_crossbody', shoes: 'dudu_shoes_winter_boots' },
-      bubu: { hat: 'bubu_hat_earmuffs', outfit: 'bubu_outfit_sweater_skirt', accs: 'bubu_accs_heart_bag', shoes: 'bubu_shoes_winter_boots' }
-    },
-    {
-      name: 'Kencan Manis Kafe & Maid ☕🌸',
-      name_en: 'Sweet Cafe & Maid Date ☕🌸',
-      name_id: 'Kencan Manis Kafe & Maid ☕🌸',
-      dudu: { hat: 'dudu_hat_beret', outfit: 'dudu_outfit_varsity', accs: 'dudu_accs_satchel', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_artist_beret', outfit: 'bubu_outfit_maid_dress', accs: 'bubu_accs_heart_glasses', shoes: 'bubu_shoes_mary_janes' }
-    },
-    {
-      name: 'Piknik Musim Panas 🌸👒',
-      name_en: 'Summer Picnic Flowers 🌸👒',
-      name_id: 'Piknik Musim Panas 🌸👒',
-      dudu: { hat: 'dudu_hat_newsboy', outfit: 'dudu_outfit_shorts', accs: 'dudu_accs_sunglasses', shoes: 'dudu_shoes_sneakers' },
-      bubu: { hat: 'bubu_hat_straw_hat', outfit: 'bubu_outfit_floral_dress', accs: 'bubu_accs_bear_satchel', shoes: 'bubu_shoes_mary_janes' }
+      dudu: { outfit_set: 'none' },
+      bubu: { outfit_set: 'none' }
     }
   ];
 
   function syncWardrobeToServer() {
+    if (!appData.wardrobe) appData.wardrobe = {};
+    if (!appData.wardrobe.dudu) appData.wardrobe.dudu = { outfit_set: 'dudu_06_couple_clothes' };
+    if (!appData.wardrobe.bubu) appData.wardrobe.bubu = { outfit_set: 'bubu_06_couple_clothes' };
+
     const payload = {
       wardrobe: {
         dudu: {
           ...appData.wardrobe.dudu,
-          sweater: appData.wardrobe.dudu.outfit,
-          coat: appData.wardrobe.dudu.shoes
+          outfit_set: appData.wardrobe.dudu.outfit_set || 'dudu_06_couple_clothes',
+          outfit: appData.wardrobe.dudu.outfit_set || 'dudu_06_couple_clothes',
+          sweater: appData.wardrobe.dudu.outfit_set || 'dudu_06_couple_clothes',
+          shoes: 'none',
+          hat: 'none',
+          accs: 'none'
         },
         bubu: {
           ...appData.wardrobe.bubu,
-          sweater: appData.wardrobe.bubu.outfit,
-          coat: appData.wardrobe.bubu.shoes
+          outfit_set: appData.wardrobe.bubu.outfit_set || 'bubu_06_couple_clothes',
+          outfit: appData.wardrobe.bubu.outfit_set || 'bubu_06_couple_clothes',
+          sweater: appData.wardrobe.bubu.outfit_set || 'bubu_06_couple_clothes',
+          shoes: 'none',
+          hat: 'none',
+          accs: 'none'
         }
       },
       miniGameHighScore: appData.miniGameHighScore || 420,
@@ -2592,194 +2879,81 @@
     sendSaveRest('/api/wardrobe', payload);
   }
 
-  function getItemMeta(slot, rawVal, char) {
-    let resolvedSlot = slot;
-    if (resolvedSlot === 'sweater') resolvedSlot = 'outfit';
-    if (resolvedSlot === 'coat') resolvedSlot = 'shoes';
-
-    const charKey = (char === 'bubu') ? 'bubu' : 'dudu';
-    let val = rawVal;
-    if (LEGACY_VAL_MAP[val]) {
-      val = LEGACY_VAL_MAP[val];
-    }
-    const catList = WARDROBE_CATALOG[charKey]?.[resolvedSlot] || WARDROBE_CATALOG.dudu[resolvedSlot] || [];
-    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
-    if (!val || val === 'none') {
-      return {
-        val: 'none',
-        label: isEn ? 'Raw Naked' : 'Polos Mentahan',
-        shortLabel: isEn ? 'Naked' : 'Polos',
-        icon: charKey === 'bubu' ? '🐼' : '🐻',
-        img: '',
-        theme: 'natural'
-      };
-    }
-    let match = catList.find(o => o.val === val);
-    if (!match) {
-      const otherChar = charKey === 'bubu' ? 'dudu' : 'bubu';
-      match = WARDROBE_CATALOG[otherChar]?.[resolvedSlot]?.find(o => o.val === val);
-    }
-    if (match) {
-      return {
-        ...match,
-        label: (isEn && match.label_en) ? match.label_en : (match.label_id || match.label),
-        shortLabel: (isEn && match.shortLabel_en) ? match.shortLabel_en : (match.shortLabel_id || match.shortLabel)
-      };
-    }
-
-    return catList[0] || {
-      val: 'none',
-      label: isEn ? 'Raw Naked' : 'Polos Mentahan',
-      shortLabel: isEn ? 'Naked' : 'Polos',
-      icon: '✨',
-      img: '',
-      theme: 'natural'
-    };
+  function getClosetSet(char, setId) {
+    const list = CLOSET_SETS[char] || CLOSET_SETS.dudu;
+    if (!setId || setId === 'none') return null;
+    return list.find(s => s.id === setId) || null;
   }
 
   function computeCoupleMatchBanner() {
-    const d = appData.wardrobe?.dudu || {};
-    const b = appData.wardrobe?.bubu || {};
-    const slots = ['hat', 'outfit', 'accs', 'shoes'];
-    let exactMatches = 0;
-    let themeMatches = 0;
-    const themes = [];
-
-    slots.forEach(s => {
-      const dm = getItemMeta(s, d[s] || d[s === 'outfit' ? 'sweater' : s === 'shoes' ? 'coat' : s], 'dudu');
-      const bm = getItemMeta(s, b[s] || b[s === 'outfit' ? 'sweater' : s === 'shoes' ? 'coat' : s], 'bubu');
-      if (dm.val !== 'none' && dm.val === bm.val) exactMatches++;
-      if (dm.theme !== 'natural' && dm.theme === bm.theme) themeMatches++;
-      themes.push(dm.theme, bm.theme);
-    });
-
-    const sleepCount = themes.filter(t => t === 'sleep').length;
-    const chicCount = themes.filter(t => t === 'chic').length;
-    const summerCount = themes.filter(t => t === 'summer').length;
-    const winterCount = themes.filter(t => t === 'winter').length;
-    const naturalCount = themes.filter(t => t === 'natural').length;
-
+    const dSetId = appData.wardrobe?.dudu?.outfit_set || 'dudu_06_couple_clothes';
+    const bSetId = appData.wardrobe?.bubu?.outfit_set || 'bubu_06_couple_clothes';
     const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
 
-    if (naturalCount >= 6) {
-      return isEn ? 'Natural Cute Bears 🐻🐼✨' : 'Bears Asli Mentahan 🐻🐼✨';
+    if (dSetId === 'none' && bSetId === 'none') {
+      return isEn ? 'Natural Cute Bears (Mentahan) 🐻🐼✨' : 'Bears Asli Mentahan (Natural 🐻🐼)';
     }
-    if (sleepCount >= 4) {
-      return isEn ? 'Sweet Sleepy Pajama Match 🌙💤✨' : 'Piyama Tidur Berdua 🌙💤✨';
+
+    const dSet = getClosetSet('dudu', dSetId);
+    const bSet = getClosetSet('bubu', bSetId);
+
+    if (dSet && bSet && dSet.pairId === bSet.pairId) {
+      const setName = isEn ? dSet.name_en : dSet.name;
+      return isEn ? `✨ Matching Couple: ${setName}! ${dSet.icon}💕` : `✨ Pasangan Serasi: ${setName}! ${dSet.icon}💕`;
     }
-    if (chicCount >= 4) {
-      return isEn ? 'Chic Romantic Date Match 🌹✨' : 'Kencan Mewah Berdua 🌹✨';
+
+    if (dSet && bSet) {
+      const dName = isEn ? dSet.name_en : dSet.name;
+      const bName = isEn ? bSet.name_en : bSet.name;
+      return `🐻 ${dName} • 🐼 ${bName}`;
     }
-    if (summerCount >= 4) {
-      return isEn ? 'Summer Holiday Match 🏖️🌴✨' : 'Liburan Tropis Serasi 🏖️🌴✨';
+
+    if (dSet) {
+      return `🐻 ${isEn ? dSet.name_en : dSet.name} • 🐼 ${isEn ? 'Raw Mentahan' : 'Polos Mentahan'}`;
     }
-    if (winterCount >= 4) {
-      return isEn ? 'Cozy Winter Match ❄️✨' : 'Hangat di Musim Dingin ❄️✨';
+    if (bSet) {
+      return `🐻 ${isEn ? 'Raw Mentahan' : 'Polos Mentahan'} • 🐼 ${isEn ? bSet.name_en : bSet.name}`;
     }
-    if (exactMatches >= 2 || themeMatches >= 2) {
-      return isEn ? 'Perfect Couple Match 💖✨' : 'Pasangan Serasi 💖✨';
-    }
+
     return isEn ? 'Cozy Playful Match 🧸💕' : 'Paduan Busana Menggemaskan 🧸💕';
+  }
+
+  function getItemMeta(slot, rawVal, char) {
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
+    return {
+      val: rawVal || 'none',
+      label: isEn ? 'Outfit Set' : 'Set Pakaian',
+      shortLabel: isEn ? 'Set' : 'Set',
+      icon: char === 'bubu' ? '🐼' : '🐻',
+      img: '',
+      theme: 'casual'
+    };
   }
 
   function applyLayerStyle(imgEl, slot, itemVal, char, mode) {
     if (!imgEl) return;
-    const meta = getItemMeta(slot, itemVal, char);
-    if (!meta || !meta.img || meta.val === 'none') {
-      imgEl.style.display = 'none';
-      imgEl.removeAttribute('src');
-      return;
-    }
-
-    imgEl.src = meta.img;
-    imgEl.style.display = 'block';
-
-    let w = 25.1;
-    let l = 37.45;
-    let t = 58.0;
-
-    if (char === 'dudu') {
-      if (slot === 'hat') {
-        if (meta.val === 'dudu_hat_newsboy') { w = 35.0; l = 35.0; t = 27.0; }
-        else if (meta.val === 'dudu_hat_pompom') { w = 33.3; l = 33.5; t = 22.0; }
-        else if (meta.val === 'dudu_hat_plaid_beret') { w = 31.0; l = 31.5; t = 28.5; }
-        else if (meta.val === 'dudu_hat_beret') { w = 36.0; l = 35.5; t = 28.0; }
-        else if (meta.val === 'dudu_hat_earmuffs') { w = 43.3; l = 28.5; t = 27.5; }
-        else { w = 35.0; l = 32.5; t = 27.0; }
-      } else if (slot === 'accs') {
-        if (meta.val === 'dudu_accs_sunglasses') { w = 27.6; l = 36.2; t = 46.5; }
-        else if (meta.val === 'dudu_accs_satchel') { w = 17.2; l = 31.0; t = 56.0; }
-        else if (meta.val === 'dudu_accs_crossbody') { w = 17.7; l = 53.5; t = 56.0; }
-        else { w = 27.6; l = 36.2; t = 46.5; }
-      } else if (slot === 'outfit') {
-        if (meta.val === 'dudu_outfit_overalls') { w = 25.1; l = 37.45; t = 58.0; }
-        else if (meta.val === 'dudu_outfit_cable_sweater') { w = 36.2; l = 31.9; t = 57.5; }
-        else if (meta.val === 'dudu_outfit_trench') { w = 36.2; l = 31.9; t = 57.5; }
-        else if (meta.val === 'dudu_outfit_varsity') { w = 35.4; l = 32.3; t = 57.5; }
-        else if (meta.val === 'dudu_outfit_shorts') { w = 29.6; l = 35.2; t = 69.5; }
-        else { w = 25.1; l = 37.45; t = 58.0; }
-      } else if (slot === 'shoes') {
-        if (meta.val === 'dudu_shoes_sneakers') { w = 22.5; l = 38.7; t = 84.5; }
-        else if (meta.val === 'dudu_shoes_winter_boots') { w = 26.0; l = 37.0; t = 83.5; }
-        else { w = 22.5; l = 38.7; t = 84.5; }
-      }
-    } else {
-      // Bubu
-      if (slot === 'hat') {
-        if (meta.val === 'bubu_hat_artist_beret') { w = 31.0; l = 31.5; t = 28.5; }
-        else if (meta.val === 'bubu_hat_earmuffs') { w = 43.3; l = 28.5; t = 27.5; }
-        else if (meta.val === 'bubu_hat_straw_hat') { w = 41.2; l = 29.5; t = 25.0; }
-        else { w = 31.0; l = 31.5; t = 28.5; }
-      } else if (slot === 'accs') {
-        if (meta.val === 'bubu_accs_heart_glasses') { w = 28.2; l = 35.9; t = 46.5; }
-        else if (meta.val === 'bubu_accs_bear_satchel') { w = 17.1; l = 31.0; t = 56.0; }
-        else if (meta.val === 'bubu_accs_heart_bag') { w = 17.6; l = 53.5; t = 56.0; }
-        else { w = 28.2; l = 35.9; t = 46.5; }
-      } else if (slot === 'outfit') {
-        if (meta.val === 'bubu_outfit_floral_dress') { w = 36.1; l = 31.95; t = 58.0; }
-        else if (meta.val === 'bubu_outfit_maid_dress') { w = 36.2; l = 31.9; t = 57.5; }
-        else if (meta.val === 'bubu_outfit_trench') { w = 36.2; l = 31.9; t = 57.0; }
-        else if (meta.val === 'bubu_outfit_sweater_skirt') { w = 35.2; l = 32.4; t = 57.0; }
-        else if (meta.val === 'bubu_outfit_overalls') { w = 25.0; l = 37.5; t = 58.0; }
-        else if (meta.val === 'bubu_outfit_artist_apron') { w = 33.1; l = 33.45; t = 58.0; }
-        else if (meta.val === 'bubu_outfit_cardigan') { w = 38.5; l = 30.75; t = 57.5; }
-        else { w = 36.1; l = 31.95; t = 58.0; }
-      } else if (slot === 'shoes') {
-        if (meta.val === 'bubu_shoes_mary_janes') { w = 22.5; l = 38.7; t = 84.5; }
-        else if (meta.val === 'bubu_shoes_winter_boots') { w = 26.0; l = 37.0; t = 83.5; }
-        else { w = 22.5; l = 38.7; t = 84.5; }
-      }
-    }
-
-    if (mode === 'couple') {
-      const coupleW = w * 0.497;
-      const coupleL = (char === 'dudu' ? 25 : 75) + (l - 50) * 0.497;
-      imgEl.style.width = `${coupleW.toFixed(2)}%`;
-      imgEl.style.left = `${coupleL.toFixed(2)}%`;
-      imgEl.style.top = `${t.toFixed(2)}%`;
-    } else {
-      imgEl.style.width = `${w.toFixed(2)}%`;
-      imgEl.style.left = `${l.toFixed(2)}%`;
-      imgEl.style.top = `${t.toFixed(2)}%`;
-    }
+    imgEl.style.display = 'none';
   }
 
   function renderWardrobeRoom() {
     if (!appData.wardrobe) appData.wardrobe = JSON.parse(JSON.stringify(defaultMockupData.wardrobe));
     if (!appData.wardrobe.dudu) appData.wardrobe.dudu = { ...defaultMockupData.wardrobe.dudu };
     if (!appData.wardrobe.bubu) appData.wardrobe.bubu = { ...defaultMockupData.wardrobe.bubu };
+    if (!appData.wardrobe.dudu.outfit_set) appData.wardrobe.dudu.outfit_set = 'dudu_06_couple_clothes';
+    if (!appData.wardrobe.bubu.outfit_set) appData.wardrobe.bubu.outfit_set = 'bubu_06_couple_clothes';
 
     const duduBadge = document.getElementById('wardrobe-badge-dudu');
     const bubuBadge = document.getElementById('wardrobe-badge-bubu');
     const prevPresetBtn = document.getElementById('btn-wardrobe-prev-preset');
     const nextPresetBtn = document.getElementById('btn-wardrobe-next-preset');
-    const matchCoupleBtn = document.getElementById('btn-wardrobe-match-couple');
     const undressAllBtn = document.getElementById('btn-wardrobe-undress-all');
     const viewDuduBtn = document.getElementById('btn-stage-view-dudu');
     const viewBubuBtn = document.getElementById('btn-stage-view-bubu');
     const viewCoupleBtn = document.getElementById('btn-stage-view-couple');
     const stageHitDudu = document.getElementById('wardrobe-stage-hit-dudu');
     const stageHitBubu = document.getElementById('wardrobe-stage-hit-bubu');
+    const stageCoupleDuduCard = document.getElementById('wardrobe-stage-couple-dudu-card');
+    const stageCoupleBubuCard = document.getElementById('wardrobe-stage-couple-bubu-card');
     const highScoreEl = document.getElementById('wardrobe-high-score');
     if (highScoreEl) highScoreEl.textContent = String(appData.miniGameHighScore || 420);
 
@@ -2819,6 +2993,23 @@
       };
     }
 
+    if (stageCoupleDuduCard) {
+      stageCoupleDuduCard.onclick = () => {
+        activeWardrobeChar = 'dudu';
+        updateWardrobeTabs();
+        window.duduAudio?.playPop?.(650);
+        showFeedbackToast("Dudu's Wardrobe 🐻", "Lemari Dudu 🐻");
+      };
+    }
+    if (stageCoupleBubuCard) {
+      stageCoupleBubuCard.onclick = () => {
+        activeWardrobeChar = 'bubu';
+        updateWardrobeTabs();
+        window.duduAudio?.playPop?.(650);
+        showFeedbackToast("Bubu's Wardrobe 🐼", "Lemari Bubu 🐼");
+      };
+    }
+
     if (stageHitDudu) {
       stageHitDudu.onclick = () => {
         if (activeStageView === 'couple') {
@@ -2826,7 +3017,6 @@
           updateWardrobeTabs();
         }
         window.duduAudio?.playPop?.(650);
-        showFeedbackToast('Dudu 🐻 siap didandani!');
       };
     }
     if (stageHitBubu) {
@@ -2836,36 +3026,37 @@
           updateWardrobeTabs();
         }
         window.duduAudio?.playPop?.(650);
-        showFeedbackToast('Bubu 🐼 siap didandani!');
       };
     }
 
     const applyPreset = (idx) => {
       activePresetIdx = (idx + COUPLE_OUTFIT_PRESETS.length) % COUPLE_OUTFIT_PRESETS.length;
       const preset = COUPLE_OUTFIT_PRESETS[activePresetIdx];
-      appData.wardrobe.dudu = { ...preset.dudu };
-      appData.wardrobe.bubu = { ...preset.bubu };
+      appData.wardrobe.dudu = { ...appData.wardrobe.dudu, ...preset.dudu };
+      appData.wardrobe.bubu = { ...appData.wardrobe.bubu, ...preset.bubu };
       saveState();
       updateWardrobeTabs();
       syncWardrobeToServer();
       window.duduAudio?.playPop?.(820);
-      showFeedbackToast(`✨ Memakai set: "${preset.name}"!`);
+      showFeedbackToast(`✨ Wearing set: "${preset.name}"!`, `✨ Memakai set: "${preset.name}"!`);
     };
 
     if (prevPresetBtn) prevPresetBtn.onclick = () => applyPreset(activePresetIdx - 1);
     if (nextPresetBtn) nextPresetBtn.onclick = () => applyPreset(activePresetIdx + 1);
-    if (matchCoupleBtn) matchCoupleBtn.onclick = () => applyPreset(activePresetIdx + 1);
 
     if (undressAllBtn) {
       undressAllBtn.onclick = () => {
         if (activeStageView === 'couple') {
-          appData.wardrobe.dudu = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
-          appData.wardrobe.bubu = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
-          showFeedbackToast('Semua pakaian dilepas! 🐻🐼 Mentahan polos');
+          appData.wardrobe.dudu.outfit_set = 'none';
+          appData.wardrobe.bubu.outfit_set = 'none';
+          showFeedbackToast('All outfits removed! 🐻🐼 Base look', 'Semua pakaian dilepas! 🐻🐼 Mentahan polos');
         } else {
           const char = (activeWardrobeChar === 'bubu') ? 'bubu' : 'dudu';
-          appData.wardrobe[char] = { hat: 'none', outfit: 'none', accs: 'none', shoes: 'none' };
-          showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} kembali ke mentahan polos!`);
+          appData.wardrobe[char].outfit_set = 'none';
+          showFeedbackToast(
+            `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} returned to base look!`,
+            `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} kembali ke mentahan polos!`
+          );
         }
         saveState();
         updateWardrobeTabs();
@@ -2873,30 +3064,6 @@
         window.duduAudio?.playPop?.(400);
       };
     }
-
-    document.querySelectorAll('.wardrobe-item-card').forEach(card => {
-      card.onclick = () => {
-        let itemType = card.getAttribute('data-type');
-        if (itemType === 'sweater') itemType = 'outfit';
-        if (itemType === 'coat') itemType = 'shoes';
-        activeWardrobeSlot = itemType;
-
-        const char = (activeWardrobeChar === 'bubu') ? 'bubu' : 'dudu';
-        const catalog = WARDROBE_CATALOG[char]?.[activeWardrobeSlot] || [];
-        if (catalog && catalog.length > 0) {
-          if (!appData.wardrobe[char]) appData.wardrobe[char] = { ...defaultMockupData.wardrobe[char] };
-          const currentVal = appData.wardrobe[char][activeWardrobeSlot] || appData.wardrobe[char][activeWardrobeSlot === 'outfit' ? 'sweater' : activeWardrobeSlot === 'shoes' ? 'coat' : activeWardrobeSlot];
-          const curIdx = catalog.findIndex(o => o.val === currentVal);
-          const nextOpt = catalog[(curIdx + 1) % catalog.length];
-          appData.wardrobe[char][activeWardrobeSlot] = nextOpt.val;
-          saveState();
-          updateWardrobeTabs();
-          syncWardrobeToServer();
-          window.duduAudio?.playPop?.(750);
-          showFeedbackToast(`${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${nextOpt.label}! ${nextOpt.icon}`);
-        }
-      };
-    });
 
     updateWardrobeTabs();
 
@@ -2914,209 +3081,142 @@
     if (!appData.wardrobe) appData.wardrobe = JSON.parse(JSON.stringify(defaultMockupData.wardrobe));
     if (!appData.wardrobe.dudu) appData.wardrobe.dudu = { ...defaultMockupData.wardrobe.dudu };
     if (!appData.wardrobe.bubu) appData.wardrobe.bubu = { ...defaultMockupData.wardrobe.bubu };
+    if (!appData.wardrobe.dudu.outfit_set) appData.wardrobe.dudu.outfit_set = 'dudu_06_couple_clothes';
+    if (!appData.wardrobe.bubu.outfit_set) appData.wardrobe.bubu.outfit_set = 'bubu_06_couple_clothes';
 
     const duduBadge = document.getElementById('wardrobe-badge-dudu');
     const bubuBadge = document.getElementById('wardrobe-badge-bubu');
     const viewDuduBtn = document.getElementById('btn-stage-view-dudu');
     const viewBubuBtn = document.getElementById('btn-stage-view-bubu');
     const viewCoupleBtn = document.getElementById('btn-stage-view-couple');
-    const stageArt = document.getElementById('wardrobe-stage-art');
     const stageEl = document.getElementById('wardrobe-stage');
-    const duduLayers = document.getElementById('wardrobe-dudu-layers');
-    const bubuLayers = document.getElementById('wardrobe-bubu-layers');
-    const stageHitDudu = document.getElementById('wardrobe-stage-hit-dudu');
-    const stageHitBubu = document.getElementById('wardrobe-stage-hit-bubu');
+    const stageSingle = document.getElementById('wardrobe-stage-single');
+    const stageCouple = document.getElementById('wardrobe-stage-couple');
+    const stageArt = document.getElementById('wardrobe-stage-art');
+    const coupleDuduImg = document.getElementById('wardrobe-stage-couple-dudu-img');
+    const coupleBubuImg = document.getElementById('wardrobe-stage-couple-bubu-img');
+    const coupleDuduCard = document.getElementById('wardrobe-stage-couple-dudu-card');
+    const coupleBubuCard = document.getElementById('wardrobe-stage-couple-bubu-card');
 
-    // Wardrobe character badges
+    const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
+
+    // Character toggle badges
     if (duduBadge && bubuBadge) {
       if (isDudu) {
-        duduBadge.className = 'px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer';
+        duduBadge.className = 'px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer shadow-2xs';
         bubuBadge.className = 'px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer';
       } else {
-        bubuBadge.className = 'px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer';
+        bubuBadge.className = 'px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer shadow-2xs';
         duduBadge.className = 'px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer';
       }
     }
 
     // View switcher buttons styling
     if (viewDuduBtn && viewBubuBtn && viewCoupleBtn) {
-      const activeClass = 'px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer shadow-xs';
-      const inactiveClass = 'px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 hover:text-stone-900 button-press cursor-pointer';
+      const activeClass = 'px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer shadow-xs font-bold';
+      const inactiveClass = 'px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 hover:text-stone-900 button-press cursor-pointer font-bold';
       viewDuduBtn.className = (activeStageView === 'dudu') ? activeClass : inactiveClass;
       viewBubuBtn.className = (activeStageView === 'bubu') ? activeClass : inactiveClass;
       viewCoupleBtn.className = (activeStageView === 'couple') ? activeClass : inactiveClass;
     }
 
-    // Stage Background and Aspect Ratio
-    if (stageArt && stageEl) {
-      if (activeStageView === 'dudu') {
-        stageArt.src = 'assets/mockup_art/wardrobe/stage_dudu_room.jpg';
-        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300';
-      } else if (activeStageView === 'bubu') {
-        stageArt.src = 'assets/mockup_art/wardrobe/stage_bubu_room.jpg';
-        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300';
-      } else {
-        stageArt.src = 'assets/mockup_art/wardrobe/stage_couple_room.jpg';
-        stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[1400/781] transition-all duration-300';
-      }
-    }
+    const dSetId = appData.wardrobe.dudu.outfit_set;
+    const bSetId = appData.wardrobe.bubu.outfit_set;
+    const dSet = getClosetSet('dudu', dSetId);
+    const bSet = getClosetSet('bubu', bSetId);
 
-    // Hitboxes
-    if (stageHitDudu && stageHitBubu) {
-      if (activeStageView === 'couple') {
-        stageHitDudu.style.cssText = 'top: 30%; left: 10%; width: 30%; height: 60%;';
-        stageHitBubu.style.cssText = 'top: 30%; right: 10%; width: 30%; height: 60%;';
-        stageHitDudu.style.display = 'block';
-        stageHitBubu.style.display = 'block';
-      } else if (activeStageView === 'dudu') {
-        stageHitDudu.style.cssText = 'top: 30%; left: 25%; width: 50%; height: 60%;';
-        stageHitDudu.style.display = 'block';
-        stageHitBubu.style.display = 'none';
-      } else {
-        stageHitBubu.style.cssText = 'top: 30%; left: 25%; width: 50%; height: 60%;';
-        stageHitBubu.style.display = 'block';
-        stageHitDudu.style.display = 'none';
-      }
-    }
+    const duduImgSrc = (dSet && dSetId !== 'none') ? dSet.file : 'assets/mockup_art/wardrobe/stage_dudu_mentahan.png';
+    const bubuImgSrc = (bSet && bSetId !== 'none') ? bSet.file : 'assets/mockup_art/wardrobe/stage_bubu_mentahan.png';
 
-    // Overlay Layers Rendering
-    const dOut = appData.wardrobe?.dudu || {};
-    const bOut = appData.wardrobe?.bubu || {};
-
-    const dHat = dOut.hat;
-    const dOutfit = dOut.outfit || dOut.sweater;
-    const dAccs = dOut.accs;
-    const dShoes = dOut.shoes || dOut.coat;
-
-    const bHat = bOut.hat;
-    const bOutfit = bOut.outfit || bOut.sweater;
-    const bAccs = bOut.accs;
-    const bShoes = bOut.shoes || bOut.coat;
-
+    // Stage Display
     if (activeStageView === 'couple') {
-      if (duduLayers) duduLayers.style.display = 'block';
-      if (bubuLayers) bubuLayers.style.display = 'block';
-      applyLayerStyle(document.getElementById('layer-dudu-shoes'), 'shoes', dShoes, 'dudu', 'couple');
-      applyLayerStyle(document.getElementById('layer-dudu-outfit'), 'outfit', dOutfit, 'dudu', 'couple');
-      applyLayerStyle(document.getElementById('layer-dudu-accs'), 'accs', dAccs, 'dudu', 'couple');
-      applyLayerStyle(document.getElementById('layer-dudu-hat'), 'hat', dHat, 'dudu', 'couple');
+      if (stageSingle) stageSingle.classList.add('hidden');
+      if (stageCouple) stageCouple.classList.remove('hidden');
+      if (stageEl) stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300';
 
-      applyLayerStyle(document.getElementById('layer-bubu-shoes'), 'shoes', bShoes, 'bubu', 'couple');
-      applyLayerStyle(document.getElementById('layer-bubu-outfit'), 'outfit', bOutfit, 'bubu', 'couple');
-      applyLayerStyle(document.getElementById('layer-bubu-accs'), 'accs', bAccs, 'bubu', 'couple');
-      applyLayerStyle(document.getElementById('layer-bubu-hat'), 'hat', bHat, 'bubu', 'couple');
-    } else if (activeStageView === 'dudu') {
-      if (duduLayers) duduLayers.style.display = 'block';
-      if (bubuLayers) bubuLayers.style.display = 'none';
-      applyLayerStyle(document.getElementById('layer-dudu-shoes'), 'shoes', dShoes, 'dudu', 'solo');
-      applyLayerStyle(document.getElementById('layer-dudu-outfit'), 'outfit', dOutfit, 'dudu', 'solo');
-      applyLayerStyle(document.getElementById('layer-dudu-accs'), 'accs', dAccs, 'dudu', 'solo');
-      applyLayerStyle(document.getElementById('layer-dudu-hat'), 'hat', dHat, 'dudu', 'solo');
+      if (coupleDuduImg) coupleDuduImg.src = duduImgSrc;
+      if (coupleBubuImg) coupleBubuImg.src = bubuImgSrc;
+
+      // Active character focus in couple stage
+      if (coupleDuduCard && coupleBubuCard) {
+        if (isDudu) {
+          coupleDuduCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
+          coupleBubuCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
+        } else {
+          coupleBubuCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
+          coupleDuduCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
+        }
+      }
     } else {
-      if (duduLayers) duduLayers.style.display = 'none';
-      if (bubuLayers) bubuLayers.style.display = 'block';
-      applyLayerStyle(document.getElementById('layer-bubu-shoes'), 'shoes', bShoes, 'bubu', 'solo');
-      applyLayerStyle(document.getElementById('layer-bubu-outfit'), 'outfit', bOutfit, 'bubu', 'solo');
-      applyLayerStyle(document.getElementById('layer-bubu-accs'), 'accs', bAccs, 'bubu', 'solo');
-      applyLayerStyle(document.getElementById('layer-bubu-hat'), 'hat', bHat, 'bubu', 'solo');
+      if (stageCouple) stageCouple.classList.add('hidden');
+      if (stageSingle) stageSingle.classList.remove('hidden');
+      if (stageEl) stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300';
+
+      if (stageArt) {
+        stageArt.src = isDudu ? duduImgSrc : bubuImgSrc;
+      }
     }
 
-    // Match text
+    // Match banner text
     const matchTextEl = document.getElementById('wardrobe-match-text');
     if (matchTextEl) {
       matchTextEl.textContent = computeCoupleMatchBanner();
     }
 
-    // Category Cards UI for active character
-    const currentOutfit = appData.wardrobe[char] || {};
-    const equippedLabels = [];
-
-    document.querySelectorAll('.wardrobe-item-card').forEach(card => {
-      let type = card.getAttribute('data-type');
-      if (type === 'sweater') type = 'outfit';
-      if (type === 'coat') type = 'shoes';
-      const catalog = WARDROBE_CATALOG[char]?.[type] || [];
-      const curVal = currentOutfit[type] || currentOutfit[type === 'outfit' ? 'sweater' : type === 'shoes' ? 'coat' : type];
-      const activeIdx = Math.max(0, catalog.findIndex(o => o.val === curVal));
-      const activeOpt = catalog[activeIdx] || catalog[0] || { val: 'none', label: 'Polos', shortLabel: 'Polos', icon: '🐾', img: '' };
-      const isSelectedSlot = type === activeWardrobeSlot;
-
-      card.classList.toggle('border-2', isSelectedSlot);
-      card.classList.toggle('border-[#8D5B4C]', isSelectedSlot);
-      card.classList.toggle('shadow-sm', isSelectedSlot);
-
-      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
-      if (activeOpt.val !== 'none') {
-        const lbl = isEn ? (activeOpt.shortLabel_en || activeOpt.shortLabel || activeOpt.label) : (activeOpt.shortLabel || activeOpt.label);
-        equippedLabels.push(`${activeOpt.icon} ${lbl}`);
-      }
-
-      const imgEl = card.querySelector('.wardrobe-card-img');
-      const iconSpan = card.querySelector('.wardrobe-card-icon');
-      const labelSpan = card.querySelector('.wardrobe-card-label');
-      const idxSpan = card.querySelector('.wardrobe-card-idx');
-
-      if (labelSpan) labelSpan.textContent = isEn ? (activeOpt.shortLabel_en || activeOpt.shortLabel || activeOpt.label) : (activeOpt.shortLabel || activeOpt.label);
-      if (idxSpan) idxSpan.textContent = `${activeIdx + 1}/${catalog.length}`;
-
-      if (activeOpt.img && imgEl) {
-        imgEl.src = activeOpt.img;
-        imgEl.style.display = 'block';
-        if (iconSpan) iconSpan.classList.add('hidden');
+    // Summary text pill
+    const summaryEl = document.getElementById('wardrobe-equipped-summary');
+    if (summaryEl) {
+      const activeSet = isDudu ? dSet : bSet;
+      const charLabel = isDudu ? 'Dudu 🐻' : 'Bubu 🐼';
+      if (!activeSet || (isDudu ? dSetId : bSetId) === 'none') {
+        summaryEl.textContent = `${charLabel}: ${isEn ? 'Bare Natural 🐾' : 'Polos Mentahan 🐾'}`;
       } else {
-        if (imgEl) imgEl.style.display = 'none';
-        if (iconSpan) {
-          iconSpan.classList.remove('hidden');
-          iconSpan.textContent = activeOpt.icon || (char === 'bubu' ? '🐼' : '🐻');
-        }
+        const setName = isEn ? activeSet.name_en : activeSet.name;
+        summaryEl.textContent = `${charLabel}: ${activeSet.icon} ${setName}`;
       }
-    });
+    }
 
-    // Populate direct item picker pills/chips for activeWardrobeSlot
-    const slotPicker = document.getElementById('wardrobe-slot-picker');
-    if (slotPicker) {
-      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
-      const catalog = WARDROBE_CATALOG[char]?.[activeWardrobeSlot] || [];
-      const curVal = currentOutfit[activeWardrobeSlot] || currentOutfit[activeWardrobeSlot === 'outfit' ? 'sweater' : activeWardrobeSlot === 'shoes' ? 'coat' : activeWardrobeSlot];
+    // Populate Outfit Sets Grid
+    const setsGrid = document.getElementById('wardrobe-sets-grid');
+    if (setsGrid) {
+      const catalog = CLOSET_SETS[char] || [];
+      const curSetId = isDudu ? dSetId : bSetId;
 
-      slotPicker.innerHTML = catalog.map(opt => {
-        const active = opt.val === curVal;
-        const isNone = opt.val === 'none';
-        const labelText = isNone ? (isEn ? '❌ Undress / Bare' : '❌ Lepas / Polos') : (isEn ? (opt.label_en || opt.label) : opt.label);
+      setsGrid.innerHTML = catalog.map(set => {
+        const isEquipped = (set.id === curSetId);
+        const title = isEn ? set.name_en : set.name;
+        const desc = isEn ? set.desc_en : set.desc;
+
         return `
-          <button type="button" data-pick-val="${opt.val}" class="wardrobe-slot-chip px-2.5 py-1.5 rounded-2xl text-[11px] font-bold shrink-0 flex items-center gap-2 cursor-pointer button-press transition-all border ${active ? 'bg-[#8D5B4C] text-white shadow-xs border-[#78493C]' : 'bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 border-[#E8DACB] dark:border-stone-600 hover:border-[#8D5B4C]'}">
-            ${opt.img ? `<img src="${opt.img}" class="w-7 h-7 object-contain drop-shadow-xs" alt="${opt.shortLabel}" />` : `<span class="text-lg">${opt.icon}</span>`}
-            <span class="truncate max-w-[120px]">${labelText}</span>
+          <button type="button" data-set-id="${set.id}" class="wardrobe-set-card p-2 rounded-2xl flex flex-col items-center text-center cursor-pointer button-press transition-all relative border-2 ${isEquipped ? 'bg-[#F2E4D5] dark:bg-stone-700 border-[#8D5B4C] shadow-sm ring-2 ring-[#8D5B4C]/25' : 'bg-[#FAF5EE] dark:bg-stone-800 border-[#E8DACB] dark:border-stone-700 hover:border-[#8D5B4C] shadow-2xs'}">
+            ${isEquipped ? `<span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full bg-[#8D5B4C] text-white text-[8px] font-black z-10 shadow-2xs leading-none">✓</span>` : ''}
+            <div class="w-full aspect-square rounded-xl overflow-hidden bg-white/70 dark:bg-stone-900/60 mb-1.5 border border-[#E8DACB]/60 dark:border-stone-700 flex items-center justify-center">
+              <img src="${set.file}" alt="${title}" class="w-full h-full object-cover block" loading="lazy" />
+            </div>
+            <span class="font-heading font-extrabold text-[11px] text-[#4A3222] dark:text-stone-100 truncate w-full leading-tight">${set.icon} ${title}</span>
+            <span class="text-[9px] text-[#8D5B4C] dark:text-stone-300 truncate w-full mt-0.5 opacity-80">${desc}</span>
           </button>
         `;
       }).join('');
 
-      slotPicker.querySelectorAll('button[data-pick-val]').forEach(btn => {
+      setsGrid.querySelectorAll('button[data-set-id]').forEach(btn => {
         btn.onclick = () => {
-          const val = btn.getAttribute('data-pick-val');
-          const opt = catalog.find(o => o.val === val);
-          if (opt) {
-            appData.wardrobe[char][activeWardrobeSlot] = opt.val;
+          const setId = btn.getAttribute('data-set-id');
+          const chosenSet = catalog.find(s => s.id === setId);
+          if (chosenSet) {
+            appData.wardrobe[char].outfit_set = chosenSet.id;
             saveState();
             updateWardrobeTabs();
             syncWardrobeToServer();
             window.duduAudio?.playPop?.(780);
-            if (opt.val === 'none') {
-              showFeedbackToast(isEn ? `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} undressed!` : `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} melepas pakaian!`);
-            } else {
-              const optLabel = isEn ? (opt.label_en || opt.label) : opt.label;
-              showFeedbackToast(isEn ? `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} equipped ${optLabel}! ${opt.icon}` : `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${optLabel}! ${opt.icon}`);
-            }
+            const title = isEn ? chosenSet.name_en : chosenSet.name;
+            showFeedbackToast(
+              `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} is wearing ${chosenSet.icon} ${chosenSet.name_en || chosenSet.name}!`,
+              `${char === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'} memakai ${chosenSet.icon} ${chosenSet.name}!`
+            );
           }
         };
       });
-    }
-
-    const summaryEl = document.getElementById('wardrobe-equipped-summary');
-    if (summaryEl) {
-      const isEn = window.DuduI18n && window.DuduI18n.getLanguage() === 'en';
-      const charLabel = isDudu ? 'Dudu 🐻' : 'Bubu 🐼';
-      summaryEl.textContent = `${charLabel}: ${equippedLabels.length > 0 ? equippedLabels.join(' • ') : (isEn ? 'Bare Natural 🐾' : 'Polos Mentahan 🐾')}`;
     }
   }
 
@@ -3198,7 +3298,10 @@
                 if (hsEl) hsEl.textContent = String(bonusScore);
               }
               setTimeout(() => {
-                showFeedbackToast(`🎉 All pairs matched! Score: ${bonusScore} 🐻❤️`);
+                showFeedbackToast(
+                  `🎉 All pairs matched! Score: ${bonusScore} 🐻❤️`,
+                  `🎉 Semua pasangan cocok! Skor: ${bonusScore} 🐻❤️`
+                );
                 modal.classList.add('hidden');
               }, 400);
             }
@@ -3220,7 +3323,10 @@
       if (timeEl) timeEl.textContent = `${timeLeft}s`;
       if (timeLeft <= 0) {
         clearInterval(gameTimer);
-        showFeedbackToast(`Time's up! Great effort, score: ${gameScore} ✨`);
+        showFeedbackToast(
+          `Time's up! Great effort, score: ${gameScore} ✨`,
+          `Waktu habis! Usaha hebat, skor: ${gameScore} ✨`
+        );
         modal.classList.add('hidden');
       }
     }, 1000);
@@ -3256,7 +3362,7 @@
       sendNoteBtn.onclick = () => {
         const body = document.getElementById('input-love-note-body')?.value?.trim();
         if (!body) {
-          showFeedbackToast('Please write a note! 💌');
+          showFeedbackToast('Please write a note! 💌', 'Silakan tulis surat! 💌');
           return;
         }
 
@@ -3283,7 +3389,7 @@
         sendSaveRest('/api/notes', newNote);
         closeSheet('modal-write-love-note');
         document.getElementById('input-love-note-body').value = '';
-        showFeedbackToast('Love note sent to Honey! 💌');
+        showFeedbackToast('Love note sent to Honey! 💌', 'Surat cinta terkirim ke Sayang! 💌');
         window.duduAudio?.playPop?.(850);
       };
     }
@@ -3333,7 +3439,7 @@
             activeCustomPolaroidImage = canvas.toDataURL('image/jpeg', 0.82);
             if (previewImg) previewImg.src = activeCustomPolaroidImage;
             if (previewBox) previewBox.classList.remove('hidden');
-            showFeedbackToast('Custom photo selected! 📸');
+            showFeedbackToast('Custom photo selected! 📸', 'Foto khusus dipilih! 📸');
           };
           img.src = rawDataUrl;
         };
@@ -3388,7 +3494,7 @@
         sendSaveRest('/api/memories/polaroids', newPol);
         clearCustomPolaroid();
         closeSheet('modal-add-polaroid');
-        showFeedbackToast('Polaroid added to jar! 📸');
+        showFeedbackToast('Polaroid added to jar! 📸', 'Polaroid ditambahkan ke toples! 📸');
         window.duduAudio?.playPop?.(750);
       };
     }
@@ -3414,7 +3520,7 @@
       submitMsBtn.onclick = () => {
         const title = document.getElementById('input-milestone-title')?.value?.trim();
         if (!title) {
-          showFeedbackToast('Please enter a milestone title! ✨');
+          showFeedbackToast('Please enter a milestone title! ✨', 'Silakan masukkan judul momen penting! ✨');
           return;
         }
         const date = document.getElementById('input-milestone-date')?.value?.trim() || 'Today';
@@ -3433,7 +3539,7 @@
         window.DuduChatSocket?.sendSaveMilestone?.(newMs);
         sendSaveRest('/api/memories/milestones', newMs);
         closeSheet('modal-add-milestone');
-        showFeedbackToast('Milestone added to timeline! ⌛✨');
+        showFeedbackToast('Milestone added to timeline! ⌛✨', 'Momen penting ditambahkan ke garis waktu! ⌛✨');
         window.duduAudio?.playPop?.(780);
       };
     }
@@ -3459,7 +3565,7 @@
         const descInput = document.getElementById('input-planner-desc');
         const title = titleInput?.value?.trim();
         if (!title) {
-          showFeedbackToast('Please enter a date idea! ✨');
+          showFeedbackToast('Please enter a date idea! ✨', 'Silakan masukkan ide kencan! ✨');
           return;
         }
         const desc = descInput?.value?.trim() || 'A cozy couple adventure together';
@@ -3483,7 +3589,7 @@
         window.DuduChatSocket?.sendSavePlannerItem?.(newPlan);
         sendSaveRest('/api/planner', newPlan);
         closeSheet('modal-add-planner');
-        showFeedbackToast('Date idea added to planner! 📝✨');
+        showFeedbackToast('Date idea added to planner! 📝✨', 'Ide kencan ditambahkan ke perencana! 📝✨');
         window.duduAudio?.playPop?.(800);
       };
     }
@@ -3499,7 +3605,7 @@
         const input = document.getElementById('input-cal-event-title');
         const title = input?.value?.trim();
         if (!title) {
-          showFeedbackToast('Please enter an event title! 🗓️');
+          showFeedbackToast('Please enter an event title! 🗓️', 'Silakan masukkan judul acara! 🗓️');
           return;
         }
 
@@ -3526,7 +3632,7 @@
         if (input) input.value = '';
         const customIconEl = document.getElementById('input-cal-custom-icon');
         if (customIconEl) customIconEl.value = '';
-        showFeedbackToast('Event added to calendar! 🗓️✨');
+        showFeedbackToast('Event added to calendar! 🗓️✨', 'Acara ditambahkan ke kalender! 🗓️✨');
         window.duduAudio?.playPop?.(750);
       };
     }
@@ -3548,7 +3654,10 @@
         renderLoveNotes();
         window.DuduChatSocket?.sendSaveNote?.(activeViewingNote);
         sendSaveRest('/api/notes', activeViewingNote);
-        showFeedbackToast(activeViewingNote.isFavorite ? 'Added to Favorites ♥' : 'Removed from Favorites');
+        showFeedbackToast(
+          activeViewingNote.isFavorite ? 'Added to Favorites ♥' : 'Removed from Favorites',
+          activeViewingNote.isFavorite ? 'Ditambahkan ke Favorit ♥' : 'Dihapus dari Favorit'
+        );
       };
     }
 
@@ -3564,7 +3673,7 @@
         window.DuduChatSocket?.sendDeleteNote?.(id);
         sendDeleteRest('/api/notes', id);
         closeSheet('modal-view-love-note');
-        showFeedbackToast('Love note removed from space 🗑️');
+        showFeedbackToast('Love note removed from space 🗑️', 'Surat cinta dihapus 🗑️');
         window.duduAudio?.playPop?.(400);
       };
     }
@@ -3587,7 +3696,7 @@
         window.DuduChatSocket?.sendDeletePolaroid?.(id);
         sendDeleteRest('/api/memories/polaroids', id);
         closeSheet('modal-view-polaroid');
-        showFeedbackToast('Photo removed from jar 🗑️');
+        showFeedbackToast('Photo removed from jar 🗑️', 'Foto dihapus dari toples 🗑️');
         window.duduAudio?.playPop?.(400);
       };
     }
@@ -3626,7 +3735,7 @@
         if (!activeViewingPolaroid) return;
         const newCaption = captionInput?.value?.trim();
         if (!newCaption) {
-          showFeedbackToast('Please enter a caption! 📸');
+          showFeedbackToast('Please enter a caption! 📸', 'Silakan masukkan keterangan! 📸');
           return;
         }
         activeViewingPolaroid.title = newCaption;
@@ -3640,7 +3749,7 @@
         const titleEl = document.getElementById('modal-polaroid-title');
         if (titleEl) titleEl.textContent = newCaption;
         exitEditMode();
-        showFeedbackToast('Polaroid caption updated! 📸✨');
+        showFeedbackToast('Polaroid caption updated! 📸✨', 'Keterangan foto diperbarui! 📸✨');
         window.duduAudio?.playPop?.(640);
       };
     }
@@ -3662,7 +3771,7 @@
           window.DuduChatSocket?.sendUpdateCoupleSpace?.({ statuses: appData.statuses });
           sendSaveRest('/api/couple-space', { statuses: appData.statuses });
           closeSheet('modal-edit-status');
-          showFeedbackToast('Status updated! 💭');
+          showFeedbackToast('Status updated! 💭', 'Status diperbarui! 💭');
           window.duduAudio?.playPop?.(700);
         }
       };
@@ -3702,7 +3811,10 @@
           window.DuduChatSocket?.sendUpdateCoupleSpace?.({ anniversaryDate: appData.anniversaryDate });
           sendSaveRest('/api/couple-space', { anniversaryDate: appData.anniversaryDate });
           closeSheet('modal-edit-anniversary');
-          showFeedbackToast(`Anniversary updated! (${getDaysTogether()} days) ♡`);
+          showFeedbackToast(
+            `Anniversary updated! (${getDaysTogether()} days) ♡`,
+            `Hari jadian diperbarui! (${getDaysTogether()} hari) ♡`
+          );
           window.duduAudio?.playPop?.(750);
         }
       };
@@ -3760,6 +3872,11 @@
   }
 
   function setUserRole(newRole) {
+    const oldRole = appData.userRole;
+    if (oldRole && oldRole !== newRole) {
+      window.DuduChatSocket?.sendPresenceAnnounce?.('offline', oldRole);
+      window.DuduChatUI?.recordRoleOffline?.(oldRole);
+    }
     appData.userRole = newRole;
     saveState();
     try {
@@ -3769,8 +3886,11 @@
     updateIdentityUI();
     window.DuduChatUI?.refreshPresence?.();
     window.DuduChatUI?.reloadActiveMessages?.();
-    window.DuduChatSocket?.sendPresenceAnnounce?.('online');
-    showFeedbackToast(`Viewing as ${appData.userRole === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'}`);
+    window.DuduChatSocket?.sendPresenceAnnounce?.('online', newRole);
+    showFeedbackToast(
+      `Viewing as ${appData.userRole === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'}`,
+      `Melihat sebagai ${appData.userRole === 'dudu' ? 'Dudu 🐻' : 'Bubu 🐼'}`
+    );
     window.duduAudio?.playPop?.(580);
   }
 
@@ -3849,9 +3969,11 @@
   }
 
   let toastTimer = null;
-  function showFeedbackToast(msg) {
+  function showFeedbackToast(enMsg, idMsg) {
     const toast = document.getElementById('feedback-toast');
     if (!toast) return;
+    const isEn = window.DuduI18n?.getLanguage() === 'en';
+    const msg = idMsg ? (isEn ? enMsg : idMsg) : enMsg;
     toast.textContent = msg;
     toast.style.opacity = '1';
     if (toastTimer) clearTimeout(toastTimer);

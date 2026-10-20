@@ -16,9 +16,8 @@
       name_id: 'Kamar Hangat Dudu & Bubu 🐻🐼',
       name: 'Kamar Hangat Dudu & Bubu 🐻🐼',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_dudu_bubu_room.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_dudu_bubu_room.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_dudu_bubu_room.jpg); background-size: cover; background-position: center bottom;'
+      style: 'background: linear-gradient(145deg, #FFF7ED 0%, #FED7AA 60%, #FDBA74 100%); background-image: radial-gradient(rgba(141, 91, 76, 0.12) 1.5px, transparent 1.5px); background-size: 24px 24px;',
+      preview: 'background: linear-gradient(145deg, #fff7ed 0%, #fed7aa 60%, #fdba74 100%);'
     },
     {
       id: 'couple-stargazing',
@@ -26,9 +25,8 @@
       name_id: 'Malam Berbintang Berdua ✨',
       name: 'Malam Berbintang Berdua ✨',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_stargazing.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_stargazing.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_stargazing.jpg); background-size: cover; background-position: center bottom;'
+      style: 'background: linear-gradient(160deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%); background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px); background-size: 28px 28px;',
+      preview: 'background: linear-gradient(160deg, #1e1b4b 0%, #312e81 100%);'
     },
     {
       id: 'couple-adventure',
@@ -36,9 +34,8 @@
       name_id: 'Kencan Piknik Musim Semi 🌸',
       name: 'Kencan Piknik Musim Semi 🌸',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_adventure.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_adventure.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_adventure.jpg); background-size: cover; background-position: center bottom;'
+      style: 'background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #FFE4E6 100%); background-image: radial-gradient(rgba(244, 114, 182, 0.15) 1.5px, transparent 1.5px); background-size: 22px 22px;',
+      preview: 'background: linear-gradient(135deg, #f0fdf4 0%, #ffe4e6 100%);'
     },
     {
       id: 'sweet-dreams',
@@ -46,9 +43,8 @@
       name_id: 'Mimpi Indah di Awan ☁️',
       name: 'Mimpi Indah di Awan ☁️',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_sweet_dreams.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_sweet_dreams.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_sweet_dreams.jpg); background-size: cover; background-position: center bottom;'
+      style: 'background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #BAE6FD 100%); background-image: radial-gradient(rgba(186, 230, 253, 0.4) 2px, transparent 2px); background-size: 26px 26px;',
+      preview: 'background: linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%);'
     },
     {
       id: 'couple-stage',
@@ -56,9 +52,8 @@
       name_id: 'Kafe Manis Dudu Bubu 🍰',
       name: 'Kafe Manis Dudu Bubu 🍰',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_couple_stage.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_couple_stage.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_couple_stage.jpg); background-size: cover; background-position: center 65%;'
+      style: 'background: linear-gradient(140deg, #FEF3C7 0%, #FDE68A 50%, #FBCFE8 100%); background-image: radial-gradient(rgba(217, 119, 6, 0.12) 1.5px, transparent 1.5px); background-size: 20px 20px;',
+      preview: 'background: linear-gradient(140deg, #fef3c7 0%, #fbcfe8 100%);'
     },
     {
       id: 'bubu-room',
@@ -66,9 +61,8 @@
       name_id: 'Pola Hati & Coretan Manis 💖',
       name: 'Pola Hati & Coretan Manis 💖',
       category: 'dudu_bubu',
-      imgSrc: 'assets/wallpapers/wallpaper_bubu_room.jpg',
-      style: 'background-image: url(assets/wallpapers/wallpaper_bubu_room.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;',
-      preview: 'background-image: url(assets/wallpapers/wallpaper_bubu_room.jpg); background-size: cover; background-position: center;'
+      style: 'background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 50%, #FECDD3 100%); background-image: radial-gradient(rgba(225, 29, 72, 0.15) 1.5px, transparent 1.5px); background-size: 22px 22px;',
+      preview: 'background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%);'
     },
     {
       id: 'peach-sunset',

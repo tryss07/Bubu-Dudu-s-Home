@@ -27,33 +27,6 @@
       isArchived: false,
       createdAt: 1728000000000,
       lastActivity: Date.now() - 3600000
-    },
-    {
-      id: 'watchlist',
-      title: 'Watchlist',
-      emoji: '🎬',
-      isPinned: false,
-      isArchived: false,
-      createdAt: 1728000000000,
-      lastActivity: Date.now() - 7200000
-    },
-    {
-      id: 'vent_space',
-      title: 'Vent Space',
-      emoji: '🧸',
-      isPinned: false,
-      isArchived: false,
-      createdAt: 1728000000000,
-      lastActivity: Date.now() - 10800000
-    },
-    {
-      id: 'deep_talks',
-      title: 'Deep Talks',
-      emoji: '🌙',
-      isPinned: false,
-      isArchived: false,
-      createdAt: 1728000000000,
-      lastActivity: Date.now() - 14400000
     }
   ];
 
@@ -106,67 +79,33 @@
 
   async function seedDefaultSessions(db) {
     return new Promise((resolve) => {
-      const tx = db.transaction('sessions', 'readwrite');
-      const store = tx.objectStore('sessions');
-      const countReq = store.count();
+      try {
+        const tx = db.transaction(['sessions', 'messages'], 'readwrite');
+        const sessionStore = tx.objectStore('sessions');
+        const msgStore = tx.objectStore('messages');
 
-      countReq.onsuccess = () => {
-        if (countReq.result > 0) {
-          localStorage.setItem('DUDU_CHAT_SEEDED', 'true');
-        } else if (countReq.result === 0) {
-          const hasSeeded = localStorage.getItem('DUDU_CHAT_SEEDED');
-          if (!hasSeeded) {
-            DEFAULT_SESSIONS.forEach(sess => store.put(sess));
-            localStorage.setItem('DUDU_CHAT_SEEDED', 'true');
-            console.log('[Storage] Seeded default chat sessions');
+        // Automatically clean up legacy mock messages
+        ['mock_msg_1', 'mock_msg_2', 'mock_msg_3'].forEach(id => {
+          try { msgStore.delete(id); } catch (_) {}
+        });
+
+        // Automatically clean up empty placeholder topics
+        ['watchlist', 'vent_space', 'deep_talks'].forEach(id => {
+          try { sessionStore.delete(id); } catch (_) {}
+        });
+
+        const countReq = sessionStore.count();
+        countReq.onsuccess = () => {
+          if (countReq.result === 0) {
+            DEFAULT_SESSIONS.forEach(sess => sessionStore.put(sess));
           }
-        }
+        };
 
-        // Also seed mockup conversation if messages store is empty
-        try {
-          const msgTx = db.transaction('messages', 'readwrite');
-          const msgStore = msgTx.objectStore('messages');
-          const msgCountReq = msgStore.count();
-          msgCountReq.onsuccess = () => {
-            if (msgCountReq.result === 0) {
-              const now = Date.now();
-              msgStore.put({
-                id: 'mock_msg_1',
-                sessionId: 'daily_banter',
-                sender: 'bubu',
-                content: 'What are you doing now? 🐾',
-                type: 'text',
-                timestamp: now - 120000,
-                status: 'read'
-              });
-              msgStore.put({
-                id: 'mock_msg_2',
-                sessionId: 'daily_banter',
-                sender: 'dudu',
-                content: 'Thinking of you, of course! 🥰',
-                type: 'text',
-                timestamp: now - 60000,
-                status: 'read'
-              });
-              msgStore.put({
-                id: 'mock_msg_3',
-                sessionId: 'daily_banter',
-                sender: 'bubu',
-                content: 'I want to send you a sticker!',
-                type: 'text',
-                timestamp: now - 10000,
-                status: 'read'
-              });
-            }
-          };
-        } catch (e) {
-          console.warn('[Storage] Mockup message seeding skipped', e);
-        }
-
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      } catch (_) {
         resolve();
-      };
-
-      countReq.onerror = () => resolve();
+      }
     });
   }
 

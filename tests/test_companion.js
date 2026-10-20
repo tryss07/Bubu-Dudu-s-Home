@@ -5,11 +5,14 @@ const fs = require('fs');
 (async () => {
   console.log('🚀 Starting Full Playwright Verification Suite for Dudu Companion App...');
   
-  const browser = await chromium.launch({
-    executablePath: '/usr/bin/chromium',
+  const launchOpts = {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security']
-  });
+  };
+  if (fs.existsSync('/usr/bin/chromium')) {
+    launchOpts.executablePath = '/usr/bin/chromium';
+  }
+  const browser = await chromium.launch(launchOpts);
 
   // Test across responsive viewport widths:
   // 1. Mobile standard (412x915)

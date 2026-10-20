@@ -14,7 +14,8 @@ async function runWardrobeVisualTest() {
     if (msg.type() === 'error') console.log('[Browser Error]', msg.text());
   });
 
-  await page.goto('http://localhost:3000/#wardrobe', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:3000');
+  await page.click('[data-tab="wardrobe"]');
   await page.waitForTimeout(1000);
 
   fs.mkdirSync('/tmp/wardrobe_test', { recursive: true });
@@ -61,34 +62,21 @@ async function runWardrobeVisualTest() {
   await page.screenshot({ path: '/tmp/wardrobe_test/test_closet_bubu_raw.png' });
   console.log('📸 Captured Bubu raw naked screenshot');
 
-  // 5. Test item picker: equip strawberry pajamas & nightcap
-  // Click Baju card (slot outfit)
-  const outfitCard = page.locator('.wardrobe-item-card[data-type="outfit"]');
-  await outfitCard.click();
-  await page.waitForTimeout(300);
+  // 5. Test outfit set picker: equip sleep pajamas
+  const pajamaSetBtn = page.locator('#wardrobe-sets-grid button[data-set-id="bubu_05_sleep_pajamas"]');
+  await pajamaSetBtn.waitFor({ state: 'visible', timeout: 5000 });
+  await pajamaSetBtn.click();
+  await page.waitForTimeout(400);
 
-  // Pick strawberry pajamas chip
-  const strawberryPjChip = page.locator('#wardrobe-slot-picker button[data-pick-val="bubu_outfit_strawberry_pj"]');
-  if (await strawberryPjChip.count() > 0) {
-    await strawberryPjChip.click();
-    await page.waitForTimeout(300);
-    console.log('✅ Picked strawberry pajamas');
+  const bubuPjSrc = await stageArt.getAttribute('src');
+  console.log('Bubu Pajamas src:', bubuPjSrc);
+  if (!bubuPjSrc.includes('bubu_05_sleep_pajamas')) {
+    throw new Error('FAIL: Expected bubu_05_sleep_pajamas on stage!');
   }
-
-  // Click Topi card (slot hat)
-  const hatCard = page.locator('.wardrobe-item-card[data-type="hat"]');
-  await hatCard.click();
-  await page.waitForTimeout(300);
-
-  const nightcapChip = page.locator('#wardrobe-slot-picker button[data-pick-val="bubu_hat_nightcap"]');
-  if (await nightcapChip.count() > 0) {
-    await nightcapChip.click();
-    await page.waitForTimeout(300);
-    console.log('✅ Picked nightcap');
-  }
+  console.log('✅ Picked and equipped sleep pajamas set');
 
   await page.screenshot({ path: '/tmp/wardrobe_test/test_closet_bubu_pajamas.png' });
-  console.log('📸 Captured Bubu in strawberry pajamas screenshot');
+  console.log('📸 Captured Bubu in sleep pajamas screenshot');
 
   // 6. Test Couple View
   const btnViewCouple = page.locator('#btn-stage-view-couple');

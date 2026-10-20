@@ -347,19 +347,19 @@
   }
 
   function getStoredIdentity() {
-    // 1. Check window.duduMockup state if available
-    try {
-      if (window.duduMockup && typeof window.duduMockup.getUserRole === 'function') {
-        const role = window.duduMockup.getUserRole();
-        if (role) return role;
-      }
-    } catch (_) {}
-
-    // 2. Check tab session storage (isolated per tab)
+    // 1. Check tab session storage first (isolated per tab so Dudu and Bubu tabs in the same browser don't overwrite each other)
     try {
       const sessionRole = sessionStorage.getItem('DUDU_ACTIVE_ROLE');
       if (sessionRole && (sessionRole === 'dudu' || sessionRole === 'bubu')) {
         return sessionRole;
+      }
+    } catch (_) {}
+
+    // 2. Check window.duduMockup state if available
+    try {
+      if (window.duduMockup && typeof window.duduMockup.getUserRole === 'function') {
+        const role = window.duduMockup.getUserRole();
+        if (role) return role;
       }
     } catch (_) {}
 

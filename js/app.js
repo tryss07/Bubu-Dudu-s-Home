@@ -507,7 +507,7 @@
     state.currentDialogue = customQuote || sticker.quote;
 
     if (el.duduAvatarImg) {
-      el.duduAvatarImg.src = `Dudu Stickers/${sticker.file}`;
+      el.duduAvatarImg.src = window.DuduStickers?.resolveStickerPath?.(sticker.file) || `assets/stickers_dudu/${sticker.file}`;
       el.duduAvatarImg.alt = sticker.title;
     }
 
@@ -1076,7 +1076,7 @@
     container.innerHTML = stickers.map(s => `
       <button type="button" class="gallery-sticker-card button-press flex flex-col items-center p-2 rounded-2xl bg-surface-container-low/60 hover:bg-secondary-fixed/30 border border-outline-variant/20 transition-all cursor-pointer group text-center" data-sticker-id="${s.id}">
         <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center pointer-events-none">
-          <img src="Dudu Stickers/${s.file}" alt="${s.title}" loading="lazy" class="w-full h-full object-contain">
+          <img src="${window.DuduStickers?.resolveStickerPath?.(s.file) || 'assets/stickers_dudu/' + s.file}" alt="${s.title}" loading="lazy" class="w-full h-full object-contain" onerror="window.DuduStickers?.handleImageError?.(this);">
         </div>
         <span class="mt-1 bg-neutral-900/85 text-amber-300 font-mono text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/10 group-hover:bg-primary group-hover:text-white transition-colors">
           ID #${s.id}

@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#FAF5EE">
+  <meta name="color-scheme" content="light dark">
   <title>Dudu &amp; Bubu ♡ Our Space</title>
   <link rel="icon" type="image/png" href="assets/dudu_icon.png">
   <link rel="apple-touch-icon" href="assets/dudu_icon.png">
@@ -163,7 +165,7 @@
 
         <!-- Anniversary Pill Badge (4 November 2025) -->
         <button id="home-anniversary-pill" type="button" class="w-full max-w-xs mt-3 py-2.5 px-4 rounded-full bg-[#FCDFD0] hover:bg-[#F9D0BC] border border-[#EAA684]/50 shadow-xs flex flex-col items-center justify-center button-press cursor-pointer group" title="Anniversary: 4 November 2025 (Tap to edit date)">
-          <span class="text-[11px] font-heading font-semibold text-[#8D5B4C]">We've been together for</span>
+          <span class="text-[11px] font-heading font-semibold text-[#8D5B4C]" data-i18n="home_together_prefix">We've been together for</span>
           <span id="home-days-count" class="text-xl font-heading font-black text-[#5A3825] tracking-tight group-hover:scale-105 transition-transform">
             345 days ♡
           </span>
@@ -190,11 +192,11 @@
             </div>
             <div class="flex items-center gap-1.5">
               <button id="btn-boost-battery" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to view or adjust Dudu's love battery">
-                <div id="home-battery-fill" class="h-full bg-gradient-to-r from-amber-500 via-[#8D5B4C] to-[#EAA684] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
+                <div id="home-battery-fill" class="h-full bg-gradient-to-r from-amber-500 via-[#8D5B4C] to-[#EAA684] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 95%;">
                   <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">♥</span>
                 </div>
               </button>
-              <span id="home-battery-text" class="text-xs font-heading font-black text-[#8D5B4C] dark:text-amber-200 w-8 text-right shrink-0">100%</span>
+              <span id="home-battery-text" class="text-xs font-heading font-black text-[#8D5B4C] dark:text-amber-200 w-8 text-right shrink-0">95%</span>
             </div>
           </div>
 
@@ -211,11 +213,11 @@
             </div>
             <div class="flex items-center gap-1.5">
               <button id="btn-boost-battery-bubu" type="button" class="flex-1 h-7 rounded-xl border-2 border-[#5A3825] dark:border-stone-400 p-0.5 bg-stone-50 dark:bg-stone-900 flex items-center relative overflow-hidden button-press cursor-pointer" title="Tap to view or adjust Bubu's love battery">
-                <div id="home-battery-bubu-fill" class="h-full bg-gradient-to-r from-rose-400 to-[#FDA4AF] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 100%;">
+                <div id="home-battery-bubu-fill" class="h-full bg-gradient-to-r from-rose-400 to-[#FDA4AF] rounded-lg transition-all duration-300 flex items-center justify-center relative" style="width: 95%;">
                   <span class="text-[10px] text-white font-black leading-none drop-shadow-xs">♥</span>
                 </div>
               </button>
-              <span id="home-battery-bubu-text" class="text-xs font-heading font-black text-[#EAA684] dark:text-rose-300 w-8 text-right shrink-0">100%</span>
+              <span id="home-battery-bubu-text" class="text-xs font-heading font-black text-[#EAA684] dark:text-rose-300 w-8 text-right shrink-0">95%</span>
             </div>
           </div>
 
@@ -234,12 +236,12 @@
             <!-- Dudu chip -->
             <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
               <span class="px-1.5 py-0.2 rounded-md bg-[#8D5B4C] text-white text-[9px] font-extrabold shrink-0">Dudu</span>
-              <span id="home-status-dudu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Thinking of you! 💭</span>
+              <span id="home-status-dudu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Syududu</span>
             </div>
             <!-- Bubu chip -->
             <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
               <span class="px-1.5 py-0.2 rounded-md bg-[#EAA684] text-white text-[9px] font-extrabold shrink-0">Bubu</span>
-              <span id="home-status-bubu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Eating snacks! 🐼</span>
+              <span id="home-status-bubu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Syububu</span>
             </div>
           </div>
         </button>
@@ -250,7 +252,7 @@
       <div class="flex flex-col gap-2 pt-2">
         <h4 class="font-heading font-bold text-xs text-[#8D5B4C] px-1 uppercase tracking-wider flex items-center justify-between">
           <span data-i18n="home_cozy_rooms">Our Cozy Rooms</span>
-          <span class="text-[10px] font-normal normal-case opacity-80">Tap to visit</span>
+          <span class="text-[10px] font-normal normal-case opacity-80" data-i18n="home_tap_to_visit">Tap to visit</span>
         </h4>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -260,8 +262,8 @@
               <span class="material-symbols-outlined text-lg">mail</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Love Notes</span>
-              <span class="text-[10px] text-on-surface-variant truncate">Shared letters</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_notes">Love Notes</span>
+              <span class="text-[10px] text-on-surface-variant truncate" data-i18n="home_portal_notes_sub">Shared letters</span>
             </div>
           </a>
 
@@ -271,8 +273,8 @@
               <span class="material-symbols-outlined text-lg">photo_library</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Memory Jar</span>
-              <span class="text-[10px] text-on-surface-variant truncate">Our Polaroids</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_memories">Memory Jar</span>
+              <span class="text-[10px] text-on-surface-variant truncate" data-i18n="home_portal_memories_sub">Our Polaroids</span>
             </div>
           </a>
 
@@ -282,7 +284,7 @@
               <span class="material-symbols-outlined text-lg">calendar_month</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Our Calendar</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_calendar">Our Calendar</span>
               <span id="home-portal-calendar-next" class="text-[10px] text-on-surface-variant truncate">Next: 1 Year (Nov 4)</span>
             </div>
           </a>
@@ -293,8 +295,8 @@
               <span class="material-symbols-outlined text-lg">checklist</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bucket List</span>
-              <span class="text-[10px] text-on-surface-variant truncate">Date Planner</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_bucket">Bucket List</span>
+              <span class="text-[10px] text-on-surface-variant truncate" data-i18n="home_portal_bucket_sub">Date Planner</span>
             </div>
           </a>
 
@@ -304,8 +306,8 @@
               <span class="material-symbols-outlined text-lg">bedtime</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Bedtime Lofi</span>
-              <span class="text-[10px] text-on-surface-variant truncate">Soothing beats</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_music">Bedtime Lofi</span>
+              <span class="text-[10px] text-on-surface-variant truncate" data-i18n="home_portal_music_sub">Soothing beats</span>
             </div>
           </a>
 
@@ -315,8 +317,8 @@
               <span class="material-symbols-outlined text-lg">checkroom</span>
             </span>
             <div class="flex flex-col min-w-0">
-              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate">Couple Closet</span>
-              <span class="text-[10px] text-on-surface-variant truncate">Outfits &amp; Games</span>
+              <span class="font-heading font-bold text-xs text-primary dark:text-stone-100 truncate" data-i18n="home_portal_closet">Couple Closet</span>
+              <span class="text-[10px] text-on-surface-variant truncate" data-i18n="home_portal_closet_sub">Outfits &amp; Games</span>
             </div>
           </a>
         </div>
@@ -335,11 +337,11 @@
           Us 🤎
         </span>
         <div class="text-center">
-          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100">Love Notes</h2>
-          <span class="px-2.5 py-0.5 rounded-full bg-[#F5EAE0] text-[10px] font-bold text-[#8D5B4C]">Our Shared Space</span>
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100" data-i18n="notes_title">Love Notes</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-[#F5EAE0] text-[10px] font-bold text-[#8D5B4C]" data-i18n="header_shared_space">Our Shared Space</span>
         </div>
         <button id="btn-write-love-note" type="button" class="px-3 py-1 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white text-xs font-bold shadow-xs button-press cursor-pointer flex items-center gap-1">
-          <span>+ Write</span>
+          <span data-i18n="notes_write">+ Write</span>
         </button>
       </div>
 
@@ -351,13 +353,13 @@
 
       <!-- Filter Chips -->
       <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        <button type="button" data-filter="all" class="notes-filter-chip px-3.5 py-1 rounded-full bg-[#8D5B4C] text-white text-xs font-bold button-press cursor-pointer shadow-xs">
+        <button type="button" data-filter="all" class="notes-filter-chip px-3.5 py-1 rounded-full bg-[#8D5B4C] text-white text-xs font-bold button-press cursor-pointer shadow-xs" data-i18n="notes_all">
           All Notes
         </button>
-        <button type="button" data-filter="unread" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+        <button type="button" data-filter="unread" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer" data-i18n="notes_unread">
           Unread
         </button>
-        <button type="button" data-filter="favorites" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer">
+        <button type="button" data-filter="favorites" class="notes-filter-chip px-3.5 py-1 rounded-full bg-surface-container text-primary text-xs font-bold button-press cursor-pointer" data-i18n="notes_favorites">
           Favorites
         </button>
       </div>
@@ -377,10 +379,10 @@
       <!-- Top Memory Jar Bar -->
       <div class="flex items-center justify-between px-1">
         <div>
-          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight" data-i18n="memories_title">
             Memory Jar 🍯✨
           </h2>
-          <p class="text-[11px] text-on-surface-variant font-medium">Capturing our together today</p>
+          <p class="text-[11px] text-on-surface-variant font-medium" data-i18n="memories_subtitle_full">Capturing our together today</p>
         </div>
         <div class="flex items-center gap-2">
           <button id="btn-add-polaroid" type="button" class="w-8 h-8 rounded-full bg-[#8D5B4C] text-white flex items-center justify-center button-press cursor-pointer shadow-xs" title="Add Polaroid">
@@ -396,11 +398,11 @@
           <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
             <span>Our Polaroids 📸</span>
           </h3>
-          <button id="btn-view-all-polaroids" type="button" class="text-[11px] font-bold text-[#8D5B4C] cursor-pointer hover:underline focus:outline-none">View All</button>
+          <button id="btn-view-all-polaroids" type="button" class="text-[11px] font-bold text-[#8D5B4C] cursor-pointer hover:underline focus:outline-none" data-i18n="memories_view_all">View All</button>
         </div>
 
-        <!-- 4 Polaroid Grid with Washi Tape & Peeking Bears -->
-        <div id="polaroids-grid" class="grid grid-cols-2 gap-3.5 pt-2">
+        <!-- Polaroid Pinterest-Style Masonry Grid with Washi Tape & Peeking Bears -->
+        <div id="polaroids-grid" class="columns-2 gap-3.5 pt-3 [column-fill:_balance]">
           <!-- Rendered dynamically by js/dudu_mockup.js -->
         </div>
 
@@ -411,11 +413,11 @@
         
         <div class="flex items-center justify-between border-b border-[#E8DACB]/40 pb-2">
           <h3 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-            <span>⌛ Memory Timeline ⌛</span>
+            <span data-i18n="memories_timeline_title">⌛ Memory Timeline ⌛</span>
           </h3>
           <div class="flex items-center gap-2">
-            <span class="font-handwriting text-base text-[#8D5B4C] hidden xs:inline">Handwritten notes</span>
-            <button id="btn-add-milestone" type="button" class="px-2.5 py-0.5 rounded-full bg-[#FAF0E6] dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer">+ Add</button>
+            <span class="font-handwriting text-base text-[#8D5B4C] hidden xs:inline" data-i18n="memories_handwritten">Handwritten notes</span>
+            <button id="btn-add-milestone" type="button" class="px-2.5 py-0.5 rounded-full bg-[#FAF0E6] dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer" data-i18n="memories_add_milestone">+ Add</button>
           </div>
         </div>
 
@@ -435,10 +437,10 @@
       <!-- Top Header -->
       <div class="flex items-center justify-between px-1">
         <div>
-          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight">
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 leading-tight" data-i18n="bucket_title">
             Bucket List &amp; Date Planner
           </h2>
-          <p class="text-[11px] text-on-surface-variant font-medium">Adventures &amp; dreams together</p>
+          <p class="text-[11px] text-on-surface-variant font-medium" data-i18n="bucket_subtitle_full">Adventures &amp; dreams together</p>
         </div>
         <span id="bucket-header-badge" class="px-2.5 py-1 rounded-full bg-[#FAF0E6] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">
           3 Completed ✨
@@ -490,7 +492,7 @@
             ✨
           </div>
           <div>
-            <span class="text-[10px] font-bold text-[#8D5B4C] uppercase tracking-wide">Next Date Idea?</span>
+            <span class="text-[10px] font-bold text-[#8D5B4C] uppercase tracking-wide" data-i18n="home_next_date_idea">Next Date Idea?</span>
             <p class="font-heading font-bold text-xs text-primary dark:text-stone-100">Warm campfire &amp; s'mores</p>
           </div>
         </div>
@@ -509,7 +511,7 @@
       <!-- Top Bar -->
       <div class="flex items-center justify-between px-1">
         <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-          <span>Our Calendar 🗓️ ♡</span>
+          <span data-i18n="calendar_title">Our Calendar 🗓️ ♡</span>
         </h2>
         <span class="text-xs font-bold text-[#8D5B4C]">Bubu &amp; Dudu</span>
       </div>
@@ -521,7 +523,7 @@
         <div class="flex items-center gap-3">
           <img src="assets/mockup_art/calendar_anniversary.png" alt="Anniversary" class="w-20 h-16 object-contain">
           <div>
-            <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide">Next Anniversary:</span>
+            <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide" data-i18n="home_next_anniversary">Next Anniversary:</span>
             <h3 id="calendar-anniversary-title" class="font-heading font-black text-base text-[#4A3222] dark:text-stone-100 leading-tight">
               1 Year Anniversary! 🎂🎉
             </h3>
@@ -548,7 +550,7 @@
 
         <!-- Days of week -->
         <div class="grid grid-cols-7 text-center text-[10px] font-heading font-bold text-stone-500 py-1 border-b border-[#E8DACB]/40">
-          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          <span data-i18n="cal_sun">Sun</span><span data-i18n="cal_mon">Mon</span><span data-i18n="cal_tue">Tue</span><span data-i18n="cal_wed">Wed</span><span data-i18n="cal_thu">Thu</span><span data-i18n="cal_fri">Fri</span><span data-i18n="cal_sat">Sat</span>
         </div>
 
         <!-- Calendar Days Grid -->
@@ -562,9 +564,9 @@
       <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-2.5">
         <div class="flex items-center justify-between border-b border-[#E8DACB]/40 pb-2">
           <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-            <span>⏳ Upcoming Events 📝</span>
+            <span data-i18n="cal_upcoming">⏳ Upcoming Events 📝</span>
           </h4>
-          <span class="font-handwriting text-base text-[#8D5B4C]">Handwritten notes</span>
+          <span class="font-handwriting text-base text-[#8D5B4C]" data-i18n="memories_handwritten">Handwritten notes</span>
         </div>
 
         <div id="calendar-upcoming-list" class="flex flex-col gap-2 pt-1 text-xs text-primary dark:text-stone-200">
@@ -658,9 +660,6 @@
           </h2>
           <span class="text-[11px] text-on-surface-variant font-medium">Cozy Room</span>
         </div>
-        <button id="btn-wardrobe-match-couple" type="button" class="px-3 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white text-[11px] font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
-          <span>Match Us ✨</span>
-        </button>
       </div>
 
       <!-- Dressing Room Card (wardrobe.jpg) -->
@@ -675,32 +674,46 @@
             <div class="flex items-center gap-1 bg-white/80 dark:bg-stone-700/80 p-0.5 rounded-full border border-[#E8DACB] dark:border-stone-600 text-[10px] font-bold">
               <button id="btn-stage-view-dudu" type="button" class="px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu 🐻</button>
               <button id="btn-stage-view-bubu" type="button" class="px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 button-press cursor-pointer">Bubu 🐼</button>
-              <button id="btn-stage-view-couple" type="button" class="px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 button-press cursor-pointer">Berdua ✨</button>
+              <button id="btn-stage-view-couple" type="button" class="px-2 py-0.5 rounded-full text-stone-600 dark:text-stone-300 button-press cursor-pointer" data-i18n="closet_view_couple">Together ✨</button>
             </div>
           </div>
           <span id="wardrobe-equipped-summary" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 text-[#8D5B4C] dark:text-stone-200 truncate max-w-[200px]">
-            Dudu 🐻: Polos Mentahan
+            Dudu 🐻: Baju Bayi Lucu
           </span>
         </div>
 
         <!-- Interactive Dressing Room Stage -->
-        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-stone-100 select-none shadow-inner aspect-[900/1006] transition-all duration-300">
-          <img id="wardrobe-stage-art" src="assets/mockup_art/wardrobe/stage_dudu_room.jpg" alt="Dressing Room" class="w-full h-full object-cover block pointer-events-none">
-
-          <!-- Dudu Interactive Stage Layers -->
-          <div id="wardrobe-dudu-layers" class="absolute inset-0 pointer-events-none">
-            <img id="layer-dudu-shoes" class="wardrobe-layer-item absolute" alt="Dudu Shoes" style="display:none;" />
-            <img id="layer-dudu-outfit" class="wardrobe-layer-item absolute" alt="Dudu Outfit" style="display:none;" />
-            <img id="layer-dudu-accs" class="wardrobe-layer-item absolute" alt="Dudu Accessories" style="display:none;" />
-            <img id="layer-dudu-hat" class="wardrobe-layer-item absolute" alt="Dudu Hat" style="display:none;" />
+        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300">
+          
+          <!-- Single View Stage (Dudu or Bubu) -->
+          <div id="wardrobe-stage-single" class="w-full h-full relative flex items-center justify-center p-3 pb-11 bg-[#FBF7EB] dark:bg-stone-800">
+            <img id="wardrobe-stage-art" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dressing Room" class="w-full h-full object-contain block mx-auto pointer-events-none transition-all duration-200">
           </div>
 
-          <!-- Bubu Interactive Stage Layers -->
-          <div id="wardrobe-bubu-layers" class="absolute inset-0 pointer-events-none" style="display:none;">
-            <img id="layer-bubu-shoes" class="wardrobe-layer-item absolute" alt="Bubu Shoes" style="display:none;" />
-            <img id="layer-bubu-outfit" class="wardrobe-layer-item absolute" alt="Bubu Outfit" style="display:none;" />
-            <img id="layer-bubu-accs" class="wardrobe-layer-item absolute" alt="Bubu Accessories" style="display:none;" />
-            <img id="layer-bubu-hat" class="wardrobe-layer-item absolute" alt="Bubu Hat" style="display:none;" />
+          <!-- Couple View Stage (Duo Side-by-Side) -->
+          <div id="wardrobe-stage-couple" class="hidden absolute inset-0 grid grid-cols-2 gap-2 p-2 pb-11 bg-[#FAF5EE] dark:bg-stone-900">
+            <div id="wardrobe-stage-couple-dudu-card" class="relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
+              <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white z-10 shadow-xs">Dudu 🐻</span>
+              <img id="wardrobe-stage-couple-dudu-img" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dudu Outfit" class="w-full h-full object-contain rounded-xl" />
+            </div>
+            <div id="wardrobe-stage-couple-bubu-card" class="relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
+              <span class="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white z-10 shadow-xs">Bubu 🐼</span>
+              <img id="wardrobe-stage-couple-bubu-img" src="closet/bubu/bubu_02_winter_clothes.jpg" alt="Bubu Outfit" class="w-full h-full object-contain rounded-xl" />
+            </div>
+          </div>
+
+          <!-- Legacy compatibility layers for testing -->
+          <div id="wardrobe-dudu-layers" style="display:none;" class="hidden">
+            <img id="layer-dudu-shoes" style="display:none;" />
+            <img id="layer-dudu-outfit" style="display:none;" />
+            <img id="layer-dudu-accs" style="display:none;" />
+            <img id="layer-dudu-hat" style="display:none;" />
+          </div>
+          <div id="wardrobe-bubu-layers" style="display:none;" class="hidden">
+            <img id="layer-bubu-shoes" style="display:none;" />
+            <img id="layer-bubu-outfit" style="display:none;" />
+            <img id="layer-bubu-accs" style="display:none;" />
+            <img id="layer-bubu-hat" style="display:none;" />
           </div>
 
           <!-- Clickable Tap zones on characters to select character -->
@@ -708,13 +721,13 @@
           <div id="wardrobe-stage-hit-bubu" class="absolute cursor-pointer rounded-2xl" title="Pilih Bubu 🐼"></div>
 
           <!-- Live Dynamic Stage Footer Banner -->
-          <div class="absolute bottom-2 inset-x-3 flex flex-col items-center pointer-events-auto">
+          <div class="absolute bottom-2 inset-x-3 flex flex-col items-center pointer-events-auto z-30">
             <div id="wardrobe-match-banner" class="w-full bg-white/95 dark:bg-stone-800/95 backdrop-blur-xs rounded-xl py-1 px-2.5 text-center shadow-xs border border-[#E8DACB] dark:border-stone-600 flex items-center justify-between gap-1">
               <span id="wardrobe-match-text" class="font-heading font-extrabold text-[11px] text-[#4A3222] dark:text-stone-100 truncate flex-1 text-center">
-                Bears Asli Mentahan (Natural 🐻🐼)
+                ✨ Pasangan Serasi: Baju Bayi &amp; Mantel Hangat! 🧸💕
               </span>
-              <button id="btn-wardrobe-undress-all" type="button" class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 hover:bg-[#8D5B4C] hover:text-white transition-all button-press cursor-pointer border border-[#E8DACB] dark:border-stone-600" title="Lepas Semua Pakaian">
-                Lepas Semua
+              <button id="btn-wardrobe-undress-all" type="button" class="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 hover:bg-[#8D5B4C] hover:text-white transition-all button-press cursor-pointer border border-[#E8DACB] dark:border-stone-600" title="Lepas Semua Pakaian" data-i18n="closet_bare_btn">
+                Bare 🐾
               </button>
             </div>
           </div>
@@ -726,75 +739,46 @@
       <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
         <div class="flex items-center justify-between gap-2 flex-wrap">
           <div class="flex items-center gap-1.5">
-            <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Choose Clothes</h4>
+            <h4 data-i18n="closet_choose_clothes" class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100">Choose Outfit Set</h4>
             <button id="btn-wardrobe-prev-preset" type="button" class="w-6 h-6 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 font-bold text-xs flex items-center justify-center border border-[#E8DACB] dark:border-stone-600 button-press cursor-pointer" title="Previous Outfit Set">&lt;</button>
             <button id="btn-wardrobe-next-preset" type="button" class="w-6 h-6 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-200 font-bold text-xs flex items-center justify-center border border-[#E8DACB] dark:border-stone-600 button-press cursor-pointer" title="Next Outfit Set">&gt;</button>
           </div>
           <div class="flex items-center gap-1.5 text-xs font-bold">
-            <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer">Dudu's Wardrobe 🐻</button>
-            <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer">Bubu's Wardrobe 🐼</button>
+            <button id="wardrobe-badge-dudu" type="button" class="px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white button-press cursor-pointer" data-i18n="closet_dudu_tab">Dudu's Wardrobe 🐻</button>
+            <button id="wardrobe-badge-bubu" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary button-press cursor-pointer" data-i18n="closet_bubu_tab">Bubu's Wardrobe 🐼</button>
           </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-2 text-center text-xs">
-          <button type="button" data-type="hat" class="wardrobe-item-card p-2 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border-2 border-[#8D5B4C] flex flex-col items-center relative transition-all">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Topi</span>
-            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
-              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Hat Thumb" />
-              <span class="wardrobe-card-icon text-2xl hidden">🧢</span>
-            </div>
-            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Topi Beret</span>
-            <span class="wardrobe-card-idx text-[8px] opacity-70">1/6</span>
-          </button>
-          <button type="button" data-type="outfit" class="wardrobe-item-card p-2 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative transition-all">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Baju</span>
-            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
-              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Outfit Thumb" />
-              <span class="wardrobe-card-icon text-2xl hidden">👕</span>
-            </div>
-            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Baju Kodok</span>
-            <span class="wardrobe-card-idx text-[8px] opacity-70">1/9</span>
-          </button>
-          <button type="button" data-type="accs" class="wardrobe-item-card p-2 rounded-2xl bg-[#EBD6C3] text-[#4A3222] font-bold button-press cursor-pointer border border-[#DFCBB7] flex flex-col items-center relative transition-all">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Aksesoris</span>
-            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
-              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Accs Thumb" />
-              <span class="wardrobe-card-icon text-2xl hidden">👓</span>
-            </div>
-            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Kacamata</span>
-            <span class="wardrobe-card-idx text-[8px] opacity-70">1/5</span>
-          </button>
-          <button type="button" data-type="shoes" class="wardrobe-item-card p-2 rounded-2xl bg-[#DEC0A6] text-[#4A3222] font-bold button-press cursor-pointer border border-[#CBB098] flex flex-col items-center relative transition-all">
-            <span class="text-[9px] uppercase tracking-wider opacity-75 font-extrabold mb-0.5">Sepatu</span>
-            <div class="wardrobe-card-thumb w-12 h-12 flex items-center justify-center my-0.5 overflow-hidden">
-              <img class="wardrobe-card-img max-h-12 max-w-12 object-contain" alt="Shoes Thumb" />
-              <span class="wardrobe-card-icon text-2xl hidden">👞</span>
-            </div>
-            <span class="wardrobe-card-label text-[10px] leading-tight truncate w-full mt-0.5">Sandal</span>
-            <span class="wardrobe-card-idx text-[8px] opacity-70">1/6</span>
-          </button>
+        <!-- 10 Outfit Sets Responsive Grid -->
+        <div id="wardrobe-sets-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 max-h-[380px] overflow-y-auto no-scrollbar p-1">
+          <!-- Populated dynamically by js/dudu_mockup.js -->
         </div>
 
-        <!-- Direct Item Picker Strip for Active Category -->
-        <div id="wardrobe-slot-picker" class="pt-2 border-t border-[#E8DACB]/60 dark:border-stone-700 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+        <!-- Direct Item Picker & legacy cards for compatibility -->
+        <div id="wardrobe-slot-picker" style="display:none;" class="hidden"></div>
+        <div style="display:none;" class="hidden">
+          <button type="button" data-type="hat" class="wardrobe-item-card"></button>
+          <button type="button" data-type="outfit" class="wardrobe-item-card"></button>
+          <button type="button" data-type="accs" class="wardrobe-item-card"></button>
+          <button type="button" data-type="shoes" class="wardrobe-item-card"></button>
         </div>
       </div>
 
       <!-- Mini Game Room Card (wardrobe.jpg) -->
       <div class="bg-white dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3">
         <h4 class="font-heading font-bold text-xs text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-          <span>⏳ Mini Game Room 🕹️</span>
+          <span data-i18n="closet_minigame_title">⏳ Mini Game Room 🕹️</span>
         </h4>
 
         <div class="bg-[#FAF5EE] dark:bg-stone-900 rounded-2xl p-3 flex items-center justify-between gap-3 border border-[#E8DACB]">
           <img src="assets/mockup_art/minigame_switch.png" alt="Switch Game" class="w-24 object-contain rounded-xl">
           <div class="flex-1 min-w-0">
-            <h5 class="font-heading font-bold text-xs text-primary dark:text-stone-100">Outfit Matcher Game</h5>
+            <h5 class="font-heading font-bold text-xs text-primary dark:text-stone-100" data-i18n="game_outfit_matcher">Outfit Matcher Game</h5>
             <p class="text-[11px] text-on-surface-variant leading-tight mt-0.5">
-              Mix &amp; match pairs! Best score: <span id="wardrobe-high-score" class="font-bold text-[#8D5B4C] dark:text-amber-300">420</span> 🐻✨
+              <span data-i18n="closet_minigame_desc">Mix &amp; match pairs! Best score:</span> <span id="wardrobe-high-score" class="font-bold text-[#8D5B4C] dark:text-amber-300">705</span> 🐻✨
             </p>
             <button id="btn-play-minigame" type="button" class="mt-2 py-1.5 px-4 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white text-xs font-bold button-press cursor-pointer shadow-xs flex items-center gap-1">
-              <span>Play 🎮</span>
+              <span data-i18n="closet_play_btn">Play 🎮</span>
             </button>
           </div>
         </div>
@@ -819,12 +803,12 @@
                 Bubu 🐼❤️
               </h3>
             </div>
-            <button id="chat-partner-presence-container" type="button" class="flex items-center gap-1.5 mt-0.5 cursor-pointer button-press text-left focus:outline-none" title="Tap to toggle online/offline state">
-              <span id="chat-partner-presence-dot" class="hidden" style="display: none !important;"></span>
+            <div id="chat-partner-presence-container" class="flex items-center gap-1.5 mt-0.5 text-left select-none">
+              <span id="chat-partner-presence-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
               <span id="chat-partner-presence-text" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">
                 online 💫
               </span>
-            </button>
+            </div>
           </div>
         </div>
 
@@ -861,15 +845,15 @@
         <div class="flex items-center gap-1.5">
           <button id="btn-selection-copy" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Copy selected">
             <span class="material-symbols-outlined text-xs">content_copy</span>
-            <span>Copy</span>
+            <span data-i18n="chat_selection_copy">Copy</span>
           </button>
           <button id="btn-selection-forward" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Forward selected">
             <span class="material-symbols-outlined text-xs">forward</span>
-            <span>Forward</span>
+            <span data-i18n="chat_selection_forward">Forward</span>
           </button>
           <button id="btn-selection-delete" type="button" class="px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 text-[11px] font-bold flex items-center gap-1 cursor-pointer button-press" title="Delete selected">
             <span class="material-symbols-outlined text-xs">delete</span>
-            <span>Delete</span>
+            <span data-i18n="chat_selection_delete">Delete</span>
           </button>
         </div>
       </div>
@@ -887,11 +871,25 @@
         </div>
       </div>
 
+      <!-- Sticker In-line Suggestions Bar (Triggered by typing dudu [verb] or bubu [verb]) -->
+      <div id="chat-sticker-suggestions" class="hidden bg-[#FAF5EE]/80 dark:bg-stone-900/80 backdrop-blur-md rounded-3xl p-2 mb-1 z-25 border border-[#E8DACB]/70 dark:border-stone-700/70 shadow-sm flex flex-col gap-1 select-none animate-fadeIn">
+        <div class="flex items-center justify-between px-2 text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">
+          <span id="chat-suggestion-label" class="flex items-center gap-1">
+            <span class="text-xs">✨</span>
+            <span id="chat-suggestion-query" data-i18n="chat_suggestions_label">Sticker Suggestions</span>
+          </span>
+          <button id="btn-close-suggestions" type="button" class="w-5 h-5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-[10px] text-stone-500 cursor-pointer" title="Dismiss">✕</button>
+        </div>
+        <div id="chat-suggestions-track" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-1 overscroll-x-contain">
+          <!-- Suggested sticker preview chips rendered dynamically -->
+        </div>
+      </div>
+
       <!-- Reply Quote Preview Banner -->
       <div id="chat-reply-bar" class="hidden bg-white dark:bg-stone-800 rounded-2xl px-3.5 py-2 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
         <div class="flex flex-col min-w-0 border-l-2 border-[#8D5B4C] pl-2">
-          <span id="chat-reply-sender" class="text-[10px] font-heading font-extrabold text-[#8D5B4C]">Replying to Bubu</span>
-          <span id="chat-reply-snippet" class="text-xs text-primary dark:text-stone-200 truncate">Message preview</span>
+          <span id="chat-reply-sender" class="text-[10px] font-heading font-extrabold text-[#8D5B4C]" data-i18n="chat_replying_to">Replying to Bubu</span>
+          <span id="chat-reply-snippet" class="text-xs text-primary dark:text-stone-200 truncate" data-i18n="chat_msg_preview">Message preview</span>
         </div>
         <button id="btn-cancel-reply" type="button" class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-stone-500 cursor-pointer button-press" title="Cancel reply">✕</button>
       </div>
@@ -906,7 +904,7 @@
 
         <!-- Input Pill -->
         <div class="flex-1 bg-white dark:bg-stone-800 rounded-2xl sm:rounded-full pl-3 pr-1.5 py-1 flex items-end gap-1.5 shadow-inner min-h-[36px]">
-          <textarea id="chat-text-input" rows="1" placeholder="Send a message... 🧸" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0 resize-none max-h-28 overflow-y-auto leading-relaxed py-1 self-center"></textarea>
+          <textarea id="chat-text-input" rows="1" placeholder="Send a message..." data-i18n-placeholder="chat_placeholder" class="w-full bg-transparent border-0 p-0 text-xs text-primary dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-0 resize-none max-h-28 overflow-y-auto leading-relaxed py-1 self-center"></textarea>
           <!-- Bear Sticker Toggle Button moved inside input pill -->
           <button id="btn-toggle-sticker-tray" type="button" class="w-7 h-7 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 text-[#8D5B4C] flex items-center justify-center button-press cursor-pointer shrink-0 self-center" title="Open Stickers">
             <span class="text-base leading-none">🧸</span>
@@ -944,13 +942,14 @@
           <button id="btn-close-sticker-tray" type="button" class="text-xs font-bold text-stone-500 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer p-1">✕</button>
         </div>
 
-        <!-- Bottom Sticker Tabs (All, Only Dudu, Only Bubu, Together, GIF) -->
+        <!-- Bottom Sticker Tabs (Fav, All, Only Dudu, Only Bubu, Together, Animated) -->
         <div class="flex flex-wrap justify-center items-center gap-1.5 pt-1 border-b border-[#E8DACB]/30 dark:border-stone-700/50 pb-2">
-          <button type="button" data-cat="all" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white text-[11px] font-bold button-press shadow-xs" data-i18n="stk_tab_all">🌟 All (135+)</button>
-          <button type="button" data-cat="dudu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_dudu">🐻 Only Dudu (83)</button>
-          <button type="button" data-cat="bubu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_bubu">🐼 Only Bubu (15)</button>
-          <button type="button" data-cat="couple" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_couple">🐻🐼 Together (39)</button>
-          <button type="button" data-cat="gif" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_gif">✨ GIF Stickers (95)</button>
+          <button type="button" data-cat="fav" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_fav">⭐ Fav (0)</button>
+          <button type="button" data-cat="all" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#8D5B4C] text-white text-[11px] font-bold button-press shadow-xs" data-i18n="stk_tab_all">🌟 All (1975)</button>
+          <button type="button" data-cat="dudu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_dudu">🐻 Only Dudu (411)</button>
+          <button type="button" data-cat="bubu" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_bubu">🐼 Only Bubu (683)</button>
+          <button type="button" data-cat="couple" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_couple">🐻🐼 Together (881)</button>
+          <button type="button" data-cat="gif" class="stk-cat-btn px-2.5 py-1 rounded-full bg-[#F5EAE0] dark:bg-stone-700 text-[#4A3222] dark:text-stone-200 text-[11px] font-bold button-press" data-i18n="stk_tab_gif">✨ Animated (1975)</button>
         </div>
 
         <!-- Sticker Grid -->
@@ -1072,32 +1071,32 @@
     <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] flex flex-col gap-3 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]">
         <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-          <span>💌 Write a Love Note</span>
+          <span data-i18n="notes_modal_title">💌 Write a Love Note</span>
         </h3>
         <button id="btn-close-write-note" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
 
-      <p class="text-xs text-on-surface-variant">Send a sweet handwritten note into our shared space:</p>
+      <p class="text-xs text-on-surface-variant" data-i18n="notes_modal_desc">Send a sweet handwritten note into our shared space:</p>
 
       <div class="flex items-center gap-2 flex-wrap text-xs">
         <label class="flex items-center gap-1 cursor-pointer">
           <input type="radio" name="note-style" value="envelope" checked class="accent-[#8D5B4C]">
-          <span>Wax Seal</span>
+          <span data-i18n="notes_seal_wax">Wax Seal</span>
         </label>
         <label class="flex items-center gap-1 cursor-pointer">
           <input type="radio" name="note-style" value="craft" class="accent-[#8D5B4C]">
-          <span>Craft Paper</span>
+          <span data-i18n="notes_seal_craft">Craft Paper</span>
         </label>
         <label class="flex items-center gap-1 cursor-pointer">
           <input type="radio" name="note-style" value="card" class="accent-[#8D5B4C]">
-          <span>Sweet Card</span>
+          <span data-i18n="notes_seal_card">Sweet Card</span>
         </label>
       </div>
 
       <textarea id="input-love-note-body" rows="4" placeholder="Can't wait to see you tonight! Bring your cozy sweater... 💌" class="w-full rounded-2xl border border-[#E8DACB] p-3 text-base font-handwriting bg-white dark:bg-stone-700 focus:outline-none"></textarea>
 
       <div class="flex justify-end gap-2 pt-1">
-        <button id="btn-submit-love-note" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button id="btn-submit-love-note" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="notes_send_btn">
           Send Love Note ♥
         </button>
       </div>
@@ -1108,40 +1107,40 @@
   <div id="modal-add-polaroid" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white dark:bg-stone-800 max-w-sm w-full rounded-3xl p-5 plush-shadow border border-[#E8DACB] flex flex-col gap-3 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/40">
-        <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100">Add to Memory Jar 📸</h3>
+        <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="memories_modal_title">Add to Memory Jar 📸</h3>
         <button id="btn-close-add-polaroid" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
 
       <div class="flex flex-col gap-2.5 text-xs">
         <div>
-          <label class="font-bold block mb-1">Memory Title</label>
+          <label class="font-bold block mb-1" data-i18n="memories_label_title">Memory Title</label>
           <input type="text" id="input-polaroid-title" placeholder="Starlight Picnic" class="w-full p-2.5 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
         
         <div>
-          <label class="font-bold block mb-1">Date</label>
+          <label class="font-bold block mb-1" data-i18n="memories_label_date">Date</label>
           <input type="text" id="input-polaroid-date" placeholder="Oct 15" class="w-full p-2.5 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
 
         <!-- Custom Photo Upload Section -->
         <div>
-          <label class="font-bold block mb-1">Polaroid Photo</label>
+          <label class="font-bold block mb-1" data-i18n="memories_label_photo">Polaroid Photo</label>
           <input type="file" id="input-polaroid-file" accept="image/*" class="hidden">
           
           <div id="polaroid-custom-preview-box" class="hidden relative rounded-xl border-2 border-dashed border-[#8D5B4C] p-2 bg-[#FAF5EE] dark:bg-stone-700 flex flex-col items-center gap-1.5 mb-2">
             <img id="polaroid-custom-preview-img" src="" alt="Custom Preview" class="w-full max-h-40 object-cover rounded-lg">
-            <button id="btn-remove-polaroid-custom" type="button" class="text-[10px] text-rose-500 font-bold hover:underline cursor-pointer">✕ Remove custom photo</button>
+            <button id="btn-remove-polaroid-custom" type="button" class="text-[10px] text-rose-500 font-bold hover:underline cursor-pointer" data-i18n="memories_remove_photo">✕ Remove custom photo</button>
           </div>
 
           <div class="flex items-center gap-2">
             <button id="btn-upload-polaroid-file" type="button" class="w-full py-2 px-3 rounded-xl bg-[#FAF0E6] hover:bg-[#F2E4D5] dark:bg-stone-700 border border-[#DFCBB7] text-[#8D5B4C] dark:text-amber-200 font-bold flex items-center justify-center gap-1.5 cursor-pointer button-press">
               <span class="material-symbols-outlined text-base">upload_file</span>
-              <span>Upload Custom Photo</span>
+              <span data-i18n="memories_upload_btn">Upload Custom Photo</span>
             </button>
           </div>
 
           <div class="flex items-center gap-2 my-1.5 text-stone-400 text-[10px] justify-center">
-            <span>or choose a preset art scene:</span>
+            <span data-i18n="memories_choose_preset">or choose a preset art scene:</span>
           </div>
 
           <select id="select-polaroid-art" class="w-full p-2 rounded-xl border border-[#E8DACB] bg-[#FAF5EE] dark:bg-stone-700 text-xs text-primary dark:text-stone-100">
@@ -1153,7 +1152,7 @@
         </div>
       </div>
 
-      <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-submit-polaroid" type="button" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="memories_save_btn">
         Save to Jar ✨
       </button>
     </div>
@@ -1165,16 +1164,16 @@
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]">
         <div>
           <h3 class="font-heading font-black text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1">
-            <span>🎮 Outfit Matcher</span>
+            <span data-i18n="game_outfit_matcher">🎮 Outfit Matcher</span>
           </h3>
-          <span class="text-[10px] text-[#8D5B4C] font-semibold">Match pairs before time expires!</span>
+          <span class="text-[10px] text-[#8D5B4C] font-semibold" data-i18n="game_match_desc">Match pairs before time expires!</span>
         </div>
         <button id="btn-close-minigame" type="button" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
 
       <div class="flex items-center justify-between px-2 text-xs font-bold text-[#8D5B4C]">
-        <span>Score: <span id="minigame-score" class="text-base text-[#4A3222] dark:text-stone-100">0</span></span>
-        <span>Time: <span id="minigame-time" class="text-base text-rose-500">45s</span></span>
+        <span><span data-i18n="game_score_label">Score:</span> <span id="minigame-score" class="text-base text-[#4A3222] dark:text-stone-100">0</span></span>
+        <span><span data-i18n="game_time_label">Time:</span> <span id="minigame-time" class="text-base text-rose-500">45s</span></span>
       </div>
 
       <!-- 12-Card Grid -->
@@ -1194,7 +1193,7 @@
           <span class="text-xl">🗓️</span>
           <div>
             <h3 id="modal-cal-date-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 leading-tight">October 15, 2026</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">our cozy agenda ♡</span>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="cal_agenda_sub">our cozy agenda ♡</span>
           </div>
         </div>
         <button id="btn-close-cal-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1202,7 +1201,7 @@
 
       <!-- Events List on this day -->
       <div class="flex flex-col gap-2">
-        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300">Planned Moments:</span>
+        <span class="text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300" data-i18n="cal_planned_moments">Planned Moments:</span>
         <div id="modal-cal-events-list" class="flex flex-col gap-1.5 min-h-[40px]">
           <!-- Populated by JS -->
         </div>
@@ -1212,7 +1211,7 @@
       <div class="bg-white/80 dark:bg-stone-700/60 rounded-2xl p-3 border border-[#E8DACB]/80 dark:border-stone-600 flex flex-col gap-2.5">
         <span class="text-[11px] font-extrabold text-[#4A3222] dark:text-stone-200 flex items-center gap-1">
           <span>✨</span>
-          <span>Add New Moment</span>
+          <span data-i18n="cal_add_moment">Add New Moment</span>
         </span>
 
         <input type="text" id="input-cal-event-title" placeholder="e.g. Cozy pasta & movie date 🍝" class="w-full rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-[#FAF5EE] dark:bg-stone-800 p-2.5 text-xs text-[#4A3222] dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
@@ -1243,11 +1242,11 @@
             <input type="radio" name="cal-icon" value="🧸" class="accent-[#8D5B4C]">
             <span>🧸 Bear</span>
           </label>
-          <input type="text" id="input-cal-custom-icon" placeholder="Other emoji" maxlength="4" class="w-24 px-2 py-0.5 rounded-full border border-[#E8DACB] dark:border-stone-600 text-[10px] bg-[#FAF5EE] dark:bg-stone-800 text-[#4A3222] dark:text-stone-100 text-center" title="Type custom emoji here">
+          <input type="text" id="input-cal-custom-icon" placeholder="Other emoji" data-i18n-placeholder="cal_custom_icon_ph" maxlength="4" class="w-24 px-2 py-0.5 rounded-full border border-[#E8DACB] dark:border-stone-600 text-[10px] bg-[#FAF5EE] dark:bg-stone-800 text-[#4A3222] dark:text-stone-100 text-center" title="Type custom emoji here">
         </div>
 
         <button id="btn-submit-cal-event" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
-          <span>Save to Calendar ♡</span>
+          <span data-i18n="cal_save_btn">Save to Calendar ♡</span>
         </button>
       </div>
 
@@ -1262,8 +1261,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">📝</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Add Date Wishlist</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">dreaming our future together ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="bucket_modal_title">Add Date Wishlist</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="bucket_modal_sub">dreaming our future together ♡</span>
           </div>
         </div>
         <button id="btn-close-planner-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1271,31 +1270,31 @@
 
       <div class="flex flex-col gap-2.5 text-xs">
         <div>
-          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Date or Idea Title</label>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1" data-i18n="bucket_label_title">Date or Idea Title</label>
           <input type="text" id="input-planner-title" placeholder="e.g. Stargazing with blankets & warm cider ✨" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
 
         <div>
-          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Little Description (Optional)</label>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1" data-i18n="bucket_label_desc">Little Description (Optional)</label>
           <input type="text" id="input-planner-desc" placeholder="A cozy couple memory we want to make" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
 
         <div>
-          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1">Vibe Category</label>
+          <label class="font-bold text-[#4A3222] dark:text-stone-200 block mb-1" data-i18n="bucket_label_vibe">Vibe Category</label>
           <div class="flex items-center gap-2">
             <label class="flex-1 flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] cursor-pointer">
               <input type="radio" name="planner-category" value="outdoor" checked class="accent-[#8D5B4C]">
-              <span class="font-bold">🌸 Outdoor</span>
+              <span class="font-bold" data-i18n="bucket_vibe_outdoor">🌸 Outdoor</span>
             </label>
             <label class="flex-1 flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] cursor-pointer">
               <input type="radio" name="planner-category" value="indoor" class="accent-[#8D5B4C]">
-              <span class="font-bold">☕ Indoor</span>
+              <span class="font-bold" data-i18n="bucket_vibe_indoor">☕ Indoor</span>
             </label>
           </div>
         </div>
       </div>
 
-      <button id="btn-submit-planner-item" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-submit-planner-item" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="bucket_add_btn_action">
         Add to Wishlist ✨
       </button>
     </div>
@@ -1327,12 +1326,12 @@
       <!-- Action Footer -->
       <div class="flex items-center gap-2 pt-1">
         <button id="btn-delete-view-note" type="button" class="py-2 px-3.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
-          <span>🗑️ Delete</span>
+          <span data-i18n="notes_delete_btn">🗑️ Delete</span>
         </button>
         <button id="btn-fav-view-note" type="button" class="py-2 px-3 rounded-full bg-amber-50 dark:bg-stone-700 text-[#8D5B4C] dark:text-amber-300 border border-[#E8DACB] font-heading font-bold text-xs button-press cursor-pointer">
-          <span>♥ Favorite</span>
+          <span data-i18n="btn_fav">♥ Favorite</span>
         </button>
-        <button id="btn-dismiss-view-note" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button id="btn-dismiss-view-note" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="notes_keep_btn">
           Keep in Heart ♡
         </button>
       </div>
@@ -1346,7 +1345,7 @@
       
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
         <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-          <span>📸 Memory Jar Photo</span>
+          <span data-i18n="memories_view_title">📸 Memory Jar Photo</span>
         </h3>
         <button id="btn-close-view-polaroid" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
       </div>
@@ -1370,12 +1369,12 @@
         <!-- Inline Edit Caption Form -->
         <div id="polaroid-caption-edit-box" class="hidden flex flex-col gap-2 pt-2.5">
           <div class="flex flex-col gap-1 text-left">
-            <label class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300">Edit Caption</label>
+            <label class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300" data-i18n="memories_edit_caption">Edit Caption</label>
             <input type="text" id="input-edit-polaroid-caption" class="w-full text-center font-handwriting text-xl text-[#4A3222] dark:text-stone-100 p-2 rounded-xl border border-[#DFCBB7] dark:border-stone-600 bg-[#FAF4ED] dark:bg-stone-800 focus:outline-none" placeholder="Enter new caption...">
           </div>
           <div class="flex items-center gap-2">
-            <button id="btn-cancel-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full border border-stone-300 dark:border-stone-600 text-xs font-bold text-stone-600 dark:text-stone-300 button-press cursor-pointer">Cancel</button>
-            <button id="btn-save-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-xs font-bold text-white button-press cursor-pointer shadow-xs">Save Caption ♡</button>
+            <button id="btn-cancel-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full border border-stone-300 dark:border-stone-600 text-xs font-bold text-stone-600 dark:text-stone-300 button-press cursor-pointer" data-i18n="chat_cancel_btn">Cancel</button>
+            <button id="btn-save-polaroid-caption" type="button" class="flex-1 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-xs font-bold text-white button-press cursor-pointer shadow-xs" data-i18n="memories_save_caption">Save Caption ♡</button>
           </div>
         </div>
       </div>
@@ -1383,13 +1382,13 @@
       <!-- Action Footer -->
       <div class="flex items-center gap-2 pt-1">
         <button id="btn-delete-view-polaroid" type="button" class="py-2 px-3 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-200 font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
-          <span>🗑️ Delete</span>
+          <span data-i18n="btn_delete">🗑️ Delete</span>
         </button>
         <button id="btn-edit-view-polaroid" type="button" class="py-2 px-3 rounded-full bg-amber-50 dark:bg-stone-700 text-[#8D5B4C] dark:text-amber-300 border border-[#E8DACB] font-heading font-bold text-xs button-press cursor-pointer flex items-center gap-1">
           <span class="material-symbols-outlined text-[14px]">edit</span>
-          <span>Edit</span>
+          <span data-i18n="home_adjust">Edit</span>
         </button>
-        <button id="btn-dismiss-view-polaroid" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button id="btn-dismiss-view-polaroid" type="button" class="flex-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="memories_cherish_btn">
           Cherish Forever ✨
         </button>
       </div>
@@ -1405,8 +1404,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">💭</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Update Your Status</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">let your partner know what you're doing ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="status_modal_title">Update Your Status</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="status_modal_sub">let your partner know what you're doing ♡</span>
           </div>
         </div>
         <button id="btn-close-status-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1416,18 +1415,18 @@
 
       <!-- Quick Status Presets -->
       <div class="flex flex-col gap-1.5">
-        <span class="text-[10px] font-bold text-stone-500">Quick Sweet Statuses:</span>
+        <span class="text-[10px] font-bold text-stone-500" data-i18n="status_quick_label">Quick Sweet Statuses:</span>
         <div class="flex flex-wrap gap-1.5">
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Thinking of you! 💭</button>
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Missing you ❤️</button>
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Eating snacks! 🐼</button>
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Studying hard 📚</button>
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">Sleepy cozy 😴</button>
-          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer">On my way home! 🚗</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_thinking">Thinking of you! 💭</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_missing">Missing you ❤️</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_eating">Eating snacks! 🐼</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_studying">Studying hard 📚</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_sleepy">Sleepy cozy 😴</button>
+          <button type="button" class="btn-preset-status text-[11px] font-bold px-2.5 py-1 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] hover:border-[#8D5B4C] button-press cursor-pointer" data-i18n="status_onway">On my way home! 🚗</button>
         </div>
       </div>
 
-      <button id="btn-save-partner-status" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-save-partner-status" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="status_update_btn">
         Update Status ♡
       </button>
 
@@ -1441,8 +1440,8 @@
         <div class="flex items-center gap-2">
           <span id="battery-modal-avatar" class="text-2xl">🐻</span>
           <div>
-            <h3 id="battery-modal-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Adjust Dudu's Love Battery</h3>
-            <span id="battery-modal-subtitle" class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">how full is Dudu's heart right now? ♡</span>
+            <h3 id="battery-modal-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="battery_modal_title">Adjust Love Battery</h3>
+            <span id="battery-modal-subtitle" class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="battery_modal_sub">how full is your heart right now? ♡</span>
           </div>
         </div>
         <button id="btn-close-battery-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1470,23 +1469,23 @@
       <div id="battery-modal-presets" class="grid grid-cols-2 gap-2 text-xs font-bold">
         <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="25">
           <span>🥺</span>
-          <span>Low Energy (25%)</span>
+          <span data-i18n="battery_preset_low">Low Energy (25%)</span>
         </button>
         <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="50">
           <span>🤗</span>
-          <span>Need Hugs (50%)</span>
+          <span data-i18n="battery_preset_hug">Need Hugs (50%)</span>
         </button>
         <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="75">
           <span>🥰</span>
-          <span>Happy (75%)</span>
+          <span data-i18n="battery_preset_happy">Happy (75%)</span>
         </button>
         <button type="button" class="btn-battery-preset p-2 rounded-xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#FBE4D5] dark:hover:bg-stone-600 text-left flex items-center gap-1.5 cursor-pointer button-press" data-val="100">
           <span>💖</span>
-          <span>Full Love (100%)</span>
+          <span data-i18n="battery_preset_full">Full Love (100%)</span>
         </button>
       </div>
 
-      <button id="btn-save-battery-slider" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-save-battery-slider" type="button" class="w-full py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#794B3D] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="battery_save_btn">
         Save Love Level ♡
       </button>
     </div>
@@ -1499,8 +1498,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">🔔</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Notifications</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">latest 5 updates from our space ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="notif_modal_title">Notifications</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="notif_modal_sub">latest 5 updates from our space ♡</span>
           </div>
         </div>
         <button id="btn-close-notif-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1513,10 +1512,10 @@
 
       <!-- Bottom actions -->
       <div class="flex items-center justify-between pt-1 border-t border-[#E8DACB]/40 dark:border-stone-700 text-xs">
-        <button id="btn-clear-notif-history" type="button" class="text-[11px] font-bold text-stone-400 hover:text-[#8D5B4C] dark:text-stone-400 cursor-pointer button-press">
+        <button id="btn-clear-notif-history" type="button" class="text-[11px] font-bold text-stone-400 hover:text-[#8D5B4C] dark:text-stone-400 cursor-pointer button-press" data-i18n="notif_clear_btn">
           Clear history
         </button>
-        <button id="btn-dismiss-notif-modal" type="button" class="px-4 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button id="btn-dismiss-notif-modal" type="button" class="px-4 py-1.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="notif_close_btn">
           Close ♡
         </button>
       </div>
@@ -1531,20 +1530,20 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">💍</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Our Relationship Date</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">when our love story began ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="anni_modal_title">Our Relationship Date</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="anni_modal_sub">when our love story began ♡</span>
           </div>
         </div>
         <button id="btn-close-anniversary-modal" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="text-xs font-bold text-[#4A3222] dark:text-stone-200">Start Date</label>
+        <label class="text-xs font-bold text-[#4A3222] dark:text-stone-200" data-i18n="anni_start_label">Start Date</label>
         <input type="date" id="input-anniversary-iso" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs font-bold text-[#4A3222] dark:text-stone-100 focus:outline-none">
         <span id="anniversary-preview-days" class="text-xs text-[#8D5B4C] dark:text-stone-300 font-bold">Together for 345 sweet days ♡</span>
       </div>
 
-      <button id="btn-save-anniversary" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-save-anniversary" type="button" class="py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="anni_save_btn">
         Save Anniversary Date ♡
       </button>
 
@@ -1559,10 +1558,10 @@
           <span class="material-symbols-outlined text-[#8D5B4C] text-xl">forum</span>
           <div>
             <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
-              <span>All Chat Topics</span>
+              <span data-i18n="chat_all_topics_title">All Chat Topics</span>
               <span id="all-topics-count-badge" class="px-2 py-0.5 rounded-full bg-[#8D5B4C]/15 text-[#8D5B4C] dark:text-stone-300 text-[10px] font-bold">0</span>
             </h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">explore &amp; organize our talks ♡</span>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold" data-i18n="chat_all_topics_sub">explore &amp; organize our talks ♡</span>
           </div>
         </div>
         <div class="flex items-center gap-1">
@@ -1574,7 +1573,7 @@
       <!-- Search input -->
       <div class="relative">
         <span class="material-symbols-outlined absolute left-3 top-2.5 text-stone-400 text-sm">search</span>
-        <input type="text" id="input-search-topics" placeholder="Search topics..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
+        <input type="text" id="input-search-topics" placeholder="Search topics..." data-i18n-placeholder="chat_search_topics_placeholder" class="w-full pl-8 pr-3 py-2 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
       </div>
 
       <!-- Topics List -->
@@ -1591,8 +1590,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">💬</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Create New Topic</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">a new thread for our thoughts ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="chat_create_topic_title">Create New Topic</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold" data-i18n="chat_create_topic_sub">a new thread for our thoughts ♡</span>
           </div>
         </div>
         <button id="btn-close-new-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1600,12 +1599,12 @@
 
       <form id="form-new-topic" class="flex flex-col gap-3">
         <div>
-          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Topic Title</label>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block" data-i18n="chat_topic_name_label">Topic Title</label>
           <input type="text" id="input-new-topic-title" placeholder="e.g. Late Night Snacks 🍱" required class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
 
         <div>
-          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Icon / Emoji</label>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block" data-i18n="chat_topic_icon_label">Icon / Emoji</label>
           <select id="select-new-topic-emoji" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none">
             <option value="💬">💬 Chat</option>
             <option value="🍱">🍱 Food &amp; Snacks</option>
@@ -1618,7 +1617,7 @@
           </select>
         </div>
 
-        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="chat_create_topic_btn">
           Create Topic ✨
         </button>
       </form>
@@ -1659,7 +1658,7 @@
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
         <div class="flex items-center gap-2 min-w-0">
           <span id="topic-action-emoji" class="text-2xl shrink-0">💬</span>
-          <h3 id="topic-action-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 truncate text-left">Topic Options</h3>
+          <h3 id="topic-action-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 truncate text-left" data-i18n="chat_topic_options_title">Topic Options</h3>
         </div>
         <button id="btn-close-topic-actions" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
       </div>
@@ -1667,11 +1666,11 @@
       <div class="flex flex-col gap-2 pt-1">
         <button id="btn-topic-action-rename" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 hover:bg-[#F5EAE0] dark:hover:bg-stone-600 flex items-center justify-center gap-2 text-xs font-bold text-[#4A3222] dark:text-stone-100 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base text-[#8D5B4C]">edit</span>
-          <span>Rename Topic</span>
+          <span data-i18n="chat_rename_topic_btn">Rename Topic</span>
         </button>
         <button id="btn-topic-action-delete" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 hover:bg-rose-100 dark:hover:bg-rose-900/60 flex items-center justify-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base">delete</span>
-          <span>Delete Topic</span>
+          <span data-i18n="chat_delete_topic_btn">Delete Topic</span>
         </button>
       </div>
     </div>
@@ -1684,8 +1683,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xl">✏️</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Rename Topic</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold">give our thread a new name ♡</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="chat_rename_topic_title">Rename Topic</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-semibold" data-i18n="chat_rename_topic_sub">give our thread a new name ♡</span>
           </div>
         </div>
         <button id="btn-close-rename-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold text-stone-600 dark:text-stone-200 cursor-pointer button-press">✕</button>
@@ -1693,12 +1692,12 @@
 
       <form id="form-rename-topic" class="flex flex-col gap-3">
         <div>
-          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">New Title</label>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block" data-i18n="chat_topic_name_label">New Title</label>
           <input type="text" id="input-rename-topic-title" placeholder="Topic name" required class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none focus:ring-1 focus:ring-[#8D5B4C]">
         </div>
 
         <div>
-          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block">Icon / Emoji</label>
+          <label class="text-[11px] font-bold text-[#4A3222] dark:text-stone-200 mb-1 block" data-i18n="chat_topic_icon_label">Icon / Emoji</label>
           <select id="select-rename-topic-emoji" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-xs text-[#4A3222] dark:text-stone-100 focus:outline-none">
             <option value="💬">💬 Chat</option>
             <option value="🍱">🍱 Food &amp; Snacks</option>
@@ -1711,7 +1710,7 @@
           </select>
         </div>
 
-        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button type="submit" class="mt-2 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="chat_save_changes_btn">
           Save Changes ♡
         </button>
       </form>
@@ -1722,18 +1721,18 @@
   <div id="modal-add-milestone" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-sm w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
-        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">⌛ Add Memory Milestone</h3>
+        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="memories_milestone_title">⌛ Add Memory Milestone</h3>
         <button id="btn-close-add-milestone" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
       <div class="flex flex-col gap-2 text-xs">
-        <label class="font-bold">Milestone Title</label>
+        <label class="font-bold" data-i18n="memories_milestone_label_title">Milestone Title</label>
         <input type="text" id="input-milestone-title" placeholder="e.g. First Road Trip Together 🚗" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
-        <label class="font-bold">Date</label>
+        <label class="font-bold" data-i18n="memories_milestone_label_date">Date</label>
         <input type="text" id="input-milestone-date" placeholder="e.g. October 17th" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
-        <label class="font-bold">Sweet Note</label>
+        <label class="font-bold" data-i18n="memories_milestone_label_note">Sweet Note</label>
         <input type="text" id="input-milestone-desc" placeholder="sang our favorite songs all the way" class="p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100 focus:outline-none">
       </div>
-      <button id="btn-submit-milestone" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+      <button id="btn-submit-milestone" type="button" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="memories_milestone_save">
         Save Milestone ✨
       </button>
     </div>
@@ -1743,26 +1742,58 @@
   <div id="modal-message-actions" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-[#FAF5EE] dark:bg-stone-800 max-w-xs w-full rounded-[2.5rem] p-5 plush-shadow-lg border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-3 relative animate-squish">
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
-        <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Message Options</h3>
+        <h3 id="msg-actions-title" class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="msg_options">Message Options</h3>
         <button id="btn-close-msg-actions" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
+
+      <!-- Sticker preview (shown when sticker is clicked) -->
+      <div id="msg-action-sticker-preview" class="hidden flex flex-col items-center justify-center p-3 rounded-3xl bg-white/70 dark:bg-stone-700/60 border border-[#E8DACB]/60 dark:border-stone-600/60 shadow-2xs">
+        <div class="w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center select-none pointer-events-none p-1">
+          <img id="msg-action-sticker-img" src="" alt="Sticker Preview" class="max-w-full max-h-full object-contain filter drop-shadow-md" onerror="window.DuduStickers?.handleImageError?.(this);">
+        </div>
+        <span id="msg-action-sticker-title" class="font-heading font-extrabold text-xs text-[#8D5B4C] dark:text-stone-200 mt-1 px-2 text-center line-clamp-1"></span>
+      </div>
+
+      <!-- Text preview (shown for normal text messages) -->
       <p id="msg-action-preview-text" class="text-xs text-[#8D5B4C] dark:text-stone-300 italic truncate px-1"></p>
-      <div class="flex flex-col gap-2">
+
+      <!-- Compact action buttons for stickers (Fav, Reply, Forward, Delete - NO Copy) -->
+      <div id="msg-actions-sticker" class="hidden grid grid-cols-4 gap-1.5 pt-1 w-full">
+        <button id="btn-stk-action-fav" type="button" class="py-2.5 px-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#FAF0E6] dark:hover:bg-stone-600/80 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center gap-1 text-[10px] font-bold text-[#4A3222] dark:text-stone-100 button-press cursor-pointer shadow-2xs transition-all" title="Favorite">
+          <span id="icon-stk-action-fav" class="material-symbols-outlined text-base text-[#8D5B4C] dark:text-stone-300">star_outline</span>
+          <span id="label-stk-action-fav" data-i18n="btn_fav">Favorite</span>
+        </button>
+        <button id="btn-stk-action-reply" type="button" class="py-2.5 px-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#FAF0E6] dark:hover:bg-stone-600/80 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center gap-1 text-[10px] font-bold text-[#4A3222] dark:text-stone-100 button-press cursor-pointer shadow-2xs transition-all" title="Reply">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C] dark:text-stone-300">reply</span>
+          <span data-i18n="btn_reply">Reply</span>
+        </button>
+        <button id="btn-stk-action-forward" type="button" class="py-2.5 px-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#FAF0E6] dark:hover:bg-stone-600/80 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center gap-1 text-[10px] font-bold text-[#4A3222] dark:text-stone-100 button-press cursor-pointer shadow-2xs transition-all" title="Forward to Topic">
+          <span class="material-symbols-outlined text-base text-[#8D5B4C] dark:text-stone-300">forward</span>
+          <span data-i18n="btn_forward">Forward</span>
+        </button>
+        <button id="btn-stk-action-delete" type="button" class="py-2.5 px-1.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 border border-rose-200 dark:border-rose-900 flex flex-col items-center justify-center gap-1 text-[10px] font-bold text-rose-600 dark:text-rose-400 button-press cursor-pointer shadow-2xs transition-all" title="Delete">
+          <span class="material-symbols-outlined text-base text-rose-500">delete</span>
+          <span data-i18n="btn_delete">Delete</span>
+        </button>
+      </div>
+
+      <!-- Normal action buttons for text/media messages (Reply, Copy, Forward, Delete) -->
+      <div id="msg-actions-normal" class="flex flex-col gap-2">
         <button id="btn-action-reply" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base text-[#8D5B4C]">reply</span>
-          <span>Reply</span>
+          <span data-i18n="btn_reply">Reply</span>
         </button>
         <button id="btn-action-copy" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base text-[#8D5B4C]">content_copy</span>
-          <span>Copy</span>
+          <span data-i18n="btn_copy">Copy</span>
         </button>
         <button id="btn-action-forward" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-white dark:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center gap-2.5 text-xs font-bold text-primary dark:text-stone-100 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base text-[#8D5B4C]">forward</span>
-          <span>Forward to Topic</span>
+          <span data-i18n="btn_forward">Forward to Topic</span>
         </button>
         <button id="btn-action-delete" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 flex items-center gap-2.5 text-xs font-bold text-rose-600 dark:text-rose-400 button-press cursor-pointer">
           <span class="material-symbols-outlined text-base">delete</span>
-          <span>Delete Message</span>
+          <span data-i18n="btn_delete">Delete Message</span>
         </button>
       </div>
     </div>
@@ -1774,11 +1805,11 @@
       <div class="w-11 h-11 mx-auto rounded-full bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-500">
         <span class="material-symbols-outlined text-2xl">delete</span>
       </div>
-      <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">Delete Message?</h3>
-      <p id="delete-message-confirm-text" class="text-xs text-[#8D5B4C] dark:text-stone-300 leading-relaxed">Are you sure you want to delete this message?</p>
+      <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="chat_delete_modal_title">Delete Message?</h3>
+      <p id="delete-message-confirm-text" class="text-xs text-[#8D5B4C] dark:text-stone-300 leading-relaxed" data-i18n="chat_delete_modal_desc">Are you sure you want to delete this message?</p>
       <div class="flex items-center gap-2 pt-1">
-        <button id="btn-cancel-delete-msg" type="button" class="flex-1 py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs button-press cursor-pointer">Cancel</button>
-        <button id="btn-confirm-delete-msg" type="button" class="flex-1 py-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs button-press cursor-pointer shadow-xs">Delete</button>
+        <button id="btn-cancel-delete-msg" type="button" class="flex-1 py-2 rounded-full border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-300 font-bold text-xs button-press cursor-pointer" data-i18n="chat_cancel_btn">Cancel</button>
+        <button id="btn-confirm-delete-msg" type="button" class="flex-1 py-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="chat_delete_confirm_btn">Delete</button>
       </div>
     </div>
   </div>
@@ -1789,7 +1820,7 @@
       <div class="flex items-center justify-between pb-2 border-b border-[#E8DACB]/60 dark:border-stone-700">
         <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100 flex items-center gap-1.5">
           <span class="material-symbols-outlined text-base text-[#8D5B4C]">forward</span>
-          <span>Forward to Topic</span>
+          <span data-i18n="chat_forward_title">Forward to Topic</span>
         </h3>
         <button id="btn-close-forward-topic" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
@@ -1812,33 +1843,33 @@
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[#8D5B4C]">lock</span>
           <div>
-            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100">E2EE Security &amp; Relay</h3>
-            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold">AES-GCM 256-bit Zero-Knowledge</span>
+            <h3 class="font-heading font-extrabold text-sm text-[#4A3222] dark:text-stone-100" data-i18n="sec_title">E2EE Security &amp; Relay</h3>
+            <span class="text-[10px] text-[#8D5B4C] dark:text-stone-400 font-bold" data-i18n="sec_subtitle">AES-GCM 256-bit Zero-Knowledge</span>
           </div>
         </div>
         <button id="btn-close-chat-settings" type="button" class="w-7 h-7 rounded-full bg-white dark:bg-stone-700 border border-[#E8DACB] flex items-center justify-center text-xs font-bold cursor-pointer">✕</button>
       </div>
       <form id="form-chat-settings" class="flex flex-col gap-2.5 text-xs">
         <div>
-          <label class="font-bold block mb-1">Viewing Role</label>
+          <label class="font-bold block mb-1" data-i18n="sec_view_role">Viewing Role</label>
           <select id="select-chat-identity" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
             <option value="dudu">Dudu 🐻 (Kevin)</option>
             <option value="bubu">Bubu 🐼 (Nana)</option>
           </select>
         </div>
         <div>
-          <label class="font-bold block mb-1">Shared Secret Passphrase</label>
+          <label class="font-bold block mb-1" data-i18n="sec_passphrase">Shared Secret Passphrase</label>
           <input type="password" id="input-chat-passphrase" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
         </div>
         <div>
-          <label class="font-bold block mb-1">Relay Server URL</label>
+          <label class="font-bold block mb-1" data-i18n="sec_relay_url">Relay Server URL</label>
           <input type="text" id="input-chat-server-url" value="wss://chat.nexora-v1.my.id/chat-socket" placeholder="wss://chat.nexora-v1.my.id/chat-socket" class="w-full p-2.5 rounded-xl border border-[#E8DACB] dark:border-stone-600 bg-white dark:bg-stone-700 text-primary dark:text-stone-100">
           <div class="flex items-center gap-2 mt-1.5">
-            <button id="btn-use-localhost" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer">Local Server</button>
-            <button id="btn-use-remote" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer">Cloudflare Relay</button>
+            <button id="btn-use-localhost" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer" data-i18n="sec_btn_local">Local Server</button>
+            <button id="btn-use-remote" type="button" class="px-2.5 py-1 rounded-full bg-surface-container text-[10px] font-bold cursor-pointer" data-i18n="sec_btn_remote">Cloudflare Relay</button>
           </div>
         </div>
-        <button type="submit" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs">
+        <button type="submit" class="mt-1 py-2.5 rounded-full bg-[#8D5B4C] hover:bg-[#78493C] text-white font-heading font-bold text-xs button-press cursor-pointer shadow-xs" data-i18n="sec_save_btn">
           Save Security Settings ♡
         </button>
       </form>
@@ -1924,11 +1955,11 @@
   <!-- TOGETHER OFFLINE SLEEP OVERLAY -->
   <div id="offline-sleep-overlay" class="hidden fixed inset-0 z-50 bg-[#120E18]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center text-white animate-fade-in">
     <span class="text-6xl mb-4 animate-bounce">🌙</span>
-    <h2 class="font-heading font-black text-2xl tracking-tight mb-1">Sweet Dreams, Bubu &amp; Dudu</h2>
-    <p class="text-sm text-stone-300 max-w-xs leading-relaxed mb-6 font-handwriting text-xl">
+    <h2 class="font-heading font-black text-2xl tracking-tight mb-1" data-i18n="sleep_title">Sweet Dreams, Bubu &amp; Dudu</h2>
+    <p class="text-sm text-stone-300 max-w-xs leading-relaxed mb-6 font-handwriting text-xl" data-i18n="sleep_desc">
       The stars are glowing softly. Together offline, resting our hearts for tomorrow... zzz ✨
     </p>
-    <button id="btn-close-sleep-overlay" type="button" class="py-2.5 px-6 rounded-full bg-[#8D5B4C] hover:bg-[#9E6959] text-white font-bold text-xs button-press cursor-pointer shadow-lg">
+    <button id="btn-close-sleep-overlay" type="button" class="py-2.5 px-6 rounded-full bg-[#8D5B4C] hover:bg-[#9E6959] text-white font-bold text-xs button-press cursor-pointer shadow-lg" data-i18n="sleep_wake_btn">
       Wake Up ☀️
     </button>
   </div>
@@ -1940,6 +1971,7 @@
 
   <!-- SCRIPTS -->
   <script src="js/i18n.js?v=v6"></script>
+  <script src="js/stickers_catalog.js?v=v1"></script>
   <script src="js/stickers.js?v=v5"></script>
   <script src="js/audio.js?v=v5"></script>
   <script src="js/chat/crypto.js?v=v6"></script>
