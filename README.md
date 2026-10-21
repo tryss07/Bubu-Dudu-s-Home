@@ -74,8 +74,8 @@
 ### 9. 🎨 In-App Sticker Centre (Pusat Stiker)
 - **1,472 Curated WebP Stickers**: 22 modular packs covering Dudu, Bubu, and Couple themes.
 - **Default Core 300 Pack**: Pre-indexed essential stickers ready on startup.
-- **In-App On-Demand Downloads**: Modular packs download inside the app over HTTP with a live download progress bar, keeping the base app package lean.
-- **Local IndexedDB Blob Persistence**: Downloaded packs are permanently cached into client-side IndexedDB (`DuduStickersDB`) with `navigator.storage.persist()`, enabling instant 100% offline access.
+- **In-App On-Demand Downloads & Visual Queue**: Modular packs download on-demand with a real-time progress bar. Includes sequential download queueing (`+N queued` badge, `Queued (#X)` card states, and cancel buttons) to smoothly download multiple packs without CPU/network congestion.
+- **Local IndexedDB Blob Persistence**: Downloaded packs are permanently cached into client-side IndexedDB (`DuduStickersDB`) with `navigator.storage.persist()`, enabling instant 100% offline access with a 64-item LRU memory cache.
 - **Sticker Management**: Filter packs by **All**, **Dudu**, **Bubu**, **Couple**, and **Downloaded**, plus emotion search and in-chat sticker keyboard tray.
 
 ### 10. 🌐 Bilingual Localization & Theming

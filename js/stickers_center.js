@@ -359,24 +359,76 @@
 
   const downloadQueue = [];
 
-  // Concurrent Batch Downloader
+  function isPackQueued(packId) {
+    return downloadQueue.some(item => item.packId === packId);
+  }
+
+  function getQueuePosition(packId) {
+    const idx = downloadQueue.findIndex(item => item.packId === packId);
+    return idx !== -1 ? idx + 1 : 0;
+  }
+
+  function removeFromQueue(packId) {
+    const idx = downloadQueue.findIndex(item => item.packId === packId);
+    if (idx !== -1) {
+      const removed = downloadQueue.splice(idx, 1)[0];
+      removed?.resolve?.(false);
+      renderStickerCenterUI();
+      dispatchProgress();
+      if (window.showToast) {
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        window.showToast(isEn ? 'Removed from download queue' : 'Dihapus dari antrean unduh');
+      }
+      return true;
+    }
+    return false;
+  }
+
+  // Concurrent Batch Downloader with Visual Queue
   async function downloadPack(packId, options = {}) {
+    if (isPackDownloaded(packId)) {
+      return true;
+    }
+
+    if (isPackQueued(packId)) {
+      if (window.showToast) {
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        window.showToast(isEn ? 'Already in download queue' : 'Sudah ada dalam antrean unduh');
+      }
+      return false;
+    }
+
     if (isDownloading) {
+      const pack = getPackById(packId);
+      const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+      const packTitle = pack ? (isEn ? pack.title : (pack.title_id || pack.title)) : packId;
+
       return new Promise((resolve) => {
         downloadQueue.push({
           packId,
           options: {
             ...options,
-            onComplete: (pack) => {
-              options.onComplete?.(pack);
+            onComplete: (p) => {
+              options.onComplete?.(p);
               resolve(true);
             },
             onError: (err) => {
               options.onError?.(err);
               resolve(false);
             }
-          }
+          },
+          resolve
         });
+
+        renderStickerCenterUI();
+        dispatchProgress();
+
+        if (window.showToast) {
+          const pos = downloadQueue.length;
+          window.showToast(
+            isEn ? `Added to queue (#${pos}): ${packTitle}` : `Masuk antrean (#${pos}): ${packTitle}`
+          );
+        }
       });
     }
 
@@ -474,14 +526,17 @@
       options.onComplete(pack);
     }
 
-    if (downloadQueue.length > 0) {
-      const next = downloadQueue.shift();
-      downloadPack(next.packId, next.options);
-    }
+    renderStickerCenterUI();
 
     if (window.showToast) {
       const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
       window.showToast(isEn ? `${pack.title} downloaded!` : `${pack.title_id || pack.title} berhasil diunduh!`);
+    }
+
+    if (downloadQueue.length > 0) {
+      const next = downloadQueue.shift();
+      renderStickerCenterUI();
+      downloadPack(next.packId, next.options);
     }
 
     return true;
@@ -578,13 +633,22 @@
 
     if (progressInfo && progressInfo.percent < 100) {
       container.classList.remove('hidden');
+      const queueCount = downloadQueue.length;
+      const queueBadge = queueCount > 0 ? `
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 text-[10px] font-extrabold shadow-2xs">
+          <span class="material-symbols-outlined text-[12px]">schedule</span>
+          ${isEn ? `+${queueCount} queued` : `+${queueCount} antrean`}
+        </span>
+      ` : '';
+
       container.innerHTML = `
-        <div class="bg-white/95 dark:bg-stone-800/95 backdrop-blur-md border border-[#E8DACB] dark:border-stone-700 rounded-2xl p-3 plush-shadow flex flex-col gap-2">
+        <div class="bg-white/95 dark:bg-stone-800/95 backdrop-blur-md border border-[#E8DACB] dark:border-stone-700 rounded-2xl p-3 plush-shadow flex flex-col gap-2 transition-all">
           <div class="flex items-center justify-between text-xs font-heading">
-            <div class="flex items-center gap-1.5 min-w-0">
+            <div class="flex items-center gap-2 min-w-0">
               <span class="font-extrabold text-[#8D5B4C] dark:text-[#F5C7A9] truncate">
                 ${isEn ? 'Downloading:' : 'Mengunduh:'} ${escapeHtml(progressInfo.packTitle)}
               </span>
+              ${queueBadge}
             </div>
             <span class="font-black text-[#4A3222] dark:text-stone-100 shrink-0">
               ${progressInfo.completed} / ${progressInfo.total} (${progressInfo.percent}%)
@@ -664,6 +728,8 @@
     listContainer.innerHTML = filtered.map(pack => {
       const downloaded = isPackDownloaded(pack.id);
       const isCurrentlyDownloading = isDownloading && currentDownloadInfo?.packId === pack.id;
+      const queuePos = getQueuePosition(pack.id);
+      const isQueued = queuePos > 0;
       const title = isEn ? pack.title : (pack.title_id || pack.title);
       const desc = isEn ? pack.description : (pack.description_id || pack.description);
 
@@ -685,8 +751,21 @@
         actionButtonHtml = `
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-[#8D5B4C]">${currentDownloadInfo.percent}%</span>
-            <button disabled class="px-3.5 py-1.5 rounded-full bg-[#E8DACB] text-[#4A3222] text-xs font-extrabold opacity-75 cursor-not-allowed">
+            <button disabled class="px-3.5 py-1.5 rounded-full bg-[#E8DACB] text-[#4A3222] text-xs font-extrabold opacity-80 cursor-not-allowed flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm animate-spin">sync</span>
               ${isEn ? 'Downloading...' : 'Mengunduh...'}
+            </button>
+          </div>
+        `;
+      } else if (isQueued) {
+        actionButtonHtml = `
+          <div class="flex items-center gap-1.5">
+            <span class="px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs font-extrabold flex items-center gap-1.5 shadow-2xs">
+              <span class="material-symbols-outlined text-sm text-amber-600 dark:text-amber-400">schedule</span>
+              ${isEn ? `Queued (#${queuePos})` : `Antrean (#${queuePos})`}
+            </span>
+            <button type="button" data-cancel-queue="${pack.id}" class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-700 hover:bg-rose-100 hover:text-rose-600 dark:hover:bg-rose-900/40 text-stone-500 flex items-center justify-center cursor-pointer button-press transition-colors" title="${isEn ? 'Cancel from queue' : 'Batal dari antrean'}">
+              <span class="material-symbols-outlined text-base">close</span>
             </button>
           </div>
         `;
@@ -762,6 +841,14 @@
       });
     });
 
+    listContainer.querySelectorAll('[data-cancel-queue]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const packId = btn.getAttribute('data-cancel-queue');
+        removeFromQueue(packId);
+      });
+    });
+
     listContainer.querySelectorAll('[data-delete-pack]').forEach(btn => {
       btn.addEventListener('click', () => {
         const packId = btn.getAttribute('data-delete-pack');
@@ -807,6 +894,10 @@
     getPackById,
     isPackDownloaded,
     isFileDownloaded,
+    isPackQueued,
+    getQueuePosition,
+    removeFromQueue,
+    get downloadQueue() { return [...downloadQueue]; },
     getStickerUrl,
     getStoredBlob,
     touchBlobUrl,

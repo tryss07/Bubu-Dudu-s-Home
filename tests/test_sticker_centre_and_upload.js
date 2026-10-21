@@ -132,16 +132,41 @@ const assert = require('assert');
   if (dudu2DownloadBtn) {
     await dudu2DownloadBtn.click();
     console.log('Clicked download on dudu_pack_2...');
-    // Wait for download to finish
+
+    // Test QoL: Queue dudu_pack_3 while dudu_pack_2 is running
+    await page.waitForTimeout(100);
+    const dudu3DownloadBtn = await page.$('[data-download-pack="dudu_pack_3"]');
+    if (dudu3DownloadBtn) {
+      await dudu3DownloadBtn.click();
+      console.log('Clicked download on dudu_pack_3 while dudu_pack_2 is downloading...');
+      await page.waitForTimeout(200);
+
+      const queueState = await page.evaluate(() => {
+        return {
+          isQueued: window.DuduStickerStore.isPackQueued('dudu_pack_3'),
+          pos: window.DuduStickerStore.getQueuePosition('dudu_pack_3'),
+          hasCancelBtn: !!document.querySelector('[data-cancel-queue="dudu_pack_3"]')
+        };
+      });
+      console.log('Queue State for dudu_pack_3:', JSON.stringify(queueState));
+      assert(queueState.isQueued, 'dudu_pack_3 must be marked queued');
+      assert.strictEqual(queueState.pos, 1, 'dudu_pack_3 must be position 1 in queue');
+      assert(queueState.hasCancelBtn, 'dudu_pack_3 must show cancel queue button');
+      console.log('✅ Passed: Visual download queue state and cancel button verified!');
+    }
+
+    // Wait for both to finish downloading via sequential queue
     await page.waitForFunction(() => {
-      return window.DuduStickerStore.isPackDownloaded('dudu_pack_2');
-    }, null, { timeout: 35000 });
-    console.log('dudu_pack_2 finished downloading!');
+      return window.DuduStickerStore.isPackDownloaded('dudu_pack_2') &&
+             window.DuduStickerStore.isPackDownloaded('dudu_pack_3');
+    }, null, { timeout: 45000 });
+    console.log('dudu_pack_2 and queued dudu_pack_3 finished downloading!');
   }
 
   const isDudu2Downloaded = await page.evaluate(() => window.DuduStickerStore.isPackDownloaded('dudu_pack_2'));
-  assert(isDudu2Downloaded, 'dudu_pack_2 must be marked downloaded');
-  console.log('✅ Passed: Pack download and progress update verified!');
+  const isDudu3Downloaded = await page.evaluate(() => window.DuduStickerStore.isPackDownloaded('dudu_pack_3'));
+  assert(isDudu2Downloaded && isDudu3Downloaded, 'Both packs must be marked downloaded via queue');
+  console.log('✅ Passed: Pack download and queue progression verified!');
 
   // 5. Test Chat Sticker Tray only displays downloaded stickers
   console.log('Test 5: Navigating to Chat & checking Sticker Tray...');
