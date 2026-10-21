@@ -375,21 +375,41 @@
   // --- BEDTIME LOFI ENGINE WITH 24/7 LOFI.RADIO INTEGRATION ---
   const LOFI_RADIO_SONGS = ["3 A.M. Radio.mp3", "A Place to Hide.mp3", "Adrift.mp3", "Aether.mp3", "After Hours.mp3", "All Curled Up.mp3", "Alley Cat.mp3", "Artifact.mp3", "Astral Projection.mp3", "Aurora.mp3", "Awakenings.mp3", "Bayou Blues.mp3", "Beautiful Day.mp3", "Bird Bath.mp3", "Birdhouse.mp3", "Blood Moon.mp3", "Bloom.mp3", "Breathing Underwater.mp3", "Cable Car.mp3", "Calm Waters.mp3", "Can't Sleep.mp3", "Carousel.mp3", "Cave of Solace.mp3", "Celestial Sands.mp3", "Changes.mp3", "Chasing Snowflakes.mp3", "Chugging Along.mp3", "Come One, Come All.mp3", "Comfy.mp3", "Constellations.mp3", "Contact.mp3", "Convergence.mp3", "Cool Breeze.mp3", "Corner Store.mp3", "Cosmic Echoes.mp3", "Cosmic Web.mp3", "Creation.mp3", "Creatures of the Night.mp3", "Crescent Moon.mp3", "Crossroads.mp3", "Cruisin'.mp3", "Dance of the Cacti.mp3", "Dancing Dandelions.mp3", "Dancing Shadows.mp3", "Dark Corners.mp3", "Dark Forest.mp3", "Day's End.mp3", "Day_s End.mp3", "Defunct.mp3", "Deja Vu.mp3", "Desert Rain.mp3", "Desolate.mp3", "Discovery.mp3", "Distant Ships.mp3", "Dont Look Back.mp3", "Downpour.mp3", "Downtown.mp3", "Dream Machine.mp3", "Dream State.mp3", "Drifting.mp3", "Dune Drifter.mp3", "Ebb and Flow.mp3", "Echoes of Yesterday.mp3", "Eerie Glow.mp3", "Egress.mp3", "Elevated.mp3", "Embrace.mp3", "Empty Sidewalks.mp3", "End of the Line.mp3", "Epiphany.mp3", "Equinox.mp3", "Ethereal.mp3", "Everchanging.mp3", "Exhale.mp3", "Exploration.mp3", "Eye of the Storm.mp3", "Eyes in the Dark.mp3", "Fading.mp3", "Fallen.mp3", "Familiar Faces.mp3", "Field Of Fireflies.mp3", "Flourish.mp3", "Fog Blanket.mp3", "Forget-Me-Not.mp3", "Fourth Dimension.mp3", "Fragments.mp3", "Frolic.mp3", "Frosted Evergreen.mp3", "Frozen Flowers.mp3", "Gentle Breeze.mp3", "Ghost Planet.mp3", "Ghost Town.mp3", "Ghosties.mp3", "Gingerbread House.mp3", "Glowing Tides.mp3", "Going With The Flow.mp3", "Goosebumps.mp3", "Green Tea.mp3", "Half Awake.mp3", "Happy Trails.mp3", "Heart of the Ocean.mp3", "Ice Palace.mp3", "Icicles.mp3", "In Between.mp3", "In the Moment.mp3", "In the Past.mp3", "In the Walls.mp3", "Infinite.mp3", "Insomnia.mp3", "Intertwined.mp3", "Labyrinth.mp3", "Lazy Afternoon.mp3", "Leviathan.mp3", "Lighthouse.mp3", "Lonely.mp3", "Long Day.mp3", "Looking Up.mp3", "Lost Paradise.mp3", "Lost Souls.mp3", "Lost and Found.mp3", "Lost at Sea.mp3", "Low Tide.mp3", "Lullaby.mp3", "Luminous.mp3", "Lurking in the Shadows.mp3", "Lush.mp3", "Maelstrom.mp3", "Magical Moments.mp3", "Mesa's Edge.mp3", "Message in a Bottle.mp3", "Meteorites.mp3", "Mirage.mp3", "Missing Pieces.mp3", "Morning Dew.mp3", "Moving Landscapes.mp3", "Mysterious Passenger.mp3", "Nevermore.mp3", "Nexus.mp3", "Night Light.mp3", "Night Owls.mp3", "Night Train.mp3", "Nightfall.mp3", "Not Alone.mp3", "Nowhere to Hide.mp3", "Oddity.mp3", "On the Brink.mp3", "Once in a Lifetime.mp3", "Otherworldly.mp3", "Out of Place.mp3", "Out of the Blue.mp3", "Palm Tree.mp3", "Paradox.mp3", "Passing Time.mp3", "Peppermint Mocha.mp3", "Phantom Waltz.mp3", "Pineapple Popsicle.mp3", "Pitter Patter.mp3", "Planetary Alignment.mp3", "Rainy Streets.mp3", "Refractions.mp3", "Rewind.mp3", "Rift in Time.mp3", "Rocky Shores.mp3", "Rooftop Rendezvous.mp3", "Running Late.mp3", "Sandstorm.mp3", "Satellite.mp3", "Sea Foam.mp3", "Sea of Stars.mp3", "Seashells.mp3", "Secret Of The Forest.mp3", "Serendipity.mp3", "Serenity Now.mp3", "Shelter.mp3", "Signs of Life.mp3", "Silent Wood.mp3", "Siren's Song.mp3", "Skeleton Dance.mp3", "Skyscrapers.mp3", "Snow Pillow.mp3", "Soft.mp3", "Solitude.mp3", "Sonder.mp3", "Spring Showers.mp3", "Star Bright.mp3", "Starlit Beach.mp3", "Starry Night.mp3", "Stars Collide.mp3", "Starseed.mp3", "Stasis.mp3", "Step Right Up.mp3", "Still of the Night.mp3", "Stranded.mp3", "Strange Fog.mp3", "Stray.mp3", "Streetlights.mp3", "Strike of Midnight.mp3", "Sunken Secrets.mp3", "Supernova.mp3", "Take Me With You.mp3", "The Bells.mp3", "The Dungeon.mp3", "The Midnight Diner.mp3", "The Murk.mp3", "The Portal.mp3", "The Toymaker.mp3", "Through the Trees.mp3", "Thunderous Waves.mp3", "Time Loop.mp3", "Time to Think.mp3", "Timeless.mp3", "Toasty.mp3", "Torn.mp3", "Tracks to Nowhere.mp3", "Transformation.mp3", "Tumbleweeds.mp3", "Tunnels.mp3", "Twilight Market.mp3", "UFO.mp3", "Under the Canopy.mp3", "Undertow.mp3", "Underwater Cavern.mp3", "Uninvited.mp3", "Unreality.mp3", "Upside Down.mp3", "Verdant.mp3", "Visions.mp3", "Waiting for the Sun.mp3", "Wanderlust.mp3", "Warm Horizon.mp3", "Weightless.mp3", "Weird Dream.mp3", "What Lies Beyond.mp3", "Wild Strawberry.mp3", "Window Seat.mp3", "Wish You Were Here.mp3", "Wishes.mp3", "Wishing Well.mp3", "Wonderland.mp3", "Wonderment.mp3", "Zero Gravity.mp3", "Zzz....mp3"];
 
+  const LOFI_STORAGE_TRACK_KEY = 'dudu_lofi_last_track_index';
+  const LOFI_STORAGE_POS_KEY = 'dudu_lofi_last_position_sec';
+  const LOFI_STORAGE_LOOP_KEY = 'dudu_lofi_loop_mode';
+  const LOFI_STORAGE_SHUFFLE_KEY = 'dudu_lofi_is_shuffle';
+
   class BedtimeLofiEngine {
     constructor() {
       this.isPlaying = false;
+      this.isBuffering = false;
       this.volume = 0.65;
       this.audio = null;
+      this.preloadAudio = null;
+      this.lastPositionSaveTime = 0;
+
       this.tracks = LOFI_RADIO_SONGS.map(file => ({
         title: `${file.replace(/\.mp3$/i, '')} 🌙`,
         subtitle: 'lofi.radio • 24/7 Chill Beats',
         filename: file,
         url: `https://lofi.radio/songs/${encodeURIComponent(file)}`
       }));
+
+      // Restore saved state (last track, last duration point, loop mode, shuffle)
+      const savedTrack = localStorage.getItem(LOFI_STORAGE_TRACK_KEY);
+      const savedPos = parseFloat(localStorage.getItem(LOFI_STORAGE_POS_KEY) || '0');
+      const savedLoop = localStorage.getItem(LOFI_STORAGE_LOOP_KEY);
+      const savedShuffle = localStorage.getItem(LOFI_STORAGE_SHUFFLE_KEY);
+
       const songIntervalMs = 180000;
-      this.currentTrackIndex = Math.floor(Date.now() / songIntervalMs) % this.tracks.length;
-      this.loopMode = 'all'; // 'all' (loop playlist), 'one' (repeat 1 song), 'off' (stop after last song)
-      this.isShuffle = false;
+      const defaultIndex = Math.floor(Date.now() / songIntervalMs) % this.tracks.length;
+
+      const parsedIdx = savedTrack !== null ? parseInt(savedTrack, 10) : defaultIndex;
+      this.currentTrackIndex = (!isNaN(parsedIdx) && parsedIdx >= 0 && parsedIdx < this.tracks.length) ? parsedIdx : defaultIndex;
+      this.savedPosition = (!isNaN(savedPos) && savedPos > 0) ? savedPos : 0;
+      this.loopMode = (savedLoop === 'one' || savedLoop === 'off') ? savedLoop : 'all';
+      this.isShuffle = (savedShuffle === 'true');
       this.history = [];
       this.playedHistory = [this.currentTrackIndex];
     }
@@ -405,31 +425,137 @@
     initAudio() {
       if (this.audio) return;
       this.audio = new Audio();
-      this.audio.preload = 'none';
+      this.audio.preload = 'auto';
       this.audio.volume = this.volume;
+      this.attachAudioListeners(this.audio);
 
-      this.audio.addEventListener('ended', () => {
+      const track = this.currentTrack;
+      if (!this.audio.src || !this.audio.src.includes(encodeURIComponent(track.filename))) {
+        this.audio.src = track.url;
+      }
+    }
+
+    attachAudioListeners(audioEl) {
+      if (!audioEl) return;
+
+      audioEl.addEventListener('ended', () => {
         this.handleTrackEnded();
       });
 
-      this.audio.addEventListener('error', (e) => {
+      audioEl.addEventListener('error', (e) => {
         console.warn('[LofiRadio] Track error, skipping to next:', e);
+        this.isBuffering = false;
+        updateLofiProgressUI();
         if (this.isPlaying) {
           setTimeout(() => {
             if (this.isPlaying) this.nextTrack(true);
-          }, 1000);
+          }, 1200);
         }
       });
 
-      this.audio.addEventListener('play', () => {
-        this.isPlaying = true;
-        updateLofiUI();
+      audioEl.addEventListener('waiting', () => {
+        this.isBuffering = true;
+        updateLofiProgressUI();
       });
 
-      this.audio.addEventListener('pause', () => {
-        this.isPlaying = false;
+      audioEl.addEventListener('playing', () => {
+        this.isPlaying = true;
+        this.isBuffering = false;
         updateLofiUI();
+        updateLofiProgressUI();
+        syncMusicNotification(this.currentTrack, true, 'playing');
       });
+
+      audioEl.addEventListener('canplay', () => {
+        this.isBuffering = false;
+        updateLofiProgressUI();
+      });
+
+      audioEl.addEventListener('pause', () => {
+        this.isPlaying = false;
+        this.isBuffering = false;
+        updateLofiUI();
+        updateLofiProgressUI();
+        syncMusicNotification(this.currentTrack, false, 'pause');
+      });
+
+      audioEl.addEventListener('timeupdate', () => {
+        updateLofiProgressUI();
+        this.throttleSavePosition();
+      });
+
+      audioEl.addEventListener('loadedmetadata', () => {
+        if (this.savedPosition > 0 && audioEl.currentTime < 1) {
+          try {
+            audioEl.currentTime = Math.min(this.savedPosition, (audioEl.duration || 100) - 1);
+          } catch (_) {}
+        }
+        updateLofiProgressUI();
+      });
+    }
+
+    throttleSavePosition() {
+      const now = Date.now();
+      if (now - this.lastPositionSaveTime > 1500) {
+        this.lastPositionSaveTime = now;
+        this.savePlaybackState();
+      }
+    }
+
+    savePlaybackState() {
+      try {
+        localStorage.setItem(LOFI_STORAGE_TRACK_KEY, String(this.currentTrackIndex));
+        localStorage.setItem(LOFI_STORAGE_LOOP_KEY, this.loopMode);
+        localStorage.setItem(LOFI_STORAGE_SHUFFLE_KEY, String(this.isShuffle));
+        if (this.audio && this.audio.currentTime > 0) {
+          localStorage.setItem(LOFI_STORAGE_POS_KEY, String(this.audio.currentTime));
+          this.savedPosition = this.audio.currentTime;
+        }
+      } catch (_) {}
+    }
+
+    seek(pct) {
+      this.initAudio();
+      const dur = this.audio.duration;
+      if (!dur || isNaN(dur) || !isFinite(dur)) return;
+      const targetSec = Math.max(0, Math.min(dur - 0.5, pct * dur));
+      try {
+        this.audio.currentTime = targetSec;
+      } catch (_) {}
+      this.savedPosition = targetSec;
+      this.savePlaybackState();
+      updateLofiProgressUI();
+      if (!this.isPlaying) {
+        this.start();
+      }
+    }
+
+    preloadNextTrack() {
+      try {
+        let nextIdx;
+        if (this.loopMode === 'one') {
+          nextIdx = this.currentTrackIndex;
+        } else if (this.isShuffle) {
+          const pool = this.tracks.map((_, i) => i).filter(i => i !== this.currentTrackIndex);
+          nextIdx = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : 0;
+        } else {
+          nextIdx = (this.currentTrackIndex + 1) % this.tracks.length;
+        }
+
+        const nextTrack = this.tracks[nextIdx];
+        if (!nextTrack) return;
+
+        if (!this.preloadAudio) {
+          this.preloadAudio = new Audio();
+          this.preloadAudio.preload = 'auto';
+        }
+        if (!this.preloadAudio.src || !this.preloadAudio.src.includes(encodeURIComponent(nextTrack.filename))) {
+          this.preloadAudio.src = nextTrack.url;
+          this.preloadAudio.load();
+        }
+      } catch (err) {
+        console.warn('[LofiPreload] error:', err);
+      }
     }
 
     handleTrackEnded() {
@@ -440,6 +566,7 @@
           this.audio.play().then(() => {
             this.isPlaying = true;
             updateLofiUI();
+            updateLofiProgressUI();
           }).catch(e => console.warn(e));
         }
         return;
@@ -461,7 +588,7 @@
         const nextIdx = remaining.length > 0
           ? remaining[Math.floor(Math.random() * remaining.length)]
           : Math.floor(Math.random() * this.tracks.length);
-        this.playTrack(nextIdx, true);
+        this.playTrack(nextIdx, true, 'next');
         return;
       }
 
@@ -473,9 +600,9 @@
           return;
         }
         // Mode 1: Loop playlist back to start
-        this.playTrack(0, true);
+        this.playTrack(0, true, 'next');
       } else {
-        this.playTrack(this.currentTrackIndex + 1, true);
+        this.playTrack(this.currentTrackIndex + 1, true, 'next');
       }
     }
 
@@ -494,14 +621,22 @@
         this.audio.src = track.url;
       }
       this.audio.volume = this.volume;
+      this.isBuffering = true;
+      updateLofiProgressUI();
       try {
         await this.audio.play();
         this.isPlaying = true;
+        this.isBuffering = false;
+        setTimeout(() => this.preloadNextTrack(), 1500);
       } catch (err) {
         console.warn('[LofiRadio] play() blocked or failed:', err);
         this.isPlaying = false;
+        this.isBuffering = false;
       }
+      this.savePlaybackState();
       updateLofiUI();
+      updateLofiProgressUI();
+      syncMusicNotification(this.currentTrack, this.isPlaying, 'playing');
     }
 
     stop() {
@@ -509,7 +644,11 @@
         this.audio.pause();
       }
       this.isPlaying = false;
+      this.isBuffering = false;
+      this.savePlaybackState();
       updateLofiUI();
+      updateLofiProgressUI();
+      syncMusicNotification(this.currentTrack, false, 'pause');
     }
 
     toggle() {
@@ -517,31 +656,59 @@
       else this.start();
     }
 
-    playTrack(index, autoPlay = true) {
+    playTrack(index, autoPlay = true, action = 'playing') {
       this.initAudio();
       if (index < 0 || index >= this.tracks.length) return;
       if (this.currentTrackIndex !== index) {
         this.history.push(this.currentTrackIndex);
+        this.savedPosition = 0;
       }
       this.currentTrackIndex = index;
       if (!this.playedHistory.includes(index)) {
         this.playedHistory.push(index);
       }
-      this.audio.src = this.currentTrack.url;
+
+      const track = this.currentTrack;
+
+      // Seamless swap if standby preloader already has next track ready
+      if (this.preloadAudio && this.preloadAudio.src.includes(encodeURIComponent(track.filename)) && this.preloadAudio.readyState >= 2) {
+        const oldAudio = this.audio;
+        oldAudio.pause();
+        oldAudio.src = '';
+        this.audio = this.preloadAudio;
+        this.preloadAudio = null;
+        this.attachAudioListeners(this.audio);
+      } else {
+        if (!this.audio.src || !this.audio.src.includes(encodeURIComponent(track.filename))) {
+          this.audio.src = track.url;
+        }
+      }
+
       this.audio.volume = this.volume;
+      this.savePlaybackState();
+
       if (autoPlay || this.isPlaying) {
+        this.isBuffering = true;
+        updateLofiProgressUI();
         this.audio.play()
           .then(() => {
             this.isPlaying = true;
+            this.isBuffering = false;
             updateLofiUI();
+            updateLofiProgressUI();
+            setTimeout(() => this.preloadNextTrack(), 1500);
           })
           .catch((err) => {
             console.warn('[LofiRadio] play() error:', err);
             this.isPlaying = false;
+            this.isBuffering = false;
             updateLofiUI();
+            updateLofiProgressUI();
           });
       }
       updateLofiUI();
+      updateLofiProgressUI();
+      syncMusicNotification(this.currentTrack, this.isPlaying, action);
     }
 
     nextTrack(autoPlay = undefined) {
@@ -551,12 +718,12 @@
       if (this.isShuffle) {
         const pool = this.tracks.map((_, i) => i).filter(i => i !== this.currentTrackIndex);
         const nextIdx = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : 0;
-        this.playTrack(nextIdx, shouldPlay);
+        this.playTrack(nextIdx, shouldPlay, 'next');
         return;
       }
 
       const nextIdx = (this.currentTrackIndex + 1) % this.tracks.length;
-      this.playTrack(nextIdx, shouldPlay);
+      this.playTrack(nextIdx, shouldPlay, 'next');
     }
 
     prevTrack() {
@@ -565,15 +732,16 @@
       if (this.audio && this.audio.currentTime > 3) {
         this.audio.currentTime = 0;
         if (shouldPlay) this.audio.play().catch(e => console.warn(e));
+        updateLofiProgressUI();
         return;
       }
 
       if (this.history.length > 0) {
         const prevIdx = this.history.pop();
-        this.playTrack(prevIdx, shouldPlay);
+        this.playTrack(prevIdx, shouldPlay, 'prev');
       } else {
         const prevIdx = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
-        this.playTrack(prevIdx, shouldPlay);
+        this.playTrack(prevIdx, shouldPlay, 'prev');
       }
     }
 
@@ -589,6 +757,7 @@
         this.loopMode = 'all';
         showFeedbackToast('Loop All Songs 🔁', 'Ulang Seluruh Lagu 🔁');
       }
+      this.savePlaybackState();
       window.duduAudio?.playPop?.(480);
       updateLofiUI();
     }
@@ -601,6 +770,7 @@
       } else {
         showFeedbackToast('Shuffle Off ➡️', 'Acak Lagu Mati ➡️');
       }
+      this.savePlaybackState();
       window.duduAudio?.playPop?.(420);
       updateLofiUI();
     }
@@ -1430,6 +1600,9 @@
     }
     if (tabName === 'music') {
       updateLofiUI();
+    }
+    if (tabName === 'chat') {
+      window.DuduChatUI?.dismissDeliveredChatNotifications?.();
     }
 
     tabs.forEach(t => {
@@ -2626,6 +2799,17 @@
       };
     }
 
+    const progressBar = document.getElementById('lofi-progress-bar');
+    if (progressBar) {
+      progressBar.onclick = (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        if (!rect.width) return;
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        lofiEngine.seek(pct);
+        window.duduAudio?.playPop?.(450);
+      };
+    }
+
     if (volBar) {
       volBar.onclick = (e) => {
         const rect = volBar.getBoundingClientRect();
@@ -2726,8 +2910,93 @@
       }
     }
 
+    updateLofiProgressUI();
     syncOfflineIcons();
   }
+
+  function formatTrackTime(secs) {
+    if (isNaN(secs) || secs < 0 || !isFinite(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function updateLofiProgressUI() {
+    const curTimeEl = document.getElementById('lofi-current-time');
+    const totTimeEl = document.getElementById('lofi-total-duration');
+    const fillEl = document.getElementById('lofi-progress-fill');
+    const thumbEl = document.getElementById('lofi-progress-thumb');
+    const bufferLabel = document.getElementById('lofi-buffering-label');
+
+    if (bufferLabel) {
+      if (lofiEngine.isBuffering) {
+        bufferLabel.classList.remove('hidden');
+      } else {
+        bufferLabel.classList.add('hidden');
+      }
+    }
+
+    const audio = lofiEngine.audio;
+    const cur = (audio && audio.currentTime > 0) ? audio.currentTime : (lofiEngine.savedPosition || 0);
+    const dur = (audio && audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) ? audio.duration : 0;
+
+    if (curTimeEl) curTimeEl.textContent = formatTrackTime(cur);
+    if (totTimeEl) totTimeEl.textContent = dur > 0 ? formatTrackTime(dur) : '--:--';
+
+    const pct = dur > 0 ? Math.min(100, Math.max(0, (cur / dur) * 100)) : 0;
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (thumbEl) thumbEl.style.left = `${pct}%`;
+  }
+
+  async function syncMusicNotification(track, isPlaying, action = 'playing') {
+    if (!track) return;
+    const cleanTitle = (track.title || '3 A.M. Radio').replace(/🌙|✨|🐾/g, '').trim();
+    const artist = 'Dudu Bedtime Lofi • 24/7 Chill Beats';
+
+    // 1. DuduCompanion Native Android Notification
+    try {
+      if (window.Capacitor?.Plugins?.DuduCompanion?.updateMusicNotification) {
+        await window.Capacitor.Plugins.DuduCompanion.updateMusicNotification({
+          title: cleanTitle,
+          artist,
+          isPlaying,
+          action
+        });
+      }
+    } catch (_) {}
+
+    // 2. Capacitor LocalNotifications fallback
+    try {
+      if (window.Capacitor?.Plugins?.LocalNotifications) {
+        const notifId = 9002;
+        await window.Capacitor.Plugins.LocalNotifications.createChannel({
+          id: 'dudu_music_channel',
+          name: 'Dudu Music Player',
+          description: 'Playback status for Bedtime Lofi',
+          importance: 2,
+          visibility: 1,
+          vibration: false
+        }).catch(() => {});
+
+        await window.Capacitor.Plugins.LocalNotifications.schedule({
+          notifications: [{
+            id: notifId,
+            title: isPlaying ? `🎵 ${cleanTitle}` : `⏸ ${cleanTitle} (Paused)`,
+            body: `${artist} • Tap to view player`,
+            channelId: 'dudu_music_channel',
+            ongoing: isPlaying,
+            autoCancel: !isPlaying
+          }]
+        });
+      }
+    } catch (_) {}
+  }
+
+  window.addEventListener('beforeunload', () => lofiEngine.savePlaybackState());
+  window.addEventListener('pagehide', () => lofiEngine.savePlaybackState());
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) lofiEngine.savePlaybackState();
+  });
 
   function startBedtimeCountdownTimer() {
     function tick() {

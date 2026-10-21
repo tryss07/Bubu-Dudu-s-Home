@@ -63,4 +63,21 @@ public class DuduCompanionPlugin extends Plugin {
         DuduCompanionService.clearUnread(getContext());
         call.resolve();
     }
+
+    @PluginMethod
+    public void clearChatNotifications(PluginCall call) {
+        DuduCompanionService.clearChatNotifications(getContext());
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void updateMusicNotification(PluginCall call) {
+        String title = call.getString("title", "Bedtime Lofi");
+        String artist = call.getString("artist", "Dudu & Bubu");
+        boolean isPlaying = call.getBoolean("isPlaying", false);
+        String action = call.getString("action", "playing");
+
+        DuduCompanionService.updateMusicNotification(getContext(), title, artist, isPlaying, action);
+        call.resolve();
+    }
 }

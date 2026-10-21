@@ -606,6 +606,13 @@ html.dark .doodle-bg {
   color: #FFF2EB;
 }
 
+html.dark .cozy-brown-dock,
+.dark .cozy-brown-dock {
+  background-color: rgba(30, 24, 20, 0.96) !important;
+  color: #E8DACB !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
 /* Bottom Dock Fixed Horizontal Centering (Prevents side positioning in desktop browsers) */
 #bottom-nav-bar {
   left: 0 !important;
@@ -635,10 +642,18 @@ html.dark .doodle-bg {
   right: 0 !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  bottom: calc(var(--bottom-nav-height, 56px) + 1.25rem + env(safe-area-inset-bottom, 0px)) !important;
+  bottom: calc(var(--bottom-nav-height, 52px) + 0.45rem + env(safe-area-inset-bottom, 0px)) !important;
   z-index: 60 !important;
   transform-origin: bottom center;
   box-shadow: 0 16px 40px -6px rgba(74, 50, 34, 0.35), 0 4px 12px 0 rgba(141, 91, 76, 0.2);
+}
+
+html.dark #bottom-nav-more-popup,
+.dark #bottom-nav-more-popup {
+  background-color: rgba(30, 24, 20, 0.96) !important;
+  color: #E8DACB !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.7), 0 4px 12px 0 rgba(0, 0, 0, 0.4) !important;
 }
 
 #bottom-nav-more-popup:not(.hidden) {

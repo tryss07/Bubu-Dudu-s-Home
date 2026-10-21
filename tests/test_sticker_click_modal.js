@@ -112,13 +112,24 @@ const fs = require('fs');
   console.log('Reply bar visible:', isReplyBarVisible);
   if (!isReplyBarVisible) throw new Error('Reply bar should be visible after clicking reply!');
 
-  // Cancel reply
-  await page.locator('#btn-cancel-reply').click();
-  await page.waitForTimeout(300);
+  const replyThumb = page.locator('#chat-reply-thumb');
+  const isReplyThumbVisible = await replyThumb.isVisible();
+  const replyThumbSrc = await replyThumb.getAttribute('src');
+  console.log('Reply sticker thumb visible:', isReplyThumbVisible, 'src:', replyThumbSrc);
+  if (!isReplyThumbVisible || !replyThumbSrc) throw new Error('Reply bar must show sticker thumbnail!');
+
+  // Send reply to sticker
+  const input = page.locator('#chat-text-input');
+  await input.fill('Replying with love to your cute sticker!');
+  await page.locator('#btn-send-message').click();
+  await page.waitForTimeout(600);
+  const quoteStickerImg = page.locator('.reply-quote-jump img').last();
+  const hasQuoteImg = await quoteStickerImg.isVisible();
+  console.log('Quote sticker image rendered in message bubble:', hasQuoteImg);
+  if (!hasQuoteImg) throw new Error('Message quote must display sticker thumbnail!');
 
   // 11. Send a regular text message and verify normal actions (including Copy) are displayed
   console.log('Sending text message to test normal actions modal...');
-  const input = page.locator('#chat-text-input');
   await input.fill('Hello text message test');
   await page.locator('#btn-send-message').click();
   await page.waitForTimeout(600);

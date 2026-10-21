@@ -317,6 +317,23 @@
     }
   }
 
+  async function dismissDeliveredChatNotifications() {
+    try {
+      if (window.Capacitor?.Plugins?.LocalNotifications?.removeAllDeliveredNotifications) {
+        await window.Capacitor.Plugins.LocalNotifications.removeAllDeliveredNotifications();
+      }
+    } catch (_) {}
+
+    try {
+      if (window.Capacitor?.Plugins?.DuduCompanion?.clearChatNotifications) {
+        await window.Capacitor.Plugins.DuduCompanion.clearChatNotifications();
+      }
+      if (window.Capacitor?.Plugins?.DuduCompanion?.clearUnread) {
+        await window.Capacitor.Plugins.DuduCompanion.clearUnread();
+      }
+    } catch (_) {}
+  }
+
   function markSessionRead(sessionId) {
     if (!sessionId) return;
     if (unreadSessionIds.has(sessionId)) {
@@ -329,6 +346,7 @@
         renderAllTopicsList(q);
       }
     }
+    dismissDeliveredChatNotifications();
   }
 
   function notifyTypingState(isTyping) {
@@ -463,6 +481,7 @@
       console.warn('[Notify] Web Notification error:', err);
     }
 
+    if (window.__suppressChatToasts) return;
     if (window.showToast) {
       window.showToast(`${cleanTitle}: ${cleanBody}`);
     }
@@ -1182,18 +1201,42 @@
     }
   }
 
+  function getStickerPreviewSrc(message) {
+    if (!message) return null;
+    if (message.stickerSrc) return message.stickerSrc;
+    if (message.type === 'sticker') {
+      const stickerId = parseInt(message.content, 10);
+      const sticker = window.DuduTaxonomy?.getById(stickerId) || window.DUDU_STICKERS?.[0];
+      const stickerFile = sticker ? sticker.file : 'STK-20260925-WA0187.webp';
+      const isCouple = typeof COUPLE_STICKER_IDS !== 'undefined' && sticker && COUPLE_STICKER_IDS.has(sticker.id);
+      const folder = isCouple ? 'assets/stickers_couple' : 'assets/stickers_dudu';
+      const storeUrl = window.DuduStickerStore?.getStickerUrl?.(stickerFile);
+      return storeUrl || `${folder}/${stickerFile}`;
+    }
+    if (message.type === 'image' && typeof message.content === 'string') {
+      const c = message.content;
+      if (c.includes('stickers_') || c.includes('chat_stk') || c.includes('mockup_art') || c.includes('Dudu Stickers') || c.endsWith('.gif') || c.endsWith('.webp') || c.endsWith('.svg')) {
+        return c;
+      }
+    }
+    return null;
+  }
+
   function startReply(message) {
     if (!message) return;
+    const stickerSrc = getStickerPreviewSrc(message);
     activeReplyMessage = {
       id: message.id,
       sender: message.sender,
       type: message.type,
-      content: message.type === 'text' ? message.content : (message.type === 'sticker' ? 'Sticker' : (message.type === 'video' ? 'Video' : 'Photo'))
+      content: message.type === 'text' ? message.content : (message.type === 'sticker' ? '🧸 Sticker' : (message.type === 'video' ? '🎥 Video' : '📷 Photo')),
+      stickerSrc: stickerSrc
     };
 
     const replyBar = document.getElementById('chat-reply-bar');
     const replySender = document.getElementById('chat-reply-sender');
     const replySnippet = document.getElementById('chat-reply-snippet');
+    const replyThumb = document.getElementById('chat-reply-thumb');
 
     if (replyBar && replySender && replySnippet) {
       const myIdentity = DuduChatCrypto.getStoredIdentity() || 'dudu';
@@ -1215,6 +1258,17 @@
       }
       else if (message.type === 'video') preview = '🎥 Video';
       replySnippet.textContent = preview.length > 50 ? preview.substring(0, 47) + '...' : preview;
+
+      if (replyThumb) {
+        if (stickerSrc) {
+          replyThumb.src = stickerSrc;
+          replyThumb.classList.remove('hidden');
+        } else {
+          replyThumb.src = '';
+          replyThumb.classList.add('hidden');
+        }
+      }
+
       replyBar.classList.remove('hidden');
     }
 
@@ -1226,6 +1280,11 @@
   function cancelReply() {
     activeReplyMessage = null;
     const replyBar = document.getElementById('chat-reply-bar');
+    const replyThumb = document.getElementById('chat-reply-thumb');
+    if (replyThumb) {
+      replyThumb.src = '';
+      replyThumb.classList.add('hidden');
+    }
     if (replyBar) replyBar.classList.add('hidden');
   }
 
@@ -1759,11 +1818,15 @@
         } catch (e) { snippet = '📁 Attachment'; }
       }
       if (snippet.length > 55) snippet = snippet.substring(0, 52) + '...';
+      const replyStickerSrc = msg.replyTo.stickerSrc || getStickerPreviewSrc(msg.replyTo);
 
       quoteHtml = `
-        <div class="mb-1 p-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 border-secondary text-[10px] cursor-pointer hover:opacity-80 transition-opacity reply-quote-jump select-none" data-target-id="${escapeHtml(msg.replyTo.id)}">
-          <span class="font-bold text-secondary block">${escapeHtml(replyLabel)}</span>
-          <span class="opacity-80 truncate block">${escapeHtml(snippet)}</span>
+        <div class="mb-1 p-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 border-secondary text-[10px] cursor-pointer hover:opacity-80 transition-opacity reply-quote-jump select-none flex items-center justify-between gap-2" data-target-id="${escapeHtml(msg.replyTo.id)}">
+          <div class="min-w-0 flex-1">
+            <span class="font-bold text-secondary block">${escapeHtml(replyLabel)}</span>
+            <span class="opacity-80 truncate block">${escapeHtml(snippet)}</span>
+          </div>
+          ${replyStickerSrc ? `<img src="${escapeHtml(replyStickerSrc)}" alt="Sticker" class="w-8 h-8 object-contain rounded shrink-0 select-none pointer-events-none drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">` : ''}
         </div>
       `;
     }
@@ -2974,6 +3037,15 @@
       sendTextMessage();
     });
 
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        dismissDeliveredChatNotifications();
+      }
+    });
+    window.addEventListener('focus', () => {
+      dismissDeliveredChatNotifications();
+    });
+
     // Enter creates newline; Ctrl+Enter or Cmd+Enter sends message
     const textInput = document.getElementById('chat-text-input');
     const adjustTextareaHeight = () => {
@@ -4135,6 +4207,7 @@
       setTimeout(jumpToBottom, 120);
     },
     markSessionRead: markSessionRead,
+    dismissDeliveredChatNotifications: dismissDeliveredChatNotifications,
     updateNavChatBadge: updateNavChatBadge,
     flushPendingMessages,
     recordRoleOffline,

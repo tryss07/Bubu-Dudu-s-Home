@@ -71,6 +71,7 @@ async function runBilingualAndFreshDefaultsTest() {
 
     // Mute incoming socket message toasts during unit verification of showToast
     await page.evaluate(() => {
+      window.__suppressChatToasts = true;
       if (window.DuduChatSocket) {
         window.DuduChatSocket.disconnect?.();
         window.DuduChatSocket.connect = () => {};
@@ -82,7 +83,10 @@ async function runBilingualAndFreshDefaultsTest() {
       }
     });
 
-    await page.waitForTimeout(600);
+    await page.evaluate(() => {
+      try { window.DuduChatSocket?.disconnect?.(); } catch (_) {}
+    });
+    await page.waitForTimeout(300);
 
     // Test toast in EN
     await page.evaluate(() => window.showToast('Removed from favorites', 'Dihapus dari favorit'));

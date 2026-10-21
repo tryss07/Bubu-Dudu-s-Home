@@ -150,6 +150,43 @@ const assert = require('assert');
   assert.strictEqual(isPlayingAfterEnd, false, 'In loopMode "off" at end of playlist, playback must stop');
   console.log('✓ Loop Mode "off" stopped playback at end of playlist');
 
+  // 7. Test Duration / Seek Bar
+  console.log('\nTest 7: Testing Duration & Seek Bar interaction...');
+  const hasProgressBar = await page.isVisible('#lofi-progress-bar');
+  assert(hasProgressBar, 'Progress bar must be visible');
+  const hasCurrentTime = await page.isVisible('#lofi-current-time');
+  const hasTotalDuration = await page.isVisible('#lofi-total-duration');
+  assert(hasCurrentTime && hasTotalDuration, 'Time indicators must be visible');
+
+  // Test seeking to 50%
+  await page.evaluate(() => {
+    window.DuduMockup.lofiEngine.initAudio();
+    // Mock duration for testing environment
+    Object.defineProperty(window.DuduMockup.lofiEngine.audio, 'duration', { value: 180, configurable: true });
+    window.DuduMockup.lofiEngine.seek(0.5);
+  });
+  await page.waitForTimeout(100);
+  const seekedTime = await page.evaluate(() => window.DuduMockup.lofiEngine.audio.currentTime);
+  assert(Math.abs(seekedTime - 90) < 2, `Expected seeked time ~90s, got ${seekedTime}`);
+  const currentTimeText = await page.textContent('#lofi-current-time');
+  console.log(`Seeked to: ${currentTimeText} (90s)`);
+  assert(currentTimeText.includes('1:30'), 'Current time should display 1:30');
+  console.log('✅ Passed: Duration seek bar seeks and displays time accurately!');
+
+  // 8. Test State Persistence (Remember last track and duration position)
+  console.log('\nTest 8: Testing playback position persistence across restarts...');
+  await page.evaluate(() => {
+    window.DuduMockup.lofiEngine.currentTrackIndex = 7;
+    window.DuduMockup.lofiEngine.audio.currentTime = 45;
+    window.DuduMockup.lofiEngine.savePlaybackState();
+  });
+  const savedIdx = await page.evaluate(() => localStorage.getItem('dudu_lofi_last_track_index'));
+  const savedPos = await page.evaluate(() => localStorage.getItem('dudu_lofi_last_position_sec'));
+  assert.strictEqual(savedIdx, '7', 'Track index 7 must be persisted to localStorage');
+  assert(parseFloat(savedPos) >= 44, 'Position 45s must be persisted to localStorage');
+  console.log(`Saved in localStorage: track #${savedIdx}, position ${savedPos}s`);
+  console.log('✅ Passed: Position persistence verified!');
+
   await browser.close();
   console.log('\n🎉 ALL MUSIC PANEL TESTS PASSED 100%!\n');
 })().catch(err => {

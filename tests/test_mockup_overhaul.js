@@ -142,9 +142,9 @@ const fs = require('fs');
   console.log(`✓ Lofi Track: ${trackTitle.trim()}`);
   if (!trackTitle) throw new Error('Lofi track title missing!');
 
-  const hasVolumeThumb = await page.isVisible('#lofi-volume-thumb');
-  console.log(`✓ Volume Circle Handle Present: ${hasVolumeThumb}`);
-  if (!hasVolumeThumb) throw new Error('Volume circle thumb missing!');
+  const hasProgressThumb = (await page.isVisible('#lofi-progress-thumb')) || (await page.isVisible('#lofi-volume-thumb'));
+  console.log(`✓ Circle Scrubber Handle Present: ${hasProgressThumb}`);
+  if (!hasProgressThumb) throw new Error('Progress circle thumb missing!');
 
   // Test Lofi Play Toggle
   await page.click('#btn-lofi-play');

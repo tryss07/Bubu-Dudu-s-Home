@@ -34,7 +34,10 @@ public class DuduCompanionService extends Service {
     private static final String TAG = "DuduCompanionService";
     public static final String CHANNEL_COMPANION_ID = "dudu_companion_channel";
     public static final String CHANNEL_CHAT_ID = "dudu_chat_channel";
+    public static final String CHANNEL_MUSIC_ID = "dudu_music_channel";
     public static final int COMPANION_NOTIFICATION_ID = 9001;
+    public static final int MUSIC_NOTIFICATION_ID = 9002;
+    private static final java.util.Set<Integer> activeChatNotificationIds = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
 
     private static final String PREFS_NAME = "dudu_companion_prefs";
     private static final String KEY_FOOD = "stat_food";
@@ -111,6 +114,68 @@ public class DuduCompanionService extends Service {
             context.startForegroundService(intent);
         } else {
             context.startService(intent);
+        }
+    }
+
+    public static void clearChatNotifications(Context context) {
+        if (context == null) return;
+        try {
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                synchronized (activeChatNotificationIds) {
+                    for (Integer id : activeChatNotificationIds) {
+                        manager.cancel(id);
+                    }
+                    activeChatNotificationIds.clear();
+                }
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "clearChatNotifications error: " + t.getMessage());
+        }
+    }
+
+    public static void updateMusicNotification(Context context, String title, String artist, boolean isPlaying, String action) {
+        if (context == null) return;
+        try {
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager == null) return;
+
+            if (!isPlaying && "stop".equals(action)) {
+                manager.cancel(MUSIC_NOTIFICATION_ID);
+                return;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_MUSIC_ID, "Dudu Music Player", NotificationManager.IMPORTANCE_LOW
+                );
+                channel.setDescription("Playback controls and status for Bedtime Lofi");
+                channel.enableVibration(false);
+                channel.setShowBadge(false);
+                manager.createNotificationChannel(channel);
+            }
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setAction("ACTION_OPEN_MUSIC");
+            intent.putExtra("target_tab", "music");
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    context, MUSIC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_MUSIC_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(isPlaying ? "🎵 " + title : "⏸ " + title)
+                    .setContentText(artist + (isPlaying ? " (Playing)" : " (Paused)"))
+                    .setContentIntent(pendingIntent)
+                    .setOngoing(isPlaying)
+                    .setAutoCancel(!isPlaying)
+                    .setPriority(NotificationCompat.PRIORITY_LOW);
+
+            manager.notify(MUSIC_NOTIFICATION_ID, builder.build());
+        } catch (Throwable t) {
+            Log.w(TAG, "updateMusicNotification error: " + t.getMessage());
         }
     }
 
@@ -428,7 +493,9 @@ public class DuduCompanionService extends Service {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-            manager.notify((int) (System.currentTimeMillis() % 100000), alertBuilder.build());
+            int notifId = (int) (System.currentTimeMillis() % 100000);
+            activeChatNotificationIds.add(notifId);
+            manager.notify(notifId, alertBuilder.build());
         } catch (Throwable t) {
             Log.w(TAG, "Safe guard caught showHeadsUpNotification error: " + t.getMessage());
         }
