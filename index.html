@@ -613,9 +613,9 @@
         <!-- Player Row: Vinyl + Details -->
         <div class="flex items-center gap-3.5">
           <!-- Spinning Vinyl Disc -->
-          <div id="lofi-vinyl-disc" class="vinyl-disc w-16 h-16 rounded-full shrink-0 flex items-center justify-center relative shadow-md">
-            <div class="w-6 h-6 rounded-full bg-[#F5C7A9] flex items-center justify-center border border-white/40">
-              <span class="text-[8px] font-bold text-[#5C3D2E]">🐾</span>
+          <div id="lofi-vinyl-disc" class="vinyl-disc w-14 h-14 rounded-full shrink-0 flex items-center justify-center relative shadow-md">
+            <div class="w-5 h-5 rounded-full bg-[#F5C7A9] flex items-center justify-center border border-white/40">
+              <span class="text-[7px] font-bold text-[#5C3D2E]">🐾</span>
             </div>
           </div>
 
@@ -627,19 +627,34 @@
               lofi.radio • 24/7 Chill Beats
             </p>
           </div>
+        </div>
 
-          <!-- Controls with Prev & Next -->
-          <div class="flex items-center gap-1">
-            <button id="btn-lofi-prev" type="button" class="w-8 h-8 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer" title="Previous Track">
-              <span class="material-symbols-outlined text-lg">skip_previous</span>
-            </button>
-            <button id="btn-lofi-play" type="button" class="w-10 h-10 rounded-full bg-[#8D5B4C] hover:bg-[#7A4C3F] text-white flex items-center justify-center button-press cursor-pointer shadow-md transition-transform active:scale-95" title="Play / Pause">
-              <span id="lofi-play-icon" class="material-symbols-outlined text-xl">play_arrow</span>
-            </button>
-            <button id="btn-lofi-next" type="button" class="w-8 h-8 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer" title="Next Track">
-              <span class="material-symbols-outlined text-lg">skip_next</span>
-            </button>
-          </div>
+        <!-- Controls Row: Shuffle, Prev, Play, Next, Loop -->
+        <div class="flex items-center justify-center gap-2.5 pt-1">
+          <!-- Shuffle Button -->
+          <button id="btn-lofi-shuffle" type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-stone-400 opacity-60 hover:opacity-100 button-press cursor-pointer transition-all duration-200" title="Shuffle Mode">
+            <span class="material-symbols-outlined text-lg">shuffle</span>
+          </button>
+
+          <!-- Prev Button -->
+          <button id="btn-lofi-prev" type="button" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer transition-transform active:scale-95" title="Previous Track">
+            <span class="material-symbols-outlined text-xl">skip_previous</span>
+          </button>
+
+          <!-- Play / Pause Button -->
+          <button id="btn-lofi-play" type="button" class="w-12 h-12 rounded-full bg-[#8D5B4C] hover:bg-[#7A4C3F] text-white flex items-center justify-center button-press cursor-pointer shadow-md transition-transform active:scale-95" title="Play / Pause">
+            <span id="lofi-play-icon" class="material-symbols-outlined text-2xl">play_arrow</span>
+          </button>
+
+          <!-- Next Button -->
+          <button id="btn-lofi-next" type="button" class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 flex items-center justify-center text-primary dark:text-stone-200 button-press cursor-pointer transition-transform active:scale-95" title="Next Track">
+            <span class="material-symbols-outlined text-xl">skip_next</span>
+          </button>
+
+          <!-- Loop Mode Button (3-state: Playlist Loop -> Single Track Repeat -> Off) -->
+          <button id="btn-lofi-loop" type="button" class="w-9 h-9 rounded-full flex items-center justify-center text-[#8D5B4C] bg-[#FAF5EE] dark:bg-stone-700/60 button-press cursor-pointer transition-all duration-200" title="Loop Mode: Playlist">
+            <span id="lofi-loop-icon" class="material-symbols-outlined text-lg">repeat</span>
+          </button>
         </div>
 
         <!-- Scrubber Bar with Circle Handle -->
@@ -650,6 +665,30 @@
             <div id="lofi-volume-thumb" class="absolute left-2/3 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#8D5B4C] border-2 border-white dark:border-stone-800 shadow-sm pointer-events-none transition-all duration-150"></div>
           </div>
           <span id="lofi-volume-label" class="text-[10px] font-bold text-[#8D5B4C] dark:text-stone-300 w-8 text-right">65%</span>
+        </div>
+
+      </div>
+
+      <!-- Playlist Box: Scrollable List of All Songs -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-3.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-2.5">
+        
+        <!-- Playlist Header with Song Count and Search/Filter -->
+        <div class="flex items-center justify-between gap-2 px-1">
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="material-symbols-outlined text-sm text-[#8D5B4C]">queue_music</span>
+            <span class="font-heading font-bold text-xs text-primary dark:text-stone-100">Playlist</span>
+            <span id="lofi-track-count-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#8D5B4C] dark:text-stone-300 font-bold">156 Songs</span>
+          </div>
+          <!-- Quick search filter -->
+          <div class="relative flex-1 max-w-[150px]">
+            <input id="lofi-playlist-search" type="text" placeholder="Search song..." class="w-full text-[11px] py-1 pl-6 pr-2 rounded-xl bg-[#FAF5EE] dark:bg-stone-900 border border-[#E8DACB] dark:border-stone-700 text-primary dark:text-stone-200 placeholder:text-stone-400 focus:outline-none focus:border-[#8D5B4C]">
+            <span class="material-symbols-outlined text-xs text-stone-400 absolute left-1.5 top-1/2 -translate-y-1/2 pointer-events-none">search</span>
+          </div>
+        </div>
+
+        <!-- Scrollable Song List Box (Vertically constrained: max-h-52 = 208px) -->
+        <div id="lofi-playlist-box" class="max-h-52 overflow-y-auto rounded-2xl bg-[#FAF5EE]/50 dark:bg-stone-900/40 border border-[#E8DACB]/60 dark:border-stone-700/60 p-1 flex flex-col gap-1" style="scrollbar-width: thin;">
+          <!-- Items generated dynamically by js/dudu_mockup.js -->
         </div>
 
       </div>

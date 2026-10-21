@@ -5,6 +5,7 @@ const { spawnSync } = require('child_process');
 const path = require('path');
 
 const testSuites = [
+  'tests/test_music_panel.js',
   'tests/test_sticker_centre_and_upload.js',
   'tests/test_sticker_suggestions_and_favs.js',
   'tests/test_bilingual_and_fresh_defaults.js',

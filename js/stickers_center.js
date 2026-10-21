@@ -454,7 +454,7 @@
     dispatchProgress();
 
     // Download pool worker - gentle concurrency to protect low-end mobile devices & WebView
-    const CONCURRENCY = 4;
+    const CONCURRENCY = 6;
     let fileIndex = 0;
     let lastProgressTime = 0;
 
@@ -503,7 +503,7 @@
         throttleProgress();
 
         // Small yield to prevent event loop starvation and garbage collection pressure
-        await new Promise(r => setTimeout(r, 15));
+        await new Promise(r => setTimeout(r, 6));
       }
     }
 

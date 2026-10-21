@@ -388,6 +388,10 @@
       }));
       const songIntervalMs = 180000;
       this.currentTrackIndex = Math.floor(Date.now() / songIntervalMs) % this.tracks.length;
+      this.loopMode = 'all'; // 'all' (loop playlist), 'one' (repeat 1 song), 'off' (stop after last song)
+      this.isShuffle = false;
+      this.history = [];
+      this.playedHistory = [this.currentTrackIndex];
     }
 
     get currentTrack() {
@@ -405,13 +409,15 @@
       this.audio.volume = this.volume;
 
       this.audio.addEventListener('ended', () => {
-        this.nextTrack();
+        this.handleTrackEnded();
       });
 
       this.audio.addEventListener('error', (e) => {
         console.warn('[LofiRadio] Track error, skipping to next:', e);
         if (this.isPlaying) {
-          setTimeout(() => this.nextTrack(), 500);
+          setTimeout(() => {
+            if (this.isPlaying) this.nextTrack(true);
+          }, 1000);
         }
       });
 
@@ -424,6 +430,53 @@
         this.isPlaying = false;
         updateLofiUI();
       });
+    }
+
+    handleTrackEnded() {
+      if (this.loopMode === 'one') {
+        // Mode 2: Repeat single song
+        if (this.audio) {
+          this.audio.currentTime = 0;
+          this.audio.play().then(() => {
+            this.isPlaying = true;
+            updateLofiUI();
+          }).catch(e => console.warn(e));
+        }
+        return;
+      }
+
+      if (this.isShuffle) {
+        // Shuffle Mode
+        if (this.playedHistory.length >= this.tracks.length) {
+          if (this.loopMode === 'off') {
+            // Mode 3: Stop when all songs played
+            this.stop();
+            return;
+          }
+          this.playedHistory = [];
+        }
+        const remaining = this.tracks
+          .map((_, i) => i)
+          .filter(i => !this.playedHistory.includes(i) && i !== this.currentTrackIndex);
+        const nextIdx = remaining.length > 0
+          ? remaining[Math.floor(Math.random() * remaining.length)]
+          : Math.floor(Math.random() * this.tracks.length);
+        this.playTrack(nextIdx, true);
+        return;
+      }
+
+      // Linear Mode
+      if (this.currentTrackIndex >= this.tracks.length - 1) {
+        if (this.loopMode === 'off') {
+          // Mode 3: Stop after last song in playlist
+          this.stop();
+          return;
+        }
+        // Mode 1: Loop playlist back to start
+        this.playTrack(0, true);
+      } else {
+        this.playTrack(this.currentTrackIndex + 1, true);
+      }
     }
 
     setVolume(val) {
@@ -464,27 +517,91 @@
       else this.start();
     }
 
-    nextTrack() {
+    playTrack(index, autoPlay = true) {
       this.initAudio();
-      this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-      const wasPlaying = this.isPlaying;
+      if (index < 0 || index >= this.tracks.length) return;
+      if (this.currentTrackIndex !== index) {
+        this.history.push(this.currentTrackIndex);
+      }
+      this.currentTrackIndex = index;
+      if (!this.playedHistory.includes(index)) {
+        this.playedHistory.push(index);
+      }
       this.audio.src = this.currentTrack.url;
       this.audio.volume = this.volume;
-      if (wasPlaying) {
-        this.audio.play().catch(e => console.warn(e));
+      if (autoPlay || this.isPlaying) {
+        this.audio.play()
+          .then(() => {
+            this.isPlaying = true;
+            updateLofiUI();
+          })
+          .catch((err) => {
+            console.warn('[LofiRadio] play() error:', err);
+            this.isPlaying = false;
+            updateLofiUI();
+          });
       }
       updateLofiUI();
     }
 
+    nextTrack(autoPlay = undefined) {
+      this.initAudio();
+      const shouldPlay = autoPlay !== undefined ? autoPlay : this.isPlaying;
+
+      if (this.isShuffle) {
+        const pool = this.tracks.map((_, i) => i).filter(i => i !== this.currentTrackIndex);
+        const nextIdx = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : 0;
+        this.playTrack(nextIdx, shouldPlay);
+        return;
+      }
+
+      const nextIdx = (this.currentTrackIndex + 1) % this.tracks.length;
+      this.playTrack(nextIdx, shouldPlay);
+    }
+
     prevTrack() {
       this.initAudio();
-      this.currentTrackIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
-      const wasPlaying = this.isPlaying;
-      this.audio.src = this.currentTrack.url;
-      this.audio.volume = this.volume;
-      if (wasPlaying) {
-        this.audio.play().catch(e => console.warn(e));
+      const shouldPlay = this.isPlaying;
+      if (this.audio && this.audio.currentTime > 3) {
+        this.audio.currentTime = 0;
+        if (shouldPlay) this.audio.play().catch(e => console.warn(e));
+        return;
       }
+
+      if (this.history.length > 0) {
+        const prevIdx = this.history.pop();
+        this.playTrack(prevIdx, shouldPlay);
+      } else {
+        const prevIdx = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
+        this.playTrack(prevIdx, shouldPlay);
+      }
+    }
+
+    cycleLoopMode() {
+      // 1: Loop playlist ('all') -> 2: Repeat single song ('one') -> 3: Loop off ('off') -> 1
+      if (this.loopMode === 'all') {
+        this.loopMode = 'one';
+        showFeedbackToast('Repeat Current Song 🔂', 'Ulang 1 Lagu Ini 🔂');
+      } else if (this.loopMode === 'one') {
+        this.loopMode = 'off';
+        showFeedbackToast('Loop Off ⏹️', 'Ulang Dimatikan ⏹️');
+      } else {
+        this.loopMode = 'all';
+        showFeedbackToast('Loop All Songs 🔁', 'Ulang Seluruh Lagu 🔁');
+      }
+      window.duduAudio?.playPop?.(480);
+      updateLofiUI();
+    }
+
+    toggleShuffle() {
+      this.isShuffle = !this.isShuffle;
+      if (this.isShuffle) {
+        this.playedHistory = [this.currentTrackIndex];
+        showFeedbackToast('Shuffle On 🔀', 'Acak Lagu Aktif 🔀');
+      } else {
+        showFeedbackToast('Shuffle Off ➡️', 'Acak Lagu Mati ➡️');
+      }
+      window.duduAudio?.playPop?.(420);
       updateLofiUI();
     }
   }
@@ -806,7 +923,12 @@
     download: '⬇',
     description: '📄',
     photo: '🖼️',
-    attach_file: '📎'
+    attach_file: '📎',
+    shuffle: '🔀',
+    repeat: '🔁',
+    repeat_one: '🔂',
+    queue_music: '🎵',
+    equalizer: '📊'
   };
 
   function syncOfflineIcons() {
@@ -1305,6 +1427,9 @@
 
     if (tabName === 'stickers') {
       window.DuduStickerStore?.renderStickerCenterUI?.();
+    }
+    if (tabName === 'music') {
+      updateLofiUI();
     }
 
     tabs.forEach(t => {
@@ -2418,18 +2543,88 @@
   }
 
   // --- 6. BEDTIME & MUSIC (music & bed time.jpg) ---
+  let lofiPlaylistSearchQuery = '';
+
+  function renderBedtimePlaylist() {
+    const box = document.getElementById('lofi-playlist-box');
+    const badge = document.getElementById('lofi-track-count-badge');
+    if (!box) return;
+
+    const query = (lofiPlaylistSearchQuery || '').trim().toLowerCase();
+    const tracksWithIdx = lofiEngine.tracks.map((track, idx) => ({ track, idx }));
+    const filtered = query
+      ? tracksWithIdx.filter(item => item.track.title.toLowerCase().includes(query) || item.track.filename.toLowerCase().includes(query))
+      : tracksWithIdx;
+
+    if (badge) {
+      badge.textContent = query ? `${filtered.length}/${lofiEngine.tracks.length}` : `${lofiEngine.tracks.length} Songs`;
+    }
+
+    if (filtered.length === 0) {
+      box.innerHTML = `
+        <div class="py-6 text-center text-xs text-stone-400">
+          No songs found matching "${escapeHtml(lofiPlaylistSearchQuery)}"
+        </div>
+      `;
+      return;
+    }
+
+    box.innerHTML = filtered.map(({ track, idx }) => {
+      const isActive = idx === lofiEngine.currentTrackIndex;
+      const isPlaying = isActive && lofiEngine.isPlaying;
+      return `
+        <button type="button" data-track-index="${idx}" class="lofi-track-row w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition-all ${
+          isActive
+            ? 'bg-[#8D5B4C]/15 dark:bg-[#8D5B4C]/25 text-[#8D5B4C] dark:text-[#E8DACB] font-bold shadow-sm'
+            : 'hover:bg-black/5 dark:hover:bg-white/5 text-primary dark:text-stone-300'
+        }">
+          <span class="material-symbols-outlined text-sm shrink-0 ${isActive ? 'text-[#8D5B4C] dark:text-[#F5C7A9]' : 'text-stone-400'}">
+            ${isPlaying ? 'equalizer' : (isActive ? 'play_arrow' : 'music_note')}
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs truncate ${isActive ? 'font-bold' : 'font-medium'}">${escapeHtml(track.title)}</div>
+            <div class="text-[10px] text-stone-400 truncate">${escapeHtml(track.subtitle)}</div>
+          </div>
+          ${isActive ? `<span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${isPlaying ? 'bg-[#8D5B4C] text-white animate-pulse' : 'bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-300'}">${isPlaying ? 'Playing' : 'Paused'}</span>` : ''}
+        </button>
+      `;
+    }).join('');
+
+    box.querySelectorAll('.lofi-track-row').forEach(btn => {
+      btn.onclick = () => {
+        const idx = Number(btn.getAttribute('data-track-index'));
+        if (!isNaN(idx)) {
+          window.duduAudio?.playPop?.(500);
+          lofiEngine.playTrack(idx, true);
+        }
+      };
+    });
+  }
+
   function renderBedtimeMusic() {
     updateLofiUI();
 
     const playBtn = document.getElementById('btn-lofi-play');
     const prevBtn = document.getElementById('btn-lofi-prev');
     const nextBtn = document.getElementById('btn-lofi-next');
+    const shuffleBtn = document.getElementById('btn-lofi-shuffle');
+    const loopBtn = document.getElementById('btn-lofi-loop');
+    const searchInput = document.getElementById('lofi-playlist-search');
     const offlineBtn = document.getElementById('btn-together-offline');
     const volBar = document.getElementById('lofi-volume-bar');
 
     if (playBtn) playBtn.onclick = () => lofiEngine.toggle();
     if (prevBtn) prevBtn.onclick = () => lofiEngine.prevTrack();
     if (nextBtn) nextBtn.onclick = () => lofiEngine.nextTrack();
+    if (shuffleBtn) shuffleBtn.onclick = () => lofiEngine.toggleShuffle();
+    if (loopBtn) loopBtn.onclick = () => lofiEngine.cycleLoopMode();
+
+    if (searchInput) {
+      searchInput.oninput = (e) => {
+        lofiPlaylistSearchQuery = e.target.value;
+        renderBedtimePlaylist();
+      };
+    }
 
     if (volBar) {
       volBar.onclick = (e) => {
@@ -2470,6 +2665,9 @@
     const volFill = document.getElementById('lofi-volume-fill');
     const volThumb = document.getElementById('lofi-volume-thumb') || document.getElementById('lofi-volume-star');
     const volLabel = document.getElementById('lofi-volume-label');
+    const shuffleBtn = document.getElementById('btn-lofi-shuffle');
+    const loopBtn = document.getElementById('btn-lofi-loop');
+    const loopIcon = document.getElementById('lofi-loop-icon');
 
     if (titleEl) titleEl.textContent = cur.title;
     if (subEl) subEl.textContent = cur.subtitle;
@@ -2481,13 +2679,54 @@
 
     if (iconEl) {
       iconEl.textContent = lofiEngine.isPlaying ? 'pause' : 'play_arrow';
-      syncOfflineIcons();
     }
 
     const pct = Math.round((lofiEngine.volume ?? 0.65) * 100);
     if (volFill) volFill.style.width = `${pct}%`;
     if (volThumb) volThumb.style.left = `${pct}%`;
     if (volLabel) volLabel.textContent = `${pct}%`;
+
+    // Shuffle Button UI
+    if (shuffleBtn) {
+      if (lofiEngine.isShuffle) {
+        shuffleBtn.className = 'w-9 h-9 rounded-full flex items-center justify-center text-[#8D5B4C] bg-[#FAF5EE] dark:bg-stone-700/80 border border-[#8D5B4C]/40 shadow-sm button-press cursor-pointer transition-all duration-200';
+        shuffleBtn.title = 'Shuffle Mode: ON';
+      } else {
+        shuffleBtn.className = 'w-9 h-9 rounded-full flex items-center justify-center text-stone-400 opacity-60 hover:opacity-100 button-press cursor-pointer transition-all duration-200';
+        shuffleBtn.title = 'Shuffle Mode: OFF';
+      }
+    }
+
+    // Loop Button UI (3-function: playlist 'all' -> single 'one' -> off 'off')
+    if (loopBtn && loopIcon) {
+      if (lofiEngine.loopMode === 'all') {
+        loopIcon.textContent = 'repeat';
+        loopBtn.className = 'w-9 h-9 rounded-full flex items-center justify-center text-[#8D5B4C] bg-[#FAF5EE] dark:bg-stone-700/80 border border-[#8D5B4C]/40 shadow-sm button-press cursor-pointer transition-all duration-200';
+        loopBtn.title = 'Loop Mode: Playlist (repeat entire playlist)';
+      } else if (lofiEngine.loopMode === 'one') {
+        loopIcon.textContent = 'repeat_one';
+        loopBtn.className = 'w-9 h-9 rounded-full flex items-center justify-center text-[#8D5B4C] bg-[#FAF5EE] dark:bg-stone-700/80 border border-[#8D5B4C]/40 shadow-sm button-press cursor-pointer transition-all duration-200';
+        loopBtn.title = 'Loop Mode: Single Track (repeats current track)';
+      } else {
+        loopIcon.textContent = 'repeat';
+        loopBtn.className = 'w-9 h-9 rounded-full flex items-center justify-center text-stone-400 opacity-40 hover:opacity-80 button-press cursor-pointer transition-all duration-200';
+        loopBtn.title = 'Loop Mode: OFF (stops at end of playlist)';
+      }
+    }
+
+    // Render / update playlist items
+    renderBedtimePlaylist();
+
+    // Auto-scroll active track into view inside playlist box
+    const box = document.getElementById('lofi-playlist-box');
+    if (box) {
+      const activeBtn = box.querySelector(`.lofi-track-row[data-track-index="${lofiEngine.currentTrackIndex}"]`);
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+
+    syncOfflineIcons();
   }
 
   function startBedtimeCountdownTimer() {
