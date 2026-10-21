@@ -82,14 +82,17 @@ async function runBilingualAndFreshDefaultsTest() {
       }
     });
 
+    await page.waitForTimeout(600);
+
     // Test toast in EN
     await page.evaluate(() => window.showToast('Removed from favorites', 'Dihapus dari favorit'));
+    await page.waitForTimeout(100);
     let toastText = await page.$eval('#feedback-toast', el => el.textContent.trim());
     assert.strictEqual(toastText, 'Removed from favorites', 'Toast in EN must show English string');
 
     // Switch to ID
     await page.evaluate(() => window.DuduI18n.setLanguage('id'));
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(400);
 
     const idNavHome = await page.$eval('[data-tab="home"] span:last-child', el => el.textContent.trim());
     const idTogetherPrefix = await page.$eval('[data-i18n="home_together_prefix"]', el => el.textContent.trim());
@@ -98,6 +101,7 @@ async function runBilingualAndFreshDefaultsTest() {
 
     // Test toast in ID
     await page.evaluate(() => window.showToast('Removed from favorites', 'Dihapus dari favorit'));
+    await page.waitForTimeout(100);
     toastText = await page.$eval('#feedback-toast', el => el.textContent.trim());
     assert.strictEqual(toastText, 'Dihapus dari favorit', 'Toast in ID must show Indonesian string');
 

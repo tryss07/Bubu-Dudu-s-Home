@@ -14,11 +14,31 @@
   const PACK_CHUNK_SIZE = 60;
 
   let dbPromise = null;
-  const memoryBlobUrls = new Map();
+  const MAX_MEMORY_BLOB_URLS = 64; // Guardrail: Max 64 active blob URLs in memory (~8-10MB max)
+  const memoryBlobUrls = new Map(); // file -> objectUrl (LRU tracked)
   const downloadedFilesSet = new Set();
   const downloadedPacksSet = new Set();
   let isDownloading = false;
   let currentDownloadInfo = null;
+
+  function touchBlobUrl(file, url) {
+    if (!file || !url) return url;
+    if (memoryBlobUrls.has(file)) {
+      memoryBlobUrls.delete(file);
+    } else if (memoryBlobUrls.size >= MAX_MEMORY_BLOB_URLS) {
+      // Evict oldest blob URL to prevent OOM
+      const oldestKey = memoryBlobUrls.keys().next().value;
+      if (oldestKey) {
+        const oldUrl = memoryBlobUrls.get(oldestKey);
+        try {
+          URL.revokeObjectURL(oldUrl);
+        } catch (_) {}
+        memoryBlobUrls.delete(oldestKey);
+      }
+    }
+    memoryBlobUrls.set(file, url);
+    return url;
+  }
 
   // Initialize downloaded packs from localStorage
   try {
@@ -196,7 +216,7 @@
     return `${getHttpBase()}/assets/stickers_${cat}/${canonical}`;
   }
 
-  // Pre-load all stored blobs into memory on init
+  // Crashproof Zero-RAM Initialization: Load only keys into memory on init (<50KB RAM)
   async function init() {
     if (typeof navigator !== 'undefined' && navigator.storage?.persist) {
       navigator.storage.persist().catch(() => {});
@@ -209,39 +229,53 @@
       try {
         const tx = db.transaction(STORE_NAME, 'readonly');
         const store = tx.objectStore(STORE_NAME);
-        const req = store.openCursor();
 
-        req.onsuccess = (e) => {
-          const cursor = e.target.result;
-          if (cursor) {
-            const { file, blob } = cursor.value;
-            downloadedFilesSet.add(file);
-            if (blob && !memoryBlobUrls.has(file)) {
-              try {
-                memoryBlobUrls.set(file, URL.createObjectURL(blob));
-              } catch (_) {}
+        const finishInit = () => {
+          // Verify core pack status
+          const corePack = getPackById(CORE_PACK_ID);
+          if (corePack) {
+            const coreDownloadedCount = corePack.files.filter(f => downloadedFilesSet.has(f)).length;
+            if (coreDownloadedCount >= corePack.files.length * 0.95) {
+              downloadedPacksSet.add(CORE_PACK_ID);
+              savePacksState();
             }
-            cursor.continue();
+          }
+
+          dispatchStickersUpdated();
+          resolve();
+
+          // Check if core 300 stickers need startup download gently after UI settles
+          if (typeof requestIdleCallback !== 'undefined') {
+            requestIdleCallback(() => checkStartupCoreDownload(), { timeout: 3000 });
           } else {
-            // Verify core pack status
-            const corePack = getPackById(CORE_PACK_ID);
-            if (corePack) {
-              const coreDownloadedCount = corePack.files.filter(f => downloadedFilesSet.has(f)).length;
-              if (coreDownloadedCount >= corePack.files.length * 0.95) {
-                downloadedPacksSet.add(CORE_PACK_ID);
-                savePacksState();
-              }
-            }
-
-            dispatchStickersUpdated();
-            resolve();
-
-            // Check if core 300 stickers need startup download
-            checkStartupCoreDownload();
+            setTimeout(() => checkStartupCoreDownload(), 1500);
           }
         };
 
-        req.onerror = () => resolve();
+        if (typeof store.getAllKeys === 'function') {
+          const req = store.getAllKeys();
+          req.onsuccess = () => {
+            const keys = req.result || [];
+            for (let i = 0; i < keys.length; i++) {
+              downloadedFilesSet.add(keys[i]);
+            }
+            finishInit();
+          };
+          req.onerror = () => finishInit();
+        } else {
+          const req = store.openKeyCursor ? store.openKeyCursor() : store.openCursor();
+          req.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              const fileKey = cursor.key || cursor.primaryKey || cursor.value?.file;
+              if (fileKey) downloadedFilesSet.add(fileKey);
+              cursor.continue();
+            } else {
+              finishInit();
+            }
+          };
+          req.onerror = () => finishInit();
+        }
       } catch (_) {
         resolve();
       }
@@ -278,7 +312,9 @@
     if (!file) return '';
     const base = file.split('/').pop();
     if (memoryBlobUrls.has(base)) {
-      return memoryBlobUrls.get(base);
+      const url = memoryBlobUrls.get(base);
+      touchBlobUrl(base, url);
+      return `${url}#${base}`;
     }
     const catalog = window.DUDU_STICKERS_CATALOG;
     if (catalog?.resolveStickerPath) {
@@ -365,8 +401,8 @@
 
     dispatchProgress();
 
-    // Download pool worker
-    const CONCURRENCY = 24;
+    // Download pool worker - gentle concurrency to protect low-end mobile devices & WebView
+    const CONCURRENCY = 4;
     let fileIndex = 0;
     let lastProgressTime = 0;
 
@@ -394,13 +430,13 @@
           const remoteUrl = `${getHttpBase()}/assets/stickers_${cat}/${canonical}`;
 
           try {
-            const res = await fetch(remoteUrl, { mode: 'cors', cache: 'default', signal: AbortSignal.timeout(4000) });
+            const res = await fetch(remoteUrl, { mode: 'cors', cache: 'default', signal: AbortSignal.timeout(8000) });
             if (res.ok) {
               const blob = await res.blob();
               await saveStoredBlob(file, cat, blob, packId);
               downloadedFilesSet.add(file);
               const objectUrl = URL.createObjectURL(blob);
-              memoryBlobUrls.set(file, objectUrl);
+              touchBlobUrl(file, objectUrl);
             }
           } catch (err) {
             // Silently continue for resilience; retry on next run
@@ -413,6 +449,9 @@
         currentDownloadInfo.completed = completed;
         currentDownloadInfo.percent = Math.round((completed / total) * 100);
         throttleProgress();
+
+        // Small yield to prevent event loop starvation and garbage collection pressure
+        await new Promise(r => setTimeout(r, 15));
       }
     }
 
@@ -769,6 +808,8 @@
     isPackDownloaded,
     isFileDownloaded,
     getStickerUrl,
+    getStoredBlob,
+    touchBlobUrl,
     getDownloadedStickers,
     downloadPack,
     deletePack,

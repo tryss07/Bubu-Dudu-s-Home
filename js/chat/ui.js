@@ -1781,7 +1781,7 @@
       const stickerFolder = isCouple ? 'assets/stickers_couple' : 'assets/stickers_dudu';
       contentHtml = `
         <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
-          <img src="${stickerFolder}/${stickerFile}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
+          <img src="${stickerFolder}/${stickerFile}" alt="Sticker" loading="lazy" decoding="async" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
         </div>
       `;
     } else if (isGifOrStickerImg) {
@@ -1793,7 +1793,7 @@
       }
       contentHtml = `
         <div class="w-36 h-36 xs:w-44 xs:h-44 sm:w-48 sm:h-48 py-1 select-none pointer-events-none flex items-center justify-center">
-          <img src="${imgSrc}" alt="Sticker Animasi" loading="lazy" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
+          <img src="${imgSrc}" alt="Sticker Animasi" loading="lazy" decoding="async" class="w-full h-full object-contain filter drop-shadow-sm" onerror="window.DuduStickers?.handleImageError?.(this);">
         </div>
       `;
     } else if (msg.type === 'image') {
@@ -2750,7 +2750,7 @@
           <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md ${badgeBg} text-[8px] font-bold text-white tracking-wider pointer-events-none">${badgeIcon}</span>
           ${favStarHtml}
           <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="${localUrl}" alt="Sticker" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
+            <img src="${localUrl}" alt="Sticker" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
           </div>
         </button>
       `;

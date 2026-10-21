@@ -220,9 +220,13 @@ public class DuduCompanionService extends Service {
     }
 
     private void updateNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            manager.notify(COMPANION_NOTIFICATION_ID, buildCompanionNotification());
+        try {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.notify(COMPANION_NOTIFICATION_ID, buildCompanionNotification());
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Safe guard caught updateNotification error: " + t.getMessage());
         }
     }
 
@@ -399,31 +403,35 @@ public class DuduCompanionService extends Service {
     }
 
     private void showHeadsUpMessageNotification(String partner, String topic, String preview) {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager == null) return;
+        try {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager == null) return;
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setAction("ACTION_OPEN_CHAT");
-        intent.putExtra("target_tab", "chat");
-        intent.putExtra("target_session", topic);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setAction("ACTION_OPEN_CHAT");
+            intent.putExtra("target_tab", "chat");
+            intent.putExtra("target_session", topic);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
 
-        String title = String.format("[%s] %s", topic, partner);
+            String title = String.format("[%s] %s", topic, partner);
 
-        NotificationCompat.Builder alertBuilder = new NotificationCompat.Builder(this, CHANNEL_CHAT_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(preview)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+            NotificationCompat.Builder alertBuilder = new NotificationCompat.Builder(this, CHANNEL_CHAT_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title)
+                    .setContentText(preview)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-        manager.notify((int) (System.currentTimeMillis() % 100000), alertBuilder.build());
+            manager.notify((int) (System.currentTimeMillis() % 100000), alertBuilder.build());
+        } catch (Throwable t) {
+            Log.w(TAG, "Safe guard caught showHeadsUpNotification error: " + t.getMessage());
+        }
     }
 
     @Override

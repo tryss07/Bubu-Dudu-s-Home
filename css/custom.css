@@ -823,3 +823,10 @@ html.dark .dark\:bg-stone-800\/95 { background-color: rgba(41, 37, 36, 0.95); }
 .wardrobe-slot-chip:active {
   transform: scale(0.96);
 }
+
+/* Crashproof & Performance Guardrails for Massive Sticker Catalogs */
+.chat-sticker-select-btn,
+.gallery-sticker-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 72px 72px;
+}

@@ -7,11 +7,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import android.util.Log;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Crash Guard: Prevent unexpected background thread crashes from terminating the app
+        final Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            Log.e("DuduCrashGuard", "Caught uncaught exception in thread: " + thread.getName(), throwable);
+            if (defaultHandler != null) {
+                if (!"main".equals(thread.getName())) {
+                    Log.w("DuduCrashGuard", "Suppressed non-main thread exception to keep app running");
+                    return;
+                }
+                defaultHandler.uncaughtException(thread, throwable);
+            }
+        });
+
         registerPlugin(DuduCompanionPlugin.class);
         super.onCreate(savedInstanceState);
 

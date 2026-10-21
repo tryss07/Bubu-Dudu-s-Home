@@ -1518,6 +1518,29 @@
     const cat = getCategory(base);
     const serverBase = window.DuduChatSocket?.getHttpBaseUrl?.() || 'https://chat.nexora-v1.my.id';
     const remoteUrl = `${serverBase}/assets/stickers_${cat}/${base}`;
+
+    // Guardrail: If file is saved in offline IndexedDB store, resolve blob on demand
+    if (window.DuduStickerStore?.isFileDownloaded?.(base) && typeof window.DuduStickerStore.getStoredBlob === 'function') {
+      window.DuduStickerStore.getStoredBlob(base).then(blob => {
+        if (blob) {
+          try {
+            const blobUrl = URL.createObjectURL(blob);
+            const cachedUrl = window.DuduStickerStore.touchBlobUrl ? window.DuduStickerStore.touchBlobUrl(base, blobUrl) : blobUrl;
+            img.src = `${cachedUrl}#${base}`;
+            return;
+          } catch (_) {}
+        }
+        if (img.src !== remoteUrl) {
+          img.src = remoteUrl;
+        }
+      }).catch(() => {
+        if (img.src !== remoteUrl) {
+          img.src = remoteUrl;
+        }
+      });
+      return;
+    }
+
     if (img.src !== remoteUrl) {
       img.src = remoteUrl;
     } else {
