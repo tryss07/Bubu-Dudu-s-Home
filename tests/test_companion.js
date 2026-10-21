@@ -34,7 +34,7 @@ const fs = require('fs');
     });
 
     const page = await context.newPage();
-    await page.goto(fileUrl, { waitUntil: 'load' });
+    await page.goto(fileUrl, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(400);
 
     // Capture initial layout
@@ -49,7 +49,7 @@ const fs = require('fs');
     deviceScaleFactor: 2
   });
   const page = await primaryContext.newPage();
-  await page.goto(fileUrl, { waitUntil: 'load' });
+  await page.goto(fileUrl, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(500);
 
   // 1. Check title & Bubu / Dudu couple header

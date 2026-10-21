@@ -885,6 +885,20 @@
         </div>
       </div>
 
+      <!-- Upload Progress Bar (Photo / Video Media) -->
+      <div id="chat-upload-bar" class="hidden bg-white dark:bg-stone-800 rounded-2xl px-3.5 py-2.5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-1.5 shrink-0 transition-all">
+        <div class="flex items-center justify-between text-xs font-heading">
+          <div class="flex items-center gap-2 min-w-0">
+            <span id="chat-upload-icon" class="material-symbols-outlined text-base text-[#8D5B4C]">photo_camera</span>
+            <span id="chat-upload-filename" class="font-bold text-primary dark:text-stone-200 truncate text-[11px] max-w-[200px]">Uploading media...</span>
+          </div>
+          <span id="chat-upload-percent" class="text-[11px] font-black text-[#8D5B4C] dark:text-stone-300">0%</span>
+        </div>
+        <div class="w-full bg-[#E8DACB]/40 dark:bg-stone-700 h-2 rounded-full overflow-hidden p-0.5">
+          <div id="chat-upload-progress" class="bg-gradient-to-r from-[#D48B70] to-[#8D5B4C] h-full rounded-full transition-all duration-150" style="width: 0%"></div>
+        </div>
+      </div>
+
       <!-- Reply Quote Preview Banner -->
       <div id="chat-reply-bar" class="hidden bg-white dark:bg-stone-800 rounded-2xl px-3.5 py-2 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-2 shrink-0">
         <div class="flex flex-col min-w-0 border-l-2 border-[#8D5B4C] pl-2">
@@ -915,7 +929,7 @@
         <button id="btn-chat-photo" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Send Photo">
           <span class="material-symbols-outlined text-xl">image</span>
         </button>
-        <input type="file" id="chat-image-input" accept="image/*" class="hidden">
+        <input type="file" id="chat-image-input" accept="image/*,video/*" class="hidden">
 
         <!-- Voice Note / Mic Button -->
         <button id="btn-chat-mic" type="button" class="w-8 h-8 rounded-full text-white/90 hover:text-white flex items-center justify-center button-press cursor-pointer shrink-0" title="Record Voice">
@@ -937,7 +951,10 @@
         <div class="flex items-center justify-between pb-1 border-b border-[#E8DACB]/40 dark:border-stone-700">
           <div class="flex items-center gap-2">
             <span class="font-heading font-extrabold text-xs text-[#4A3222] dark:text-stone-100" data-i18n="stk_title">Dudu &amp; Bubu Stickers</span>
-            <span class="text-[9px] px-2 py-0.5 rounded-full bg-[#8D5B4C]/10 text-[#8D5B4C] dark:text-stone-300 font-semibold" data-i18n="stk_author">art by Huang Xiao B</span>
+            <a href="#stickers" data-tab="stickers" class="mockup-nav-item text-[10px] px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white font-bold hover:bg-[#9E6959] cursor-pointer button-press flex items-center gap-0.5" title="Sticker Centre">
+              <span class="material-symbols-outlined text-xs">storefront</span>
+              <span data-i18n="stk_centre_btn">Centre</span>
+            </a>
           </div>
           <button id="btn-close-sticker-tray" type="button" class="text-xs font-bold text-stone-500 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer p-1">✕</button>
         </div>
@@ -965,14 +982,66 @@
 
     </section>
 
+    <!-- ====================================================================
+         SCREEN 9: STICKER CENTRE (Offline packs & download manager)
+         ==================================================================== -->
+    <section id="tab-stickers" class="hidden flex flex-col gap-4 pb-28 animate-fadeIn">
+      
+      <!-- Top Download Progress Bar (shown at top of panel) -->
+      <div id="sticker-center-progress-bar-container" class="w-full">
+        <!-- Rendered dynamically by DuduStickerStore -->
+      </div>
+
+      <!-- Sticker Centre Header Card -->
+      <div class="bg-white dark:bg-stone-800 rounded-3xl p-5 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex items-center justify-between gap-3">
+        <div>
+          <h2 class="font-heading font-black text-lg text-[#4A3222] dark:text-stone-100" data-i18n="stk_centre_title">
+            Sticker Centre
+          </h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400" data-i18n="stk_centre_subtitle">
+            Download sticker packs for instant offline chat
+          </p>
+        </div>
+        <button type="button" onclick="window.switchTab('chat')" class="px-3.5 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 border border-[#E8DACB] text-xs font-bold text-[#8D5B4C] dark:text-stone-200 button-press flex items-center gap-1.5 cursor-pointer shrink-0">
+          <span class="material-symbols-outlined text-sm">chat</span>
+          <span data-i18n="stk_open_chat">Chat</span>
+        </button>
+      </div>
+
+      <!-- Filter Category Chips -->
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+        <button type="button" data-filter="all" class="stk-center-filter-btn px-3 py-1.5 rounded-full bg-[#8D5B4C] text-white text-xs font-extrabold button-press shadow-xs whitespace-nowrap cursor-pointer">
+          All Packs
+        </button>
+        <button type="button" data-filter="dudu" class="stk-center-filter-btn px-3 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-300 text-xs font-bold button-press whitespace-nowrap cursor-pointer">
+          🐻 Dudu
+        </button>
+        <button type="button" data-filter="bubu" class="stk-center-filter-btn px-3 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-300 text-xs font-bold button-press whitespace-nowrap cursor-pointer">
+          🐼 Bubu
+        </button>
+        <button type="button" data-filter="couple" class="stk-center-filter-btn px-3 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-300 text-xs font-bold button-press whitespace-nowrap cursor-pointer">
+          🐻🐼 Couple
+        </button>
+        <button type="button" data-filter="downloaded" class="stk-center-filter-btn px-3 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-stone-700 text-[#4A3222] dark:text-stone-300 text-xs font-bold button-press whitespace-nowrap cursor-pointer">
+          ✓ Downloaded
+        </button>
+      </div>
+
+      <!-- Packs Grid List -->
+      <div id="sticker-packs-list" class="flex flex-col gap-3">
+        <!-- Rendered dynamically by DuduStickerStore -->
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ====================================================================
        BOTTOM DOCK (timeline.jpg warm brown dock)
        ==================================================================== -->
   <!-- MORE POPUP MENU (Floats above dock on small screens) -->
-  <div id="bottom-nav-more-popup" class="hidden fixed left-0 right-0 mx-auto w-[calc(100%-2rem)] max-w-[380px] z-50 cozy-brown-dock rounded-3xl p-3 shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-200">
-    <div class="grid grid-cols-4 gap-2 text-center">
+  <div id="bottom-nav-more-popup" class="hidden fixed left-0 right-0 mx-auto w-[calc(100%-2rem)] max-w-[420px] z-50 cozy-brown-dock rounded-3xl p-3 shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-200">
+    <div class="grid grid-cols-4 gap-1.5 text-center">
       <!-- Calendar -->
       <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center p-2 rounded-2xl hover:bg-white/10 transition-colors button-press">
         <span class="material-symbols-outlined text-2xl">calendar_month</span>
@@ -1000,19 +1069,19 @@
     <div class="flex justify-around items-center">
       
       <!-- Home -->
-      <a href="#home" data-tab="home" class="mockup-nav-item dock-item-active flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <a href="#home" data-tab="home" class="mockup-nav-item dock-item-active flex flex-col items-center justify-center py-1 px-2 button-press">
         <span class="material-symbols-outlined text-xl">home</span>
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_home">Home</span>
       </a>
 
       <!-- Love Notes -->
-      <a href="#notes" data-tab="notes" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <a href="#notes" data-tab="notes" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2 button-press">
         <span class="material-symbols-outlined text-xl">mail</span>
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_notes">Notes</span>
       </a>
 
       <!-- Chat -->
-      <a href="#chat" data-tab="chat" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press relative">
+      <a href="#chat" data-tab="chat" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2 button-press relative">
         <div class="relative">
           <span class="material-symbols-outlined text-xl">chat</span>
           <span id="nav-chat-unread-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-white"></span>
@@ -1020,8 +1089,14 @@
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_chat">Chat</span>
       </a>
 
+      <!-- Sticker Centre -->
+      <a href="#stickers" data-tab="stickers" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2 button-press">
+        <span class="material-symbols-outlined text-xl">loyalty</span>
+        <span class="text-[9px] font-heading font-bold" data-i18n="nav_stickers">Stickers</span>
+      </a>
+
       <!-- Memory Jar -->
-      <a href="#memories" data-tab="memories" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2.5 button-press">
+      <a href="#memories" data-tab="memories" class="mockup-nav-item opacity-75 flex flex-col items-center justify-center py-1 px-2 button-press">
         <span class="material-symbols-outlined text-xl">photo_library</span>
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_memories">Memories</span>
       </a>
@@ -1976,6 +2051,7 @@
   <script src="js/audio.js?v=v5"></script>
   <script src="js/chat/crypto.js?v=v6"></script>
   <script src="js/chat/storage.js?v=v6"></script>
+  <script src="js/stickers_center.js?v=v1"></script>
   <script src="js/chat/socket.js?v=v6"></script>
   <script src="js/chat/ui.js?v=v6"></script>
   <script src="js/chat/wallpaper.js?v=v6"></script>

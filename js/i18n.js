@@ -12,6 +12,7 @@
       nav_bucket: "Planner",
       nav_music: "Music",
       nav_wardrobe: "Closet",
+      nav_stickers: "Stickers",
       nav_more: "More",
 
       // Top Header
@@ -270,9 +271,13 @@
       cal_agenda_sub: "our cozy agenda ♡",
       cal_custom_icon_ph: "Other emoji",
 
-      // Sticker Drawer
+      // Sticker Drawer & Centre
       stk_title: "Dudu & Bubu Stickers",
       stk_author: "art by Huang Xiao B",
+      stk_centre_title: "Sticker Centre",
+      stk_centre_subtitle: "Download sticker packs for instant offline chat",
+      stk_open_chat: "Chat",
+      stk_centre_btn: "Centre",
       stk_tab_fav: "⭐ Fav (0)",
       stk_tab_all: "🌟 All (1975)",
       stk_tab_dudu: "🐻 Only Dudu (411)",
@@ -326,6 +331,7 @@
       nav_bucket: "Impian",
       nav_music: "Musik",
       nav_wardrobe: "Lemari",
+      nav_stickers: "Stiker",
       nav_more: "Lainnya",
 
       // Top Header
@@ -448,9 +454,13 @@
       btn_fav: "Favorit",
       btn_unfav: "Disukai",
 
-      // Sticker Drawer
+      // Sticker Drawer & Centre
       stk_title: "Stiker Dudu & Bubu",
       stk_author: "karya Huang Xiao B",
+      stk_centre_title: "Pusat Stiker",
+      stk_centre_subtitle: "Unduh paket stiker agar chat offline instan",
+      stk_open_chat: "Obrolan",
+      stk_centre_btn: "Pusat",
       stk_tab_fav: "⭐ Favorit (0)",
       stk_tab_all: "🌟 Semua (1975)",
       stk_tab_dudu: "🐻 Hanya Dudu (411)",

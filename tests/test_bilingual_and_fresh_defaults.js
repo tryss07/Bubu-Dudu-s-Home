@@ -69,6 +69,19 @@ async function runBilingualAndFreshDefaultsTest() {
     assert.strictEqual(enNavHome, 'Home', 'EN nav home must be "Home"');
     assert.strictEqual(enTogetherPrefix, "We've been together for", 'EN together prefix must match');
 
+    // Mute incoming socket message toasts during unit verification of showToast
+    await page.evaluate(() => {
+      if (window.DuduChatSocket) {
+        window.DuduChatSocket.disconnect?.();
+        window.DuduChatSocket.connect = () => {};
+        window.DuduChatSocket.handleIncomingMessage = () => {};
+        if (window.DuduChatSocket.socket) {
+          window.DuduChatSocket.socket.onmessage = null;
+          try { window.DuduChatSocket.socket.close(); } catch (_) {}
+        }
+      }
+    });
+
     // Test toast in EN
     await page.evaluate(() => window.showToast('Removed from favorites', 'Dihapus dari favorit'));
     let toastText = await page.$eval('#feedback-toast', el => el.textContent.trim());

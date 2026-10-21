@@ -1298,10 +1298,14 @@
   function switchTab(tabName, updateHash = true) {
     document.querySelectorAll(".modal-backdrop:not(.hidden)").forEach(m => m.classList.add("hidden"));
     if (tabName === 'memory') tabName = 'memories';
-    const tabs = ['home', 'notes', 'chat', 'memories', 'calendar', 'bucket', 'music', 'wardrobe'];
+    const tabs = ['home', 'notes', 'chat', 'memories', 'calendar', 'bucket', 'music', 'wardrobe', 'stickers'];
     if (!tabs.includes(tabName)) tabName = 'home';
     const isSameTab = (currentActiveTab === tabName);
     currentActiveTab = tabName;
+
+    if (tabName === 'stickers') {
+      window.DuduStickerStore?.renderStickerCenterUI?.();
+    }
 
     tabs.forEach(t => {
       const el = document.getElementById(`tab-${t}`);

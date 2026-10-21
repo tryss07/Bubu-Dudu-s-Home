@@ -193,11 +193,14 @@
       queryLabel.textContent = isEn ? `Stickers for "${displayQuery}"` : `Stiker untuk "${displayQuery}"`;
     }
 
-    track.innerHTML = suggestions.map((s) => `
-      <button type="button" data-sticker-file="${s.filePath}" class="btn-suggestion-chip shrink-0 w-16 h-16 rounded-2xl bg-white/90 dark:bg-stone-800/90 hover:bg-[#FAF0E6] dark:hover:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center justify-center p-1.5 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-2xs group" title="${escapeHtml(s.title || 'Sticker')}">
-        <img src="${s.filePath}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-xs pointer-events-none">
-      </button>
-    `).join('');
+    track.innerHTML = suggestions.map((s) => {
+      const imgSrc = window.DuduStickerStore?.getStickerUrl?.(s.file) || s.filePath;
+      return `
+        <button type="button" data-sticker-file="${s.filePath}" class="btn-suggestion-chip shrink-0 w-16 h-16 rounded-2xl bg-white/90 dark:bg-stone-800/90 hover:bg-[#FAF0E6] dark:hover:bg-stone-700 border border-[#E8DACB] dark:border-stone-600 flex items-center justify-center p-1.5 cursor-pointer transition-transform hover:scale-110 active:scale-95 shadow-2xs group" title="${escapeHtml(s.title || 'Sticker')}">
+          <img src="${imgSrc}" alt="Sticker" loading="lazy" class="w-full h-full object-contain filter drop-shadow-xs pointer-events-none" onerror="window.DuduStickers?.handleImageError?.(this);">
+        </button>
+      `;
+    }).join('');
 
     suggestionsBox.classList.remove('hidden');
   }
@@ -2066,6 +2069,39 @@
     });
   }
 
+  function showMediaUploadBar(file, isVideo) {
+    const bar = document.getElementById('chat-upload-bar');
+    const nameEl = document.getElementById('chat-upload-filename');
+    const iconEl = document.getElementById('chat-upload-icon');
+    const pctEl = document.getElementById('chat-upload-percent');
+    const progEl = document.getElementById('chat-upload-progress');
+    if (!bar) return;
+
+    if (nameEl) nameEl.textContent = file.name || (isVideo ? 'Video' : 'Photo');
+    if (iconEl) iconEl.textContent = isVideo ? 'videocam' : 'photo_camera';
+    if (pctEl) pctEl.textContent = '0%';
+    if (progEl) progEl.style.width = '0%';
+    bar.classList.remove('hidden');
+  }
+
+  function setMediaUploadProgress(percent) {
+    const pctEl = document.getElementById('chat-upload-percent');
+    const progEl = document.getElementById('chat-upload-progress');
+    const pct = Math.min(100, Math.max(0, Math.round(percent)));
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    if (progEl) progEl.style.width = `${pct}%`;
+  }
+
+  function hideMediaUploadBar() {
+    const bar = document.getElementById('chat-upload-bar');
+    if (!bar) return;
+    setMediaUploadProgress(100);
+    setTimeout(() => {
+      bar.classList.add('hidden');
+      setMediaUploadProgress(0);
+    }, 600);
+  }
+
   async function sendMediaMessage(file) {
     if (!file) return;
     if (!activeSessionId) {
@@ -2083,10 +2119,13 @@
     const isImage = file.type && file.type.startsWith('image/');
     const mediaKind = isVideo ? 'video' : (isImage ? 'image' : 'file');
 
+    showMediaUploadBar(file, isVideo);
+
     // Route large files (>256KB) or non-media attachments to chunked encrypted blob system
     if (file.size > 256 * 1024 || (!isVideo && !isImage)) {
       const isEn = window.DuduI18n?.getLanguage() === 'en';
       if (file.size > 200 * 1024 * 1024) {
+        hideMediaUploadBar();
         if (window.showToast) window.showToast(isEn ? 'File too large (max 200MB)' : 'File terlalu besar (maks 200MB)');
         return;
       }
@@ -2095,7 +2134,9 @@
 
       try {
         if (!activeCryptoKey) await updateCryptoKey();
-        const { blobId, totalChunks } = await uploadEncryptedBlob(file, activeCryptoKey);
+        const { blobId, totalChunks } = await uploadEncryptedBlob(file, activeCryptoKey, (pct) => {
+          setMediaUploadProgress(pct);
+        });
 
         const blobMeta = {
           blobId,
@@ -2122,9 +2163,11 @@
         };
 
         await handleOutboundMessage(message);
+        hideMediaUploadBar();
         window.duduAudio?.playPop?.(520);
         if (window.showToast) window.showToast(isEn ? 'Encrypted media sent!' : 'Media terenkripsi terkirim!');
       } catch (err) {
+        hideMediaUploadBar();
         console.error('[ChatUI] Blob upload error:', err);
         if (window.showToast) window.showToast(isEn ? 'Failed to upload file' : 'Gagal mengunggah file');
       }
@@ -2134,8 +2177,10 @@
     // Small video (<= 256KB): Send inline
     if (isVideo) {
       try {
+        setMediaUploadProgress(40);
         const reader = new FileReader();
         reader.onload = async (e) => {
+          setMediaUploadProgress(80);
           const videoDataUrl = e.target.result;
           const message = {
             id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
@@ -2149,10 +2194,13 @@
           };
 
           await handleOutboundMessage(message);
+          setMediaUploadProgress(100);
+          hideMediaUploadBar();
           window.duduAudio?.playPop?.(520);
         };
         reader.readAsDataURL(file);
       } catch (err) {
+        hideMediaUploadBar();
         console.error('[ChatUI] Video processing error:', err);
         if (window.showToast) {
           const isEn = window.DuduI18n?.getLanguage() === 'en';
@@ -2164,7 +2212,9 @@
 
     // Small images (<= 256KB): Compress and send inline
     try {
+      setMediaUploadProgress(40);
       const compressedDataUrl = await compressImageFile(file, 1200, 0.75);
+      setMediaUploadProgress(80);
       const message = {
         id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
         sessionId: activeSessionId,
@@ -2177,8 +2227,11 @@
       };
 
       await handleOutboundMessage(message);
+      setMediaUploadProgress(100);
+      hideMediaUploadBar();
       window.duduAudio?.playPop?.(520);
     } catch (err) {
+      hideMediaUploadBar();
       console.error('[ChatUI] Photo processing error:', err);
       if (window.showToast) {
         const isEn = window.DuduI18n?.getLanguage() === 'en';
@@ -2645,17 +2698,42 @@
     const isEn = lang === 'en';
 
     const catalog = window.DUDU_STICKERS_CATALOG || { dudu: [], bubu: [], couple: [] };
-    const duduFiles = catalog.dudu || [];
-    const bubuFiles = catalog.bubu || [];
-    const coupleFiles = catalog.couple || [];
+    const downloadedSet = window.DuduStickerStore?.downloadedFilesSet;
+    const hasDownloaded = Boolean(downloadedSet && downloadedSet.size > 0);
+
+    // Only display stickers that are downloaded into local storage!
+    const duduFiles = hasDownloaded 
+      ? (catalog.dudu || []).filter(f => downloadedSet.has(f))
+      : (catalog.dudu || []).slice(0, 100);
+    const bubuFiles = hasDownloaded 
+      ? (catalog.bubu || []).filter(f => downloadedSet.has(f))
+      : (catalog.bubu || []).slice(0, 100);
+    const coupleFiles = hasDownloaded 
+      ? (catalog.couple || []).filter(f => downloadedSet.has(f))
+      : (catalog.couple || []).slice(0, 100);
+
+    // Update Category Tab Count Badges with real downloaded counts
+    const allTabBtn = document.querySelector('.stk-cat-btn[data-cat="all"]');
+    const duduTabBtn = document.querySelector('.stk-cat-btn[data-cat="dudu"]');
+    const bubuTabBtn = document.querySelector('.stk-cat-btn[data-cat="bubu"]');
+    const coupleTabBtn = document.querySelector('.stk-cat-btn[data-cat="couple"]');
+
+    const totalDownloaded = duduFiles.length + bubuFiles.length + coupleFiles.length;
+    if (allTabBtn) allTabBtn.textContent = isEn ? `🌟 All (${totalDownloaded})` : `🌟 Semua (${totalDownloaded})`;
+    if (duduTabBtn) duduTabBtn.textContent = isEn ? `🐻 Only Dudu (${duduFiles.length})` : `🐻 Hanya Dudu (${duduFiles.length})`;
+    if (bubuTabBtn) bubuTabBtn.textContent = isEn ? `🐼 Only Bubu (${bubuFiles.length})` : `🐼 Hanya Bubu (${bubuFiles.length})`;
+    if (coupleTabBtn) coupleTabBtn.textContent = isEn ? `🐻🐼 Together (${coupleFiles.length})` : `🐻🐼 Berdua (${coupleFiles.length})`;
 
     function renderStkBtn(file, cat, idx) {
-      const filePath = `assets/stickers_${cat}/${file}`;
-      const badgeIcon = cat === 'bubu' ? '🐼' : (cat === 'couple' ? '🐻🐼' : '🐻');
-      const badgeBg = cat === 'bubu' ? 'bg-[#D48B70]/80' : (cat === 'couple' ? 'bg-[#8D5B4C]/80' : 'bg-[#5C4033]/80');
-      const title = cat === 'bubu'
+      const canonical = catalog.getCanonical ? catalog.getCanonical(file) : file;
+      const actualCat = catalog.getCategory ? catalog.getCategory(canonical) : cat;
+      const localUrl = window.DuduStickerStore?.getStickerUrl?.(canonical) || `assets/stickers_${actualCat}/${canonical}`;
+      const filePath = `assets/stickers_${actualCat}/${canonical}`;
+      const badgeIcon = actualCat === 'bubu' ? '🐼' : (actualCat === 'couple' ? '🐻🐼' : '🐻');
+      const badgeBg = actualCat === 'bubu' ? 'bg-[#D48B70]/80' : (actualCat === 'couple' ? 'bg-[#8D5B4C]/80' : 'bg-[#5C4033]/80');
+      const title = actualCat === 'bubu'
         ? (isEn ? `Bubu Sticker #${idx + 1}` : `Stiker Bubu #${idx + 1}`)
-        : (cat === 'couple'
+        : (actualCat === 'couple'
             ? (isEn ? `Dudu & Bubu #${idx + 1}` : `Stiker Berdua #${idx + 1}`)
             : (isEn ? `Dudu Sticker #${idx + 1}` : `Stiker Dudu #${idx + 1}`));
       const isFav = isFavoriteSticker(filePath);
@@ -2666,13 +2744,13 @@
           data-sticker-file="${filePath}" 
           data-gif-file="${filePath}" 
           data-mockup-file="${filePath}" 
-          data-cat="${cat}" 
+          data-cat="${actualCat}" 
           class="chat-sticker-select-btn chat-gif-stk-btn chat-mockup-stk-btn button-press p-1.5 rounded-2xl bg-white dark:bg-stone-700/80 hover:bg-[#F5C7A9]/40 border border-[#E8DACB] dark:border-stone-600 flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-105 shadow-2xs relative group" 
           title="${escapeHtml(title)}">
           <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md ${badgeBg} text-[8px] font-bold text-white tracking-wider pointer-events-none">${badgeIcon}</span>
           ${favStarHtml}
           <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="${filePath}" alt="Sticker" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
+            <img src="${localUrl}" alt="Sticker" loading="lazy" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
           </div>
         </button>
       `;
@@ -2770,7 +2848,26 @@
       ].join('');
     }
 
+    const morePacksTile = `
+      <a href="#stickers" data-tab="stickers" class="mockup-nav-item button-press p-2 rounded-2xl bg-[#FAF5EE] dark:bg-stone-700/60 hover:bg-[#F5C7A9]/40 border-2 border-dashed border-[#8D5B4C]/40 flex flex-col items-center justify-center text-center cursor-pointer min-h-[76px]" title="Get More Packs">
+        <span class="text-xl">🛍️</span>
+        <span class="font-heading font-extrabold text-[10px] text-[#8D5B4C] dark:text-[#F5C7A9] mt-0.5">${isEn ? 'More Packs' : 'Pusat Stiker'}</span>
+      </a>
+    `;
+    if (category !== 'fav') {
+      itemsHtml += morePacksTile;
+    }
+
     grid.innerHTML = itemsHtml;
+
+    // Attach click listener for More Packs navigation
+    grid.querySelectorAll('a[data-tab="stickers"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeStickerTray();
+        window.switchTab?.('stickers');
+      });
+    });
 
     // Attach click listeners to all sticker buttons in grid
     grid.querySelectorAll('.chat-sticker-select-btn, .chat-gif-stk-btn, .chat-mockup-stk-btn').forEach(btn => {
@@ -4001,6 +4098,12 @@
     uploadBlob: uploadEncryptedBlob,
     downloadBlob: downloadEncryptedBlob,
     downloadAndDisplayBlob: downloadAndDisplayBlob,
+    refreshStickers: () => {
+      const tray = document.getElementById('chat-sticker-tray');
+      if (tray && !tray.classList.contains('hidden')) {
+        setupStickerTray(activeStickerCategory, activeGifSubCategory);
+      }
+    },
     previewImage: previewImage,
     closePhotoPreview: closePhotoPreview,
     openSettings: openChatSettingsModal,
