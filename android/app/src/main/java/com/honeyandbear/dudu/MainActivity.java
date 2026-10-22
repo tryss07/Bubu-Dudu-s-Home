@@ -70,6 +70,21 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        Log.w("DuduCrashGuard", "onTrimMemory received level: " + level);
+        if (getBridge() != null && getBridge().getWebView() != null) {
+            getBridge().getWebView().post(() -> {
+                try {
+                    getBridge().getWebView().freeMemory();
+                    getBridge().getWebView().clearCache(false);
+                } catch (Throwable ignored) {}
+            });
+        }
+        System.gc();
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
@@ -80,7 +95,21 @@ public class MainActivity extends BridgeActivity {
         if (intent == null) return;
         String action = intent.getAction();
         String targetTab = intent.getStringExtra("target_tab");
-        if ("ACTION_OPEN_CHAT".equals(action) || "chat".equals(targetTab)) {
+        if ("ACTION_MUSIC_PREV".equals(action)) {
+            dispatchMusicControl("prev");
+        } else if ("ACTION_MUSIC_TOGGLE".equals(action)) {
+            dispatchMusicControl("toggle");
+        } else if ("ACTION_MUSIC_NEXT".equals(action)) {
+            dispatchMusicControl("next");
+        } else if ("ACTION_OPEN_MUSIC".equals(action) || "music".equals(targetTab)) {
+            if (getBridge() != null && getBridge().getWebView() != null) {
+                getBridge().getWebView().post(() -> {
+                    getBridge().getWebView().evaluateJavascript(
+                        "window.location.hash = '#music'; if (typeof switchTab === 'function') switchTab('music');", null
+                    );
+                });
+            }
+        } else if ("ACTION_OPEN_CHAT".equals(action) || "chat".equals(targetTab)) {
             if (getBridge() != null && getBridge().getWebView() != null) {
                 getBridge().getWebView().post(() -> {
                     getBridge().getWebView().evaluateJavascript(
@@ -88,6 +117,16 @@ public class MainActivity extends BridgeActivity {
                     );
                 });
             }
+        }
+    }
+
+    private void dispatchMusicControl(String action) {
+        if (getBridge() != null && getBridge().getWebView() != null) {
+            getBridge().getWebView().post(() -> {
+                getBridge().getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new CustomEvent('dudu-music-control', { detail: { action: '" + action + "' } }));", null
+                );
+            });
         }
     }
 }

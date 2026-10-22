@@ -1544,7 +1544,7 @@
     if (img.src !== remoteUrl) {
       img.src = remoteUrl;
     } else {
-      img.src = 'assets/stickers_dudu/STK-20260307-WA0001.webp';
+      img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><text y="18" font-size="16">🐾</text></svg>';
     }
   }
 

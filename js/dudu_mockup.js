@@ -1459,7 +1459,8 @@
 
   function updateBottomNavOverflow() {
     const moreBtn = document.getElementById('btn-bottom-nav-more');
-    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const bottomNav = document.getElementById('bottom-nav-bar');
+    const expandedPanel = document.getElementById('bottom-nav-expanded-panel');
     const secondaryItems = document.querySelectorAll('.bottom-nav-secondary');
     if (!moreBtn) return;
 
@@ -1482,8 +1483,9 @@
     } else {
       moreBtn.classList.add('hidden');
       moreBtn.classList.remove('flex');
-      if (morePopup) {
-        morePopup.classList.add('hidden');
+      if (expandedPanel) {
+        expandedPanel.classList.add('hidden');
+        bottomNav?.classList.remove('dock-expanded');
         document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
       }
     }
@@ -1491,39 +1493,49 @@
 
   function initBottomNavOverflow() {
     const moreBtn = document.getElementById('btn-bottom-nav-more');
-    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const bottomNav = document.getElementById('bottom-nav-bar');
+    const expandedPanel = document.getElementById('bottom-nav-expanded-panel');
     const moreIcon = document.getElementById('bottom-nav-more-icon');
 
     updateBottomNavOverflow();
     window.addEventListener('resize', updateBottomNavOverflow);
 
+    const closeExpandedNav = () => {
+      if (expandedPanel && !expandedPanel.classList.contains('hidden')) {
+        expandedPanel.classList.add('hidden');
+        bottomNav?.classList.remove('dock-expanded');
+        moreIcon?.classList.remove('rotate-180');
+        updateBottomNavHeightVar();
+      }
+    };
+
     moreBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (!morePopup) return;
-      updateBottomNavHeightVar();
-      const isOpen = !morePopup.classList.contains('hidden');
+      if (!expandedPanel || !bottomNav) return;
+      const isOpen = !expandedPanel.classList.contains('hidden');
       if (isOpen) {
-        morePopup.classList.add('hidden');
+        expandedPanel.classList.add('hidden');
+        bottomNav.classList.remove('dock-expanded');
         moreIcon?.classList.remove('rotate-180');
       } else {
-        morePopup.classList.remove('hidden');
+        expandedPanel.classList.remove('hidden');
+        bottomNav.classList.add('dock-expanded');
         moreIcon?.classList.add('rotate-180');
         window.duduAudio?.playPop?.(480);
       }
+      updateBottomNavHeightVar();
     });
 
-    morePopup?.querySelectorAll('.mockup-nav-item').forEach(item => {
+    expandedPanel?.querySelectorAll('.mockup-nav-item').forEach(item => {
       item.addEventListener('click', () => {
-        morePopup.classList.add('hidden');
-        moreIcon?.classList.remove('rotate-180');
+        closeExpandedNav();
       });
     });
 
     document.addEventListener('click', (e) => {
-      if (morePopup && !morePopup.classList.contains('hidden')) {
-        if (!morePopup.contains(e.target) && !moreBtn?.contains(e.target)) {
-          morePopup.classList.add('hidden');
-          moreIcon?.classList.remove('rotate-180');
+      if (bottomNav && bottomNav.classList.contains('dock-expanded')) {
+        if (!bottomNav.contains(e.target)) {
+          closeExpandedNav();
         }
       }
     });
@@ -1532,15 +1544,16 @@
   function initChatInputCollapse() {
     const chatInput = document.getElementById('chat-text-input');
     const bottomNav = document.getElementById('bottom-nav-bar');
-    const morePopup = document.getElementById('bottom-nav-more-popup');
+    const expandedPanel = document.getElementById('bottom-nav-expanded-panel');
     const tabChat = document.getElementById('tab-chat');
     const messagesContainer = document.getElementById('chat-messages-container');
 
     chatInput?.addEventListener('focus', () => {
       bottomNav?.classList.add('nav-collapsed');
       tabChat?.classList.add('chat-input-focused');
-      if (morePopup) {
-        morePopup.classList.add('hidden');
+      if (expandedPanel) {
+        expandedPanel.classList.add('hidden');
+        bottomNav?.classList.remove('dock-expanded');
         document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
       }
     });
@@ -1618,10 +1631,12 @@
       }
     });
 
-    const morePopup = document.getElementById('bottom-nav-more-popup');
-    if (morePopup) {
-      morePopup.classList.add('hidden');
+    const expandedPanel = document.getElementById('bottom-nav-expanded-panel');
+    if (expandedPanel) {
+      expandedPanel.classList.add('hidden');
+      document.getElementById('bottom-nav-bar')?.classList.remove('dock-expanded');
       document.getElementById('bottom-nav-more-icon')?.classList.remove('rotate-180');
+      updateBottomNavHeightVar();
     }
 
     document.querySelectorAll('.mockup-nav-item').forEach(btn => {
@@ -1637,16 +1652,13 @@
 
     const isSecondaryTab = ['calendar', 'bucket', 'music', 'wardrobe'].includes(tabName);
     const moreBtn = document.getElementById('btn-bottom-nav-more');
-    const moreDot = document.getElementById('bottom-nav-more-dot');
     if (moreBtn) {
       if (isSecondaryTab) {
         moreBtn.classList.add('dock-item-active', 'text-white');
         moreBtn.classList.remove('opacity-75');
-        moreDot?.classList.remove('hidden');
       } else {
         moreBtn.classList.remove('dock-item-active', 'text-white');
         moreBtn.classList.add('opacity-75');
-        moreDot?.classList.add('hidden');
       }
     }
 
@@ -2965,7 +2977,32 @@
       }
     } catch (_) {}
 
-    // 2. Capacitor LocalNotifications fallback
+    // 2. Web MediaSession API (Android lockscreen & system quick settings widget)
+    if ('mediaSession' in navigator) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: `🐻 ${cleanTitle}`,
+          artist: 'Dudu & Bubu Bedtime Lofi 🐾',
+          album: 'Cozy Radio • 24/7 Chill Beats',
+          artwork: [
+            { src: 'assets/dudu_avatar.png', sizes: '128x128', type: 'image/png' },
+            { src: 'assets/mockup_art/music_bedtime.png', sizes: '512x512', type: 'image/png' }
+          ]
+        });
+        navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+        navigator.mediaSession.setActionHandler('play', () => lofiEngine.start());
+        navigator.mediaSession.setActionHandler('pause', () => lofiEngine.stop());
+        navigator.mediaSession.setActionHandler('previoustrack', () => lofiEngine.prevTrack());
+        navigator.mediaSession.setActionHandler('nexttrack', () => lofiEngine.nextTrack());
+        navigator.mediaSession.setActionHandler('seekto', (details) => {
+          if (details.seekTime && lofiEngine.audio?.duration) {
+            lofiEngine.seek((details.seekTime / lofiEngine.audio.duration) * 100);
+          }
+        });
+      } catch (_) {}
+    }
+
+    // 3. Capacitor LocalNotifications fallback
     try {
       if (window.Capacitor?.Plugins?.LocalNotifications) {
         const notifId = 9002;
@@ -2981,7 +3018,7 @@
         await window.Capacitor.Plugins.LocalNotifications.schedule({
           notifications: [{
             id: notifId,
-            title: isPlaying ? `🎵 ${cleanTitle}` : `⏸ ${cleanTitle} (Paused)`,
+            title: isPlaying ? `🎵 🐻 ${cleanTitle}` : `⏸ 🐻 ${cleanTitle} (Paused)`,
             body: `${artist} • Tap to view player`,
             channelId: 'dudu_music_channel',
             ongoing: isPlaying,
@@ -2991,6 +3028,18 @@
       }
     } catch (_) {}
   }
+
+  // Handle music control actions from native Android notification buttons
+  window.addEventListener('dudu-music-control', (e) => {
+    const action = e.detail?.action;
+    if (action === 'prev') {
+      lofiEngine.prevTrack();
+    } else if (action === 'next') {
+      lofiEngine.nextTrack();
+    } else if (action === 'toggle') {
+      lofiEngine.toggle();
+    }
+  });
 
   window.addEventListener('beforeunload', () => lofiEngine.savePlaybackState());
   window.addEventListener('pagehide', () => lofiEngine.savePlaybackState());

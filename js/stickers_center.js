@@ -454,7 +454,7 @@
     dispatchProgress();
 
     // Download pool worker - gentle concurrency to protect low-end mobile devices & WebView
-    const CONCURRENCY = 6;
+    const CONCURRENCY = 4;
     let fileIndex = 0;
     let lastProgressTime = 0;
 
@@ -476,7 +476,7 @@
         if (!file) continue;
 
         // Skip if already in memory
-        if (!memoryBlobUrls.has(file)) {
+        if (!downloadedFilesSet.has(file)) {
           const canonical = catalog?.getCanonical(file) || file;
           const cat = catalog?.getCategory(canonical) || 'dudu';
           const remoteUrl = `${getHttpBase()}/assets/stickers_${cat}/${canonical}`;
@@ -487,14 +487,10 @@
               const blob = await res.blob();
               await saveStoredBlob(file, cat, blob, packId);
               downloadedFilesSet.add(file);
-              const objectUrl = URL.createObjectURL(blob);
-              touchBlobUrl(file, objectUrl);
             }
           } catch (err) {
             // Silently continue for resilience; retry on next run
           }
-        } else {
-          downloadedFilesSet.add(file);
         }
 
         completed++;
@@ -901,6 +897,7 @@
     getStickerUrl,
     getStoredBlob,
     touchBlobUrl,
+    memoryBlobUrls,
     getDownloadedStickers,
     downloadPack,
     deletePack,

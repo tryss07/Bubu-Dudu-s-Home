@@ -85,25 +85,26 @@ function startServer() {
     await page.click('#btn-bottom-nav-more');
     await page.waitForTimeout(200);
 
-    const isPopupVisible = await page.$eval('#bottom-nav-more-popup', el => !el.classList.contains('hidden'));
-    if (!isPopupVisible) {
-      throw new Error('FAIL: #bottom-nav-more-popup should open when clicking #btn-bottom-nav-more!');
+    const isExpandedVisible = await page.$eval('#bottom-nav-expanded-panel', el => !el.classList.contains('hidden'));
+    const isDockExpanded = await page.$eval('#bottom-nav-bar', el => el.classList.contains('dock-expanded'));
+    if (!isExpandedVisible || !isDockExpanded) {
+      throw new Error('FAIL: #bottom-nav-bar should expand and #bottom-nav-expanded-panel open when clicking #btn-bottom-nav-more!');
     }
-    console.log('✅ Passed: #bottom-nav-more-popup popped up with secondary tabs.');
+    console.log('✅ Passed: #bottom-nav-bar expanded up with secondary tabs.');
 
-    // Click Calendar in popup
-    await page.click('#bottom-nav-more-popup a[data-tab="calendar"]');
+    // Click Calendar in expanded panel
+    await page.click('#bottom-nav-expanded-panel a[data-tab="calendar"]');
     await page.waitForTimeout(300);
 
     const isCalendarTabVisible = await page.$eval('#tab-calendar', el => !el.classList.contains('hidden'));
     if (!isCalendarTabVisible) {
-      throw new Error('FAIL: Switching to Calendar tab from More popup failed!');
+      throw new Error('FAIL: Switching to Calendar tab from expanded dock failed!');
     }
-    const isPopupClosed = await page.$eval('#bottom-nav-more-popup', el => el.classList.contains('hidden'));
-    if (!isPopupClosed) {
-      throw new Error('FAIL: #bottom-nav-more-popup should close after tab selection!');
+    const isExpandedClosed = await page.$eval('#bottom-nav-expanded-panel', el => el.classList.contains('hidden'));
+    if (!isExpandedClosed) {
+      throw new Error('FAIL: #bottom-nav-expanded-panel should close after tab selection!');
     }
-    console.log('✅ Passed: Switched to Calendar and popup closed.');
+    console.log('✅ Passed: Switched to Calendar and expanded dock closed.');
 
     // 3. Switch to Chat Tab & Test Chat Screen Space Efficiency & Input Tap Collapse
     console.log('Test 3: Chat screen layout & space efficiency...');

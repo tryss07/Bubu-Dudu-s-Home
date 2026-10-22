@@ -187,6 +187,30 @@ const assert = require('assert');
   console.log(`Saved in localStorage: track #${savedIdx}, position ${savedPos}s`);
   console.log('✅ Passed: Position persistence verified!');
 
+  // 9. Test Native Transport Controls (Prev, Next, Toggle) & MediaSession
+  console.log('\nTest 9: Testing native music transport events...');
+  await page.evaluate(() => {
+    window.DuduMockup.lofiEngine.currentTrackIndex = 10;
+    if (window.DuduMockup.lofiEngine.audio) {
+      window.DuduMockup.lofiEngine.audio.currentTime = 0;
+    }
+    window.dispatchEvent(new CustomEvent('dudu-music-control', { detail: { action: 'next' } }));
+  });
+  await page.waitForTimeout(100);
+  const trackAfterNextEvent = await page.evaluate(() => window.DuduMockup.lofiEngine.currentTrackIndex);
+  assert.strictEqual(trackAfterNextEvent, 11, 'Next action must advance track index');
+
+  await page.evaluate(() => {
+    if (window.DuduMockup.lofiEngine.audio) {
+      window.DuduMockup.lofiEngine.audio.currentTime = 0;
+    }
+    window.dispatchEvent(new CustomEvent('dudu-music-control', { detail: { action: 'prev' } }));
+  });
+  await page.waitForTimeout(100);
+  const trackAfterPrevEvent = await page.evaluate(() => window.DuduMockup.lofiEngine.currentTrackIndex);
+  assert.strictEqual(trackAfterPrevEvent, 10, 'Prev action must return to previous track index');
+  console.log('✅ Passed: Native music transport controls verified!');
+
   await browser.close();
   console.log('\n🎉 ALL MUSIC PANEL TESTS PASSED 100%!\n');
 })().catch(err => {

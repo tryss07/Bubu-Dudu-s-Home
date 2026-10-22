@@ -2787,10 +2787,71 @@
     if (bubuTabBtn) bubuTabBtn.textContent = isEn ? `🐼 Only Bubu (${bubuFiles.length})` : `🐼 Hanya Bubu (${bubuFiles.length})`;
     if (coupleTabBtn) coupleTabBtn.textContent = isEn ? `🐻🐼 Together (${coupleFiles.length})` : `🐻🐼 Berdua (${coupleFiles.length})`;
 
+    let stickerTrayObserver = null;
+    function observeStickerTrayImages(targetGrid) {
+      if (stickerTrayObserver) {
+        stickerTrayObserver.disconnect();
+        stickerTrayObserver = null;
+      }
+
+      const loadImg = (img, base) => {
+        if (!img || !base) return;
+        if (img.dataset.loaded === 'true') return;
+        img.dataset.loaded = 'true';
+
+        const cached = window.DuduStickerStore?.memoryBlobUrls?.get?.(base);
+        if (cached) {
+          img.src = `${cached}#${base}`;
+          return;
+        }
+
+        if (window.DuduStickerStore?.getStoredBlob) {
+          window.DuduStickerStore.getStoredBlob(base).then(blob => {
+            if (blob) {
+              try {
+                const url = URL.createObjectURL(blob);
+                window.DuduStickerStore?.touchBlobUrl?.(base, url);
+                img.src = `${url}#${base}`;
+              } catch (_) {}
+            } else {
+              const cat = catalog?.getCategory ? catalog.getCategory(base) : 'dudu';
+              const serverBase = window.DuduChatSocket?.getHttpBaseUrl?.() || 'https://chat.nexora-v1.my.id';
+              img.src = `${serverBase}/assets/stickers_${cat}/${base}`;
+            }
+          }).catch(() => {});
+        }
+      };
+
+      if (typeof IntersectionObserver !== 'undefined') {
+        stickerTrayObserver = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              obs.unobserve(img);
+              const base = img.getAttribute('data-stk-base');
+              loadImg(img, base);
+            }
+          });
+        }, {
+          root: document.getElementById('chat-sticker-tray'),
+          rootMargin: '120px'
+        });
+
+        targetGrid.querySelectorAll('img[data-stk-base]').forEach(img => {
+          stickerTrayObserver.observe(img);
+        });
+      } else {
+        targetGrid.querySelectorAll('img[data-stk-base]').forEach(img => {
+          loadImg(img, img.getAttribute('data-stk-base'));
+        });
+      }
+    }
+
     function renderStkBtn(file, cat, idx) {
       const canonical = catalog.getCanonical ? catalog.getCanonical(file) : file;
       const actualCat = catalog.getCategory ? catalog.getCategory(canonical) : cat;
-      const localUrl = window.DuduStickerStore?.getStickerUrl?.(canonical) || `assets/stickers_${actualCat}/${canonical}`;
+      const cachedBlob = window.DuduStickerStore?.memoryBlobUrls?.get?.(canonical);
+      const localUrl = cachedBlob ? `${cachedBlob}#${canonical}` : '';
       const filePath = `assets/stickers_${actualCat}/${canonical}`;
       const badgeIcon = actualCat === 'bubu' ? '🐼' : (actualCat === 'couple' ? '🐻🐼' : '🐻');
       const badgeBg = actualCat === 'bubu' ? 'bg-[#D48B70]/80' : (actualCat === 'couple' ? 'bg-[#8D5B4C]/80' : 'bg-[#5C4033]/80');
@@ -2813,7 +2874,7 @@
           <span class="absolute top-1 left-1 px-1 py-0.2 rounded-md ${badgeBg} text-[8px] font-bold text-white tracking-wider pointer-events-none">${badgeIcon}</span>
           ${favStarHtml}
           <div class="w-16 h-16 flex items-center justify-center pointer-events-none">
-            <img src="${localUrl}" alt="Sticker" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
+            <img data-stk-base="${canonical}" src="${localUrl || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 24 24\'><text y=\'18\' font-size=\'16\'>🐾</text></svg>'}" alt="Sticker" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain filter drop-shadow-xs" onerror="window.DuduStickers?.handleImageError?.(this);">
           </div>
         </button>
       `;
@@ -2922,6 +2983,7 @@
     }
 
     grid.innerHTML = itemsHtml;
+    observeStickerTrayImages(grid);
 
     // Attach click listener for More Packs navigation
     grid.querySelectorAll('a[data-tab="stickers"]').forEach(a => {

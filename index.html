@@ -123,7 +123,7 @@
       <!-- Live Sync Pill & Audio/Theme Controls -->
       <div class="flex items-center gap-1.5 sm:gap-2">
         <div id="header-sync-status" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 dark:bg-stone-800 border border-[#E8DACB] text-[11px] font-bold text-[#8D5B4C] dark:text-stone-300 transition-all shadow-2xs" style="display: none !important;" title="Connection status with partner">
-          <span id="header-sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="header-sync-dot" class="hidden"></span>
           <span id="header-sync-text" class="hidden sm:inline" data-i18n="header_synced">synced ♡</span>
         </div>
 
@@ -862,7 +862,7 @@
               </h3>
             </div>
             <div id="chat-partner-presence-container" class="flex items-center gap-1.5 mt-0.5 text-left select-none">
-              <span id="chat-partner-presence-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+              <span id="chat-partner-presence-dot" class="hidden"></span>
               <span id="chat-partner-presence-text" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold truncate">
                 online 💫
               </span>
@@ -1100,33 +1100,33 @@
   <!-- ====================================================================
        BOTTOM DOCK (timeline.jpg warm brown dock)
        ==================================================================== -->
-  <!-- MORE POPUP MENU (Floats above dock on small screens) -->
-  <div id="bottom-nav-more-popup" class="hidden fixed left-0 right-0 mx-auto w-[calc(100%-2.5rem)] max-w-[340px] z-50 cozy-brown-dock dark:bg-[#1e1814]/95 dark:text-[#E8DACB] rounded-2xl p-1.5 shadow-2xl border border-white/20 dark:border-stone-700/60 backdrop-blur-md transition-all duration-200">
-    <div class="grid grid-cols-4 gap-1 text-center">
-      <!-- Calendar -->
-      <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center py-1 px-1 rounded-xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
-        <span class="material-symbols-outlined text-xl">calendar_month</span>
-        <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_calendar">Calendar</span>
-      </a>
-      <!-- Planner -->
-      <a href="#bucket" data-tab="bucket" class="mockup-nav-item flex flex-col items-center justify-center py-1 px-1 rounded-xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
-        <span class="material-symbols-outlined text-xl">checklist</span>
-        <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_bucket">Planner</span>
-      </a>
-      <!-- Music -->
-      <a href="#music" data-tab="music" class="mockup-nav-item flex flex-col items-center justify-center py-1 px-1 rounded-xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
-        <span class="material-symbols-outlined text-xl">music_note</span>
-        <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_music">Music</span>
-      </a>
-      <!-- Closet -->
-      <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item flex flex-col items-center justify-center py-1 px-1 rounded-xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
-        <span class="material-symbols-outlined text-xl">styler</span>
-        <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_wardrobe">Closet</span>
-      </a>
+  <nav id="bottom-nav-bar" class="fixed bottom-2 left-0 right-0 mx-auto w-[calc(100%-1.5rem)] max-w-[480px] z-50 cozy-brown-dock rounded-3xl px-2 py-1.5 shadow-xl transition-all duration-300">
+    <!-- EXPANDABLE DRAWER PANEL (Expands inside the dock when More is tapped) -->
+    <div id="bottom-nav-expanded-panel" class="hidden overflow-hidden transition-all duration-300 border-b border-white/15 dark:border-white/10 pb-2 mb-1.5">
+      <div class="grid grid-cols-4 gap-1 text-center pt-1">
+        <!-- Calendar -->
+        <a href="#calendar" data-tab="calendar" class="mockup-nav-item flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
+          <span class="material-symbols-outlined text-xl">calendar_month</span>
+          <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_calendar">Calendar</span>
+        </a>
+        <!-- Planner -->
+        <a href="#bucket" data-tab="bucket" class="mockup-nav-item flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
+          <span class="material-symbols-outlined text-xl">checklist</span>
+          <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_bucket">Planner</span>
+        </a>
+        <!-- Music -->
+        <a href="#music" data-tab="music" class="mockup-nav-item flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
+          <span class="material-symbols-outlined text-xl">music_note</span>
+          <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_music">Music</span>
+        </a>
+        <!-- Closet -->
+        <a href="#wardrobe" data-tab="wardrobe" class="mockup-nav-item flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl hover:bg-white/10 dark:hover:bg-white/5 transition-colors button-press">
+          <span class="material-symbols-outlined text-xl">styler</span>
+          <span class="text-[9px] font-heading font-bold mt-0.5" data-i18n="nav_wardrobe">Closet</span>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <nav id="bottom-nav-bar" class="fixed bottom-2 left-0 right-0 mx-auto w-[calc(100%-1.5rem)] max-w-[480px] z-50 cozy-brown-dock rounded-full px-2 py-1.5 shadow-xl transition-all">
     <div class="flex justify-around items-center">
       
       <!-- Home -->
@@ -1186,11 +1186,10 @@
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_wardrobe">Closet</span>
       </a>
 
-      <!-- More Menu Button (Arrow Up) -->
+      <!-- More Menu Button (Toggles expansion of dock) -->
       <button id="btn-bottom-nav-more" type="button" class="mockup-nav-item hidden flex flex-col items-center justify-center py-1 px-2.5 button-press cursor-pointer relative" title="More Menus">
         <div class="relative">
           <span id="bottom-nav-more-icon" class="material-symbols-outlined text-xl transition-transform duration-200">keyboard_arrow_up</span>
-          <span id="bottom-nav-more-dot" class="hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-300 ring-2 ring-[#855943]"></span>
         </div>
         <span class="text-[9px] font-heading font-bold" data-i18n="nav_more">More</span>
       </button>

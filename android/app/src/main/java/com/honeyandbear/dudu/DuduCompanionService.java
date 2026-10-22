@@ -155,23 +155,60 @@ public class DuduCompanionService extends Service {
                 manager.createNotificationChannel(channel);
             }
 
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setAction("ACTION_OPEN_MUSIC");
-            intent.putExtra("target_tab", "music");
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    context, MUSIC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            Intent openIntent = new Intent(context, MainActivity.class);
+            openIntent.setAction("ACTION_OPEN_MUSIC");
+            openIntent.putExtra("target_tab", "music");
+            openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent openPending = PendingIntent.getActivity(
+                    context, 100, openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
+
+            Intent prevIntent = new Intent(context, MainActivity.class);
+            prevIntent.setAction("ACTION_MUSIC_PREV");
+            prevIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent prevPending = PendingIntent.getActivity(
+                    context, 101, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            Intent toggleIntent = new Intent(context, MainActivity.class);
+            toggleIntent.setAction("ACTION_MUSIC_TOGGLE");
+            toggleIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent togglePending = PendingIntent.getActivity(
+                    context, 102, toggleIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            Intent nextIntent = new Intent(context, MainActivity.class);
+            nextIntent.setAction("ACTION_MUSIC_NEXT");
+            nextIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent nextPending = PendingIntent.getActivity(
+                    context, 103, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            android.graphics.Bitmap duduArt = null;
+            try {
+                duduArt = android.graphics.BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+            } catch (Throwable ignored) {}
+
+            androidx.media.app.NotificationCompat.MediaStyle mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle()
+                    .setShowActionsInCompactView(0, 1, 2);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_MUSIC_ID)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(isPlaying ? "🎵 " + title : "⏸ " + title)
-                    .setContentText(artist + (isPlaying ? " (Playing)" : " (Paused)"))
-                    .setContentIntent(pendingIntent)
+                    .setContentTitle("🐻 " + title)
+                    .setContentText(artist + (isPlaying ? " • Playing 🎵" : " • Paused ⏸"))
+                    .setContentIntent(openPending)
                     .setOngoing(isPlaying)
                     .setAutoCancel(!isPlaying)
-                    .setPriority(NotificationCompat.PRIORITY_LOW);
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setStyle(mediaStyle)
+                    .addAction(android.R.drawable.ic_media_previous, "Prev", prevPending)
+                    .addAction(isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play, isPlaying ? "Pause" : "Play", togglePending)
+                    .addAction(android.R.drawable.ic_media_next, "Next", nextPending);
+
+            if (duduArt != null) {
+                builder.setLargeIcon(duduArt);
+            }
 
             manager.notify(MUSIC_NOTIFICATION_ID, builder.build());
         } catch (Throwable t) {
@@ -210,7 +247,8 @@ public class DuduCompanionService extends Service {
             if (pm != null && (wakeLock == null || !wakeLock.isHeld())) {
                 wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Dudu:CompanionWakeLock");
                 wakeLock.setReferenceCounted(false);
-                wakeLock.acquire(24 * 60 * 60 * 1000L); // 24 hours max safeguard
+                // Safe bounded wakelock timeout (60s) prevents Samsung Battery Guardian force-stop
+                wakeLock.acquire(60 * 1000L);
             }
         } catch (Exception e) {
             Log.w(TAG, "Could not acquire WakeLock: " + e.getMessage());
