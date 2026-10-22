@@ -49,8 +49,8 @@ function startServer() {
   const page = await context.newPage();
 
   try {
-    await page.goto(`http://localhost:${PORT}/index.html`);
-    await page.waitForLoadState('networkidle');
+    await page.goto(`http://localhost:${PORT}/index.html`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
 
     // 1. Verify Header Sync Indicator is HIDDEN
     console.log('Test 1: Header sync indicator hidden...');
@@ -272,7 +272,8 @@ function startServer() {
       location.hash = '#chat';
     }, targetSessionId);
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(500);
     await page.click('a[data-tab="chat"]');
     await page.waitForTimeout(300);
 

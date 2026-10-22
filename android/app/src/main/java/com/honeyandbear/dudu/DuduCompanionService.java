@@ -1,5 +1,6 @@
 package com.honeyandbear.dudu;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -541,9 +543,37 @@ public class DuduCompanionService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "onTaskRemoved triggered: app swiped away. Companion foreground service continuing.");
+        Log.d(TAG, "onTaskRemoved triggered: app swiped away. Scheduling resurrection alarm.");
         isAppForeground = false;
         ensureWebSocketConnected();
+
+        try {
+            Intent restartIntent = new Intent(getApplicationContext(), DuduCompanionService.class);
+            restartIntent.setPackage(getPackageName());
+            int flags = PendingIntent.FLAG_ONE_SHOT;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+            PendingIntent restartPendingIntent = PendingIntent.getService(
+                    getApplicationContext(),
+                    9901,
+                    restartIntent,
+                    flags
+            );
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                long triggerAt = SystemClock.elapsedRealtime() + 1500;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAt, restartPendingIntent);
+                } else {
+                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAt, restartPendingIntent);
+                }
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Failed to schedule service resurrection: " + t.getMessage());
+        }
+
         super.onTaskRemoved(rootIntent);
     }
 

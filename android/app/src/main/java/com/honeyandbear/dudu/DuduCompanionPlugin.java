@@ -1,10 +1,17 @@
 package com.honeyandbear.dudu;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.Window;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -79,5 +86,47 @@ public class DuduCompanionPlugin extends Plugin {
 
         DuduCompanionService.updateMusicNotification(getContext(), title, artist, isPlaying, action);
         call.resolve();
+    }
+
+    @PluginMethod
+    public void requestBatteryOptimization(PluginCall call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+                String pkg = getContext().getPackageName();
+                if (pm != null && !pm.isIgnoringBatteryOptimizations(pkg)) {
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + pkg));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getContext().startActivity(intent);
+                    JSObject ret = new JSObject();
+                    ret.put("requested", true);
+                    call.resolve(ret);
+                    return;
+                }
+            } catch (Throwable t) {
+                // Ignore
+            }
+        }
+        JSObject ret = new JSObject();
+        ret.put("requested", false);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void isBatteryOptimizationIgnored(PluginCall call) {
+        boolean ignored = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+                String pkg = getContext().getPackageName();
+                if (pm != null) {
+                    ignored = pm.isIgnoringBatteryOptimizations(pkg);
+                }
+            } catch (Throwable ignoredException) {}
+        }
+        JSObject ret = new JSObject();
+        ret.put("ignored", ignored);
+        call.resolve(ret);
     }
 }

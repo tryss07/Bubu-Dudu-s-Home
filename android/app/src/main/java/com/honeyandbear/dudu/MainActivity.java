@@ -1,8 +1,14 @@
 package com.honeyandbear.dudu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
@@ -31,6 +37,7 @@ public class MainActivity extends BridgeActivity {
 
         // Start native Companion Service
         DuduCompanionService.start(this);
+        requestBatteryOptimizationExemption();
 
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -127,6 +134,27 @@ public class MainActivity extends BridgeActivity {
                     "window.dispatchEvent(new CustomEvent('dudu-music-control', { detail: { action: '" + action + "' } }));", null
                 );
             });
+        }
+    }
+
+    private void requestBatteryOptimizationExemption() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                String packageName = getPackageName();
+                if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                    SharedPreferences prefs = getSharedPreferences("dudu_companion_prefs", Context.MODE_PRIVATE);
+                    boolean prompted = prefs.getBoolean("battery_optimization_requested", false);
+                    if (!prompted) {
+                        prefs.edit().putBoolean("battery_optimization_requested", true).apply();
+                        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                        intent.setData(Uri.parse("package:" + packageName));
+                        startActivity(intent);
+                    }
+                }
+            } catch (Throwable t) {
+                Log.w("MainActivity", "requestBatteryOptimizationExemption error: " + t.getMessage());
+            }
         }
     }
 }
