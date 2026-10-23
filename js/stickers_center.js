@@ -294,12 +294,15 @@
   }
 
   function isPackDownloaded(packId) {
-    if (downloadedPacksSet.has(packId)) return true;
     const pack = getPackById(packId);
     if (!pack) return false;
-    // If 95% of files are in storage, consider it downloaded
     const downloadedCount = pack.files.filter(f => downloadedFilesSet.has(f)).length;
-    return downloadedCount >= Math.floor(pack.files.length * 0.95);
+    const isComplete = downloadedCount >= Math.floor(pack.files.length * 0.9);
+    if (!isComplete && downloadedPacksSet.has(packId)) {
+      downloadedPacksSet.delete(packId);
+      savePacksState();
+    }
+    return isComplete;
   }
 
   function isFileDownloaded(file) {
@@ -481,15 +484,21 @@
           const cat = catalog?.getCategory(canonical) || 'dudu';
           const remoteUrl = `${getHttpBase()}/assets/stickers_${cat}/${canonical}`;
 
-          try {
-            const res = await fetch(remoteUrl, { mode: 'cors', cache: 'default', signal: AbortSignal.timeout(8000) });
-            if (res.ok) {
-              const blob = await res.blob();
-              await saveStoredBlob(file, cat, blob, packId);
-              downloadedFilesSet.add(file);
+          // Retry up to 2 times with 15s timeout for mobile network stability
+          for (let attempt = 0; attempt < 2; attempt++) {
+            try {
+              const res = await fetch(remoteUrl, { mode: 'cors', cache: 'default', signal: AbortSignal.timeout(15000) });
+              if (res.ok) {
+                const blob = await res.blob();
+                await saveStoredBlob(file, cat, blob, packId);
+                downloadedFilesSet.add(file);
+                break;
+              }
+            } catch (err) {
+              if (attempt === 0) {
+                await new Promise(r => setTimeout(r, 200));
+              }
             }
-          } catch (err) {
-            // Silently continue for resilience; retry on next run
           }
         }
 
@@ -510,24 +519,41 @@
 
     await Promise.all(workers);
 
-    downloadedPacksSet.add(packId);
-    savePacksState();
+    const downloadedCount = pack.files.filter(f => downloadedFilesSet.has(f)).length;
+    const isSuccess = downloadedCount >= Math.floor(total * 0.9);
+
+    if (isSuccess) {
+      downloadedPacksSet.add(packId);
+      savePacksState();
+    } else {
+      downloadedPacksSet.delete(packId);
+      savePacksState();
+    }
 
     isDownloading = false;
     currentDownloadInfo = null;
     dispatchProgress();
     dispatchStickersUpdated();
 
-    if (options.onComplete) {
-      options.onComplete(pack);
+    if (isSuccess) {
+      if (options.onComplete) {
+        options.onComplete(pack);
+      }
+      if (window.showToast) {
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        window.showToast(isEn ? `${pack.title} downloaded!` : `${pack.title_id || pack.title} berhasil diunduh!`);
+      }
+    } else {
+      if (options.onError) {
+        options.onError(new Error('Incomplete download'));
+      }
+      if (window.showToast) {
+        const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
+        window.showToast(isEn ? `Download incomplete. Please tap to retry.` : `Unduhan belum selesai. Silakan ketuk untuk coba lagi.`);
+      }
     }
 
     renderStickerCenterUI();
-
-    if (window.showToast) {
-      const isEn = (window.DuduI18n?.getLanguage?.() || 'id') === 'en';
-      window.showToast(isEn ? `${pack.title} downloaded!` : `${pack.title_id || pack.title} berhasil diunduh!`);
-    }
 
     if (downloadQueue.length > 0) {
       const next = downloadQueue.shift();
@@ -535,7 +561,7 @@
       downloadPack(next.packId, next.options);
     }
 
-    return true;
+    return isSuccess;
   }
 
   async function deletePack(packId) {
