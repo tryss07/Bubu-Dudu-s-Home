@@ -25,10 +25,7 @@ let fallbackPresence = {
   bubu: { online: false, lastSeen: null }
 };
 
-let fallbackTopics = [
-  { id: 'daily_banter', title: 'Daily Banter', emoji: '💬', isPinned: true, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() },
-  { id: 'date_ideas', title: 'Date Ideas', emoji: '🍱', isPinned: false, isArchived: false, createdAt: 1728000000000, lastActivity: Date.now() - 3600000 }
-];
+let fallbackTopics = [];
 
 let fallbackTummyLogs = [];
 let fallbackPushTokens = {};
@@ -70,8 +67,8 @@ let fallbackCoupleSpace = {
   anniversaryDate: '2025-11-04',
   loveBattery: { dudu: 100, bubu: 100 },
   statuses: {
-    dudu: 'Thinking of you! 💭',
-    bubu: 'Eating snacks! 🐼'
+    dudu: '',
+    bubu: ''
   },
   wardrobe: {
     dudu: { hat: 'beanie', sweater: 'cable', coat: 'duffle', accs: 'scarf' },

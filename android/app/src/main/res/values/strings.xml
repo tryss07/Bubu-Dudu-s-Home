@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Dudu</string>
-    <string name="title_activity_main">Dudu</string>
+    <string name="app_name">Bubu &amp; Dudu</string>
+    <string name="title_activity_main">Bubu &amp; Dudu</string>
     <string name="package_name">com.honeyandbear.dudu</string>
     <string name="custom_url_scheme">com.honeyandbear.dudu</string>
 </resources>

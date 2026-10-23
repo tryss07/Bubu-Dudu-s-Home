@@ -453,9 +453,26 @@
     return words.slice(0, maxWords).join(' ') + '...';
   }
 
+  let lastNotificationTs = 0;
+  let lastNotificationText = '';
+
   async function notifyUser(title, body) {
+    // Suppress system push/local notification if user is actively in the app viewing the chat
+    const isChatTabActive = document.body.classList.contains('chat-tab-active');
+    if (document.visibilityState === 'visible' && isChatTabActive) {
+      return;
+    }
+
     const cleanTitle = removeEmojis(title) || 'Dudu Chat';
     const cleanBody = truncateWords(removeEmojis(body) || 'New update', 6);
+
+    const now = Date.now();
+    // Debounce guard: prevent rapid consecutive notification sounds/popups
+    if (now - lastNotificationTs < 1800) return;
+    if (lastNotificationText === cleanBody && now - lastNotificationTs < 5000) return;
+    lastNotificationTs = now;
+    lastNotificationText = cleanBody;
+
     try {
       if (window.Capacitor?.Plugins?.LocalNotifications) {
         await window.Capacitor.Plugins.LocalNotifications.schedule({
@@ -614,7 +631,7 @@
   // --- Session Management ---
 
   async function loadSessions() {
-    activeSessions = await DuduChatStorage.getSessions();
+    activeSessions = (await DuduChatStorage.getSessions()).filter(s => s.id !== 'daily_banter' && s.id !== 'date_ideas');
     if (!activeSessions.some(s => s.id === activeSessionId)) {
       activeSessionId = activeSessions[0]?.id || null;
     }
@@ -2523,7 +2540,9 @@
       if (!activeCryptoKey) await updateCryptoKey();
 
       let hasNewForActiveSession = false;
-      let hasPartnerNew = false;
+      let partnerNewCount = 0;
+      let lastPartnerPreview = '';
+      let lastPartnerTopic = 'Topic';
       let highestSyncTs = DuduChatStorage.getLastSyncTimestamp();
       const myIdentity = DuduChatCrypto.getStoredIdentity() || 'dudu';
       const myIdLower = myIdentity.toLowerCase();
@@ -2547,27 +2566,16 @@
             const isFromPartner = isMeDudu !== isSenderDudu;
 
             if (isFromPartner) {
-              hasPartnerNew = true;
-              const partnerLabel = isMeDudu ? 'Bubu' : 'Dudu';
+              partnerNewCount++;
               const targetSession = activeSessions.find(s => s.id === decryptedMsg.sessionId);
-              const topicName = targetSession ? (removeEmojis(targetSession.title) || targetSession.title) : 'Topic';
+              lastPartnerTopic = targetSession ? (removeEmojis(targetSession.title) || targetSession.title) : 'Topic';
               let preview = decryptedMsg.content;
               if (decryptedMsg.type === 'sticker') preview = 'Sent a sticker';
               else if (decryptedMsg.type === 'image') preview = 'Sent a photo';
               else if (decryptedMsg.type === 'video') preview = 'Sent a video';
               else preview = removeEmojis(decryptedMsg.content) || decryptedMsg.content || 'New message';
 
-              const truncated = truncateWords(preview, 6);
-              notifyUser(`[${topicName}] ${partnerLabel}`, truncated);
-
-              if (window.DuduMockup?.addNotification) {
-                window.DuduMockup.addNotification({
-                  icon: '💬',
-                  title: `${partnerLabel} (${topicName})`,
-                  message: truncated,
-                  timestamp: Date.now()
-                });
-              }
+              lastPartnerPreview = truncateWords(preview, 6);
 
               const isChatTabActive = document.body.classList.contains('chat-tab-active');
               const isViewingThisSession = isChatTabActive && activeSessionId === decryptedMsg.sessionId;
@@ -2587,12 +2595,25 @@
 
       DuduChatStorage.setLastSyncTimestamp(highestSyncTs);
 
+      // Single summary notification after sync loop to prevent rapid chimes
+      if (partnerNewCount > 0) {
+        const partnerLabel = isMeDudu ? 'Bubu' : 'Dudu';
+        const notifMsg = partnerNewCount === 1 ? `[${lastPartnerTopic}] ${lastPartnerPreview}` : `${partnerNewCount} new messages`;
+        notifyUser(partnerLabel, notifMsg);
+        if (window.DuduMockup?.addNotification) {
+          window.DuduMockup.addNotification({
+            icon: '💬',
+            title: partnerLabel,
+            message: notifMsg,
+            timestamp: Date.now()
+          });
+        }
+        window.duduAudio?.playSparkle?.();
+      }
+
       if (hasNewForActiveSession) {
         await loadActiveMessages();
         DuduChatSocket.sendReadReceipt(activeSessionId, Date.now());
-      }
-      if (hasPartnerNew) {
-        window.duduAudio?.playSparkle?.();
       }
       loadSessions();
     });
@@ -2650,6 +2671,7 @@
     DuduChatSocket.onTopicSync(async (topics) => {
       if (!Array.isArray(topics)) return;
       for (const t of topics) {
+        if (t.id === 'daily_banter' || t.id === 'date_ideas') continue;
         await DuduChatStorage.saveSession(t);
       }
       await loadSessions();
@@ -4274,6 +4296,8 @@
     flushPendingMessages,
     recordRoleOffline,
     refreshPresence: () => handlePresenceState(),
+    loadSessions: loadSessions,
+    renderSessionBar: renderSessionBar,
     reloadActiveMessages: async (preserveScroll = true) => {
       await loadActiveMessages(preserveScroll);
     }

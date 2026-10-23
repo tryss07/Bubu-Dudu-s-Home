@@ -807,6 +807,33 @@ html.dark .dark\:bg-stone-800\/95 { background-color: rgba(41, 37, 36, 0.95); }
 #wardrobe-stage {
   touch-action: pan-y;
   user-select: none;
+  border-radius: 1.75rem !important;
+  overflow: hidden !important;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+  isolation: isolate;
+}
+#wardrobe-stage-single {
+  border-radius: 1.75rem !important;
+  overflow: hidden !important;
+}
+#wardrobe-stage-art {
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+}
+#wardrobe-stage-couple {
+  border-radius: 1.75rem !important;
+  overflow: hidden !important;
+}
+#wardrobe-stage-couple-dudu-card,
+#wardrobe-stage-couple-bubu-card {
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+}
+#wardrobe-stage-couple-dudu-img,
+#wardrobe-stage-couple-bubu-img {
+  border-radius: 1.25rem !important;
+  overflow: hidden !important;
 }
 .wardrobe-layer-item {
   pointer-events: none;

@@ -9,26 +9,7 @@
   const DB_NAME = 'DuduDuoChatDB';
   const DB_VERSION = 2;
 
-  const DEFAULT_SESSIONS = [
-    {
-      id: 'daily_banter',
-      title: 'Daily Banter',
-      emoji: '💬',
-      isPinned: true,
-      isArchived: false,
-      createdAt: 1728000000000,
-      lastActivity: Date.now()
-    },
-    {
-      id: 'date_ideas',
-      title: 'Date Ideas',
-      emoji: '🍱',
-      isPinned: false,
-      isArchived: false,
-      createdAt: 1728000000000,
-      lastActivity: Date.now() - 3600000
-    }
-  ];
+  const DEFAULT_SESSIONS = [];
 
   let dbPromise = null;
 
@@ -89,14 +70,14 @@
           try { msgStore.delete(id); } catch (_) {}
         });
 
-        // Automatically clean up empty placeholder topics
-        ['watchlist', 'vent_space', 'deep_talks'].forEach(id => {
+        // Automatically clean up empty placeholder & legacy fallback topics
+        ['watchlist', 'vent_space', 'deep_talks', 'daily_banter', 'date_ideas'].forEach(id => {
           try { sessionStore.delete(id); } catch (_) {}
         });
 
         const countReq = sessionStore.count();
         countReq.onsuccess = () => {
-          if (countReq.result === 0) {
+          if (countReq.result === 0 && DEFAULT_SESSIONS.length > 0) {
             DEFAULT_SESSIONS.forEach(sess => sessionStore.put(sess));
           }
         };

@@ -185,6 +185,31 @@ function startServer() {
 
     // 4. Test Topic Bookmarks Limited to 3 & "All Topics" Button
     console.log('Test 4: Topic bookmarks limited to 3 & "All Topics" button...');
+
+    // Setup test topics for testing bookmarks, search, rename and unread
+    await page.evaluate(async () => {
+      await window.DuduChatStorage.saveSession({
+        id: 'topic_banter',
+        title: 'Daily Banter',
+        emoji: '💬',
+        isPinned: true,
+        isArchived: false,
+        createdAt: Date.now(),
+        lastActivity: Date.now()
+      });
+      await window.DuduChatStorage.saveSession({
+        id: 'topic_date_ideas',
+        title: 'Date Ideas',
+        emoji: '🍱',
+        isPinned: false,
+        isArchived: false,
+        createdAt: Date.now(),
+        lastActivity: Date.now() - 3600000
+      });
+      await window.DuduChatUI?.loadSessions?.();
+    });
+    await page.waitForTimeout(300);
+
     const chipCount = await page.$$eval('#chat-sessions-list .chat-session-chip', chips => chips.length);
     console.log(`Rendered topic chips count: ${chipCount} (max 3 allowed)`);
     if (chipCount > 3) {

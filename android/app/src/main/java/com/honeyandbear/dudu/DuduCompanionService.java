@@ -52,6 +52,8 @@ public class DuduCompanionService extends Service {
     private static final String WS_URL = "wss://chat.nexora-v1.my.id/chat-socket?token=" + RELAY_AUTH_TOKEN;
 
     private static volatile boolean isAppForeground = false;
+    private static volatile DuduCompanionService instance = null;
+    private static volatile long lastHeadsUpTs = 0;
 
     private OkHttpClient httpClient;
     private WebSocket webSocket;
@@ -68,32 +70,23 @@ public class DuduCompanionService extends Service {
     }
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, DuduCompanionService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
+        if (context == null) return;
+        try {
+            Intent intent = new Intent(context, DuduCompanionService.class);
             context.startService(intent);
+        } catch (Throwable t) {
+            Log.w(TAG, "startService error: " + t.getMessage());
         }
     }
 
     public static void updateStats(Context context, int food, int sleep, int unread) {
+        if (context == null) return;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit()
                 .putInt(KEY_FOOD, food)
                 .putInt(KEY_SLEEP, sleep)
                 .putInt(KEY_UNREAD, unread)
                 .apply();
-
-        Intent intent = new Intent(context, DuduCompanionService.class);
-        intent.setAction("ACTION_UPDATE_STATS");
-        intent.putExtra("food", food);
-        intent.putExtra("sleep", sleep);
-        intent.putExtra("unread", unread);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
-        }
     }
 
     public static void setIdentity(Context context, String identity) {
@@ -108,15 +101,9 @@ public class DuduCompanionService extends Service {
     }
 
     public static void clearUnread(Context context) {
+        if (context == null) return;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putInt(KEY_UNREAD, 0).apply();
-        Intent intent = new Intent(context, DuduCompanionService.class);
-        intent.setAction("ACTION_UPDATE_STATS");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
-        }
     }
 
     public static void clearChatNotifications(Context context) {
@@ -144,15 +131,21 @@ public class DuduCompanionService extends Service {
 
             if (!isPlaying && "stop".equals(action)) {
                 manager.cancel(MUSIC_NOTIFICATION_ID);
+                if (instance != null) {
+                    try {
+                        instance.stopForeground(true);
+                    } catch (Throwable ignored) {}
+                }
                 return;
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel(
-                        CHANNEL_MUSIC_ID, "Dudu Music Player", NotificationManager.IMPORTANCE_LOW
+                        CHANNEL_MUSIC_ID, "Dudu Music Player", NotificationManager.IMPORTANCE_DEFAULT
                 );
                 channel.setDescription("Playback controls and status for Bedtime Lofi");
                 channel.enableVibration(false);
+                channel.setSound(null, null);
                 channel.setShowBadge(false);
                 manager.createNotificationChannel(channel);
             }
@@ -202,7 +195,7 @@ public class DuduCompanionService extends Service {
                     .setOngoing(isPlaying)
                     .setAutoCancel(!isPlaying)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setStyle(mediaStyle)
                     .addAction(android.R.drawable.ic_media_previous, "Prev", prevPending)
                     .addAction(isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play, isPlaying ? "Pause" : "Play", togglePending)
@@ -212,7 +205,23 @@ public class DuduCompanionService extends Service {
                 builder.setLargeIcon(duduArt);
             }
 
-            manager.notify(MUSIC_NOTIFICATION_ID, builder.build());
+            Notification musicNotif = builder.build();
+            if (instance != null) {
+                if (isPlaying) {
+                    try {
+                        instance.startForeground(MUSIC_NOTIFICATION_ID, musicNotif);
+                    } catch (Throwable t) {
+                        manager.notify(MUSIC_NOTIFICATION_ID, musicNotif);
+                    }
+                } else {
+                    try {
+                        instance.stopForeground(false);
+                    } catch (Throwable ignored) {}
+                    manager.notify(MUSIC_NOTIFICATION_ID, musicNotif);
+                }
+            } else {
+                manager.notify(MUSIC_NOTIFICATION_ID, musicNotif);
+            }
         } catch (Throwable t) {
             Log.w(TAG, "updateMusicNotification error: " + t.getMessage());
         }
@@ -221,23 +230,31 @@ public class DuduCompanionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         acquireWakeLock();
         createNotificationChannels();
-        startForeground(COMPANION_NOTIFICATION_ID, buildCompanionNotification());
+        // Immediately dismiss persistent companion notification
+        try {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.cancel(COMPANION_NOTIFICATION_ID);
+            }
+        } catch (Throwable ignored) {}
         initWebSocket();
         startPingLoop();
-        Log.d(TAG, "DuduCompanionService created and foreground active");
+        Log.d(TAG, "DuduCompanionService created");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannels();
-        Notification notification = buildCompanionNotification();
-        startForeground(COMPANION_NOTIFICATION_ID, notification);
-
-        if (intent != null && "ACTION_UPDATE_STATS".equals(intent.getAction())) {
-            updateNotification();
-        }
+        // Keep companion notification dismissed
+        try {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.cancel(COMPANION_NOTIFICATION_ID);
+            }
+        } catch (Throwable ignored) {}
 
         ensureWebSocketConnected();
         return START_STICKY;
@@ -262,17 +279,7 @@ public class DuduCompanionService extends Service {
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager == null) return;
 
-            // 1. Companion Channel (Low importance so it doesn't beep constantly on stat changes)
-            NotificationChannel companionChannel = new NotificationChannel(
-                    CHANNEL_COMPANION_ID,
-                    "Dudu Companion Widget",
-                    NotificationManager.IMPORTANCE_LOW
-            );
-            companionChannel.setDescription("Live companion food, sleep and chat status");
-            companionChannel.setShowBadge(false);
-            manager.createNotificationChannel(companionChannel);
-
-            // 2. High priority Chat message alert channel
+            // 1. High priority Chat message alert channel
             NotificationChannel chatChannel = new NotificationChannel(
                     CHANNEL_CHAT_ID,
                     "Dudu Chat Messages",
@@ -282,56 +289,18 @@ public class DuduCompanionService extends Service {
             chatChannel.enableVibration(true);
             chatChannel.setShowBadge(true);
             manager.createNotificationChannel(chatChannel);
-        }
-    }
 
-    private Notification buildCompanionNotification() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int food = prefs.getInt(KEY_FOOD, 80);
-        int sleep = prefs.getInt(KEY_SLEEP, 90);
-        int unread = prefs.getInt(KEY_UNREAD, 0);
-        String partner = prefs.getString(KEY_PARTNER_LABEL, "Bubu");
-
-        String unreadText = (unread > 0) ? (unread + " from " + partner) : "0 unread";
-        String contentText = String.format("🍎 Food: %d%%  •  💤 Sleep: %d%%  •  💌 %s", food, sleep, unreadText);
-
-        Intent homeIntent = new Intent(this, MainActivity.class);
-        homeIntent.setAction("ACTION_OPEN_HOME");
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent homePendingIntent = PendingIntent.getActivity(
-                this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        Intent chatIntent = new Intent(this, MainActivity.class);
-        chatIntent.setAction("ACTION_OPEN_CHAT");
-        chatIntent.putExtra("target_tab", "chat");
-        chatIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent chatPendingIntent = PendingIntent.getActivity(
-                this, 1, chatIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_COMPANION_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Dudu Companion 🐾")
-                .setContentText(contentText)
-                .setContentIntent(homePendingIntent)
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .addAction(R.mipmap.ic_launcher, "💬 Open Chat", chatPendingIntent)
-                .addAction(R.mipmap.ic_launcher, "🐾 Check Dudu", homePendingIntent);
-
-        return builder.build();
-    }
-
-    private void updateNotification() {
-        try {
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (manager != null) {
-                manager.notify(COMPANION_NOTIFICATION_ID, buildCompanionNotification());
-            }
-        } catch (Throwable t) {
-            Log.w(TAG, "Safe guard caught updateNotification error: " + t.getMessage());
+            // 2. Music Player Channel (Sound disabled, button actions visible)
+            NotificationChannel musicChannel = new NotificationChannel(
+                    CHANNEL_MUSIC_ID,
+                    "Dudu Music Player",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            musicChannel.setDescription("Playback controls and status for Bedtime Lofi");
+            musicChannel.enableVibration(false);
+            musicChannel.setSound(null, null);
+            musicChannel.setShowBadge(false);
+            manager.createNotificationChannel(musicChannel);
         }
     }
 
@@ -501,7 +470,6 @@ public class DuduCompanionService extends Service {
         if (!isAppForeground) {
             int currentUnread = prefs.getInt(KEY_UNREAD, 0) + 1;
             prefs.edit().putInt(KEY_UNREAD, currentUnread).apply();
-            updateNotification();
 
             showHeadsUpMessageNotification(partnerLabel, sessionId, previewText);
         }
@@ -509,6 +477,12 @@ public class DuduCompanionService extends Service {
 
     private void showHeadsUpMessageNotification(String partner, String topic, String preview) {
         try {
+            long now = System.currentTimeMillis();
+            if (now - lastHeadsUpTs < 1500) {
+                return;
+            }
+            lastHeadsUpTs = now;
+
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (manager == null) return;
 
@@ -543,43 +517,18 @@ public class DuduCompanionService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "onTaskRemoved triggered: app swiped away. Scheduling resurrection alarm.");
+        Log.d(TAG, "onTaskRemoved triggered: app swiped away.");
         isAppForeground = false;
         ensureWebSocketConnected();
-
-        try {
-            Intent restartIntent = new Intent(getApplicationContext(), DuduCompanionService.class);
-            restartIntent.setPackage(getPackageName());
-            int flags = PendingIntent.FLAG_ONE_SHOT;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                flags |= PendingIntent.FLAG_IMMUTABLE;
-            }
-            PendingIntent restartPendingIntent = PendingIntent.getService(
-                    getApplicationContext(),
-                    9901,
-                    restartIntent,
-                    flags
-            );
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (alarmManager != null) {
-                long triggerAt = SystemClock.elapsedRealtime() + 1500;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAt, restartPendingIntent);
-                } else {
-                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAt, restartPendingIntent);
-                }
-            }
-        } catch (Throwable t) {
-            Log.w(TAG, "Failed to schedule service resurrection: " + t.getMessage());
-        }
-
         super.onTaskRemoved(rootIntent);
     }
 
     @Override
     public void onDestroy() {
         Log.w(TAG, "DuduCompanionService destroyed. Cleaning up.");
+        if (instance == this) {
+            instance = null;
+        }
         stopPingLoop();
         if (webSocket != null) {
             try { webSocket.close(1000, "Service destroyed"); } catch (Exception ignored) {}

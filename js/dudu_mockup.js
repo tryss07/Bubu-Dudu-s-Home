@@ -83,8 +83,8 @@
     },
     badmoodLevel: 0,
     statuses: {
-      dudu: 'Syududu',
-      bubu: 'Syububu'
+      dudu: '',
+      bubu: ''
     },
     notes: [
       {
@@ -284,8 +284,8 @@
           });
         }
         if (parsed.statuses) {
-          if (parsed.statuses.dudu === 'Thinking of you! 💭') parsed.statuses.dudu = 'Syududu';
-          if (parsed.statuses.bubu === 'Eating snacks! 🐼') parsed.statuses.bubu = 'Syububu';
+          if (parsed.statuses.dudu === 'Thinking of you! 💭' || parsed.statuses.dudu === 'Syududu') parsed.statuses.dudu = '';
+          if (parsed.statuses.bubu === 'Eating snacks! 🐼' || parsed.statuses.bubu === 'Syububu') parsed.statuses.bubu = '';
         }
         if (parsed.loveBattery && parsed.loveBattery.dudu === 100 && parsed.loveBattery.bubu === 100) {
           parsed.loveBattery = { dudu: 95, bubu: 95 };
@@ -998,8 +998,14 @@
         if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = normalizeLoveBattery(data.coupleSpace.loveBattery);
         if (data.coupleSpace.badmoodLevel !== undefined) appData.badmoodLevel = Number(data.coupleSpace.badmoodLevel);
         if (data.coupleSpace.statuses) {
-          if (data.coupleSpace.statuses.dudu) appData.statuses.dudu = data.coupleSpace.statuses.dudu;
-          if (data.coupleSpace.statuses.bubu) appData.statuses.bubu = data.coupleSpace.statuses.bubu;
+          const duduSt = data.coupleSpace.statuses.dudu;
+          const bubuSt = data.coupleSpace.statuses.bubu;
+          if (duduSt && duduSt !== 'Thinking of you! 💭' && duduSt !== 'Syududu') {
+            appData.statuses.dudu = duduSt;
+          }
+          if (bubuSt && bubuSt !== 'Eating snacks! 🐼' && bubuSt !== 'Syububu') {
+            appData.statuses.bubu = bubuSt;
+          }
         }
         if (data.coupleSpace.wardrobe) {
           if (!appData.wardrobe) appData.wardrobe = JSON.parse(JSON.stringify(defaultMockupData.wardrobe));
@@ -1707,8 +1713,8 @@
 
     const duduStatusEl = document.getElementById('home-status-dudu');
     const bubuStatusEl = document.getElementById('home-status-bubu');
-    if (duduStatusEl) duduStatusEl.textContent = appData.statuses.dudu;
-    if (bubuStatusEl) bubuStatusEl.textContent = appData.statuses.bubu;
+    if (duduStatusEl) duduStatusEl.textContent = appData.statuses.dudu || '-';
+    if (bubuStatusEl) bubuStatusEl.textContent = appData.statuses.bubu || '-';
 
     // Bar 1: Dudu Love Battery Meter (Tap to view/adjust Dudu's slider)
     const duduBatteryBtn = document.getElementById('btn-boost-battery-dudu') || document.getElementById('btn-boost-battery');
@@ -2465,7 +2471,7 @@
 
           <div class="flex flex-col items-end gap-1.5 shrink-0">
             <div class="flex items-center gap-1.5">
-              ${item.image ? `<img src="${item.image}" alt="date" class="w-12 h-10 rounded-xl object-cover border border-[#E8DACB]">` : ''}
+              ${item.image ? `<img src="${item.image}" alt="date" class="w-12 h-10 rounded-2xl object-cover border border-[#E8DACB] overflow-hidden">` : ''}
               <button type="button" class="btn-delete-bucket w-7 h-7 rounded-full text-stone-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center transition-colors cursor-pointer button-press" data-id="${item.id}" title="Delete date idea">
                 <span class="material-symbols-outlined text-[16px]">delete</span>
               </button>
@@ -3002,31 +3008,33 @@
       } catch (_) {}
     }
 
-    // 3. Capacitor LocalNotifications fallback
-    try {
-      if (window.Capacitor?.Plugins?.LocalNotifications) {
-        const notifId = 9002;
-        await window.Capacitor.Plugins.LocalNotifications.createChannel({
-          id: 'dudu_music_channel',
-          name: 'Dudu Music Player',
-          description: 'Playback status for Bedtime Lofi',
-          importance: 2,
-          visibility: 1,
-          vibration: false
-        }).catch(() => {});
+    // 3. Capacitor LocalNotifications fallback (only if native companion is not present)
+    if (!window.Capacitor?.Plugins?.DuduCompanion?.updateMusicNotification) {
+      try {
+        if (window.Capacitor?.Plugins?.LocalNotifications) {
+          const notifId = 9002;
+          await window.Capacitor.Plugins.LocalNotifications.createChannel({
+            id: 'dudu_music_channel',
+            name: 'Dudu Music Player',
+            description: 'Playback status for Bedtime Lofi',
+            importance: 3,
+            visibility: 1,
+            vibration: false
+          }).catch(() => {});
 
-        await window.Capacitor.Plugins.LocalNotifications.schedule({
-          notifications: [{
-            id: notifId,
-            title: isPlaying ? `🎵 🐻 ${cleanTitle}` : `⏸ 🐻 ${cleanTitle} (Paused)`,
-            body: `${artist} • Tap to view player`,
-            channelId: 'dudu_music_channel',
-            ongoing: isPlaying,
-            autoCancel: !isPlaying
-          }]
-        });
-      }
-    } catch (_) {}
+          await window.Capacitor.Plugins.LocalNotifications.schedule({
+            notifications: [{
+              id: notifId,
+              title: isPlaying ? `🎵 🐻 ${cleanTitle}` : `⏸ 🐻 ${cleanTitle} (Paused)`,
+              body: `${artist} • Tap to view player`,
+              channelId: 'dudu_music_channel',
+              ongoing: isPlaying,
+              autoCancel: !isPlaying
+            }]
+          });
+        }
+      } catch (_) {}
+    }
   }
 
   // Handle music control actions from native Android notification buttons
@@ -3693,7 +3701,7 @@
     if (activeStageView === 'couple') {
       if (stageSingle) stageSingle.classList.add('hidden');
       if (stageCouple) stageCouple.classList.remove('hidden');
-      if (stageEl) stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300';
+      if (stageEl) stageEl.className = 'relative w-full rounded-[1.75rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300 isolate';
 
       if (coupleDuduImg) coupleDuduImg.src = duduImgSrc;
       if (coupleBubuImg) coupleBubuImg.src = bubuImgSrc;
@@ -3701,17 +3709,17 @@
       // Active character focus in couple stage
       if (coupleDuduCard && coupleBubuCard) {
         if (isDudu) {
-          coupleDuduCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
-          coupleBubuCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
+          coupleDuduCard.className = 'relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
+          coupleBubuCard.className = 'relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
         } else {
-          coupleBubuCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
-          coupleDuduCard.className = 'relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
+          coupleBubuCard.className = 'relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-sm ring-2 ring-[#8D5B4C]/20';
+          coupleDuduCard.className = 'relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 p-2 flex flex-col items-center justify-center cursor-pointer shadow-2xs opacity-80 hover:opacity-100 transition-opacity';
         }
       }
     } else {
       if (stageCouple) stageCouple.classList.add('hidden');
       if (stageSingle) stageSingle.classList.remove('hidden');
-      if (stageEl) stageEl.className = 'relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300';
+      if (stageEl) stageEl.className = 'relative w-full rounded-[1.75rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300 isolate';
 
       if (stageArt) {
         stageArt.src = isDudu ? duduImgSrc : bubuImgSrc;

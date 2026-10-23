@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
   <meta name="theme-color" content="#FAF5EE">
   <meta name="color-scheme" content="light dark">
-  <title>Dudu &amp; Bubu ♡ Our Space</title>
+  <title>Bubu &amp; Dudu ♡ Our Space</title>
   <link rel="icon" type="image/png" href="assets/dudu_icon.png">
   <link rel="apple-touch-icon" href="assets/dudu_icon.png">
   
@@ -249,12 +249,12 @@
             <!-- Dudu chip -->
             <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
               <span class="px-1.5 py-0.2 rounded-md bg-[#8D5B4C] text-white text-[9px] font-extrabold shrink-0">Dudu</span>
-              <span id="home-status-dudu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Syududu</span>
+              <span id="home-status-dudu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">-</span>
             </div>
             <!-- Bubu chip -->
             <div class="flex items-center gap-1.5 bg-[#FAF4ED] dark:bg-stone-700/60 rounded-xl px-2 py-1 border border-[#DFCBB7]/50 min-w-0">
               <span class="px-1.5 py-0.2 rounded-md bg-[#EAA684] text-white text-[9px] font-extrabold shrink-0">Bubu</span>
-              <span id="home-status-bubu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">Syububu</span>
+              <span id="home-status-bubu" class="font-medium text-[#4A3222] dark:text-stone-200 truncate">-</span>
             </div>
           </div>
         </button>
@@ -464,7 +464,7 @@
       <div class="bg-[#FAF5EE] dark:bg-stone-800 rounded-3xl p-4 plush-shadow border border-[#E8DACB] dark:border-stone-700 flex flex-col gap-2 relative">
         <div class="flex items-center justify-between">
           <h3 class="font-heading font-bold text-sm text-[#4A3222] dark:text-stone-100">Our Adventure Progress</h3>
-          <img src="assets/mockup_art/adventure_couple.png" alt="Couple" class="h-10 object-contain">
+          <img src="assets/mockup_art/adventure_couple.png" alt="Couple" class="h-10 object-contain rounded-2xl overflow-hidden">
         </div>
 
         <!-- Progress bar -->
@@ -534,7 +534,7 @@
         <div class="washi-tape washi-tape-grid top-0 right-3"></div>
 
         <div class="flex items-center gap-3">
-          <img src="assets/mockup_art/calendar_anniversary.png" alt="Anniversary" class="w-20 h-16 object-contain">
+          <img src="assets/mockup_art/calendar_anniversary.png" alt="Anniversary" class="w-20 h-16 object-contain rounded-2xl overflow-hidden">
           <div>
             <span class="text-[10px] font-heading font-bold text-[#8D5B4C] uppercase tracking-wide" data-i18n="home_next_anniversary">Next Anniversary:</span>
             <h3 id="calendar-anniversary-title" class="font-heading font-black text-base text-[#4A3222] dark:text-stone-100 leading-tight">
@@ -741,22 +741,22 @@
         </div>
 
         <!-- Interactive Dressing Room Stage -->
-        <div id="wardrobe-stage" class="relative w-full rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300">
+        <div id="wardrobe-stage" class="relative w-full rounded-[1.75rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 select-none shadow-inner aspect-square transition-all duration-300 isolate">
           
           <!-- Single View Stage (Dudu or Bubu) -->
-          <div id="wardrobe-stage-single" class="w-full h-full relative flex items-center justify-center p-3 pb-11 bg-[#FBF7EB] dark:bg-stone-800">
-            <img id="wardrobe-stage-art" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dressing Room" class="w-full h-full object-contain block mx-auto pointer-events-none transition-all duration-200">
+          <div id="wardrobe-stage-single" class="w-full h-full relative flex items-center justify-center p-3 pb-11 bg-[#FBF7EB] dark:bg-stone-800 rounded-[1.75rem] overflow-hidden">
+            <img id="wardrobe-stage-art" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dressing Room" class="w-full h-full object-contain block mx-auto pointer-events-none transition-all duration-200 rounded-2xl overflow-hidden">
           </div>
 
           <!-- Couple View Stage (Duo Side-by-Side) -->
-          <div id="wardrobe-stage-couple" class="hidden absolute inset-0 grid grid-cols-2 gap-2 p-2 pb-11 bg-[#FAF5EE] dark:bg-stone-900">
-            <div id="wardrobe-stage-couple-dudu-card" class="relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
+          <div id="wardrobe-stage-couple" class="hidden absolute inset-0 grid grid-cols-2 gap-2 p-2 pb-11 bg-[#FAF5EE] dark:bg-stone-900 rounded-[1.75rem] overflow-hidden">
+            <div id="wardrobe-stage-couple-dudu-card" class="relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
               <span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white z-10 shadow-xs">Dudu 🐻</span>
-              <img id="wardrobe-stage-couple-dudu-img" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dudu Outfit" class="w-full h-full object-contain rounded-xl" />
+              <img id="wardrobe-stage-couple-dudu-img" src="closet/dudu/dudu_01_baby_clothes.jpg" alt="Dudu Outfit" class="w-full h-full object-contain rounded-xl overflow-hidden" />
             </div>
-            <div id="wardrobe-stage-couple-bubu-card" class="relative rounded-2xl overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
+            <div id="wardrobe-stage-couple-bubu-card" class="relative rounded-[1.5rem] overflow-hidden bg-[#FBF7EB] dark:bg-stone-800 border-2 border-[#8D5B4C] p-2 flex flex-col items-center justify-center cursor-pointer shadow-xs button-press">
               <span class="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8D5B4C] text-white z-10 shadow-xs">Bubu 🐼</span>
-              <img id="wardrobe-stage-couple-bubu-img" src="closet/bubu/bubu_02_winter_clothes.jpg" alt="Bubu Outfit" class="w-full h-full object-contain rounded-xl" />
+              <img id="wardrobe-stage-couple-bubu-img" src="closet/bubu/bubu_02_winter_clothes.jpg" alt="Bubu Outfit" class="w-full h-full object-contain rounded-xl overflow-hidden" />
             </div>
           </div>
 
@@ -870,12 +870,8 @@
           </div>
         </div>
 
-        <!-- Language Toggle, Wallpaper, Notification Bell & Theme Toggle -->
+        <!-- Wallpaper, Notification Bell & Theme Toggle -->
         <div class="flex items-center gap-1.5 shrink-0">
-          <button id="btn-chat-lang-toggle" type="button" class="btn-lang-toggle h-8 px-2 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 hover:bg-[#F2E4D5] text-[#8D5B4C] dark:text-stone-200 flex items-center justify-center gap-1 text-[11px] font-bold button-press cursor-pointer shadow-2xs" title="Switch Language" data-i18n-title="header_lang_title">
-            <span class="material-symbols-outlined text-[13px]">translate</span>
-            <span class="lang-indicator-text uppercase text-[10px]">ID</span>
-          </button>
           <button id="btn-chat-wallpaper" type="button" class="w-8 h-8 rounded-full bg-white dark:bg-stone-800 border border-[#E8DACB] dark:border-stone-700 flex items-center justify-center text-[#8D5B4C] dark:text-stone-200 button-press cursor-pointer" title="Ganti Wallpaper Chat &amp; Aplikasi" data-i18n-title="chat_wallpaper_title">
             <span class="material-symbols-outlined text-base">wallpaper</span>
           </button>
