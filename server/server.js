@@ -63,8 +63,7 @@ const MIME_TYPES = {
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.woff2': 'font/woff2',
-  '.apk': 'application/vnd.android.package-archive'
+  '.woff2': 'font/woff2'
 };
 
 /**
@@ -125,40 +124,6 @@ const server = http.createServer((req, res) => {
       timestamp: new Date().toISOString()
     }));
     return;
-  }
-
-  // Dedicated APK Download Endpoint for direct mobile installation
-  if (url.pathname === '/Dudu.apk' || url.pathname === '/download' || url.pathname === '/download/apk') {
-    const candidates = [
-      path.resolve(PROJECT_ROOT, 'Dudu.apk'),
-      path.resolve(__dirname, '..', 'Dudu.apk'),
-      path.resolve(__dirname, 'Dudu.apk')
-    ];
-    let apkPath = null;
-    for (const c of candidates) {
-      if (fs.existsSync(c)) {
-        apkPath = c;
-        break;
-      }
-    }
-    if (apkPath) {
-      try {
-        const stat = fs.statSync(apkPath);
-        res.writeHead(200, {
-          'Content-Type': 'application/vnd.android.package-archive',
-          'Content-Length': stat.size,
-          'Content-Disposition': 'attachment; filename="Dudu.apk"',
-          'Access-Control-Allow-Origin': '*',
-          'Cache-Control': 'no-cache, no-store, must-revalidate'
-        });
-        if (req.method === 'HEAD') {
-          res.end();
-        } else {
-          fs.createReadStream(apkPath).pipe(res);
-        }
-        return;
-      } catch (_) {}
-    }
   }
 
   // Serve Static Frontend Assets for non-API GET/HEAD requests
