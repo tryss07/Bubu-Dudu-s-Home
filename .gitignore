@@ -12,7 +12,7 @@ android/.gradle/
 android/app/build/
 android/build/
 *.apk
-!Dudu.apk
+!Bubu & Dudu's Homespace.apk
 
 # Server database & temporary blob storage
 server/data/chat.db*

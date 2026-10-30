@@ -7,7 +7,7 @@
     "start": "node server/server.js",
     "start:static": "python3 -m http.server 3000",
     "cap:sync": "node scripts/prepare_dist.js && pnpm exec cap sync android",
-    "build:apk": "pnpm run cap:sync && cd android && JAVA_HOME=${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk} ANDROID_HOME=${ANDROID_HOME:-/home/tryss-archos/android-sdk} ./gradlew assembleDebug && cd .. && cp android/app/build/outputs/apk/debug/Dudu.apk ./Dudu.apk",
+    "build:apk": "pnpm run cap:sync && cd android && JAVA_HOME=${JAVA_HOME:-$HOME/.local/share/jvm/jdk-21} ANDROID_HOME=${ANDROID_HOME:-$HOME/android-sdk} ./gradlew assembleDebug && cd .. && cp \"android/app/build/outputs/apk/debug/Bubu & Dudu's Homespace.apk\" \"./Bubu & Dudu's Homespace.apk\"",
     "test": "node tests/run_all_tests.js"
   },
   "keywords": [],
