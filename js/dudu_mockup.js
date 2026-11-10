@@ -1222,7 +1222,18 @@
     hydrateDataFromRemoteServer();
     window.DuduChatUI?.init?.();
     syncOfflineIcons();
-    const obs = new MutationObserver(() => syncOfflineIcons());
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => syncOfflineIcons()).catch(() => {});
+    }
+    // Debounced: chat/sticker renders mutate the DOM constantly, and a
+    // full-document icon scan on every mutation starves slow devices.
+    let iconSyncQueued = false;
+    const queueIconSync = () => {
+      if (iconSyncQueued) return;
+      iconSyncQueued = true;
+      setTimeout(() => { iconSyncQueued = false; syncOfflineIcons(); }, 200);
+    };
+    const obs = new MutationObserver(queueIconSync);
     obs.observe(document.body, { childList: true, subtree: true });
   });
 

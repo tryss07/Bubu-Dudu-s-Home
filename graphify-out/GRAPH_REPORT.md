@@ -1,14 +1,19 @@
 # Graph Report - Dudu-Duo_Project  (2026-10-30)
 
 ## Corpus Check
-- 161 files · ~128,494 words
+- 70 files · ~128,506 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 23 file(s) not represented in the graph (top: .xml 10, (none) 3, .properties 2)
+- Unclassified: 25 file(s) not represented in the graph (top: .xml 10, (none) 4, .properties 2)
 
 ## Summary
-- 864 nodes · 1801 edges · 53 communities (34 shown, 19 thin omitted)
+- 863 nodes · 1801 edges · 53 communities (34 shown, 19 thin omitted)
 - Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 221 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `684ec444`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - ui.js & related
@@ -60,8 +65,8 @@
 3. `saveState()` - 25 edges
 4. `setDuduSticker()` - 24 edges
 5. `init()` - 22 edges
-6. `BedtimeLofiEngine` - 20 edges
-7. `playwright` - 20 edges
+6. `playwright` - 20 edges
+7. `BedtimeLofiEngine` - 20 edges
 8. `persistFallbackState()` - 20 edges
 9. `openDB()` - 19 edges
 10. `DuduAudioEngine` - 18 edges
@@ -106,8 +111,8 @@ Cohesion: 0.14
 Nodes (4): DuduCompanionService, WebSocketListener, Runnable, Runnable
 
 ### Community 6 - "package.json & related"
-Cohesion: 0.08
-Nodes (29): author, dependencies, @capacitor/android@^8.5.3, @capacitor/cli@^8.5.3, @capacitor/core@^8.5.3, @capacitor/local-notifications@^8.3.1, dotenv@^18.0.8, ws@^8.22.0 (+21 more)
+Cohesion: 0.05
+Nodes (42): author, dependencies, @capacitor/android@^8.5.3, @capacitor/cli@^8.5.3, @capacitor/core@^8.5.3, @capacitor/local-notifications@^8.3.1, dotenv@^18.0.8, ws@^8.22.0 (+34 more)
 
 ### Community 7 - "ref_node_sqlite & related"
 Cohesion: 0.07
@@ -134,8 +139,8 @@ Cohesion: 0.12
 Nodes (17): clearAllTummyLogs(), deleteCalendarEvent(), deleteMilestone(), deleteNote(), deletePlannerItem(), deletePolaroid(), deleteTummyLog(), persistFallbackState() (+9 more)
 
 ### Community 17 - "server.js & related"
-Cohesion: 0.13
-Nodes (13): broadcastToOthers(), fs, heartbeatInterval, http, isAuthorized(), MIME_TYPES, path, PORT (+5 more)
+Cohesion: 0.50
+Nodes (3): { chromium }, fs, path
 
 ### Community 18 - "ref_react & related"
 Cohesion: 0.23
@@ -146,8 +151,8 @@ Cohesion: 0.33
 Nodes (14): applyWallpaper(), closeWallpaperModal(), compressImage(), init(), loadSavedWallpaper(), openWallpaperModal(), renderWallpaperOptions(), resetWallpaper() (+6 more)
 
 ### Community 21 - "ref_assert & related"
-Cohesion: 0.14
-Nodes (10): assert, { chromium }, runBilingualAndFreshDefaultsTest(), assert, { chromium }, path, assert, { chromium } (+2 more)
+Cohesion: 0.12
+Nodes (13): playwright, { chromium }, { chromium }, assert, { chromium }, runBilingualAndFreshDefaultsTest(), assert, { chromium } (+5 more)
 
 ### Community 22 - "generate_wallpapers.js & related"
 Cohesion: 0.27
@@ -158,28 +163,28 @@ Cohesion: 0.15
 Nodes (7): { chromium }, fs, path, { chromium }, fs, { chromium }, fs
 
 ### Community 24 - "ref_http & related"
-Cohesion: 0.15
+Cohesion: 0.17
 Nodes (7): assert, http, path, assert, http, path, WebSocket
 
 ### Community 25 - "playwright & related"
-Cohesion: 0.15
-Nodes (9): playwright, { chromium }, { chromium }, { chromium }, fs, path, { chromium }, fs (+1 more)
-
-### Community 27 - "ref_child_process & related"
-Cohesion: 0.17
-Nodes (8): path, { spawnSync }, testSuites, { chromium }, fs, http, path, { spawn }
-
-### Community 28 - "ref_path & related"
 Cohesion: 0.17
 Nodes (8): { chromium }, fs, path, { chromium }, path, { chromium }, fs, path
+
+### Community 27 - "ref_child_process & related"
+Cohesion: 0.29
+Nodes (5): { chromium }, fs, http, path, { spawn }
+
+### Community 28 - "ref_path & related"
+Cohesion: 0.50
+Nodes (3): { chromium }, fs, path
 
 ### Community 29 - "server/package.json & related"
 Cohesion: 0.20
 Nodes (11): dependencies, dotenv@^16.4.7, ws@^8.18.0, description, dotenv, ws, main, name (+3 more)
 
 ### Community 31 - "convert_gifs.js & related"
-Cohesion: 0.25
-Nodes (6): { exec }, files, fs, OUT_DIR, path, SRC_DIR
+Cohesion: 0.15
+Nodes (9): { exec }, files, fs, OUT_DIR, path, SRC_DIR, path, { spawnSync } (+1 more)
 
 ### Community 32 - "webCrypto.ts & related"
 Cohesion: 0.32
@@ -223,17 +228,17 @@ Nodes (3): { chromium }, fs, path
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `playwright` connect `playwright & related` to `test_panel_chat_topics.js & related`, `package.json & related`, `review_stickers.js & related`, `test_sticker_suggestions_and_favs.js & related`, `ref_assert & related`, `ref_fs & related`, `ref_child_process & related`, `ref_path & related`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **Why does `playwright` connect `ref_assert & related` to `test_panel_chat_topics.js & related`, `package.json & related`, `review_stickers.js & related`, `test_sticker_suggestions_and_favs.js & related`, `server.js & related`, `ref_fs & related`, `playwright & related`, `ref_child_process & related`, `ref_path & related`?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `setupEventListeners()` (e.g. with `closeRenameTopicModal()` and `closeStickerTray()`) actually correct?**
   _`setupEventListeners()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Should `ui.js & related` be split into smaller, more focused modules?**
   _Cohesion score 0.05996212918156953 - nodes in this community are weakly interconnected._
-- **Why does `DuduCompanionService` connect `android.app.Service & related` to `alarmmanager & related`, `.clearUnread() & related`, `.onReceive() & related`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `ws` connect `package.json & related` to `ref_http & related`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Should `app.js & related` be split into smaller, more focused modules?**
   _Cohesion score 0.08081791626095423 - nodes in this community are weakly interconnected._
+- **Why does `DuduCompanionService` connect `android.app.Service & related` to `alarmmanager & related`, `.clearUnread() & related`, `.onReceive() & related`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Should `dudu_mockup.js & related` be split into smaller, more focused modules?**
   _Cohesion score 0.09615384615384616 - nodes in this community are weakly interconnected._
-- **Should `socket.js & related` be split into smaller, more focused modules?**
-  _Cohesion score 0.08250355618776671 - nodes in this community are weakly interconnected._

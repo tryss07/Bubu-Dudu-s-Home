@@ -21,47 +21,16 @@
   <!-- Fonts: Plus Jakarta Sans, Quicksand, Caveat (Handwritten) & Noto Sans KR -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <!-- media="print" onload keeps a stalled font CDN from blocking page render -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   
   <!-- Preconnect to lofi.radio CDN for low-latency streaming -->
   <link rel="preconnect" href="https://lofi.radio" crossorigin>
   <link rel="dns-prefetch" href="https://lofi.radio">
   
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script>
-    if (typeof tailwind !== 'undefined') {
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "surface": "#FAF5EE",
-            "surface-dim": "#e5d8cc",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#fff4ea",
-            "surface-container": "#f8ece0",
-            "surface-container-high": "#f1e3d5",
-            "primary": "#4A3222",
-            "primary-container": "#5c4033",
-            "secondary": "#8D5B4C",
-            "secondary-container": "#F5C7A9",
-            "warm-brown": "#8D5B4C",
-            "dark-brown": "#4A3222",
-            "biscuit": "#E6BE8A",
-            "peach": "#F5C7A9"
-          },
-          fontFamily: {
-            "heading": ["Plus Jakarta Sans", "sans-serif"],
-            "body": ["Quicksand", "sans-serif"],
-            "handwriting": ["Caveat", "cursive"]
-          }
-        }
-      }
-    };
-    }
-  </script>
+  <!-- Tailwind (prebuilt locally: npm run build:css) -->
+  <link rel="stylesheet" href="css/tailwind.css">
   
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/custom.css">
@@ -2111,7 +2080,7 @@
   <script src="js/chat/socket.js?v=v6"></script>
   <script src="js/chat/ui.js?v=v6"></script>
   <script src="js/chat/wallpaper.js?v=v6"></script>
-  <script src="js/dudu_mockup.js?v=v6"></script>
+  <script src="js/dudu_mockup.js?v=v7"></script>
 
 </body>
 </html>

@@ -183,6 +183,9 @@ const server = http.createServer((req, res) => {
           };
           if (ext === '.webp' || ext === '.png' || ext === '.jpg' || ext === '.jpeg' || ext === '.mp3') {
             headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+          } else if (ext === '.html' || ext === '.js' || ext === '.css') {
+            // Never let a browser pin an old app shell (e.g. one still pointing at a dead CDN).
+            headers['Cache-Control'] = 'no-cache, must-revalidate';
           }
           res.writeHead(200, headers);
           if (req.method === 'HEAD') {
