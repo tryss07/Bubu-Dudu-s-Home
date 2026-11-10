@@ -1,17 +1,17 @@
-# Graph Report - Dudu-Duo_Project  (2026-10-30)
+# Graph Report - Dudu-Duo_Project  (2026-11-10)
 
 ## Corpus Check
-- 70 files · ~128,506 words
+- 71 files · ~128,786 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 25 file(s) not represented in the graph (top: .xml 10, (none) 4, .properties 2)
+- Unclassified: 27 file(s) not represented in the graph (top: .xml 10, (none) 4, .css 3)
 
 ## Summary
-- 863 nodes · 1801 edges · 53 communities (34 shown, 19 thin omitted)
+- 930 nodes · 1871 edges · 57 communities (37 shown, 20 thin omitted)
 - Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 221 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `684ec444`
+- Built from commit: `2da15be4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -32,7 +32,7 @@
 - DuduBootReceiver.java & related
 - audio.js & related
 - clearAllTummyLogs() & related
-- server.js & related
+- playwright
 - ref_react & related
 - .clearUnread() & related
 - wallpaper.js & related
@@ -40,10 +40,10 @@
 - generate_wallpapers.js & related
 - ref_fs & related
 - ref_http & related
-- playwright & related
+- ref_path
 - ExampleInstrumentedTest.java & related
 - ref_child_process & related
-- ref_path & related
+- ✨ Core Modules & Feature Breakdown
 - server/package.json & related
 - chatSocket.ts & related
 - convert_gifs.js & related
@@ -56,8 +56,11 @@
 - review_stickers.js & related
 - getCoupleSpace() & related
 - chatStorage.ts & related
-- test_sticker_suggestions_and_favs.js & related
+- Dudu Project (For Nana) — Complete Architecture & Handoff Handbook
 - getAllPresence() & related
+- server.js
+- DESIGN.md
+- test_sticker_suggestions_and_favs.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `setupEventListeners()` - 47 edges
@@ -65,8 +68,8 @@
 3. `saveState()` - 25 edges
 4. `setDuduSticker()` - 24 edges
 5. `init()` - 22 edges
-6. `playwright` - 20 edges
-7. `BedtimeLofiEngine` - 20 edges
+6. `BedtimeLofiEngine` - 20 edges
+7. `playwright` - 20 edges
 8. `persistFallbackState()` - 20 edges
 9. `openDB()` - 19 edges
 10. `DuduAudioEngine` - 18 edges
@@ -84,7 +87,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (53 total, 19 thin omitted)
+## Communities (57 total, 20 thin omitted)
 
 ### Community 0 - "ui.js & related"
 Cohesion: 0.06
@@ -96,7 +99,7 @@ Nodes (76): applyOfflineSimulation(), checkDayChange(), closeCravingModal(), clo
 
 ### Community 2 - "dudu_mockup.js & related"
 Cohesion: 0.10
-Nodes (58): addNotification(), autoMigrateLegacyItems(), clearNotificationHistory(), closeSheet(), computeCoupleMatchBanner(), escapeHtml(), formatNoteBodyHtml(), formatTimeAgo() (+50 more)
+Nodes (59): addNotification(), autoMigrateLegacyItems(), clearNotificationHistory(), closeSheet(), computeCoupleMatchBanner(), escapeHtml(), formatNoteBodyHtml(), formatTimeAgo() (+51 more)
 
 ### Community 3 - "socket.js & related"
 Cohesion: 0.08
@@ -111,8 +114,8 @@ Cohesion: 0.14
 Nodes (4): DuduCompanionService, WebSocketListener, Runnable, Runnable
 
 ### Community 6 - "package.json & related"
-Cohesion: 0.05
-Nodes (42): author, dependencies, @capacitor/android@^8.5.3, @capacitor/cli@^8.5.3, @capacitor/core@^8.5.3, @capacitor/local-notifications@^8.3.1, dotenv@^18.0.8, ws@^8.22.0 (+34 more)
+Cohesion: 0.07
+Nodes (36): author, dependencies, @capacitor/android@^8.5.3, @capacitor/cli@^8.5.3, @capacitor/core@^8.5.3, @capacitor/local-notifications@^8.3.1, dotenv@^18.0.8, ws@^8.22.0 (+28 more)
 
 ### Community 7 - "ref_node_sqlite & related"
 Cohesion: 0.07
@@ -138,9 +141,9 @@ Nodes (11): BUBU_DIR, BUBU_STICKERS, COUPLE_DIR, COUPLE_STICKERS, DUDU_DIR, DUDU
 Cohesion: 0.12
 Nodes (17): clearAllTummyLogs(), deleteCalendarEvent(), deleteMilestone(), deleteNote(), deletePlannerItem(), deletePolaroid(), deleteTummyLog(), persistFallbackState() (+9 more)
 
-### Community 17 - "server.js & related"
-Cohesion: 0.50
-Nodes (3): { chromium }, fs, path
+### Community 17 - "playwright"
+Cohesion: 0.15
+Nodes (9): playwright, { chromium }, { chromium }, { chromium }, fs, path, { chromium }, fs (+1 more)
 
 ### Community 18 - "ref_react & related"
 Cohesion: 0.23
@@ -151,8 +154,8 @@ Cohesion: 0.33
 Nodes (14): applyWallpaper(), closeWallpaperModal(), compressImage(), init(), loadSavedWallpaper(), openWallpaperModal(), renderWallpaperOptions(), resetWallpaper() (+6 more)
 
 ### Community 21 - "ref_assert & related"
-Cohesion: 0.12
-Nodes (13): playwright, { chromium }, { chromium }, assert, { chromium }, runBilingualAndFreshDefaultsTest(), assert, { chromium } (+5 more)
+Cohesion: 0.14
+Nodes (10): assert, { chromium }, runBilingualAndFreshDefaultsTest(), assert, { chromium }, path, assert, { chromium } (+2 more)
 
 ### Community 22 - "generate_wallpapers.js & related"
 Cohesion: 0.27
@@ -163,28 +166,28 @@ Cohesion: 0.15
 Nodes (7): { chromium }, fs, path, { chromium }, fs, { chromium }, fs
 
 ### Community 24 - "ref_http & related"
-Cohesion: 0.17
+Cohesion: 0.15
 Nodes (7): assert, http, path, assert, http, path, WebSocket
 
-### Community 25 - "playwright & related"
+### Community 25 - "ref_path"
 Cohesion: 0.17
 Nodes (8): { chromium }, fs, path, { chromium }, path, { chromium }, fs, path
 
 ### Community 27 - "ref_child_process & related"
-Cohesion: 0.29
-Nodes (5): { chromium }, fs, http, path, { spawn }
+Cohesion: 0.17
+Nodes (8): path, { spawnSync }, testSuites, { chromium }, fs, http, path, { spawn }
 
-### Community 28 - "ref_path & related"
-Cohesion: 0.50
-Nodes (3): { chromium }, fs, path
+### Community 28 - "✨ Core Modules & Feature Breakdown"
+Cohesion: 0.08
+Nodes (24): 10. 🌐 Bilingual Localization & Theming, 1. Installation, 1. 🏠 Our Space (Home), 2. 💌 Love Notes, 2. Run Local Web Preview, 3. 🍯 Memory Jar (Our Polaroids & Timeline), 3. Run Backend Relay Server, 4. 📋 Bucket List & Date Planner (+16 more)
 
 ### Community 29 - "server/package.json & related"
 Cohesion: 0.20
 Nodes (11): dependencies, dotenv@^16.4.7, ws@^8.18.0, description, dotenv, ws, main, name (+3 more)
 
 ### Community 31 - "convert_gifs.js & related"
-Cohesion: 0.15
-Nodes (9): { exec }, files, fs, OUT_DIR, path, SRC_DIR, path, { spawnSync } (+1 more)
+Cohesion: 0.25
+Nodes (6): { exec }, files, fs, OUT_DIR, path, SRC_DIR
 
 ### Community 32 - "webCrypto.ts & related"
 Cohesion: 0.32
@@ -218,27 +221,39 @@ Nodes (3): { chromium }, fs, path
 Cohesion: 0.50
 Nodes (4): getCoupleSpace(), getWardrobe(), saveCoupleSpace(), saveWardrobe()
 
-### Community 43 - "test_sticker_suggestions_and_favs.js & related"
+### Community 43 - "Dudu Project (For Nana) — Complete Architecture & Handoff Handbook"
+Cohesion: 0.12
+Nodes (15): 1. Project Overview & Mission, 2. Tech Stack & Dependencies, 3. Directory Structure, 4. Subsystem Deep-Dive, 5. Live Server & Cloudflare Network Setup, 6. Development & Build Commands, 7. How to Transfer and Resume on a New Device, A. Private Duo Chat Architecture (+7 more)
+
+### Community 53 - "server.js"
+Cohesion: 0.13
+Nodes (13): broadcastToOthers(), fs, heartbeatInterval, http, isAuthorized(), MIME_TYPES, path, PORT (+5 more)
+
+### Community 55 - "DESIGN.md"
+Cohesion: 0.13
+Nodes (14): Bespoke Companion Components, Brand & Style, Buttons, Cards, Checkboxes & Radio Buttons, Chips & Badges, Colors, Components (+6 more)
+
+### Community 56 - "test_sticker_suggestions_and_favs.js"
 Cohesion: 0.50
 Nodes (3): { chromium }, fs, path
 
 ## Knowledge Gaps
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `playwright` connect `ref_assert & related` to `test_panel_chat_topics.js & related`, `package.json & related`, `review_stickers.js & related`, `test_sticker_suggestions_and_favs.js & related`, `server.js & related`, `ref_fs & related`, `playwright & related`, `ref_child_process & related`, `ref_path & related`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Why does `playwright` connect `playwright` to `test_panel_chat_topics.js & related`, `package.json & related`, `review_stickers.js & related`, `ref_assert & related`, `ref_fs & related`, `test_sticker_suggestions_and_favs.js`, `ref_path`, `ref_child_process & related`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `setupEventListeners()` (e.g. with `closeRenameTopicModal()` and `closeStickerTray()`) actually correct?**
   _`setupEventListeners()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **Should `ui.js & related` be split into smaller, more focused modules?**
   _Cohesion score 0.05996212918156953 - nodes in this community are weakly interconnected._
-- **Why does `ws` connect `package.json & related` to `ref_http & related`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `DuduCompanionService` connect `android.app.Service & related` to `alarmmanager & related`, `.clearUnread() & related`, `.onReceive() & related`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Should `app.js & related` be split into smaller, more focused modules?**
   _Cohesion score 0.08081791626095423 - nodes in this community are weakly interconnected._
-- **Why does `DuduCompanionService` connect `android.app.Service & related` to `alarmmanager & related`, `.clearUnread() & related`, `.onReceive() & related`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Should `dudu_mockup.js & related` be split into smaller, more focused modules?**
-  _Cohesion score 0.09615384615384616 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09603729603729604 - nodes in this community are weakly interconnected._
+- **Should `socket.js & related` be split into smaller, more focused modules?**
+  _Cohesion score 0.08250355618776671 - nodes in this community are weakly interconnected._

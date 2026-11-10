@@ -1,0 +1,992 @@
+{
+  ".playwright/cli.config.json": {
+    "mtime": 1792339036.5303874,
+    "seen": 1793346957.8658924,
+    "ast_hash": "bddba98431e6137473fb1d60c688beb0",
+    "semantic_hash": "bddba98431e6137473fb1d60c688beb0"
+  },
+  "android/app/build.gradle": {
+    "mtime": 1793347543.743102,
+    "seen": 1793348183.898655,
+    "ast_hash": "0f8ed7c9cd26001f0d9cc2f5c8fedfa0",
+    "semantic_hash": ""
+  },
+  "android/app/capacitor.build.gradle": {
+    "mtime": 1793347563.108101,
+    "seen": 1793348183.8986628,
+    "ast_hash": "40ff4eb78cc563ba8310aef14d1256c5",
+    "semantic_hash": "40ff4eb78cc563ba8310aef14d1256c5"
+  },
+  "android/app/src/androidTest/java/com/getcapacitor/myapp/ExampleInstrumentedTest.java": {
+    "mtime": 1792327820.1620505,
+    "seen": 1793346957.8659105,
+    "ast_hash": "fbaf7cc870c663eb52dcf218531c439d",
+    "semantic_hash": "fbaf7cc870c663eb52dcf218531c439d"
+  },
+  "android/app/src/main/java/com/honeyandbear/dudu/DuduBootReceiver.java": {
+    "mtime": 1792327820.1620505,
+    "seen": 1793346957.8659134,
+    "ast_hash": "fcafad62d10aa80de4e7a8c4f7b4ce60",
+    "semantic_hash": "fcafad62d10aa80de4e7a8c4f7b4ce60"
+  },
+  "android/app/src/main/java/com/honeyandbear/dudu/DuduCompanionPlugin.java": {
+    "mtime": 1793346404.1161695,
+    "seen": 1793346957.8659163,
+    "ast_hash": "0d9743d5d1f6f10c085ad02d92adf167",
+    "semantic_hash": "0d9743d5d1f6f10c085ad02d92adf167"
+  },
+  "android/app/src/main/java/com/honeyandbear/dudu/DuduCompanionService.java": {
+    "mtime": 1793346404.1161695,
+    "seen": 1793346957.8659186,
+    "ast_hash": "fd1cb0455bac16d8d36e8d1eb35c558c",
+    "semantic_hash": "fd1cb0455bac16d8d36e8d1eb35c558c"
+  },
+  "android/app/src/main/java/com/honeyandbear/dudu/MainActivity.java": {
+    "mtime": 1793346404.1171694,
+    "seen": 1793346957.865921,
+    "ast_hash": "29a59be66316b2f582dccb30693357db",
+    "semantic_hash": "29a59be66316b2f582dccb30693357db"
+  },
+  "android/app/src/test/java/com/getcapacitor/myapp/ExampleUnitTest.java": {
+    "mtime": 1792327820.1780505,
+    "seen": 1793346957.865924,
+    "ast_hash": "e91b4501c14da821682fa5c26a16d616",
+    "semantic_hash": "e91b4501c14da821682fa5c26a16d616"
+  },
+  "android/build.gradle": {
+    "mtime": 1792327820.1780505,
+    "seen": 1793346957.865926,
+    "ast_hash": "682315a426653617c6a74fc12bef55b6",
+    "semantic_hash": "682315a426653617c6a74fc12bef55b6"
+  },
+  "android/capacitor.settings.gradle": {
+    "mtime": 1793347563.108101,
+    "seen": 1793348183.8987017,
+    "ast_hash": "e023a794c3d2aaf3e98cd8badf8e3c42",
+    "semantic_hash": "e023a794c3d2aaf3e98cd8badf8e3c42"
+  },
+  "android/gradlew": {
+    "mtime": 1791382562.0,
+    "seen": 1793346957.8659317,
+    "ast_hash": "794669d78aef1dd5c7d889ef618b311a",
+    "semantic_hash": "794669d78aef1dd5c7d889ef618b311a"
+  },
+  "android/settings.gradle": {
+    "mtime": 1792327820.1800504,
+    "seen": 1793346957.8659346,
+    "ast_hash": "f6cd925b3f859e23c3d819fe2459e0e4",
+    "semantic_hash": "f6cd925b3f859e23c3d819fe2459e0e4"
+  },
+  "android/variables.gradle": {
+    "mtime": 1793346404.1188397,
+    "seen": 1793346957.865937,
+    "ast_hash": "461ebbf65027b0d71d6802a84ea2e1a6",
+    "semantic_hash": "461ebbf65027b0d71d6802a84ea2e1a6"
+  },
+  "capacitor.config.json": {
+    "mtime": 1793347539.7321022,
+    "seen": 1793348183.8987274,
+    "ast_hash": "21a232a61798be33c5ac158973474b64",
+    "semantic_hash": ""
+  },
+  "js/ambient.js": {
+    "mtime": 1792327820.4850504,
+    "seen": 1793346957.8659415,
+    "ast_hash": "7e15bdbbc408a8b3246a81bd2ec88a48",
+    "semantic_hash": "7e15bdbbc408a8b3246a81bd2ec88a48"
+  },
+  "js/app.js": {
+    "mtime": 1792508946.7314427,
+    "seen": 1793346957.865944,
+    "ast_hash": "a60ca74196d0d0087ee16fda8b824f75",
+    "semantic_hash": "a60ca74196d0d0087ee16fda8b824f75"
+  },
+  "js/audio.js": {
+    "mtime": 1792327820.4850504,
+    "seen": 1793346957.865946,
+    "ast_hash": "7e385495e502ec6739c8b2fe6e612817",
+    "semantic_hash": "7e385495e502ec6739c8b2fe6e612817"
+  },
+  "js/chat/crypto.js": {
+    "mtime": 1792508946.7314427,
+    "seen": 1793346957.8659484,
+    "ast_hash": "433b7d2a9948473ad9680be03caf78b6",
+    "semantic_hash": "433b7d2a9948473ad9680be03caf78b6"
+  },
+  "js/chat/socket.js": {
+    "mtime": 1792508946.7314427,
+    "seen": 1793346957.865951,
+    "ast_hash": "7cb9239b6e0e6a5a4ed6098b3038a7be",
+    "semantic_hash": "7cb9239b6e0e6a5a4ed6098b3038a7be"
+  },
+  "js/chat/storage.js": {
+    "mtime": 1793346404.1191692,
+    "seen": 1793346957.8659532,
+    "ast_hash": "02082b8f9840e32cabbc1ebc49071840",
+    "semantic_hash": "02082b8f9840e32cabbc1ebc49071840"
+  },
+  "js/chat/ui.js": {
+    "mtime": 1793346404.1201694,
+    "seen": 1793346957.8659556,
+    "ast_hash": "4a3934cb9bb397d5973ac5cc1bad6f88",
+    "semantic_hash": "4a3934cb9bb397d5973ac5cc1bad6f88"
+  },
+  "js/chat/wallpaper.js": {
+    "mtime": 1792508946.7324426,
+    "seen": 1793346957.8659585,
+    "ast_hash": "ed80571491b639adad455d2477143389",
+    "semantic_hash": "ed80571491b639adad455d2477143389"
+  },
+  "js/dudu_mockup.js": {
+    "mtime": 1794308669.7602193,
+    "seen": 1794309816.1706672,
+    "ast_hash": "0d53cd57d5d178226d15deede773f13e",
+    "semantic_hash": ""
+  },
+  "js/i18n.js": {
+    "mtime": 1792738714.1145449,
+    "seen": 1793346957.865963,
+    "ast_hash": "0d10f3a42870dfebcc681f73f6302e17",
+    "semantic_hash": "0d10f3a42870dfebcc681f73f6302e17"
+  },
+  "js/stickers.js": {
+    "mtime": 1792327820.4870505,
+    "seen": 1793346957.8659654,
+    "ast_hash": "96e760501424dce298f754c28b87e550",
+    "semantic_hash": "96e760501424dce298f754c28b87e550"
+  },
+  "js/stickers_catalog.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.8659675,
+    "ast_hash": "9cf60af435de9494a0dd2486da45732a",
+    "semantic_hash": "9cf60af435de9494a0dd2486da45732a"
+  },
+  "js/stickers_center.js": {
+    "mtime": 1793346404.1221693,
+    "seen": 1793346957.86597,
+    "ast_hash": "4c7dd4ad9e80d3ea3180bf9e70202c80",
+    "semantic_hash": "4c7dd4ad9e80d3ea3180bf9e70202c80"
+  },
+  "package.json": {
+    "mtime": 1794308394.4312172,
+    "seen": 1794309816.1706867,
+    "ast_hash": "eab7b4879095dc0da7d2e1bc23ccc132",
+    "semantic_hash": ""
+  },
+  "prepare_dist.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.865975,
+    "ast_hash": "3f40e1475d9bf110b8cf56d979af07fc",
+    "semantic_hash": "3f40e1475d9bf110b8cf56d979af07fc"
+  },
+  "scripts/convert_gifs.js": {
+    "mtime": 1792343584.8321185,
+    "seen": 1793346957.865977,
+    "ast_hash": "664163258b78d6e7979c618498ecb3ef",
+    "semantic_hash": "664163258b78d6e7979c618498ecb3ef"
+  },
+  "scripts/generate_stickers.js": {
+    "mtime": 1792343584.8324578,
+    "seen": 1793346957.8659794,
+    "ast_hash": "aa4ef677ccda8463dcf32931cab9e1e4",
+    "semantic_hash": "aa4ef677ccda8463dcf32931cab9e1e4"
+  },
+  "scripts/generate_wallpapers.js": {
+    "mtime": 1792343584.8324578,
+    "seen": 1793346957.865982,
+    "ast_hash": "e463e7be9c56c5ab42f05b6107570a2a",
+    "semantic_hash": "e463e7be9c56c5ab42f05b6107570a2a"
+  },
+  "scripts/prepare_dist.js": {
+    "mtime": 1792508946.7334428,
+    "seen": 1793346957.8659842,
+    "ast_hash": "5853fc3fb3d348710e5508f83110631f",
+    "semantic_hash": "5853fc3fb3d348710e5508f83110631f"
+  },
+  "server/db.js": {
+    "mtime": 1793346404.1221693,
+    "seen": 1793346957.865987,
+    "ast_hash": "517679743ddf81819723a19c37bb7d5d",
+    "semantic_hash": "517679743ddf81819723a19c37bb7d5d"
+  },
+  "server/package.json": {
+    "mtime": 1792327820.4880505,
+    "seen": 1793346957.8659894,
+    "ast_hash": "713ee9eb803bd099569fbc8110b31a1b",
+    "semantic_hash": "713ee9eb803bd099569fbc8110b31a1b"
+  },
+  "server/server.js": {
+    "mtime": 1794309657.7922275,
+    "seen": 1794309816.1707153,
+    "ast_hash": "38fd1c262e1446cf2f5df994773c4090",
+    "semantic_hash": ""
+  },
+  "src/features/chat/components/ChatInputBar.tsx": {
+    "mtime": 1792327820.4890504,
+    "seen": 1793346957.8659942,
+    "ast_hash": "824933cff0a615e6f40f086f98a6d600",
+    "semantic_hash": "824933cff0a615e6f40f086f98a6d600"
+  },
+  "src/features/chat/components/MessageList.tsx": {
+    "mtime": 1792327820.4890504,
+    "seen": 1793346957.8659966,
+    "ast_hash": "d8d44a02384ee45a4b4c3a822dc08bf4",
+    "semantic_hash": "d8d44a02384ee45a4b4c3a822dc08bf4"
+  },
+  "src/features/chat/components/PrivateChatView.tsx": {
+    "mtime": 1792327820.4890504,
+    "seen": 1793346957.8659992,
+    "ast_hash": "dfdab5188204f62e1711e4dd650a6b6f",
+    "semantic_hash": "dfdab5188204f62e1711e4dd650a6b6f"
+  },
+  "src/features/chat/components/SessionBar.tsx": {
+    "mtime": 1792327820.4900506,
+    "seen": 1793346957.8660014,
+    "ast_hash": "9d358bff9b0b9eca43eb2dc4b1d51e8a",
+    "semantic_hash": "9d358bff9b0b9eca43eb2dc4b1d51e8a"
+  },
+  "src/features/chat/components/StickerTray.tsx": {
+    "mtime": 1792327820.4900506,
+    "seen": 1793346957.8660038,
+    "ast_hash": "ef3967d03c6ab26a767dd03d780c749f",
+    "semantic_hash": "ef3967d03c6ab26a767dd03d780c749f"
+  },
+  "src/features/chat/crypto/keyStorage.ts": {
+    "mtime": 1792327820.4900506,
+    "seen": 1793346957.8660064,
+    "ast_hash": "3380b64408360724e6e156e4bebc5706",
+    "semantic_hash": "3380b64408360724e6e156e4bebc5706"
+  },
+  "src/features/chat/crypto/webCrypto.ts": {
+    "mtime": 1792327820.4900506,
+    "seen": 1793346957.8660097,
+    "ast_hash": "9c0be7d0cba5b51bab30d2a3033c23e5",
+    "semantic_hash": "9c0be7d0cba5b51bab30d2a3033c23e5"
+  },
+  "src/features/chat/services/chatSocket.ts": {
+    "mtime": 1792327820.4910505,
+    "seen": 1793346957.8660119,
+    "ast_hash": "1d062647aa2d0c2bd95e93ac9802ad4e",
+    "semantic_hash": "1d062647aa2d0c2bd95e93ac9802ad4e"
+  },
+  "src/features/chat/storage/chatStorage.ts": {
+    "mtime": 1792327820.4910505,
+    "seen": 1793346957.8660145,
+    "ast_hash": "a725688ef90b3a80fa6a5cdbb9e8631e",
+    "semantic_hash": "a725688ef90b3a80fa6a5cdbb9e8631e"
+  },
+  "tests/playwright_audit.js": {
+    "mtime": 1792327820.4930503,
+    "seen": 1793346957.8660169,
+    "ast_hash": "db3a42d92877a25fd818b9b33d363395",
+    "semantic_hash": "db3a42d92877a25fd818b9b33d363395"
+  },
+  "tests/playwright_e2e_features.js": {
+    "mtime": 1792327820.4930503,
+    "seen": 1793346957.8660192,
+    "ast_hash": "f33d5505922449811f72bf5253d8c4a8",
+    "semantic_hash": "f33d5505922449811f72bf5253d8c4a8"
+  },
+  "tests/review_stickers.js": {
+    "mtime": 1792508946.7344427,
+    "seen": 1793346957.8660216,
+    "ast_hash": "b0744037506f849946d20fb810ffeefb",
+    "semantic_hash": "b0744037506f849946d20fb810ffeefb"
+  },
+  "tests/run_all_tests.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.8660238,
+    "ast_hash": "e8ecd72c4b7c22680c9288490129151b",
+    "semantic_hash": "e8ecd72c4b7c22680c9288490129151b"
+  },
+  "tests/test_bilingual_and_fresh_defaults.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.8660262,
+    "ast_hash": "d72d0dcef2e7488e7a4c289d1ffc1143",
+    "semantic_hash": "d72d0dcef2e7488e7a4c289d1ffc1143"
+  },
+  "tests/test_bilingual_and_wallpapers.js": {
+    "mtime": 1792343584.8324578,
+    "seen": 1793346957.8660283,
+    "ast_hash": "f6535fb7dcb95955cca0c49dd5a10388",
+    "semantic_hash": "f6535fb7dcb95955cca0c49dd5a10388"
+  },
+  "tests/test_companion.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.8660307,
+    "ast_hash": "e9ff717f462ff2b422ed3d4c19720a3e",
+    "semantic_hash": "e9ff717f462ff2b422ed3d4c19720a3e"
+  },
+  "tests/test_dual_battery_ui.js": {
+    "mtime": 1792339036.8415163,
+    "seen": 1793346957.8660328,
+    "ast_hash": "afdcd183c52295cb368ca5264603601f",
+    "semantic_hash": "afdcd183c52295cb368ca5264603601f"
+  },
+  "tests/test_duo_chat.js": {
+    "mtime": 1792327820.4940505,
+    "seen": 1793346957.8660352,
+    "ast_hash": "5caf1e5c8bce7726682369d15c3fce98",
+    "semantic_hash": "5caf1e5c8bce7726682369d15c3fce98"
+  },
+  "tests/test_feature_sync.js": {
+    "mtime": 1792327820.4940505,
+    "seen": 1793346957.8660376,
+    "ast_hash": "5aada21ff698fa507059cb05e6e29744",
+    "semantic_hash": "5aada21ff698fa507059cb05e6e29744"
+  },
+  "tests/test_mockup_overhaul.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.86604,
+    "ast_hash": "426035ec3c37f52e3f184141dbdf2a3b",
+    "semantic_hash": "426035ec3c37f52e3f184141dbdf2a3b"
+  },
+  "tests/test_music_panel.js": {
+    "mtime": 1792738714.1155448,
+    "seen": 1793346957.8660424,
+    "ast_hash": "f4167ac5b20f489c1023d57c3984b238",
+    "semantic_hash": "f4167ac5b20f489c1023d57c3984b238"
+  },
+  "tests/test_new_features.js": {
+    "mtime": 1792327820.4940505,
+    "seen": 1793346957.866045,
+    "ast_hash": "7bfaae7be90f02bc57ae95604b222d16",
+    "semantic_hash": "7bfaae7be90f02bc57ae95604b222d16"
+  },
+  "tests/test_panel_chat_topics.js": {
+    "mtime": 1793346404.1231694,
+    "seen": 1793346957.8660526,
+    "ast_hash": "e0ed05b458d70ba0ec562610482ec1dd",
+    "semantic_hash": "e0ed05b458d70ba0ec562610482ec1dd"
+  },
+  "tests/test_server_wardrobe.js": {
+    "mtime": 1792339036.8415163,
+    "seen": 1793346957.8660553,
+    "ast_hash": "6230c68762e50c3435c10d6fb00c2549",
+    "semantic_hash": "6230c68762e50c3435c10d6fb00c2549"
+  },
+  "tests/test_sticker_centre_and_upload.js": {
+    "mtime": 1792738714.1165447,
+    "seen": 1793346957.8660574,
+    "ast_hash": "3e5f465780414d06d51abc89a1e0f5a1",
+    "semantic_hash": "3e5f465780414d06d51abc89a1e0f5a1"
+  },
+  "tests/test_sticker_click_modal.js": {
+    "mtime": 1792738714.1165447,
+    "seen": 1793346957.86606,
+    "ast_hash": "9542ce0887b2e7f4d6be0da9e7aa6ae4",
+    "semantic_hash": "9542ce0887b2e7f4d6be0da9e7aa6ae4"
+  },
+  "tests/test_sticker_suggestions_and_favs.js": {
+    "mtime": 1792508946.7344427,
+    "seen": 1793346957.8660624,
+    "ast_hash": "9b6f5450a7b799bedf28f6b35eddf362",
+    "semantic_hash": "9b6f5450a7b799bedf28f6b35eddf362"
+  },
+  "tests/test_stickers_and_wallpaper.js": {
+    "mtime": 1792508946.7354426,
+    "seen": 1793346957.8660645,
+    "ast_hash": "28eefccc29be6bc18682a85ca52b9acb",
+    "semantic_hash": "28eefccc29be6bc18682a85ca52b9acb"
+  },
+  "tests/test_wardrobe_debug.js": {
+    "mtime": 1792327820.4940505,
+    "seen": 1793346957.8660672,
+    "ast_hash": "9db8a028c29da964aa2eb02d45faf7bb",
+    "semantic_hash": "9db8a028c29da964aa2eb02d45faf7bb"
+  },
+  "tests/test_wardrobe_visual_overhaul.js": {
+    "mtime": 1792508946.7354426,
+    "seen": 1793346957.8660698,
+    "ast_hash": "03700c490f2260a51c1fadddf854ae7c",
+    "semantic_hash": "03700c490f2260a51c1fadddf854ae7c"
+  },
+  "PROJECT_SUMMARY.md": {
+    "mtime": 1792327820.1600504,
+    "seen": 1793348183.8989413,
+    "ast_hash": "aba40f3aeebafd856b21d72a35ce1674",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1792738714.1085448,
+    "seen": 1793348183.8989453,
+    "ast_hash": "651950c514ade29f05a44d3fdafaa8c8",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1794308966.3122218,
+    "seen": 1794309816.1708357,
+    "ast_hash": "7a9f44ff0750f9ce16664a80671f401b",
+    "semantic_hash": ""
+  },
+  "stitch_dudu_bear_girlfriend_companion/DESIGN.md": {
+    "mtime": 1792327820.4910505,
+    "seen": 1793348183.8989518,
+    "ast_hash": "d0f9582b8f52da3c2231c7c460cba3ca",
+    "semantic_hash": ""
+  },
+  "stitch_dudu_bear_girlfriend_companion/code.html": {
+    "mtime": 1792327820.4920504,
+    "seen": 1793348183.898955,
+    "ast_hash": "9288e2039b8b43bd1c05ae5d8db599c0",
+    "semantic_hash": ""
+  },
+  "tests/test_wardrobe_fits.html": {
+    "mtime": 1792343584.8324578,
+    "seen": 1793348183.8989584,
+    "ast_hash": "203f7f5908ca69e1cf77a6a4da03bb27",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-land-hdpi/splash.png": {
+    "mtime": 1792327820.1640506,
+    "seen": 1793348183.8989613,
+    "ast_hash": "a5ea628a4d22ce929d5bb24dffac37cc",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-land-mdpi/splash.png": {
+    "mtime": 1792327820.1640506,
+    "seen": 1793348183.8989646,
+    "ast_hash": "3edcc724a3b9772ef244762da41b1418",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-land-xhdpi/splash.png": {
+    "mtime": 1792327820.1640506,
+    "seen": 1793348183.8989677,
+    "ast_hash": "9713e3384f6dfbf905115d7b4846dc84",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-land-xxhdpi/splash.png": {
+    "mtime": 1792327820.1650505,
+    "seen": 1793348183.8989708,
+    "ast_hash": "e82045969e19526d3c057c601ceff98b",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-land-xxxhdpi/splash.png": {
+    "mtime": 1792327820.1660504,
+    "seen": 1793348183.8989742,
+    "ast_hash": "91aebcfda05d9e2d58103849539fcd2b",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-port-hdpi/splash.png": {
+    "mtime": 1792327820.1670504,
+    "seen": 1793348183.8989775,
+    "ast_hash": "407bf42bb78486a1fd78b39a6b1a4275",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-port-mdpi/splash.png": {
+    "mtime": 1792327820.1670504,
+    "seen": 1793348183.898981,
+    "ast_hash": "31df89b068570e2eea6eaed14d125a0b",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-port-xhdpi/splash.png": {
+    "mtime": 1792327820.1680505,
+    "seen": 1793348183.8989844,
+    "ast_hash": "d3f2d5a0a2cf54a9e02bd839970336b0",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-port-xxhdpi/splash.png": {
+    "mtime": 1792327820.1680505,
+    "seen": 1793348183.8989878,
+    "ast_hash": "4e7a0ea4ab95682f8d368938e98686f7",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable-port-xxxhdpi/splash.png": {
+    "mtime": 1792327820.1690505,
+    "seen": 1793348183.898991,
+    "ast_hash": "289638f70551940fe440907288d312e6",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/drawable/splash.png": {
+    "mtime": 1792327820.1690505,
+    "seen": 1793348183.8989944,
+    "ast_hash": "3edcc724a3b9772ef244762da41b1418",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
+    "mtime": 1792327820.1700504,
+    "seen": 1793348183.8989978,
+    "ast_hash": "4d8d2e1eefc5d3aa578d0c4f7bd7f711",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png": {
+    "mtime": 1792327820.1710505,
+    "seen": 1793348183.8990011,
+    "ast_hash": "74842cc7f24da79688d8f7aa80564496",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png": {
+    "mtime": 1792327820.1710505,
+    "seen": 1793348183.8990066,
+    "ast_hash": "d5140de6d0055ad54c1e299236b94f4d",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
+    "mtime": 1792327820.1710505,
+    "seen": 1793348183.8990104,
+    "ast_hash": "013a890e5bcaa7456ad7e9399af32bae",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png": {
+    "mtime": 1792327820.1710505,
+    "seen": 1793348183.8990135,
+    "ast_hash": "de0f07865f492988affdad7931777e2f",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png": {
+    "mtime": 1792327820.1720505,
+    "seen": 1793348183.8990169,
+    "ast_hash": "5766ac0b03446a34eac3d3cacfde17f5",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
+    "mtime": 1792327820.1720505,
+    "seen": 1793348183.8990202,
+    "ast_hash": "6c375c0ff83362c1a96c95bbd6ea1f4a",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png": {
+    "mtime": 1792327820.1720505,
+    "seen": 1793348183.8990235,
+    "ast_hash": "ff5de5e89972325ec1cd60f76cd1ce2b",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png": {
+    "mtime": 1792327820.1720505,
+    "seen": 1793348183.8990269,
+    "ast_hash": "5e6587c9b86789b998ea632480719cdc",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
+    "mtime": 1792327820.1730504,
+    "seen": 1793348183.8990302,
+    "ast_hash": "755348e2c5c64b9a69e723bb6303aae3",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png": {
+    "mtime": 1792327820.1730504,
+    "seen": 1793348183.8990335,
+    "ast_hash": "18d5fb8ae41ee14231fbf1533a1916ea",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png": {
+    "mtime": 1792327820.1740506,
+    "seen": 1793348183.8990366,
+    "ast_hash": "22bfad42dd72169cd7bade90c0dfcdfc",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
+    "mtime": 1792327820.1740506,
+    "seen": 1793348183.89904,
+    "ast_hash": "57f84f2ab7353ab32b29ac6172f51544",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png": {
+    "mtime": 1792327820.1750505,
+    "seen": 1793348183.8990433,
+    "ast_hash": "cb2c3be80a0e769d845a718090073d4d",
+    "semantic_hash": ""
+  },
+  "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png": {
+    "mtime": 1792327820.1760504,
+    "seen": 1793348183.8990467,
+    "ast_hash": "8f6d2a103dcda3a1c5e957b021314f0b",
+    "semantic_hash": ""
+  },
+  "assets/bubu_avatar.png": {
+    "mtime": 1792327820.1810505,
+    "seen": 1793348183.8990586,
+    "ast_hash": "1eb3f186a86a12f831f7b9563e3e8c03",
+    "semantic_hash": ""
+  },
+  "assets/chat_doodle_bg.svg": {
+    "mtime": 1792327820.1810505,
+    "seen": 1793348183.8990617,
+    "ast_hash": "5a8247f836c34cbd3eaa719a93a58a2f",
+    "semantic_hash": ""
+  },
+  "assets/dudu_avatar.png": {
+    "mtime": 1792327820.1820505,
+    "seen": 1793348183.8990648,
+    "ast_hash": "ddf4bc363f9f8b51e9a1ba82d5ebd3ec",
+    "semantic_hash": ""
+  },
+  "assets/dudu_icon.png": {
+    "mtime": 1792327820.1820505,
+    "seen": 1793348183.8990679,
+    "ast_hash": "3d5cfb9066dc5197b12c50adc4598e34",
+    "semantic_hash": ""
+  },
+  "assets/header_couple_avatar.png": {
+    "mtime": 1792327820.1830504,
+    "seen": 1793348183.899071,
+    "ast_hash": "0cee042e2bb65a86fa6c2dbdf6ba69f1",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/adventure_couple.png": {
+    "mtime": 1792327820.1830504,
+    "seen": 1793348183.899074,
+    "ast_hash": "9ef45d7401a987763218612ee1064913",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/bubu_head.png": {
+    "mtime": 1792327820.1830504,
+    "seen": 1793348183.8990772,
+    "ast_hash": "038d505a9d33c471df60e0b00d55c86d",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/calendar_anniversary.png": {
+    "mtime": 1792327820.1840506,
+    "seen": 1793348183.8990803,
+    "ast_hash": "05abf0aab30de111c4d16158ba67ff03",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_bamboo.png": {
+    "mtime": 1792327820.1840506,
+    "seen": 1793348183.8990834,
+    "ast_hash": "2049caa12fb34be4809e3bf7e7e5a210",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_heart.png": {
+    "mtime": 1792327820.1840506,
+    "seen": 1793348183.8990862,
+    "ast_hash": "17632421dfb93d8fa531941beb33d809",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_hug.png": {
+    "mtime": 1792327820.1850505,
+    "seen": 1793348183.8990893,
+    "ast_hash": "be70f2ac95aead10f7a2ab758ca70b83",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_peek.png": {
+    "mtime": 1792327820.1850505,
+    "seen": 1793348183.8990924,
+    "ast_hash": "c6aa589f4be84ff50e891f17b8d2a892",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_sleep.png": {
+    "mtime": 1792327820.1860504,
+    "seen": 1793348183.8990955,
+    "ast_hash": "76dda91f22a9de40aa143adb1b01e8cc",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/chat_stk_wave.png": {
+    "mtime": 1792327820.1860504,
+    "seen": 1793348183.8990986,
+    "ast_hash": "67d0a40382a573df456b8d6000cd72d7",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/date_baking.png": {
+    "mtime": 1792327820.1860504,
+    "seen": 1793348183.899102,
+    "ast_hash": "89b51979240d9838caac15dc59c953c5",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/date_coffee.png": {
+    "mtime": 1792327820.1860504,
+    "seen": 1793348183.899105,
+    "ast_hash": "a5245fbd97388a48d2ce08a88eadf730",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/date_stargazing.png": {
+    "mtime": 1792327820.1860504,
+    "seen": 1793348183.8991082,
+    "ast_hash": "2571285906d39f89d44219496260e9f8",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/home_couple_hug.png": {
+    "mtime": 1792327820.1870506,
+    "seen": 1793348183.8991113,
+    "ast_hash": "ded1ab61952fdab0d56e38d63fbdff0c",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/minigame_switch.png": {
+    "mtime": 1792327820.1880505,
+    "seen": 1793348183.8991146,
+    "ast_hash": "4bdb1a05d2317997b5c8fa4f289c4a7a",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/music_bedtime.png": {
+    "mtime": 1792343584.3351185,
+    "seen": 1793348183.8991175,
+    "ast_hash": "17aadd263eda5c5f5b5023ad92f67158",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/notes_banner.png": {
+    "mtime": 1792327820.1900504,
+    "seen": 1793348183.8991203,
+    "ast_hash": "5e1d7ada46abcc88753b3ff86efd88f6",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/polaroid_autumn.png": {
+    "mtime": 1792327820.1910505,
+    "seen": 1793348183.899132,
+    "ast_hash": "46dba54549bef839b7279c257b97d4f4",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/polaroid_cafe.png": {
+    "mtime": 1792327820.1920505,
+    "seen": 1793348183.899136,
+    "ast_hash": "ce50e8453942041bc8edc581f0c2288b",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/polaroid_picnic.png": {
+    "mtime": 1792327820.1930504,
+    "seen": 1793348183.8991394,
+    "ast_hash": "ea867767c6f25bc34bf0bfc62ee499e6",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/polaroid_sunset.png": {
+    "mtime": 1792327820.1930504,
+    "seen": 1793348183.8991425,
+    "ast_hash": "e3d6838a4f9f6d7b282abb3eafd5a24b",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/timeline_card_test.png": {
+    "mtime": 1792327820.1950505,
+    "seen": 1793348183.8991454,
+    "ast_hash": "3e336b98995b5c1e580e57920b440e28",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_bubu_clean.jpg": {
+    "mtime": 1792339036.5613873,
+    "seen": 1793348183.8991485,
+    "ast_hash": "df10cedc5ff80a14660c97f1aea98c42",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_bubu_mentahan.png": {
+    "mtime": 1792343584.3461185,
+    "seen": 1793348183.8991516,
+    "ast_hash": "453d7f8b3180dd5aedecd70c4d4ee3de",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_bubu_raw.jpg": {
+    "mtime": 1792339036.5643873,
+    "seen": 1793348183.8991547,
+    "ast_hash": "9247c0f811780df5f47ee42b3f9b432b",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_bubu_room.jpg": {
+    "mtime": 1792343584.3461185,
+    "seen": 1793348183.8991578,
+    "ast_hash": "25b565df0839232f7ee4d61a669815e7",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_couple_raw.jpg": {
+    "mtime": 1792339036.5713873,
+    "seen": 1793348183.8991609,
+    "ast_hash": "ccaae3cb4a0c5a166884cf24c7e9a83f",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_couple_room.jpg": {
+    "mtime": 1792343584.3471184,
+    "seen": 1793348183.899164,
+    "ast_hash": "b6fb2c8a25c4d349c36716bdf23d681d",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_dudu_clean.jpg": {
+    "mtime": 1792339036.5763874,
+    "seen": 1793348183.8991673,
+    "ast_hash": "d831b231b61214548db6e7c86b0db92b",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_dudu_mentahan.png": {
+    "mtime": 1792343584.3491185,
+    "seen": 1793348183.8991706,
+    "ast_hash": "7591b5ad36aeefba34a340b86de05e80",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_dudu_raw.jpg": {
+    "mtime": 1792339036.5793874,
+    "seen": 1793348183.899174,
+    "ast_hash": "9a8c93e19b88f3e877390ce756686d48",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe/stage_dudu_room.jpg": {
+    "mtime": 1792343584.3491185,
+    "seen": 1793348183.8991773,
+    "ast_hash": "dacf66280246fa5082959aa75e42b17c",
+    "semantic_hash": ""
+  },
+  "assets/mockup_art/wardrobe_room.png": {
+    "mtime": 1792327820.1960504,
+    "seen": 1793348183.8991802,
+    "ast_hash": "82155bb473d8455e1ccbb7f89afe0d30",
+    "semantic_hash": ""
+  },
+  "assets/nav_chat.png": {
+    "mtime": 1792327820.1960504,
+    "seen": 1793348183.8991833,
+    "ast_hash": "0cee042e2bb65a86fa6c2dbdf6ba69f1",
+    "semantic_hash": ""
+  },
+  "assets/nav_home.png": {
+    "mtime": 1792327820.1960504,
+    "seen": 1793348183.8991866,
+    "ast_hash": "2361aba6b7d7ddc4f2ce8d87d2c6631f",
+    "semantic_hash": ""
+  },
+  "assets/nav_shield.png": {
+    "mtime": 1792327820.1970506,
+    "seen": 1793348183.89919,
+    "ast_hash": "723caabf62e6ac646f5719c4ed6b7bc5",
+    "semantic_hash": ""
+  },
+  "assets/nav_shop.png": {
+    "mtime": 1792327820.1970506,
+    "seen": 1793348183.8991933,
+    "ast_hash": "a39c4a43a56bbdabd6ac3566304ee55d",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_01_baby_clothes.jpg": {
+    "mtime": 1792508946.7216427,
+    "seen": 1793348183.8991966,
+    "ast_hash": "4b8c28c3fc10975bd24de2e83d7eea13",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_02_winter_clothes.jpg": {
+    "mtime": 1792508946.7221394,
+    "seen": 1793348183.8991997,
+    "ast_hash": "bbdd98b33c7d1fc493939255ba6a3046",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_03_chore_clothes.jpg": {
+    "mtime": 1792508946.7224426,
+    "seen": 1793348183.899203,
+    "ast_hash": "71afaae4706a1f1de65cfefb7e88c864",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_04_work_clothes.jpg": {
+    "mtime": 1792508946.7234428,
+    "seen": 1793348183.8992062,
+    "ast_hash": "63d6061d5127d62ce7a78ce7c0ef0951",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_05_sleep_pajamas.jpg": {
+    "mtime": 1792508946.7234428,
+    "seen": 1793348183.8992095,
+    "ast_hash": "d692ac702beb9dec96f23635382f77f0",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_06_couple_clothes.jpg": {
+    "mtime": 1792508946.7234428,
+    "seen": 1793348183.8992128,
+    "ast_hash": "fcfe405bb566e6fda31d6cbf6e85f066",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_07_love_clothes.jpg": {
+    "mtime": 1792508946.7244427,
+    "seen": 1793348183.899216,
+    "ast_hash": "ffc3638309cc6aa1c2e166de99dc9ccd",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_08_dudu_face_shirt.jpg": {
+    "mtime": 1792508946.7244427,
+    "seen": 1793348183.8992195,
+    "ast_hash": "bb01c6c83862e8f3066920be7bffdeae",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_09_pants_only.jpg": {
+    "mtime": 1792508946.7254426,
+    "seen": 1793348183.8992226,
+    "ast_hash": "fffc715571d2e9b0d85e71398a1af0c3",
+    "semantic_hash": ""
+  },
+  "closet/bubu/bubu_10_dress.jpg": {
+    "mtime": 1792508946.7254426,
+    "seen": 1793348183.8992257,
+    "ast_hash": "273a0ff132caf68b900faefa35edc7cd",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_01_baby_clothes.jpg": {
+    "mtime": 1792508946.7264428,
+    "seen": 1793348183.8992286,
+    "ast_hash": "bbadf9dbe51ac9c1ec945814391ce160",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_02_winter_clothes.jpg": {
+    "mtime": 1792508946.7264428,
+    "seen": 1793348183.899232,
+    "ast_hash": "4d65acc050e89de39d4285a0dd37cc1a",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_03_chore_clothes.jpg": {
+    "mtime": 1792508946.7274427,
+    "seen": 1793348183.899235,
+    "ast_hash": "f82d8e304f8bdaa77d09d81ebc5cc86c",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_04_work_clothes.jpg": {
+    "mtime": 1792508946.7274427,
+    "seen": 1793348183.8992383,
+    "ast_hash": "e96bc9bc0dd5906d109bc87085c47ef9",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_05_sleep_pajamas.jpg": {
+    "mtime": 1792508946.7284427,
+    "seen": 1793348183.8992414,
+    "ast_hash": "d8780d7d634ed71b3ea951df95f1bbce",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_06_couple_clothes.jpg": {
+    "mtime": 1792508946.7284427,
+    "seen": 1793348183.8992448,
+    "ast_hash": "428a553e4fe0efbc3eeef6a2a6fe55ac",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_07_love_clothes.jpg": {
+    "mtime": 1792508946.7294426,
+    "seen": 1793348183.8992481,
+    "ast_hash": "b7cc9f6fa997396aaad236fc71cb1275",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_08_bubu_face_shirt.jpg": {
+    "mtime": 1792508946.7294426,
+    "seen": 1793348183.8992512,
+    "ast_hash": "a44305c9f811c4a2e456ea79eb1065fc",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_09_pants_only.jpg": {
+    "mtime": 1792508946.7294426,
+    "seen": 1793348183.8992543,
+    "ast_hash": "121b69cba1d2041a47a8e59d069e9899",
+    "semantic_hash": ""
+  },
+  "closet/dudu/dudu_10_tuxedo.jpg": {
+    "mtime": 1792508946.7304428,
+    "seen": 1793348183.8992577,
+    "ast_hash": "41abafead9ce3a830806742adad6bbf5",
+    "semantic_hash": ""
+  },
+  "stitch_dudu_bear_girlfriend_companion/screen.png": {
+    "mtime": 1792327820.4920504,
+    "seen": 1793348183.8992608,
+    "ast_hash": "37207775f9451653ee40fc0d989f483c",
+    "semantic_hash": ""
+  },
+  "tailwind.config.js": {
+    "mtime": 1794308341.7402167,
+    "seen": 1794309816.1707513,
+    "ast_hash": "d09e673350a24ab3f44a82bb17f96635",
+    "semantic_hash": ""
+  },
+  "package-lock.json": {
+    "mtime": 1794308327.8392165,
+    "seen": 1794309816.171181,
+    "ast_hash": "b66eb4de019eddd0d3afdfde8bcd6bd3",
+    "semantic_hash": ""
+  },
+  "pnpm-lock.yaml": {
+    "mtime": 1792331670.005823,
+    "seen": 1793348183.8992667,
+    "ast_hash": "b4ba757559e31249c0b2811f0b54f601",
+    "semantic_hash": ""
+  },
+  "server/package-lock.json": {
+    "mtime": 1792327820.4880505,
+    "seen": 1793348183.8992698,
+    "ast_hash": "4e24b63d1826351c14c49226b59892e0",
+    "semantic_hash": ""
+  }
+}

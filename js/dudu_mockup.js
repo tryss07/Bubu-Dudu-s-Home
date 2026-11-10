@@ -972,28 +972,31 @@
       if (!window.DuduChatSocket?.fetchAllFeaturesRest) return;
       const data = await window.DuduChatSocket.fetchAllFeaturesRest();
       let rerender = false;
-      if (Array.isArray(data.calendar) && data.calendar.length > 0) {
+      const noPending = (types) => !window.DuduChatSocket?.hasPendingOutbox?.(types);
+      // The REST arrays are the server's truth (empty means "none left"), but a
+      // feature with queued local edits must not be overwritten by a stale reply.
+      if (Array.isArray(data.calendar) && noPending(['save_calendar_event', 'delete_calendar_event'])) {
         appData.calendarEvents = data.calendar;
         rerender = true;
       }
-      if (Array.isArray(data.planner) && data.planner.length > 0) {
+      if (Array.isArray(data.planner) && noPending(['save_planner_item', 'delete_planner_item'])) {
         appData.bucketList = data.planner;
         rerender = true;
       }
-      if (Array.isArray(data.notes) && data.notes.length > 0) {
+      if (Array.isArray(data.notes) && noPending(['save_note', 'delete_note'])) {
         appData.notes = data.notes;
         rerender = true;
       }
-      if (Array.isArray(data.polaroids) && data.polaroids.length > 0) {
+      if (Array.isArray(data.polaroids) && noPending(['save_polaroid', 'delete_polaroid'])) {
         appData.polaroids = data.polaroids;
         autoMigrateLegacyItems(appData.polaroids, window.DuduChatSocket?.sendSavePolaroid, '/api/memories/polaroids');
         rerender = true;
       }
-      if (Array.isArray(data.milestones) && data.milestones.length > 0) {
+      if (Array.isArray(data.milestones) && noPending(['save_milestone', 'delete_milestone'])) {
         appData.milestones = data.milestones;
         rerender = true;
       }
-      if (data.coupleSpace) {
+      if (data.coupleSpace && noPending(['update_couple_space'])) {
         if (data.coupleSpace.anniversaryDate) appData.anniversaryDate = data.coupleSpace.anniversaryDate;
         if (data.coupleSpace.loveBattery !== undefined) appData.loveBattery = normalizeLoveBattery(data.coupleSpace.loveBattery);
         if (data.coupleSpace.badmoodLevel !== undefined) appData.badmoodLevel = Number(data.coupleSpace.badmoodLevel);
@@ -1023,7 +1026,7 @@
         }
         rerender = true;
       }
-      if (data.wardrobe) {
+      if (data.wardrobe && noPending(['update_wardrobe'])) {
         if (!appData.wardrobe) appData.wardrobe = JSON.parse(JSON.stringify(defaultMockupData.wardrobe));
         if (!appData.wardrobe.dudu) appData.wardrobe.dudu = { ...defaultMockupData.wardrobe.dudu };
         if (!appData.wardrobe.bubu) appData.wardrobe.bubu = { ...defaultMockupData.wardrobe.bubu };
@@ -1040,6 +1043,7 @@
         rerender = true;
       }
       if (rerender) {
+        purgePastCalendarEvents();
         saveState();
         renderOurSpaceHome();
         renderLoveNotes();
@@ -1209,6 +1213,7 @@
     initTabRouting();
     initBottomNavOverflow();
     initChatInputCollapse();
+    purgePastCalendarEvents();
     renderOurSpaceHome();
     renderLoveNotes();
     renderMemoryJar();
@@ -1634,6 +1639,10 @@
     if (tabName === 'chat') {
       window.DuduChatUI?.dismissDeliveredChatNotifications?.();
     }
+    if (tabName === 'calendar' && !isSameTab) {
+      purgePastCalendarEvents();
+      renderOurCalendar();
+    }
 
     tabs.forEach(t => {
       const el = document.getElementById(`tab-${t}`);
@@ -1656,7 +1665,7 @@
       updateBottomNavHeightVar();
     }
 
-    document.querySelectorAll('.mockup-nav-item').forEach(btn => {
+    document.querySelectorAll('#bottom-nav-bar .mockup-nav-item').forEach(btn => {
       const target = btn.getAttribute('data-tab');
       if (target === tabName) {
         btn.classList.add('dock-item-active', 'text-white');
@@ -2537,8 +2546,27 @@
   }
 
   // --- 5. OUR CALENDAR (calender.jpg) ---
-  let calMonth = 9; // October (0-indexed: 9)
-  let calYear = 2026;
+  let calMonth = new Date().getMonth();
+  let calYear = new Date().getFullYear();
+
+  function purgePastCalendarEvents() {
+    const now = new Date();
+    const todayKey = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    const events = appData.calendarEvents || [];
+    const past = events.filter(ev => {
+      const y = Number(ev.year);
+      const m = Number(ev.month);
+      const d = Number(ev.date);
+      if (!y || Number.isNaN(m) || !d) return false;
+      return y * 10000 + (m + 1) * 100 + d < todayKey;
+    });
+    if (past.length === 0) return false;
+
+    appData.calendarEvents = events.filter(ev => !past.includes(ev));
+    saveState();
+    past.forEach(ev => { if (ev.id) sendDeleteRest('/api/calendar', ev.id); });
+    return true;
+  }
 
   function renderOurCalendar() {
     const monthTitle = document.getElementById('calendar-month-title');
@@ -2568,9 +2596,16 @@
 
     const monthEvents = (appData.calendarEvents || []).filter(e => Number(e.month) === calMonth && Number(e.year) === calYear);
 
+    const today = new Date();
+    const isCurrentMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
+
     for (let day = 1; day <= daysInMonth; day++) {
       const cell = document.createElement('div');
       cell.className = 'h-11 border border-[#EFE5DB] dark:border-stone-700/50 rounded-xl p-1 flex flex-col justify-between relative cursor-pointer button-press transition-colors';
+      if (isCurrentMonth && day === today.getDate()) {
+        cell.classList.add('cal-today');
+        cell.setAttribute('aria-current', 'date');
+      }
 
       const dayEvents = monthEvents.filter(e => Number(e.date) === day);
       let stickerIcon = '';

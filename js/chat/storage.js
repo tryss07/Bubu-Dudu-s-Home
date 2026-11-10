@@ -312,6 +312,30 @@
     });
   }
 
+  async function pruneMessagesOutsideSessions(validSessionIds) {
+    const db = await openDB();
+    const valid = new Set(validSessionIds || []);
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('messages', 'readwrite');
+      const store = tx.objectStore('messages');
+      const req = store.openCursor();
+      let removed = 0;
+      req.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          if (cursor.value && !valid.has(cursor.value.sessionId)) {
+            cursor.delete();
+            removed++;
+          }
+          cursor.continue();
+        } else {
+          resolve(removed);
+        }
+      };
+      req.onerror = () => reject(req.error);
+    });
+  }
+
   async function markMessagesRead(sessionId, upToTimestamp) {
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -437,6 +461,7 @@
     getLastSyncTimestamp,
     setLastSyncTimestamp,
     updateMessageStatus,
-    markMessagesRead
+    markMessagesRead,
+    pruneMessagesOutsideSessions
   };
 })();

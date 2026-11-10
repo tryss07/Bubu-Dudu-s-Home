@@ -30,6 +30,35 @@
     unreadSessionIds = new Set();
   }
 
+  // Topics this device deleted. The relay can still hold them (plus their
+  // messages), so we remember the ids and refuse to resurrect them.
+  const DELETED_TOPICS_KEY = 'dudu_deleted_topics';
+  let deletedTopicIds = new Set();
+  try {
+    const raw = localStorage.getItem(DELETED_TOPICS_KEY);
+    if (raw) deletedTopicIds = new Set(JSON.parse(raw));
+  } catch (e) {
+    deletedTopicIds = new Set();
+  }
+
+  function rememberDeletedTopic(sessionId) {
+    if (!sessionId) return;
+    deletedTopicIds.add(sessionId);
+    try {
+      localStorage.setItem(DELETED_TOPICS_KEY, JSON.stringify([...deletedTopicIds].slice(-200)));
+    } catch (e) {}
+  }
+
+  // Sessions known locally, used to reject messages that belong to no topic.
+  let knownSessionIds = new Set();
+  let hasPrunedOrphanMessages = false;
+
+  function refreshKnownSessionIds() {
+    knownSessionIds = new Set(activeSessions.map(s => s.id));
+    knownSessionIds.add('daily_banter');
+    knownSessionIds.add('date_ideas');
+  }
+
   // --- Sticker Catalog Identifiers & Path Resolvers ---
   const COUPLE_STICKER_IDS = new Set([
     13, 14, 17, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 56, 58, 61, 63, 64, 65, 66, 69, 70, 72, 75, 88, 89, 92, 93
@@ -635,6 +664,18 @@
     if (!activeSessions.some(s => s.id === activeSessionId)) {
       activeSessionId = activeSessions[0]?.id || null;
     }
+    refreshKnownSessionIds();
+
+    // Drop unread badges for topics that no longer exist locally.
+    let unreadChanged = false;
+    unreadSessionIds.forEach(id => {
+      if (!activeSessions.some(s => s.id === id)) {
+        unreadSessionIds.delete(id);
+        unreadChanged = true;
+      }
+    });
+    if (unreadChanged) saveUnreadSessions();
+
     renderSessionBar();
     await loadActiveMessages();
   }
@@ -1036,6 +1077,9 @@
     // Step 3 confirmed -> Execute deletion
     const deletedTitle = pendingDeleteTitle;
     const targetSessionId = pendingDeleteSessionId;
+    rememberDeletedTopic(targetSessionId);
+    unreadSessionIds.delete(targetSessionId);
+    saveUnreadSessions();
     await DuduChatStorage.deleteSession(targetSessionId);
     DuduChatSocket.sendDeleteTopic(targetSessionId);
     closeDeleteModal();
@@ -2408,6 +2452,10 @@
       console.log(`[ChatUI] Auto-flushing ${pending.length} pending offline messages...`);
       for (const message of pending) {
         try {
+          if (message.sessionId && deletedTopicIds.has(message.sessionId)) {
+            await DuduChatStorage.deleteMessage(message.id);
+            continue;
+          }
           const encryptedPacket = await DuduChatCrypto.encrypt(message, activeCryptoKey);
           const wirePacket = {
             id: message.id,
@@ -2437,6 +2485,9 @@
     // 1. Incoming Message Payload
     DuduChatSocket.onMessage(async (packet) => {
       if (!packet || !packet.iv || !packet.ciphertext) return;
+
+      // Messages for a topic this device deleted must never come back.
+      if (packet.sessionId && deletedTopicIds.has(packet.sessionId)) return;
 
       if (!activeCryptoKey) {
         await updateCryptoKey();
@@ -2550,16 +2601,30 @@
 
       for (const packet of missedMessages) {
         try {
-          if (packet.timestamp && packet.timestamp > highestSyncTs) {
-            highestSyncTs = packet.timestamp;
+          const sid = packet.sessionId || null;
+          // Skip messages for topics deleted here, or for topics that do not
+          // exist locally (they would only pile up as orphans). Their
+          // timestamps stay below the cursor so a later sync replays them.
+          if (sid && (deletedTopicIds.has(sid) ||
+              (knownSessionIds.size > 0 && !knownSessionIds.has(sid)))) {
+            continue;
           }
 
           const existing = await DuduChatStorage.getMessage(packet.id);
-          if (existing) continue;
+          if (existing) {
+            if (packet.timestamp && packet.timestamp > highestSyncTs) highestSyncTs = packet.timestamp;
+            continue;
+          }
 
           const decryptedMsg = await DuduChatCrypto.decrypt(packet, activeCryptoKey);
           if (decryptedMsg && decryptedMsg.id && decryptedMsg.sessionId) {
+            if (deletedTopicIds.has(decryptedMsg.sessionId) ||
+                (knownSessionIds.size > 0 && !knownSessionIds.has(decryptedMsg.sessionId))) {
+              continue;
+            }
             await DuduChatStorage.saveMessage(decryptedMsg);
+            if (packet.timestamp && packet.timestamp > highestSyncTs) highestSyncTs = packet.timestamp;
+            if (decryptedMsg.timestamp && decryptedMsg.timestamp > highestSyncTs) highestSyncTs = decryptedMsg.timestamp;
 
             const senderLower = (decryptedMsg.sender || '').toLowerCase();
             const isSenderDudu = senderLower.includes('dudu') || senderLower.includes('kevin');
@@ -2635,6 +2700,8 @@
     DuduChatSocket.onDeleteTopic(async (sessionId) => {
       if (!sessionId) return;
       markSessionRead(sessionId);
+      unreadSessionIds.delete(sessionId);
+      saveUnreadSessions();
       await DuduChatStorage.deleteSession(sessionId);
       if (activeSessionId === sessionId) {
         const remainingSessions = await DuduChatStorage.getSessions();
@@ -2649,6 +2716,7 @@
       saveUnreadSessions();
       const all = await DuduChatStorage.getSessions();
       for (const s of all) {
+        rememberDeletedTopic(s.id);
         await DuduChatStorage.deleteSession(s.id);
       }
       activeSessionId = null;
@@ -2659,7 +2727,17 @@
     // Topic Creation & Real-Time Sync (Dudu creates -> Bubu sees)
     DuduChatSocket.onTopicCreated(async (topic) => {
       if (!topic || !topic.id) return;
-      await DuduChatStorage.saveSession(topic);
+      if (deletedTopicIds.has(topic.id)) {
+        DuduChatSocket.sendDeleteTopic(topic.id);
+        return;
+      }
+      const existing = activeSessions.find(s => s.id === topic.id);
+      // Failed decryption yields the raw ciphertext packet (no title).
+      // Never let it blank out a title we already have locally.
+      if (!topic.title && existing) return;
+      await DuduChatStorage.saveSession(existing
+        ? { ...existing, ...topic, title: topic.title || existing.title, emoji: topic.emoji || existing.emoji }
+        : topic);
       await loadSessions();
       if (window.showToast) {
         const isEn = window.DuduI18n?.getLanguage() === 'en';
@@ -2670,11 +2748,76 @@
 
     DuduChatSocket.onTopicSync(async (topics) => {
       if (!Array.isArray(topics)) return;
+      const remoteIds = new Set(topics.filter(t => t && t.id).map(t => t.id));
+      const pendingCreates = new Set(DuduChatSocket.getPendingTopicIds?.() || []);
+
       for (const t of topics) {
+        if (!t || !t.id) continue;
         if (t.id === 'daily_banter' || t.id === 'date_ideas') continue;
-        await DuduChatStorage.saveSession(t);
+
+        if (deletedTopicIds.has(t.id)) {
+          // Still on the relay although deleted here: remove it again.
+          DuduChatSocket.sendDeleteTopic(t.id);
+          continue;
+        }
+
+        const existing = activeSessions.find(s => s.id === t.id);
+        if (!t.title && existing) continue;
+
+        await DuduChatStorage.saveSession(existing
+          ? {
+            ...existing,
+            ...t,
+            title: t.title || existing.title,
+            emoji: t.emoji || existing.emoji,
+            lastActivity: Math.max(existing.lastActivity || 0, t.lastActivity || 0)
+          }
+          : t);
       }
+
+      // Local topics missing from the relay are republished instead of deleted:
+      // their original create_topic may have been dropped while offline, and a
+      // topic must never be lost just because the relay does not know it yet.
+      let needsHistoryUpload = false;
+      if (remoteIds.size > 0) {
+        const localSessions = await DuduChatStorage.getSessions(true);
+        for (const s of localSessions) {
+          if (!s || !s.id) continue;
+          if (s.id === 'daily_banter' || s.id === 'date_ideas') continue;
+          if (remoteIds.has(s.id) || pendingCreates.has(s.id)) continue;
+          if (deletedTopicIds.has(s.id)) continue;
+          DuduChatSocket.sendCreateTopic(s);
+          // Mark this user's own local history pending so flushPendingMessages
+          // re-uploads it (partner messages are restored by their own device).
+          const myIdLower = (DuduChatCrypto.getStoredIdentity() || 'dudu').toLowerCase();
+          const meIsDudu = myIdLower.includes('dudu') || myIdLower.includes('kevin');
+          const history = await DuduChatStorage.getMessages(s.id);
+          for (const m of history) {
+            const senderLower = (m.sender || '').toLowerCase();
+            const senderIsDudu = senderLower.includes('dudu') || senderLower.includes('kevin');
+            if (senderIsDudu !== meIsDudu) continue;
+            if (m.status !== 'pending') {
+              await DuduChatStorage.updateMessageStatus(m.id, 'pending');
+              needsHistoryUpload = true;
+            }
+          }
+        }
+      }
+      if (needsHistoryUpload) flushPendingMessages();
+
       await loadSessions();
+      // The topic list is authoritative here: drop messages whose topic no
+      // longer exists (deleted on the other device or on a previous run).
+      if (!hasPrunedOrphanMessages) {
+        hasPrunedOrphanMessages = true;
+        try {
+          await DuduChatStorage.pruneMessagesOutsideSessions([...knownSessionIds]);
+        } catch (e) {
+          console.warn('[ChatUI] Orphan message cleanup failed:', e.message);
+        }
+      }
+      // Topics now exist locally: replay any messages that arrived before them.
+      DuduChatSocket.requestSync(DuduChatStorage.getLastSyncTimestamp());
     });
 
     // 5. Server ACK handling (turns 1 check to 2 checks)
@@ -4079,31 +4222,22 @@
         document.documentElement.style.setProperty('--bottom-nav-height', `${Math.round(h)}px`);
       }
     }
-
-    const inputDock = document.getElementById('chat-input-dock');
-    if (inputDock) {
-      const dockH = inputDock.offsetHeight;
-      if (dockH > 0) {
-        document.documentElement.style.setProperty('--chat-dock-height', `${Math.round(dockH)}px`);
-      }
-    }
   }
 
   function setupKeyboardAndDockHandling() {
     const textInput = document.getElementById('chat-text-input');
     const bottomNav = document.getElementById('bottom-nav-bar');
-    const inputDock = document.getElementById('chat-input-dock');
+    const chatTab = document.getElementById('tab-chat');
     const sendBtn = document.getElementById('btn-send-message');
     const stickerBtn = document.getElementById('btn-toggle-stickers');
     const attachBtn = document.getElementById('btn-attach-photo');
-    if (!inputDock) return;
+    if (!textInput) return;
 
     syncNavHeight();
 
     if (window.ResizeObserver) {
       const ro = new ResizeObserver(() => syncNavHeight());
       if (bottomNav) ro.observe(bottomNav);
-      if (inputDock) ro.observe(inputDock);
     }
     window.addEventListener('resize', syncNavHeight);
 
@@ -4117,55 +4251,57 @@
     stickerBtn?.addEventListener('pointerdown', preventPrematureBlur);
     attachBtn?.addEventListener('pointerdown', preventPrematureBlur);
 
-    function updateDockPosition(isFocused) {
-      if (!inputDock) return;
-      let keyboardHeight = 0;
-      if (window.visualViewport) {
-        keyboardHeight = Math.max(0, window.innerHeight - window.visualViewport.height);
-      }
+    const root = document.documentElement;
+    let lastHeight = 0;
 
-      if (isFocused || keyboardHeight > 80) {
+    // The keyboard shrinks the visual viewport, not the layout viewport, so the
+    // chat column is sized from it. Input bar + messages then reflow together
+    // and the newest message is never hidden behind the keyboard.
+    function applyViewport() {
+      const vv = window.visualViewport;
+      const height = Math.round(vv ? vv.height : window.innerHeight);
+      const heightChanged = height !== lastHeight;
+      lastHeight = height;
+      if (heightChanged) root.style.setProperty('--app-height', `${height}px`);
+
+      const keyboardHeight = Math.max(0, window.innerHeight - height);
+      const keyboardOpen = keyboardHeight > 80;
+
+      if (keyboardOpen || document.activeElement === textInput) {
         bottomNav?.classList.add('nav-bar-hidden');
         document.body.classList.add('keyboard-open');
-        inputDock.classList.add('dock-keyboard-active');
-        if (keyboardHeight > 0) {
-          inputDock.style.bottom = `${keyboardHeight + 8}px`;
-        } else {
-          inputDock.style.bottom = '8px';
+        chatTab?.classList.add('chat-input-focused');
+        if (keyboardOpen && heightChanged) {
+          window.scrollTo(0, 0);
+          scrollToBottom(false);
         }
-        scrollToBottom(true);
       } else {
         bottomNav?.classList.remove('nav-bar-hidden');
         document.body.classList.remove('keyboard-open');
-        inputDock.classList.remove('dock-keyboard-active');
-        inputDock.style.bottom = '';
+        chatTab?.classList.remove('chat-input-focused');
         syncNavHeight();
       }
     }
 
-    if (textInput) {
-      textInput.addEventListener('focus', () => {
-        updateDockPosition(true);
-        setTimeout(() => scrollToBottom(true), 150);
-      });
+    textInput.addEventListener('focus', () => {
+      applyViewport();
+      setTimeout(applyViewport, 150);
+      setTimeout(() => scrollToBottom(false), 200);
+    });
 
-      textInput.addEventListener('blur', () => {
-        // Small timeout to allow tap on send/sticker buttons
-        setTimeout(() => {
-          if (document.activeElement !== textInput) {
-            updateDockPosition(false);
-            scrollToBottom(false);
-          }
-        }, 100);
-      });
-    }
+    textInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (document.activeElement !== textInput) applyViewport();
+      }, 120);
+    });
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', () => {
-        const isFocused = document.activeElement === textInput;
-        updateDockPosition(isFocused);
-      });
+      window.visualViewport.addEventListener('resize', applyViewport);
+      window.visualViewport.addEventListener('scroll', applyViewport);
     }
+    window.addEventListener('orientationchange', () => setTimeout(applyViewport, 250));
+
+    applyViewport();
   }
 
   // --- Helper Functions ---
@@ -4271,12 +4407,10 @@
       syncNavHeight();
       const bottomNav = document.getElementById('bottom-nav-bar');
       const textInput = document.getElementById('chat-text-input');
-      const inputDock = document.getElementById('chat-input-dock');
       if (document.activeElement !== textInput) {
         bottomNav?.classList.remove('nav-bar-hidden');
         document.body.classList.remove('keyboard-open');
-        inputDock?.classList.remove('dock-keyboard-active');
-        if (inputDock) inputDock.style.bottom = '';
+        document.getElementById('tab-chat')?.classList.remove('chat-input-focused');
       }
       handlePresenceState();
       await loadActiveMessages(false);

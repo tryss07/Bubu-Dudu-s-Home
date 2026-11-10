@@ -233,15 +233,10 @@ h1, h2, h3, h4, .font-heading {
   pointer-events: none !important;
 }
 
-/* Chat Bottom Input Dock */
-#chat-input-dock {
-  bottom: calc(var(--bottom-nav-height, 4rem) + 0.5rem) !important;
-  transition: bottom 0.24s cubic-bezier(0.32, 0.72, 0, 1);
-  will-change: bottom;
-}
-
-#chat-input-dock.dock-keyboard-active {
-  bottom: 0.5rem !important;
+/* Chat input bar stays in normal flow, so the message list shrinks with it
+   instead of being covered when the mobile keyboard opens. */
+#chat-input-bar-container {
+  flex-shrink: 0 !important;
 }
 
 /* Chat Input Textarea - Zero Scrollbar & No Border Clipping */
@@ -279,8 +274,9 @@ body.chat-tab-active {
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
-  height: 100dvh !important;
-  max-height: 100dvh !important;
+  height: var(--app-height, 100dvh) !important;
+  max-height: var(--app-height, 100dvh) !important;
+  min-height: var(--app-height, 100dvh) !important;
   padding-bottom: 0 !important;
   overscroll-behavior: none !important;
 }
@@ -330,16 +326,8 @@ body.chat-tab-active #tab-chat .chat-card-container {
   flex: 1 1 0% !important;
   min-height: 0 !important;
   height: auto !important;
-  margin-bottom: calc(var(--bottom-nav-height, 4rem) + var(--chat-dock-height, 3.5rem) + 0.875rem) !important;
+  margin-bottom: 0 !important;
   overflow: hidden !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-body.chat-tab-active.keyboard-open #tab-chat .chat-card-container,
-body.chat-tab-active #tab-chat:has(#chat-input-dock.dock-keyboard-active) .chat-card-container {
-  margin-bottom: calc(var(--chat-dock-height, 3.5rem) + 0.875rem) !important;
 }
 
 body.chat-tab-active #chat-messages-container {
@@ -672,11 +660,47 @@ html.dark #bottom-nav-bar.dock-expanded,
   height: 0 !important;
 }
 
-/* Active tab highlight in dock */
-.dock-item-active {
-  background-color: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
+/* Current day in the calendar grid (distinct from event days) */
+#calendar-days-grid .cal-today {
+  border-color: #8D5B4C !important;
+  box-shadow: inset 0 0 0 2px rgba(141, 91, 76, 0.35);
+}
+
+#calendar-days-grid .cal-today > span:first-child {
+  color: #8D5B4C;
+  font-weight: 900;
+}
+
+.dark #calendar-days-grid .cal-today {
+  border-color: #FBBF24 !important;
+  box-shadow: inset 0 0 0 2px rgba(251, 191, 36, 0.35);
+}
+
+.dark #calendar-days-grid .cal-today > span:first-child {
+  color: #FCD34D;
+}
+
+/* Active tab indicator in dock: small white dot under the label */
+.mockup-nav-item {
+  position: relative;
+}
+
+#bottom-nav-bar .mockup-nav-item.dock-item-active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
   border-radius: 9999px;
+  background-color: #FFFFFF;
+  pointer-events: none;
+}
+
+#bottom-nav-bar .dock-item-active {
+  background-color: transparent;
+  color: #FFFFFF;
 }
 
 /* Mini Game Flip Card 3D */

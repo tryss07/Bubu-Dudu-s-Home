@@ -144,6 +144,7 @@
       setStatus('connected');
       startHeartbeat();
       sendPresenceAnnounce('online');
+      flushOutbox();
     };
 
     ws.onmessage = async (event) => {
@@ -479,6 +480,120 @@
     }
   }
 
+  // --- Durable Outbox ---
+  // Every mutating op is queued when the socket is not open (offline, mid
+  // reconnect, or the app just booted) and flushed on connect. Without this,
+  // topics and feature edits were silently dropped and never reached the relay.
+  const OUTBOX_KEY = 'DUDU_CHAT_OUTBOX_V1';
+  const OUTBOX_LIMIT = 200;
+  const ENCRYPTED_FIELD = {
+    create_topic: 'topic',
+    save_calendar_event: 'event',
+    save_planner_item: 'item',
+    save_note: 'note',
+    save_polaroid: 'polaroid',
+    save_milestone: 'milestone',
+    update_couple_space: 'data'
+  };
+  let outbox = [];
+  let isFlushingOutbox = false;
+
+  function loadOutbox() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
+      outbox = Array.isArray(parsed) ? parsed.filter(op => op && op.type) : [];
+    } catch (_) {
+      outbox = [];
+    }
+  }
+
+  function persistOutbox() {
+    try {
+      localStorage.setItem(OUTBOX_KEY, JSON.stringify(outbox.slice(-OUTBOX_LIMIT)));
+    } catch (_) {}
+  }
+
+  function outboxKey(op) {
+    const p = op.payload || {};
+    const target = p.sessionId || p.messageId || p.logId || p.id ||
+      p.topic?.id || p.event?.id || p.item?.id || p.note?.id ||
+      p.polaroid?.id || p.milestone?.id || p.log?.id || null;
+    return target ? `${op.type}:${target}` : op.type;
+  }
+
+  function enqueueOutbox(type, payload) {
+    const op = { type, payload: payload || {}, queuedAt: Date.now() };
+    const key = outboxKey(op);
+    if (type === 'delete_all_topics') {
+      outbox = outbox.filter(o => o.type !== 'create_topic' && o.type !== 'delete_topic');
+    }
+    outbox = outbox.filter(existing => outboxKey(existing) !== key);
+    outbox.push(op);
+    if (outbox.length > OUTBOX_LIMIT) outbox = outbox.slice(-OUTBOX_LIMIT);
+    persistOutbox();
+  }
+
+  async function flushOutbox() {
+    if (isFlushingOutbox) return;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    if (outbox.length === 0) return;
+
+    isFlushingOutbox = true;
+    try {
+      console.log(`[Socket] Flushing ${outbox.length} queued op(s)...`);
+      while (outbox.length > 0) {
+        const op = outbox[0];
+        let payload = op.payload || {};
+        const field = ENCRYPTED_FIELD[op.type];
+        try {
+          if (field && payload[field] && !payload[field].ciphertext && window.DuduChatCrypto?.encryptPayload) {
+            payload = { ...payload, [field]: await window.DuduChatCrypto.encryptPayload(payload[field]) };
+          }
+        } catch (err) {
+          console.warn('[Socket] Outbox encryption failed, keeping op:', err.message);
+          break;
+        }
+        if (!send({ type: op.type, ...payload })) break;
+        outbox.shift();
+        persistOutbox();
+      }
+    } finally {
+      isFlushingOutbox = false;
+    }
+  }
+
+  function hasPendingOutbox(types) {
+    const list = Array.isArray(types) ? types : [types];
+    return outbox.some(op => list.includes(op.type));
+  }
+
+  function getPendingTopicIds() {
+    return outbox.filter(op => op.type === 'create_topic' && op.payload?.topic?.id)
+      .map(op => op.payload.topic.id);
+  }
+
+  loadOutbox();
+
+  // Send now when connected, otherwise queue for the next connection.
+  async function dispatchOp(type, payload = {}) {
+    const field = ENCRYPTED_FIELD[type];
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      let body = payload;
+      if (field && payload[field] && !payload[field].ciphertext && window.DuduChatCrypto?.encryptPayload) {
+        try {
+          body = { ...payload, [field]: await window.DuduChatCrypto.encryptPayload(payload[field]) };
+        } catch (err) {
+          console.warn('[Socket] Encryption failed, queueing op:', err.message);
+          enqueueOutbox(type, payload);
+          return false;
+        }
+      }
+      if (send({ type, ...body })) return true;
+    }
+    enqueueOutbox(type, payload);
+    return false;
+  }
+
   // --- Network & Lifecycle Listeners ---
   window.addEventListener('online', () => {
     console.log('[Socket] Device back online. Reconnecting...');
@@ -566,9 +681,8 @@
   }
 
   function sendDeleteMessage(messageId, sessionId, blobId = null) {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'delete_message', messageId, sessionId, blobId }));
-    }
+    if (!messageId) return false;
+    return dispatchOp('delete_message', { messageId, sessionId, blobId });
   }
 
   function getHttpBaseUrl() {
@@ -588,11 +702,11 @@
     const query = token ? `?token=${encodeURIComponent(token)}` : '';
     const headers = token ? { 'x-relay-token': token } : {};
     const result = {
-      calendar: [],
-      planner: [],
-      notes: [],
-      polaroids: [],
-      milestones: [],
+      calendar: null,
+      planner: null,
+      notes: null,
+      polaroids: null,
+      milestones: null,
       coupleSpace: null,
       wardrobe: null
     };
@@ -607,13 +721,14 @@
         fetch(`${baseUrl}/api/wardrobe${query}`, { headers }).then(r => r.ok ? r.json() : null)
       ]);
 
-      if (calRes.status === 'fulfilled' && calRes.value?.events) {
+      // null means "unknown / request failed"; an empty array means "server says none left".
+      if (calRes.status === 'fulfilled' && Array.isArray(calRes.value?.events)) {
         result.calendar = await maybeDecryptList(calRes.value.events);
       }
-      if (planRes.status === 'fulfilled' && planRes.value?.items) {
+      if (planRes.status === 'fulfilled' && Array.isArray(planRes.value?.items)) {
         result.planner = await maybeDecryptList(planRes.value.items);
       }
-      if (notesRes.status === 'fulfilled' && notesRes.value?.notes) {
+      if (notesRes.status === 'fulfilled' && Array.isArray(notesRes.value?.notes)) {
         result.notes = await maybeDecryptList(notesRes.value.notes);
       }
       if (memRes.status === 'fulfilled' && memRes.value) {
@@ -631,207 +746,92 @@
   }
 
   async function sendCreateTopic(topic) {
-    if (ws && ws.readyState === WebSocket.OPEN && topic) {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !topic.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(topic)
-        : topic;
-      ws.send(JSON.stringify({ type: 'create_topic', topic: wire }));
-    }
+    if (!topic) return false;
+    return dispatchOp('create_topic', { topic });
   }
 
   function sendDeleteTopic(sessionId) {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'delete_topic', sessionId }));
-    }
+    if (!sessionId) return false;
+    return dispatchOp('delete_topic', { sessionId });
   }
 
   function sendDeleteAllTopics() {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'delete_all_topics' }));
-    }
+    return dispatchOp('delete_all_topics', {});
   }
 
   function sendCreateTummyLog(log) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({
-        type: 'create_tummy_log',
-        log: log
-      }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send create_tummy_log:', e);
-      return false;
-    }
+    if (!log) return false;
+    return dispatchOp('create_tummy_log', { log });
   }
 
   function sendDeleteTummyLog(logId) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({
-        type: 'delete_tummy_log',
-        logId: logId
-      }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_tummy_log:', e);
-      return false;
-    }
+    if (!logId) return false;
+    return dispatchOp('delete_tummy_log', { logId });
   }
 
   // --- Calendar Senders ---
   async function sendSaveCalendarEvent(event) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !event.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(event)
-        : event;
-      ws.send(JSON.stringify({ type: 'save_calendar_event', event: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send save_calendar_event:', e);
-      return false;
-    }
+    if (!event) return false;
+    return dispatchOp('save_calendar_event', { event });
   }
 
   function sendDeleteCalendarEvent(id) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'delete_calendar_event', id }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_calendar_event:', e);
-      return false;
-    }
+    if (!id) return false;
+    return dispatchOp('delete_calendar_event', { id });
   }
 
   // --- Planner Senders ---
   async function sendSavePlannerItem(item) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !item.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(item)
-        : item;
-      ws.send(JSON.stringify({ type: 'save_planner_item', item: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send save_planner_item:', e);
-      return false;
-    }
+    if (!item) return false;
+    return dispatchOp('save_planner_item', { item });
   }
 
   function sendDeletePlannerItem(id) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'delete_planner_item', id }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_planner_item:', e);
-      return false;
-    }
+    if (!id) return false;
+    return dispatchOp('delete_planner_item', { id });
   }
 
   // --- Notes Senders ---
   async function sendSaveNote(note) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !note.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(note)
-        : note;
-      ws.send(JSON.stringify({ type: 'save_note', note: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send save_note:', e);
-      return false;
-    }
+    if (!note) return false;
+    return dispatchOp('save_note', { note });
   }
 
   function sendDeleteNote(id) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'delete_note', id }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_note:', e);
-      return false;
-    }
+    if (!id) return false;
+    return dispatchOp('delete_note', { id });
   }
 
   // --- Memories Senders ---
   async function sendSavePolaroid(polaroid) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !polaroid.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(polaroid)
-        : polaroid;
-      ws.send(JSON.stringify({ type: 'save_polaroid', polaroid: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send save_polaroid:', e);
-      return false;
-    }
+    if (!polaroid) return false;
+    return dispatchOp('save_polaroid', { polaroid });
   }
 
   function sendDeletePolaroid(id) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'delete_polaroid', id }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_polaroid:', e);
-      return false;
-    }
+    if (!id) return false;
+    return dispatchOp('delete_polaroid', { id });
   }
 
   async function sendSaveMilestone(milestone) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !milestone.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(milestone)
-        : milestone;
-      ws.send(JSON.stringify({ type: 'save_milestone', milestone: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send save_milestone:', e);
-      return false;
-    }
+    if (!milestone) return false;
+    return dispatchOp('save_milestone', { milestone });
   }
 
   function sendDeleteMilestone(id) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'delete_milestone', id }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send delete_milestone:', e);
-      return false;
-    }
+    if (!id) return false;
+    return dispatchOp('delete_milestone', { id });
   }
 
   // --- Couple Space Sender ---
   async function sendUpdateCoupleSpace(data) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      const wire = (window.DuduChatCrypto?.encryptPayload && !data.ciphertext)
-        ? await window.DuduChatCrypto.encryptPayload(data)
-        : data;
-      ws.send(JSON.stringify({ type: 'update_couple_space', data: wire }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send update_couple_space:', e);
-      return false;
-    }
+    if (!data) return false;
+    return dispatchOp('update_couple_space', { data });
   }
 
   function sendUpdateWardrobe(data) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
-    try {
-      ws.send(JSON.stringify({ type: 'update_wardrobe', data }));
-      return true;
-    } catch (e) {
-      console.error('[Socket] Failed to send update_wardrobe:', e);
-      return false;
-    }
+    if (!data) return false;
+    return dispatchOp('update_wardrobe', { data });
   }
 
   function sendTyping(sender, isTyping, sessionId) {
@@ -877,6 +877,10 @@
     sendUpdateCoupleSpace,
     sendUpdateWardrobe,
     sendTyping,
+    flushOutbox,
+    hasPendingOutbox,
+    getPendingTopicIds,
+    getOutboxSize: () => outbox.length,
     getStatus: () => currentStatus,
     getServerUrl,
     setServerUrl,

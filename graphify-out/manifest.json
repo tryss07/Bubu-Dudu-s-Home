@@ -126,10 +126,10 @@
     "semantic_hash": "02082b8f9840e32cabbc1ebc49071840"
   },
   "js/chat/ui.js": {
-    "mtime": 1793346404.1201694,
-    "seen": 1793346957.8659556,
-    "ast_hash": "4a3934cb9bb397d5973ac5cc1bad6f88",
-    "semantic_hash": "4a3934cb9bb397d5973ac5cc1bad6f88"
+    "mtime": 1794312246.0418653,
+    "seen": 1794312701.909794,
+    "ast_hash": "61ca7b4d5266f25da4bde0a6ee3c26ae",
+    "semantic_hash": ""
   },
   "js/chat/wallpaper.js": {
     "mtime": 1792508946.7324426,
@@ -138,10 +138,10 @@
     "semantic_hash": "ed80571491b639adad455d2477143389"
   },
   "js/dudu_mockup.js": {
-    "mtime": 1793346404.1211693,
-    "seen": 1793346957.8659606,
-    "ast_hash": "b629012b1a81103cbb897122b770c93f",
-    "semantic_hash": "b629012b1a81103cbb897122b770c93f"
+    "mtime": 1794312664.7692525,
+    "seen": 1794312701.909802,
+    "ast_hash": "0edc67d1428006cdbcc50591552666a1",
+    "semantic_hash": ""
   },
   "js/i18n.js": {
     "mtime": 1792738714.1145449,
@@ -168,9 +168,9 @@
     "semantic_hash": "4c7dd4ad9e80d3ea3180bf9e70202c80"
   },
   "package.json": {
-    "mtime": 1793347547.7331018,
-    "seen": 1793348183.8987794,
-    "ast_hash": "a61225ce94b5f4a75d0630c2e0906e2c",
+    "mtime": 1794308394.4312172,
+    "seen": 1794309816.1706867,
+    "ast_hash": "eab7b4879095dc0da7d2e1bc23ccc132",
     "semantic_hash": ""
   },
   "prepare_dist.js": {
@@ -216,10 +216,10 @@
     "semantic_hash": "713ee9eb803bd099569fbc8110b31a1b"
   },
   "server/server.js": {
-    "mtime": 1792508946.7344427,
-    "seen": 1793346957.8659918,
-    "ast_hash": "ff4f38beaa363d3b806942992adf2d9a",
-    "semantic_hash": "ff4f38beaa363d3b806942992adf2d9a"
+    "mtime": 1794309657.7922275,
+    "seen": 1794309816.1707153,
+    "ast_hash": "38fd1c262e1446cf2f5df994773c4090",
+    "semantic_hash": ""
   },
   "src/features/chat/components/ChatInputBar.tsx": {
     "mtime": 1792327820.4890504,
@@ -414,9 +414,9 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1793346404.1191692,
-    "seen": 1793348183.8989487,
-    "ast_hash": "daf77b3b9aeab9fc5779564ad491249b",
+    "mtime": 1794312333.3692496,
+    "seen": 1794312701.9099674,
+    "ast_hash": "fadcab9504608c07119409b39e815f6a",
     "semantic_hash": ""
   },
   "stitch_dudu_bear_girlfriend_companion/DESIGN.md": {
@@ -696,9 +696,9 @@
     "semantic_hash": ""
   },
   "assets/mockup_art/home_couple_hug.png": {
-    "mtime": 1792327820.1870506,
-    "seen": 1793348183.8991113,
-    "ast_hash": "ded1ab61952fdab0d56e38d63fbdff0c",
+    "mtime": 1794311863.1322458,
+    "seen": 1794312701.9101384,
+    "ast_hash": "eda23a18df09f995f52cd85de41cbc62",
     "semantic_hash": ""
   },
   "assets/mockup_art/minigame_switch.png": {
@@ -965,10 +965,16 @@
     "ast_hash": "37207775f9451653ee40fc0d989f483c",
     "semantic_hash": ""
   },
+  "tailwind.config.js": {
+    "mtime": 1794308341.7402167,
+    "seen": 1794309816.1707513,
+    "ast_hash": "d09e673350a24ab3f44a82bb17f96635",
+    "semantic_hash": ""
+  },
   "package-lock.json": {
-    "mtime": 1792327820.4870505,
-    "seen": 1793348183.8992639,
-    "ast_hash": "1fec06c1b8fbefc72658dc1ce10c12d2",
+    "mtime": 1794308327.8392165,
+    "seen": 1794309816.171181,
+    "ast_hash": "b66eb4de019eddd0d3afdfde8bcd6bd3",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {
